@@ -8,6 +8,7 @@ def test_empty_program():
     with pytest.raises(ValueError):
         run("")
 
+
 def test_simple_output():
     assert run("""
 thing Program
@@ -26,7 +27,7 @@ TESTS = {
         ('Output.write(2 + 8)', '10'),
         ('Output.write(42 - 2)', '40'),
         ('Output.write(7 * 9)', '63'),
-        ('Output.write(5 / 2)', '2')
+        ('Output.write(5 / 2)', '2.5')
     ],
     'order of operations': [
         ('Output.write(2 + 8 + 3)', '13'),
@@ -42,18 +43,20 @@ TESTS = {
     ]
 }
 
+
 def flatten_dict(dct):
     lst = []
-    for name, groups in dct.iteritems():
+    for name, groups in list(dct.items()):
         for idx, group in enumerate(groups):
             lst.append(('{} #{}'.format(name, idx + 1), group[0], group[1]))
     return lst
 
+
 @pytest.mark.parametrize('test_case', flatten_dict(TESTS), ids=lambda x: x[0])
 def test_base_operations(test_case):
-    print generate_simple_output_program(test_case[1])
+    print((generate_simple_output_program(test_case[1])))
 
-    if isinstance(test_case[2], basestring):
+    if isinstance(test_case[2], str):
         assert run(generate_simple_output_program(test_case[1])).output == test_case[2]
     else:
         with pytest.raises(test_case[2]):

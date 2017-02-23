@@ -48,7 +48,7 @@ def analyze_line(line):
                 operator = operator_set[char]
                 if operator is LexicalQuote:
                     operator_set = OPERATORS if operator_set is not OPERATORS else {'"': LexicalQuote}
-                    print 'changed_operator set to {} {}'.format(operator_set, group)
+                    print('changed_operator set to {} {}'.format(operator_set, group))
                 if operator.emitable:
                     yield OPERATORS[char](char)
             group = ""

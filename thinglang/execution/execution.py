@@ -3,6 +3,7 @@ from collections import namedtuple
 
 from thinglang.execution.vm import ITOutput
 from thinglang.parser.tokens import MethodCall
+import collections
 
 SEGMENT_END = object()
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
@@ -21,19 +22,19 @@ class ExecutionEngine(object):
         return ExecutionOutput(output=self.heap['Output'].data.strip())
 
     def __enter__(self):
-        print 'ExecutionEngine: starting'
-        print 'Parsed tree: {}'.format(self.root.tree())
+        print('ExecutionEngine: starting')
+        print('Parsed tree: {}'.format(self.root.tree()))
         self.print_header()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.print_header()
-        print 'ExecutionEngine: ended'
+        print('ExecutionEngine: ended')
         if exc_val:
-            print ''.join(traceback.format_exception(exc_type, exc_val, exc_tb))
-        print 'Program output:'
+            print(''.join(traceback.format_exception(exc_type, exc_val, exc_tb)))
+        print('Program output:')
         self.print_header()
-        print self.heap['Output'].data.strip()
+        print(self.heap['Output'].data.strip())
         self.print_header()
 
     def execute(self):
@@ -50,7 +51,7 @@ class ExecutionEngine(object):
 
             if isinstance(target, MethodCall):
                 context = self.resolve(self.stack[-1], target.target.value)
-                if callable(context):
+                if isinstance(context, collections.Callable):
                     context(target.arguments.evaluate(self.stack[-1]))
                 else:
                     self.create_stack_segment(ThingInstance(context.parent))
@@ -64,7 +65,7 @@ class ExecutionEngine(object):
 
 
     def print_header(self):
-        print '#' * 80
+        print('#' * 80)
 
     def create_stack_segment(self, instance):
         self.stack.append(StackSegment(instance))
@@ -92,7 +93,7 @@ class ThingInstance(object):
         self.members = {}
 
     def __contains__(self, item):
-        print self.methods
+        print(self.methods)
         return item in self.members or item in self.methods
 
     def __getitem__(self, item):
@@ -106,24 +107,24 @@ class StackSegment(object):
         self.idx = 0
 
     def __setitem__(self, key, value):
-        print 'SET<{}> {}: {}'.format(self.idx, key, value)
+        print('SET<{}> {}: {}'.format(self.idx, key, value))
         self.data[key] = (self.idx, value)
 
     def __getitem__(self, item):
-        print 'GET<{}> {}: {}'.format(self.idx, item, self.data[item][1])
+        print('GET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
         return self.data[item][1]
 
     def __contains__(self, item):
         return item in self.data
 
     def enter(self):
-        print 'INCR<{}> -> <{}>'.format(self.idx, self.idx + 1)
+        print('INCR<{}> -> <{}>'.format(self.idx, self.idx + 1))
         self.idx += 1
 
     def exit(self):
-        print 'DECR<{}> -> <{}>'.format(self.idx, self.idx - 1)
+        print('DECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
         self.data = {
-            key: value for key, value in self.data.iteritems() if value[1] != self.idx
+            key: value for key, value in self.data.items() if value[1] != self.idx
         }
 
         self.idx -= 1
