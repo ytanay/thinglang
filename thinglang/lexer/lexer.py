@@ -49,7 +49,7 @@ def analyze_line(line):
                 if operator is LexicalQuote:
                     operator_set = OPERATORS if operator_set is not OPERATORS else {'"': LexicalQuote}
                     print('changed_operator set to {} {}'.format(operator_set, group))
-                if operator.emitable:
+                if operator.emittable:
                     yield OPERATORS[char](char)
             group = ""
         else:
@@ -72,6 +72,7 @@ def finalize_group(group, terminating_char):
         return LexicalIdentifier(group)
 
     raise RuntimeError('Lexer: cannot finalize group {}'.format(group))
+
 
 def is_identifier(component):
     return bool(IDENTIFIER_STANDALONE.match(component))

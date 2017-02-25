@@ -8,6 +8,7 @@ import collections
 SEGMENT_END = object()
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
+
 class ExecutionEngine(object):
     def __init__(self, root):
         self.root = root
@@ -62,8 +63,6 @@ class ExecutionEngine(object):
             if target.children:
                 targets = target.children + targets
 
-
-
     def print_header(self):
         print('#' * 80)
 
@@ -98,6 +97,7 @@ class ThingInstance(object):
 
     def __getitem__(self, item):
         return self.members.get(item) or self.methods.get(item)
+
 
 class StackSegment(object):
 

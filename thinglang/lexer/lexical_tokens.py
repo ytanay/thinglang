@@ -2,11 +2,8 @@ from thinglang.common import Describeable, ValueType
 
 
 # Base type
-from thinglang.execution.vm import STACK
-
-
 class LexicalEntity(Describeable):
-    emitable = True
+    emittable = True
 
     def __init__(self, raw):
         self.raw = raw
@@ -19,7 +16,7 @@ class LexicalParenthesesOpen(LexicalEntity): pass # (
 class LexicalParenthesesClose(LexicalEntity): pass # )
 
 class LexicalQuote(LexicalEntity): # "
-    emitable = False
+    emittable = False
 
 class LexicalSeparator(LexicalEntity): pass # ,
 
