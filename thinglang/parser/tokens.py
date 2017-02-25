@@ -1,16 +1,15 @@
 from thinglang.common import Describeable, ValueType
 from thinglang.lexer.lexical_tokens import LexicalIdentifier
-from thinglang.execution.vm import HEAP, STACK
 
 
 class BaseToken(Describeable):
-
     BLOCK = False
 
     def __init__(self, slice):
         self.children = []
         self.indent = 0
         self.value = None
+        self.raw_slice = slice
 
     def attach(self, child):
         self.children.append(child)
@@ -33,6 +32,7 @@ class BaseToken(Describeable):
 class RootToken(BaseToken):
     BLOCK = True
 
+
 class DefinitionPairToken(BaseToken):
     def __init__(self, slice):
         super(DefinitionPairToken, self).__init__(slice)
@@ -41,7 +41,9 @@ class DefinitionPairToken(BaseToken):
 
 class ThingDefinition(DefinitionPairToken): pass
 
+
 class MethodDefinition(DefinitionPairToken): pass
+
 
 class Pointer(BaseToken): pass
 
@@ -52,10 +54,8 @@ class Access(Pointer):
         self.value = [x.value for x in slice if isinstance(x, LexicalIdentifier)]
 
 
-
 class String(ValueType):
     def __init__(self, value):
-
         self.value = value
 
     def evaluate(self, stack):
@@ -78,6 +78,7 @@ class ArgumentList(BaseToken):
             self.value = slice[0].value
         else:
             self.value = None
+
     def evaluate(self, stack):
         return [value.evaluate(stack) for value in self.value]
 
@@ -93,26 +94,18 @@ class MethodCall(BaseToken):
         super(MethodCall, self).__init__(slice)
         self.target, self.arguments = slice
 
-    def execute(self):
-        context = HEAP
-        for component in self.target.value:
-            if component not in context:
-                raise ValueError('Cannot find {} in {}'.format(component, context))
-            context = context[component]
-        return context(self.arguments.evaluate())
-
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
 
 class ArithmeticOperation(BaseToken, ValueType):
-
     OPERATIONS = {
         "+": lambda rhs, lhs: rhs + lhs,
         "*": lambda rhs, lhs: rhs * lhs,
         "-": lambda rhs, lhs: rhs - lhs,
         "/": lambda rhs, lhs: rhs / lhs
     }
+
     def __init__(self, slice):
         super(ArithmeticOperation, self).__init__(slice)
         self.lhs, self.operator, self.rhs = slice
@@ -121,22 +114,20 @@ class ArithmeticOperation(BaseToken, ValueType):
         return self.OPERATIONS[self.operator.operator](self.lhs.evaluate(stack), self.rhs.evaluate(stack))
 
 
-
 class ArithmeticAdd(BaseToken):
     def evaluate(self, left, right):
         return left.evaluate() + right.evaluate()
 
 
 class AssignmentOperation(BaseToken):
-
-    DECLERATION = object()
+    DECELERATION = object()
     REASSIGNMENT = object()
 
     def __init__(self, slice):
         super(AssignmentOperation, self).__init__(slice)
         if len(slice) == 4:
             self.type, self.name, _, self.value = slice
-            self.method = self.DECLERATION
+            self.method = self.DECELERATION
         else:
             self.name, _, self.value = slice
             self.method = self.REASSIGNMENT
@@ -146,7 +137,7 @@ class AssignmentOperation(BaseToken):
         return '{} {} = {}'.format(self.type, self.name, self.value)
 
     def execute(self, stack):
-        if self.method is self.DECLERATION:
+        if self.method is self.DECELERATION:
             assert not self.name.value in stack, 'variable declaration but was found in stack'
         else:
             assert self.name.value in stack, 'variable reassignment but is not in stack'
