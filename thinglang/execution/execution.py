@@ -46,16 +46,21 @@ class ExecutionEngine(object):
         while targets:
             target = targets.pop(0)
 
+            print('Execution target: {}'.format(target))
+
             if target is SEGMENT_END:
                 self.stack.pop()
                 continue
 
             if isinstance(target, MethodCall):
                 context = self.resolve(self.stack[-1], target.target.value)
+                args = target.arguments.evaluate(self.stack[-1])
                 if isinstance(context, collections.Callable):
-                    context(target.arguments.evaluate(self.stack[-1]))
+                    context(args)
                 else:
                     self.create_stack_segment(ThingInstance(context.parent))
+                    for name, value in zip(context.arguments, args):
+                        self.stack[-1][name.value] = value
                     targets = context.children + [SEGMENT_END] + targets
             else:
                 target.execute(self.stack[-1])
@@ -107,22 +112,22 @@ class StackSegment(object):
         self.idx = 0
 
     def __setitem__(self, key, value):
-        print('SET<{}> {}: {}'.format(self.idx, key, value))
+        print('\tSET<{}> {}: {}'.format(self.idx, key, value))
         self.data[key] = (self.idx, value)
 
     def __getitem__(self, item):
-        print('GET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
+        print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
         return self.data[item][1]
 
     def __contains__(self, item):
         return item in self.data
 
     def enter(self):
-        print('INCR<{}> -> <{}>'.format(self.idx, self.idx + 1))
+        print('\tINCR<{}> -> <{}>'.format(self.idx, self.idx + 1))
         self.idx += 1
 
     def exit(self):
-        print('DECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
+        print('\tDECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
         self.data = {
             key: value for key, value in self.data.items() if value[1] != self.idx
         }
