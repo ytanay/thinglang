@@ -35,9 +35,3 @@ class Stack(object):
     def exit(self):
         return self.stack.pop()
 
-HEAP = {
-    "output": ITOutput()
-}
-
-
-STACK = Stack()
