@@ -1,7 +1,7 @@
 from thinglang.runner import run
 
 
-def test_function_calls():
+def test_zero_arg_function_calls():
     assert run("""
 thing Program
     does start
@@ -18,4 +18,18 @@ thing Program
 before n= 1  m= 2
 hello 3
 after n= 1  m= 2
+    """.strip()
+
+
+def test_multi_arg_function_calls():
+    assert run("""
+thing Program
+    does start
+        text arg_val = "some value"
+        self.say_hello(1, "hello", arg_val)
+
+    does say_hello with arg1, arg2, arg3
+        Output.write("in say_hello", arg1, arg2, arg3)
+    """).output == """
+in say_hello 1 hello some value
     """.strip()
