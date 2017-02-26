@@ -2,7 +2,7 @@
 
 Thinglang is a simple Python-like language I'm toying around with to get some experience on how a parser/compiler pair might be written using a high level language (surprise - the high level language I've chosen is Python!)
 
-The syntax is modeled as something that might be explainable to a five year old reasonably easily. Hello World looks like this:
+The syntax is modeled as something that might be explainable to a elementary school student reasonably easily. Hello World looks like this:
 ```
 thing Program
     does start
@@ -14,11 +14,11 @@ A more involved example might look something like this:
 thing Program
     does start
         name = "Andy"
-        age = 5
+        age = 10
         self.say_hello(name, age)
 
     does say_hello with name, age
-        Output.write("Hello from ", age, "year old", name) # prints "Hello from 5 year old andy"
+        Output.write("Hello from ", age, "year old", name) # prints "Hello from 10 year old Andy"
 ```
 
 This next example doesn't compile yet, but it's not (too) far away.
