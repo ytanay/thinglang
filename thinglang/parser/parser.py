@@ -1,23 +1,27 @@
 from thinglang.common import ValueType
 from thinglang.lexer.lexical_tokens import LexicalDeclarationThing, LexicalIdentifier, LexicalDeclarationMethod, \
     LexicalQuote, LexicalParenthesesOpen, LexicalAccess, LexicalSeparator, LexicalParenthesesClose, \
-    LexicalDunary, LexicalIndent, LexicalAssignment, SecondOrderLexicalDunary, FirstOrderLexicalDunary
+    LexicalDunary, LexicalIndent, LexicalAssignment, SecondOrderLexicalDunary, FirstOrderLexicalDunary, LexicalGroupEnd, \
+    LexicalArgumentListIndicator
 from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, String, ArgumentListPartial, MethodCall, \
     ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation
 
 PATTERNS = [
-    ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
-    ((LexicalDeclarationMethod, LexicalIdentifier), MethodDefinition),  # does start
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
     ((ValueType, SecondOrderLexicalDunary, ValueType), ArithmeticOperation),  # 4 * 2
     ((ValueType, FirstOrderLexicalDunary, ValueType), ArithmeticOperation),  # 4 + 2
+    ((LexicalArgumentListIndicator, ValueType), ArgumentListPartial),  # with 2
     ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
     ((LexicalParenthesesOpen, LexicalParenthesesClose), ArgumentList),  # ()
     ((ArgumentListPartial, LexicalParenthesesClose), ArgumentList),  # (2, 3)
+    ((ArgumentListPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
     ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
-    ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation)  # n = 2
+    ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
+    ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
+    ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
+    ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),
 
 ]
 
@@ -70,6 +74,9 @@ def parse_group(group):
     :param group:
     :return:
     """
+
+    print('Original lexical input: {}'.format(group))
+
     while replace_in_place(group):
         pass
 
@@ -131,7 +138,13 @@ def process_indentation(group):
     size = 0
     iterable = iter(group)
 
-    if not group or not isinstance(group[0], LexicalIndent):
+    if isinstance(group[-1], LexicalGroupEnd):
+        group[-1:] = []
+
+    if not group:
+        return
+
+    if not isinstance(group[0], LexicalIndent):
         return
 
     while isinstance(next(iterable), LexicalIndent):

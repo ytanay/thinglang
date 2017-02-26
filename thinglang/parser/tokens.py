@@ -42,7 +42,17 @@ class DefinitionPairToken(BaseToken):
 class ThingDefinition(DefinitionPairToken): pass
 
 
-class MethodDefinition(DefinitionPairToken): pass
+class MethodDefinition(DefinitionPairToken):
+    def __init__(self, slice):
+        super(MethodDefinition, self).__init__(slice)
+
+        if isinstance(slice[2], ArgumentList):
+            self.arguments = slice[2].value
+        else:
+            self.arguments = []
+
+    def describe(self):
+        return '{}, args={}'.format(self.value, self.arguments)
 
 
 class Pointer(BaseToken): pass
@@ -77,7 +87,7 @@ class ArgumentList(BaseToken):
         if isinstance(slice[0], ArgumentListPartial):
             self.value = slice[0].value
         else:
-            self.value = None
+            self.value = []
 
     def evaluate(self, stack):
         return [value.evaluate(stack) for value in self.value]
@@ -93,6 +103,9 @@ class MethodCall(BaseToken):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
         self.target, self.arguments = slice
+
+        if not self.arguments:
+            self.arguments = []
 
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
