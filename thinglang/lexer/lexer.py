@@ -2,7 +2,7 @@ import re
 
 from thinglang.lexer.lexical_tokens import LexicalParenthesesClose, LexicalQuote, LexicalSeparator, LexicalIndent, LexicalParenthesesOpen, LexicalAccess, \
     LexicalIdentifier, LexicalDunary, LexicalDeclarationThing, LexicalDeclarationMethod, LexicalNumericalValue, \
-    LexicalAssignment, FirstOrderLexicalDunary, SecondOrderLexicalDunary
+    LexicalAssignment, FirstOrderLexicalDunary, SecondOrderLexicalDunary, LexicalArgumentListIndicator, LexicalGroupEnd
 from thinglang.parser.tokens import String
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
@@ -28,7 +28,7 @@ OPERATORS = {
 }
 
 
-KEYWORDS = {'thing': LexicalDeclarationThing, 'does': LexicalDeclarationMethod}
+KEYWORDS = {'thing': LexicalDeclarationThing, 'does': LexicalDeclarationMethod, 'with': LexicalArgumentListIndicator}
 
 
 def lexer(source):
@@ -56,6 +56,8 @@ def analyze_line(line):
             group += char
     if group:
         yield finalize_group(group, 'STOP')
+
+    yield LexicalGroupEnd(None)
 
 
 def finalize_group(group, terminating_char):
