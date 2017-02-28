@@ -2,7 +2,8 @@ import re
 
 from thinglang.lexer.lexical_tokens import LexicalParenthesesClose, LexicalQuote, LexicalSeparator, LexicalIndent, LexicalParenthesesOpen, LexicalAccess, \
     LexicalIdentifier, LexicalDunary, LexicalDeclarationThing, LexicalDeclarationMethod, LexicalNumericalValue, \
-    LexicalAssignment, FirstOrderLexicalDunary, SecondOrderLexicalDunary, LexicalArgumentListIndicator, LexicalGroupEnd
+    LexicalAssignment, FirstOrderLexicalDunary, SecondOrderLexicalDunary, LexicalArgumentListIndicator, LexicalGroupEnd, \
+    LexicalInlineComment
 from thinglang.parser.tokens import String
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
@@ -24,7 +25,9 @@ OPERATORS = {
     '+': FirstOrderLexicalDunary,
     '-': FirstOrderLexicalDunary,
     '/': SecondOrderLexicalDunary,
-    '*': SecondOrderLexicalDunary
+    '*': SecondOrderLexicalDunary,
+
+    '#': LexicalInlineComment
 }
 
 
@@ -49,6 +52,8 @@ def analyze_line(line):
                 if operator is LexicalQuote:
                     operator_set = OPERATORS if operator_set is not OPERATORS else {'"': LexicalQuote}
                     print('changed_operator set to {} {}'.format(operator_set, group))
+                if operator is LexicalInlineComment:
+                    break
                 if operator.emittable:
                     yield OPERATORS[char](char)
             group = ""

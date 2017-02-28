@@ -23,6 +23,10 @@ TESTS = {
         ('Output.write("hello world")', 'hello world'),
         ('Output.write("hello + world!")', 'hello + world!')
     ],
+    'inline comments': [
+        ('Output.write("test") # this is a comment', 'test'),
+        ('Output.write("test # in string") # still a comment', 'test # in string')
+    ],
     'simple arithmetic': [
         ('Output.write(2 + 8)', '10'),
         ('Output.write(42 - 2)', '40'),

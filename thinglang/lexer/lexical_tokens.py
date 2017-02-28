@@ -57,3 +57,4 @@ class LexicalDeclarationThing(LexicalEntity): pass
 class LexicalDeclarationMethod(LexicalEntity): pass
 class LexicalArgumentListIndicator(LexicalEntity): pass
 class LexicalGroupEnd(LexicalEntity): pass
+class LexicalInlineComment(LexicalEntity): pass
