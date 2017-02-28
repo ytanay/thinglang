@@ -2,7 +2,7 @@ import re
 
 from thinglang.lexer.lexical_tokens import LexicalParenthesesClose, LexicalQuote, LexicalSeparator, LexicalIndent, LexicalParenthesesOpen, LexicalAccess, \
     LexicalDeclarationThing, LexicalDeclarationMethod, \
-    LexicalAssignment, FirstOrderLexicalDunary, SecondOrderLexicalDunary, LexicalArgumentListIndicator, \
+    LexicalAssignment, FirstOrderLexicalBinary, SecondOrderLexicalBinary, LexicalArgumentListIndicator, \
     LexicalInlineComment
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
@@ -21,10 +21,10 @@ OPERATORS = {
 
     '=': LexicalAssignment,
 
-    '+': FirstOrderLexicalDunary,
-    '-': FirstOrderLexicalDunary,
-    '/': SecondOrderLexicalDunary,
-    '*': SecondOrderLexicalDunary,
+    '+': FirstOrderLexicalBinary,
+    '-': FirstOrderLexicalBinary,
+    '/': SecondOrderLexicalBinary,
+    '*': SecondOrderLexicalBinary,
 
     '#': LexicalInlineComment
 }

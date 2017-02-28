@@ -1,9 +1,6 @@
 from thinglang.common import Describeable, ValueType
 
 
-# Base type
-
-
 class LexicalEntity(Describeable):
     EMITTABLE = True
 
@@ -16,10 +13,12 @@ class LexicalEntity(Describeable):
 
 
 # Derived types
-class LexicalAccess(LexicalEntity): pass # a.b
+class LexicalAccess(LexicalEntity):
+    pass  # a.b
 
 class LexicalParenthesesOpen(LexicalEntity): pass # (
 class LexicalParenthesesClose(LexicalEntity): pass # )
+
 
 class LexicalQuote(LexicalEntity): # "
     EMITTABLE = False
@@ -36,14 +35,15 @@ class LexicalIndent(LexicalEntity): pass # <TAB>
 
 class LexicalAssignment(LexicalEntity): pass
 
+
 class LexicalDunary(LexicalEntity):
     def __init__(self, operator):
         super(LexicalDunary, self).__init__(operator)
         self.operator = operator
 
 
-class FirstOrderLexicalDunary(LexicalDunary): pass
-class SecondOrderLexicalDunary(LexicalDunary): pass
+class FirstOrderLexicalBinary(LexicalDunary): pass
+class SecondOrderLexicalBinary(LexicalDunary): pass
 
 
 class LexicalIdentifier(LexicalEntity, ValueType):
@@ -57,6 +57,7 @@ class LexicalIdentifier(LexicalEntity, ValueType):
     def evaluate(self, stack):
         return stack[self.value]
 
+
 class LexicalNumericalValue(LexicalEntity, ValueType):
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)
@@ -64,6 +65,7 @@ class LexicalNumericalValue(LexicalEntity, ValueType):
 
     def evaluate(self, stack):
         return self.value
+
 
 class LexicalDeclarationThing(LexicalEntity): pass
 class LexicalDeclarationMethod(LexicalEntity): pass

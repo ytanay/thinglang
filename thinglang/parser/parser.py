@@ -1,16 +1,16 @@
 from thinglang.common import ValueType
 from thinglang.lexer.lexical_tokens import LexicalDeclarationThing, LexicalIdentifier, LexicalDeclarationMethod, \
-    LexicalQuote, LexicalParenthesesOpen, LexicalAccess, LexicalSeparator, LexicalParenthesesClose, \
-    LexicalDunary, LexicalIndent, LexicalAssignment, SecondOrderLexicalDunary, FirstOrderLexicalDunary, LexicalGroupEnd, \
+    LexicalParenthesesOpen, LexicalAccess, LexicalSeparator, LexicalParenthesesClose, \
+    LexicalIndent, LexicalAssignment, SecondOrderLexicalBinary, FirstOrderLexicalBinary, LexicalGroupEnd, \
     LexicalArgumentListIndicator
-from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, String, ArgumentListPartial, MethodCall, \
+from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, ArgumentListPartial, MethodCall, \
     ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation
 
 PATTERNS = [
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
-    ((ValueType, SecondOrderLexicalDunary, ValueType), ArithmeticOperation),  # 4 * 2
-    ((ValueType, FirstOrderLexicalDunary, ValueType), ArithmeticOperation),  # 4 + 2
+    ((ValueType, SecondOrderLexicalBinary, ValueType), ArithmeticOperation),  # 4 * 2
+    ((ValueType, FirstOrderLexicalBinary, ValueType), ArithmeticOperation),  # 4 + 2
     ((LexicalArgumentListIndicator, ValueType), ArgumentListPartial),  # with 2
     ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
