@@ -25,11 +25,12 @@ def test_multi_arg_function_calls():
     assert run("""
 thing Program
     does start
-        text arg_val = "some value"
-        self.say_hello(1, "hello", arg_val)
+        text name = "Andy"
+        number age = 10
+        self.say_hello(name, age)
 
-    does say_hello with arg1, arg2, arg3
-        Output.write("in say_hello", arg1, arg2, arg3)
+    does say_hello with name, age
+        Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
     """).output == """
-in say_hello 1 hello some value
+Hello from 10 year old Andy
     """.strip()
