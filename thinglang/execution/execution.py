@@ -5,7 +5,7 @@ from thinglang.execution.vm import ITOutput
 from thinglang.parser.tokens import MethodCall
 import collections
 
-SEGMENT_END = object()
+STACK_FRAME_TERMINATOR = object()
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
 
@@ -39,7 +39,7 @@ class ExecutionEngine(object):
         self.print_header()
 
     def execute(self):
-        self.create_stack_segment(ThingInstance(self.root.find('Program')))
+        self.create_stack_frame(ThingInstance(self.root.find('Program')))
 
         start = self.root.find('Program').find('start')
         targets = start.children[:]  # clone the list of children
@@ -48,7 +48,7 @@ class ExecutionEngine(object):
 
             print('Execution target: {}'.format(target))
 
-            if target is SEGMENT_END:
+            if target is STACK_FRAME_TERMINATOR:
                 self.stack.pop()
                 continue
 
@@ -58,10 +58,10 @@ class ExecutionEngine(object):
                 if isinstance(context, collections.Callable):
                     context(args)
                 else:
-                    self.create_stack_segment(ThingInstance(context.parent))
+                    self.create_stack_frame(ThingInstance(context.parent))
                     for name, value in zip(context.arguments, args):
                         self.stack[-1][name.value] = value
-                    targets = context.children + [SEGMENT_END] + targets
+                    targets = context.children + [STACK_FRAME_TERMINATOR] + targets
             else:
                 target.execute(self.stack[-1])
 
@@ -71,8 +71,8 @@ class ExecutionEngine(object):
     def print_header(self):
         print('#' * 80)
 
-    def create_stack_segment(self, instance):
-        self.stack.append(StackSegment(instance))
+    def create_stack_frame(self, instance):
+        self.stack.append(StackFrame(instance))
 
     def resolve(self, stack, target):
         if target[0] == 'self':
@@ -104,7 +104,7 @@ class ThingInstance(object):
         return self.members.get(item) or self.methods.get(item)
 
 
-class StackSegment(object):
+class StackFrame(object):
 
     def __init__(self, instance):
         self.instance = instance
