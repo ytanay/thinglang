@@ -10,6 +10,8 @@ class BaseToken(Describeable):
         self.indent = 0
         self.value = None
         self.raw_slice = slice
+        if slice:
+            self.context = slice[0].context
 
     def attach(self, child):
         self.children.append(child)
@@ -151,8 +153,8 @@ class AssignmentOperation(BaseToken):
 
     def execute(self, stack):
         if self.method is self.DECELERATION:
-            assert not self.name.value in stack, 'variable declaration but was found in stack'
+            assert self.name.value not in stack, 'variable {} declaration but was found in stack'.format(self.name.value)
         else:
-            assert self.name.value in stack, 'variable reassignment but is not in stack'
+            assert self.name.value in stack, 'variable {} reassignment but is not in stack {}'.format(self.name.value, self.context)
 
         stack[self.name.value] = self.value.evaluate(stack)
