@@ -2,11 +2,17 @@ from thinglang.common import Describeable, ValueType
 
 
 # Base type
+
+
 class LexicalEntity(Describeable):
-    emittable = True
+    EMITTABLE = True
 
     def __init__(self, raw):
         self.raw = raw
+
+    @classmethod
+    def next_operator_set(cls, current, original):
+        return current
 
 
 # Derived types
@@ -16,7 +22,13 @@ class LexicalParenthesesOpen(LexicalEntity): pass # (
 class LexicalParenthesesClose(LexicalEntity): pass # )
 
 class LexicalQuote(LexicalEntity): # "
-    emittable = False
+    EMITTABLE = False
+
+    @classmethod
+    def next_operator_set(cls, current, original):
+        if current is original:
+            return {'"': LexicalQuote}
+        return original
 
 class LexicalSeparator(LexicalEntity): pass # ,
 
