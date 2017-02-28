@@ -34,9 +34,18 @@ OPERATORS = {
 KEYWORDS = {'thing': LexicalDeclarationThing, 'does': LexicalDeclarationMethod, 'with': LexicalArgumentListIndicator}
 
 
+def contextify_lexical_output(lexical_group, line):
+    for entity in lexical_group:
+        entity.context = {
+            "line": line
+        }
+
+        yield entity
+
+
 def lexer(source):
-    for line in source.strip().split('\n'):
-        yield list(analyze_line(line))
+    for idx, line in enumerate(source.strip().split('\n')):
+        yield list(contextify_lexical_output(analyze_line(line), idx))
 
 
 def analyze_line(line):
