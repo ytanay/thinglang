@@ -147,8 +147,16 @@ def process_indentation(group):
     if not isinstance(group[0], LexicalIndent):
         return
 
-    while isinstance(next(iterable), LexicalIndent):
-        size += 1
+    iterable = iter(group)
+    size = 0
+
+    try:
+        while isinstance(next(iterable), LexicalIndent):
+            size += 1
+    except StopIteration:
+        pass
 
     group[0:size] = []
-    group[0].indent = size
+
+    if group:
+        group[0].indent = size
