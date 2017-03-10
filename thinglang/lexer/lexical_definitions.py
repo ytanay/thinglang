@@ -3,7 +3,7 @@ import re
 from thinglang.lexer.lexical_tokens import LexicalParenthesesClose, LexicalQuote, LexicalSeparator, LexicalIndent, LexicalParenthesesOpen, LexicalAccess, \
     LexicalDeclarationThing, LexicalDeclarationMethod, \
     LexicalAssignment, FirstOrderLexicalBinary, SecondOrderLexicalBinary, LexicalArgumentListIndicator, \
-    LexicalInlineComment
+    LexicalInlineComment, LexicalReturnStatement
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
 IDENTIFIER = re.compile(IDENTIFIER_BASE)
@@ -33,7 +33,8 @@ OPERATORS = {
 KEYWORDS = {
     'thing': LexicalDeclarationThing,
     'does': LexicalDeclarationMethod,
-    'with': LexicalArgumentListIndicator
+    'with': LexicalArgumentListIndicator,
+    'return': LexicalReturnStatement
 }
 
 
