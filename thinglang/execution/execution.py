@@ -30,23 +30,21 @@ class ExecutionEngine(object):
     def __enter__(self):
         print('ExecutionEngine: starting')
         print('Parsed tree: {}'.format(self.root.tree()))
-        self.print_header()
+        self.print_header('Program execution start')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.print_header()
+        self.print_header('Execution end')
         print('ExecutionEngine: ended')
         if exc_val:
             print(''.join(traceback.format_exception(exc_type, exc_val, exc_tb)))
-        print('Program output:')
-        self.print_header()
+        self.print_header('Output')
         print(self.heap['Output'].data.strip())
-        self.print_header()
 
     def execute(self):
-        self.create_stack_frame(ThingInstance(self.root.find('Program')))
+        self.create_stack_frame(ThingInstance(self.root.get('Program')))
 
-        start = self.root.find('Program').find('start')
+        start = self.root.get('Program').get('start')
         targets = start.children[:]  # clone the list of children
         while targets:
             target = targets.pop(0)
