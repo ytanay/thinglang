@@ -46,8 +46,13 @@ class ExecutionEngine(object):
 
         start = self.root.get('Program').get('start')
         targets = start.children[:]  # clone the list of children
+
         while targets:
+            stack = self.stack[-1]
             target = targets.pop(0)
+            terminator = StackFrameTerminator()
+
+            self.set_context(target)
 
             print('Execution target: {}'.format(target))
 
