@@ -97,7 +97,6 @@ class ThingInstance(object):
         self.members = {}
 
     def __contains__(self, item):
-        print(self.methods)
         return item in self.members or item in self.methods
 
     def __getitem__(self, item):
@@ -110,6 +109,7 @@ class StackFrame(object):
         self.instance = instance
         self.data = {}
         self.idx = 0
+        self.return_value = None
 
     def __setitem__(self, key, value):
         print('\tSET<{}> {}: {}'.format(self.idx, key, value))
