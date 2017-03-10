@@ -1,7 +1,7 @@
-from thinglang.common import Describeable, ValueType
+from thinglang.common import Describable, ValueType, ImmediateValue, ResolvableValue
 
 
-class LexicalEntity(Describeable):
+class LexicalEntity(Describable):
     EMITTABLE = True
 
     def __init__(self, raw):
@@ -10,6 +10,10 @@ class LexicalEntity(Describeable):
     @classmethod
     def next_operator_set(cls, current, original):
         return current
+
+    def contextify(self, context):
+        self.context = context
+        return self
 
 
 # Derived types
@@ -36,17 +40,17 @@ class LexicalIndent(LexicalEntity): pass # <TAB>
 class LexicalAssignment(LexicalEntity): pass
 
 
-class LexicalDunary(LexicalEntity):
+class LexicalBinary(LexicalEntity):
     def __init__(self, operator):
-        super(LexicalDunary, self).__init__(operator)
+        super(LexicalBinary, self).__init__(operator)
         self.operator = operator
 
 
-class FirstOrderLexicalBinary(LexicalDunary): pass
-class SecondOrderLexicalBinary(LexicalDunary): pass
+class FirstOrderLexicalBinary(LexicalBinary): pass
+class SecondOrderLexicalBinary(LexicalBinary): pass
 
 
-class LexicalIdentifier(LexicalEntity, ValueType):
+class LexicalIdentifier(LexicalEntity, ResolvableValue):
     def __init__(self, value):
         super(LexicalIdentifier, self).__init__(value)
         self.value = value
@@ -58,7 +62,7 @@ class LexicalIdentifier(LexicalEntity, ValueType):
         return stack[self.value]
 
 
-class LexicalNumericalValue(LexicalEntity, ValueType):
+class LexicalNumericalValue(LexicalEntity, ImmediateValue):
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)
         self.value = int(value)
@@ -72,3 +76,4 @@ class LexicalDeclarationMethod(LexicalEntity): pass
 class LexicalArgumentListIndicator(LexicalEntity): pass
 class LexicalGroupEnd(LexicalEntity): pass
 class LexicalInlineComment(LexicalEntity): pass
+class LexicalReturnStatement(LexicalEntity): pass
