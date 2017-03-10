@@ -162,14 +162,6 @@ class AssignmentOperation(BaseToken):
     def describe(self):
         return '{} {} = {}'.format(self.type, self.name, self.value)
 
-    def execute(self, stack):
-        if self.method is self.DECELERATION:
-            assert self.name.value not in stack, 'variable {} declaration but was found in stack'.format(self.name.value)
-        else:
-            assert self.name.value in stack, 'variable {} reassignment but is not in stack {}'.format(self.name.value, self.context)
-
-        stack[self.name.value] = self.value.evaluate(stack)
-
 
 class ReturnStatement(DefinitionPairToken):
     def __init__(self, slice):
