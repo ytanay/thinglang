@@ -68,8 +68,8 @@ class ExecutionEngine(object):
             if target.children:
                 targets = target.children + targets
 
-    def print_header(self):
-        print('#' * 80)
+    def print_header(self, str):
+        print('{:#^80}'.format(' {} '.format(str)))
 
     def create_stack_frame(self, instance):
         self.stack.append(StackFrame(instance))
@@ -85,6 +85,13 @@ class ExecutionEngine(object):
                 raise ValueError('Cannot find {} in {}'.format(component, context))
             context = context[component]
         return context
+
+    def set_context(self, target):
+        print('Target: {}'.format(target.context if isinstance(target, BaseToken) else target))
+        self.current_target = target
+
+    def log(self, param):
+        print('\t{}'.format(param))
 
 
 class ThingInstance(object):
