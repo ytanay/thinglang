@@ -73,6 +73,21 @@ class ExecutionEngine(object):
                 self.stack[-1].return_value = value
                 continue
 
+            if isinstance(target, AssignmentOperation):
+                if target.method is target.DECELERATION:
+                    assert target.name.value not in stack, 'variable {} declaration but was found in stack'.format(
+                        target.name.value)
+                else:
+                    assert target.name.value in stack, 'variable {} reassignment but is not in stack {}'.format(
+                        target.name.value, target.context)
+
+                if isinstance(target.value, MethodCall):
+                    self.log('Assignment operation leading to method call, overriding terminator')
+                    terminator = StackFrameTerminator(target.name.value)
+                    target = target.value
+                else:
+                    stack[target.name.value] = target.value.evaluate(stack)
+
             if isinstance(target, MethodCall):
                 context = self.resolve(self.stack[-1], target.target.value)
                 args = target.arguments.evaluate(self.stack[-1])
