@@ -1,8 +1,8 @@
-from thinglang.common import Describeable, ValueType
+from thinglang.common import Describable, ImmediateValue, ObtainableValue
 from thinglang.lexer.lexical_tokens import LexicalIdentifier
 
 
-class BaseToken(Describeable):
+class BaseToken(Describable):
     BLOCK = False
 
     def __init__(self, slice):
@@ -11,21 +11,32 @@ class BaseToken(Describeable):
         self.value = None
         self.raw_slice = slice
         if slice:
-            self.context = slice[0].context
+            self.context = slice[-1].context
+        else:
+            self.context = None
 
     def attach(self, child):
         self.children.append(child)
         child.parent = self
 
-    def find(self, name):
+    def find(self, predicate):
+        for child in self.children:
+            if predicate(child):
+                yield child
+            for x in child.find(predicate):
+                yield x
+
+    def get(self, name):
         for child in self.children:
             if child.value == name:
                 return child
 
     def tree(self, depth=1):
         separator = ('\n' if self.children else '') + ('\t' * depth)
-        return '{}({}){}{}'.format(type(self).__name__, self.describe(), separator,
-                                   separator.join(child.tree(depth=depth + 1) for child in self.children))
+        return '<L{}> {}({}){}{}'.format(self.context.number if self.context else "?", type(self).__name__,
+                                         self.describe(),
+                                         separator,
+                                         separator.join(child.tree(depth=depth + 1) for child in self.children))
 
     def describe(self):
         return self.value if self.value is not None else ''
@@ -66,7 +77,7 @@ class Access(Pointer):
         self.value = [x.value for x in slice if isinstance(x, LexicalIdentifier)]
 
 
-class String(ValueType):
+class InlineString(ImmediateValue):
     def __init__(self, value):
         self.value = value
 
@@ -101,7 +112,7 @@ class ProcessedIndent(BaseToken):
         self.value = size
 
 
-class MethodCall(BaseToken):
+class MethodCall(BaseToken, ObtainableValue):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
         self.target, self.arguments = slice
@@ -113,7 +124,7 @@ class MethodCall(BaseToken):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
 
-class ArithmeticOperation(BaseToken, ValueType):
+class ArithmeticOperation(BaseToken, ObtainableValue):
     OPERATIONS = {
         "+": lambda rhs, lhs: rhs + lhs,
         "*": lambda rhs, lhs: rhs * lhs,
