@@ -1,4 +1,4 @@
-class Describeable(object):
+class Describable(object):
 
     def __str__(self):
         return '{}({})'.format(type(self).__name__, self.describe())
@@ -10,4 +10,18 @@ class Describeable(object):
         return self.__dict__ if self.__dict__ else ''
 
 
-class ValueType(object): pass
+class ValueType(object):
+    pass
+
+
+class ImmediateValue(ValueType):
+    pass
+
+
+class ResolvableValue(ValueType):
+    pass
+
+
+class ObtainableValue(ValueType):
+    pass
+
