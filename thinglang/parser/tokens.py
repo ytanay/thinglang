@@ -158,3 +158,9 @@ class AssignmentOperation(BaseToken):
             assert self.name.value in stack, 'variable {} reassignment but is not in stack {}'.format(self.name.value, self.context)
 
         stack[self.name.value] = self.value.evaluate(stack)
+
+
+class ReturnStatement(DefinitionPairToken):
+    def __init__(self, slice):
+        super().__init__(slice)
+        self.value = slice[1]
