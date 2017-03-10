@@ -76,8 +76,6 @@ def parse_group(group):
     :return:
     """
 
-    print('Original lexical input: {}'.format(group))
-
     while replace_in_place(group):
         pass
 
@@ -136,8 +134,6 @@ def process_indentation(group):
     :param group:
     :return:
     """
-    size = 0
-    iterable = iter(group)
 
     if isinstance(group[-1], LexicalGroupEnd):
         group[-1:] = []
