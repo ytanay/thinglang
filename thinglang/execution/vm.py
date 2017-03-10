@@ -7,7 +7,6 @@ class ITOutput(object):
 
     def write(self, args):
         self.data += ' '.join(str(x) for x in args) + "\n"
-        print(*args)
 
     def __getitem__(self, item):
         return getattr(self, item)
