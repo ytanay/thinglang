@@ -1,14 +1,15 @@
 import re
 
+from thinglang.common import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifier
 from thinglang.lexer.lexical_tokens import LexicalInlineComment, LexicalGroupEnd, LexicalNumericalValue, \
     LexicalIdentifier
-from thinglang.parser.tokens import String
+from thinglang.parser.tokens import InlineString
 
 
 def lexer(source):
     for idx, line in enumerate(source.strip().split('\n')):
-        yield list(contextualize_lexical_output(analyze_line(line), idx))
+        yield list(contextualize_lexical_output(analyze_line(line), line, idx))
 
 
 def analyze_line(line):
@@ -56,7 +57,7 @@ def finalize_group(group, termination_reason):
         return LexicalNumericalValue(group)
 
     if termination_reason == '"':
-        return String(group)
+        return InlineString(group)
 
     if is_identifier(group):
         return LexicalIdentifier(group)
@@ -64,10 +65,8 @@ def finalize_group(group, termination_reason):
     raise RuntimeError('Lexer: cannot finalize group {}'.format(group))
 
 
-def contextualize_lexical_output(lexical_group, line):
+def contextualize_lexical_output(lexical_group, line, idx):
     for entity in lexical_group:
-        entity.context = {
-            "line": line
-        }
+        entity.context = TokenContext(line, idx)
 
         yield entity
