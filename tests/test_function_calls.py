@@ -21,6 +21,17 @@ after n= 1  m= 2
     """.strip()
 
 
+def test_function_return_values():
+    assert run("""
+thing Program
+    does start
+        number result = self.say_hello()
+        Output.write(result)
+    does say_hello
+        return 42
+    """).output == """42""".strip()
+
+
 def test_multi_arg_function_calls():
     assert run("""
 thing Program
@@ -28,9 +39,37 @@ thing Program
         text name = "Andy"
         number age = 10
         self.say_hello(name, age)
+        self.say_hello("Yotam", 19)
 
     does say_hello with name, age
         Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
+
     """).output == """
 Hello from 10 year old Andy
+Hello from 19 year old Yotam
     """.strip()
+
+
+def test_function_call_integration():
+    assert run("""
+    thing Program
+        does start
+            number a = 15
+            number b = self.add(a, 10)
+            Output.write(a, b)
+        does add with a, b
+            return a + b
+        """).output == """15 25""".strip()
+
+
+def test_early_exit():
+    assert run("""
+    thing Program
+        does start
+            number a = 15
+            number b = self.add_or_multiply(a, 10)
+            Output.write(a, b)
+        does add_or_multiply with a, b
+            return a * b
+            return a + b
+        """).output == """15 150""".strip()
