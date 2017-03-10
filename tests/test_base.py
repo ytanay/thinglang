@@ -1,6 +1,6 @@
 import pytest
 
-from tests.utils import generate_simple_output_program
+from tests.utils import generate_simple_output_program, generate_test_case_structure
 from thinglang.runner import run
 
 
@@ -9,7 +9,7 @@ def test_empty_program():
         run("")
 
 
-def test_simple_output():
+def test_simple_output_program():
     assert run("""
 thing Program
     does start
@@ -48,15 +48,7 @@ TESTS = {
 }
 
 
-def flatten_dict(dct):
-    lst = []
-    for name, groups in list(dct.items()):
-        for idx, group in enumerate(groups):
-            lst.append(('{} #{}'.format(name, idx + 1), group[0], group[1]))
-    return lst
-
-
-@pytest.mark.parametrize('test_case', flatten_dict(TESTS), ids=lambda x: x[0])
+@pytest.mark.parametrize('test_case', generate_test_case_structure(TESTS), ids=lambda x: x[0])
 def test_base_operations(test_case):
     print((generate_simple_output_program(test_case[1])))
 
