@@ -62,8 +62,15 @@ class ExecutionEngine(object):
                     stack[target.target_arg] = last_frame.return_value
                 continue
 
-            if target is STACK_FRAME_TERMINATOR:
-                self.stack.pop()
+            if isinstance(target, ReturnStatement):
+                if isinstance(target.value, ResolvableValue):
+                    value = stack[target.value.value]
+                else:
+                    value = target.value.value
+                terminator = next((i for i, x in enumerate(targets) if isinstance(x, StackFrameTerminator)))
+                self.log('Assigning return value {} on stack - cleaning execution targets up to terminator at {}'.format(value, terminator))
+                targets[0:terminator] = []
+                self.stack[-1].return_value = value
                 continue
 
             if isinstance(target, MethodCall):
