@@ -95,6 +95,7 @@ class ExecutionEngine(object):
                 self.log('Method resolution: func={}, args={}'.format(context, args))
 
                 if isinstance(context, collections.Callable):
+                    self.log('Built in method, calling directly')
                     context(args)
                 else:
                     self.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
@@ -102,9 +103,9 @@ class ExecutionEngine(object):
 
                     for name, value in zip(context.arguments, args):
                         self.stack[-1][name.value] = value
-                    targets = context.children + [STACK_FRAME_TERMINATOR] + targets
-            else:
-                target.execute(self.stack[-1])
+
+                    targets = context.children + [terminator] + targets
+                continue
 
             if target.children:
                 targets = target.children + targets
