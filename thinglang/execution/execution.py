@@ -1,11 +1,16 @@
 import traceback
 from collections import namedtuple
 
+from thinglang.common import ImmediateValue, ResolvableValue
 from thinglang.execution.vm import ITOutput
-from thinglang.parser.tokens import MethodCall
+from thinglang.parser.tokens import MethodCall, ReturnStatement, BaseToken, AssignmentOperation
 import collections
 
-STACK_FRAME_TERMINATOR = object()
+class StackFrameTerminator(object):
+    def __init__(self, target_arg=None):
+        self.target_arg = target_arg
+
+STACK_FRAME_TERMINATOR = StackFrameTerminator()
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
 
