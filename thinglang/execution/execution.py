@@ -54,7 +54,13 @@ class ExecutionEngine(object):
 
             self.set_context(target)
 
-            print('Execution target: {}'.format(target))
+            if isinstance(target, StackFrameTerminator):  # Signifies the end of a function call
+                last_frame = self.stack.pop()
+                stack = self.stack[-1]
+                self.log('Stack frame termination, with return value {}, binding to {}'.format(last_frame.return_value, target.target_arg))
+                if target.target_arg is not None:
+                    stack[target.target_arg] = last_frame.return_value
+                continue
 
             if target is STACK_FRAME_TERMINATOR:
                 self.stack.pop()
