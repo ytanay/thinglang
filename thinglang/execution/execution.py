@@ -91,10 +91,15 @@ class ExecutionEngine(object):
             if isinstance(target, MethodCall):
                 context = self.resolve(self.stack[-1], target.target.value)
                 args = target.arguments.evaluate(self.stack[-1])
+
+                self.log('Method resolution: func={}, args={}'.format(context, args))
+
                 if isinstance(context, collections.Callable):
                     context(args)
                 else:
+                    self.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
                     self.create_stack_frame(ThingInstance(context.parent))
+
                     for name, value in zip(context.arguments, args):
                         self.stack[-1][name.value] = value
                     targets = context.children + [STACK_FRAME_TERMINATOR] + targets
