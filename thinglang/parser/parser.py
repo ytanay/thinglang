@@ -2,9 +2,9 @@ from thinglang.common import ValueType
 from thinglang.lexer.lexical_tokens import LexicalDeclarationThing, LexicalIdentifier, LexicalDeclarationMethod, \
     LexicalParenthesesOpen, LexicalAccess, LexicalSeparator, LexicalParenthesesClose, \
     LexicalIndent, LexicalAssignment, SecondOrderLexicalBinary, FirstOrderLexicalBinary, LexicalGroupEnd, \
-    LexicalArgumentListIndicator
+    LexicalArgumentListIndicator, LexicalReturnStatement
 from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, ArgumentListPartial, MethodCall, \
-    ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation
+    ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation, ReturnStatement
 
 PATTERNS = [
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
@@ -22,6 +22,7 @@ PATTERNS = [
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),
+    ((LexicalReturnStatement, ValueType), ReturnStatement)
 
 ]
 
