@@ -6,7 +6,7 @@ from thinglang.parser.tokens import BaseToken, DefinitionPairToken
 class Access(BaseToken):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
-        self.value = [x.value for x in slice if isinstance(x, LexicalIdentifier)]
+        self.target = [x.value for x in slice if isinstance(x, LexicalIdentifier)]
 
 
 class ArgumentListPartial(BaseToken):
