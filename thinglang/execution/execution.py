@@ -107,7 +107,7 @@ class ExecutionEngine(object):
                     self.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
 
                     self.create_stack_frame(ThingInstance(context.parent))
-
+                    assert len(context.arguments) == len(args), 'Method expected {} arguments but recieved {}'.format(len(context.arguments), len(args))
                     for name, value in zip(context.arguments, args):
                         self.stack[-1][name.value] = value
 
