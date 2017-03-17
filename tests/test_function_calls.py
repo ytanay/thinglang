@@ -77,14 +77,14 @@ def test_early_exit():
         """).output == """15 150""".strip()
 
 
-@pytest.mark.skip()
 def test_chained_calls():
     assert run("""
     thing Program
         does start
             Output.write(self.get_7(), self.get_13())
-            number res = self.mul(self.get_13(), self.add(self.get_7()), self.get_7())
+            number res = self.mul(self.get_13(), self.add(self.get_7(), self.get_7()))
             Output.write(res)
+            Output.write(self.mul(self.get_13(), self.add(self.get_7(), self.get_7())))
             Output.write(self.mul(self.add(self.get_7(), self.get_13()), res))
 
         does add with a, b
@@ -98,4 +98,4 @@ def test_chained_calls():
 
         does get_13
             return 13
-        """).output == """7 13\n3640""".strip()
+        """).output == """7 13\n182\n182\n3640""".strip()
