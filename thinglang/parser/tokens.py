@@ -4,12 +4,14 @@ from thinglang.lexer.lexical_tokens import LexicalIdentifier, LexicalEquality
 
 class BaseToken(Describable):
     BLOCK = False
+    ADVANCE = True
 
     def __init__(self, slice):
         self.children = []
         self.indent = 0
         self.value = None
         self.raw_slice = slice
+        self.parent = None
         if slice:
             self.context = slice[-1].context
         else:
@@ -20,11 +22,18 @@ class BaseToken(Describable):
         child.parent = self
 
     def find(self, predicate):
+        results = []
+
         for child in self.children:
+            results.extend(child.find(predicate))
+
             if predicate(child):
-                yield child
-            for x in child.find(predicate):
-                yield x
+                results.append(child)
+
+        if predicate(self):
+            results.append(self)
+
+        return results
 
     def get(self, name):
         for child in self.children:
@@ -139,10 +148,8 @@ class ArithmeticOperation(BaseToken, ObtainableValue):
     def evaluate(self, stack):
         return self.OPERATIONS[self.operator.operator](self.lhs.evaluate(stack), self.rhs.evaluate(stack))
 
-
-class ArithmeticAdd(BaseToken):
-    def evaluate(self, left, right):
-        return left.evaluate() + right.evaluate()
+    def describe(self):
+        return '{} {} {}'.format(self.lhs, self.operator, self.rhs)
 
 
 class AssignmentOperation(BaseToken):
