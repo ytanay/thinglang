@@ -1,10 +1,14 @@
+import collections
 import traceback
 from collections import namedtuple
 
-from thinglang.common import ImmediateValue, ResolvableValue
+from thinglang.common import ResolvableValue
 from thinglang.execution.vm import ITOutput
-from thinglang.parser.tokens import MethodCall, ReturnStatement, BaseToken, AssignmentOperation, Conditional
-import collections
+from thinglang.parser.tokens import BaseToken
+from thinglang.parser.tokens.base import AssignmentOperation
+from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
+from thinglang.parser.tokens.logic import Conditional
+
 
 class StackFrameTerminator(object):
     def __init__(self, target_arg=None):

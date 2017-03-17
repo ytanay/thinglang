@@ -1,6 +1,7 @@
 from thinglang.common import ObtainableValue
 from thinglang.lexer.symbols.base import LexicalIdentifier
-from thinglang.parser.tokens import ReturnStatement, AssignmentOperation, MethodCall
+from thinglang.parser.tokens.base import AssignmentOperation
+from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
 
 
 class Transient(object):

@@ -1,14 +1,17 @@
 from thinglang.common import ValueType
 from thinglang.lexer.symbols import LexicalGroupEnd
-
-from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional
 from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, LexicalIndent, \
     LexicalAccess, LexicalAssignment, LexicalIdentifier
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing
-from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, ArgumentListPartial, MethodCall, \
-    ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation, ReturnStatement, Conditional
+from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional
+from thinglang.parser.tokens import RootToken
+from thinglang.parser.tokens.arithmetic import ArithmeticOperation
+from thinglang.parser.tokens.base import AssignmentOperation
+from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
+from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement
+from thinglang.parser.tokens.logic import Conditional
 
 PATTERNS = [
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name

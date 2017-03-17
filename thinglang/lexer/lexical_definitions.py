@@ -9,7 +9,6 @@ from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArg
     LexicalDeclarationMethod, LexicalDeclarationThing
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
-IDENTIFIER = re.compile(IDENTIFIER_BASE)
 IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")
 
 OPERATORS = {

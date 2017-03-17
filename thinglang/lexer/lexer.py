@@ -5,7 +5,7 @@ from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifi
 from thinglang.lexer.symbols.arithmetic import LexicalNumericalValue
 from thinglang.lexer.symbols import LexicalGroupEnd
 from thinglang.lexer.symbols.base import LexicalInlineComment, LexicalIdentifier
-from thinglang.parser.tokens import InlineString
+from thinglang.parser.tokens.base import InlineString
 
 
 def lexer(source):
