@@ -1,9 +1,12 @@
 import re
 
-from thinglang.lexer.lexical_tokens import LexicalParenthesesClose, LexicalQuote, LexicalSeparator, LexicalIndent, LexicalParenthesesOpen, LexicalAccess, \
-    LexicalDeclarationThing, LexicalDeclarationMethod, \
-    LexicalAssignment, FirstOrderLexicalBinary, SecondOrderLexicalBinary, LexicalArgumentListIndicator, \
-    LexicalInlineComment, LexicalReturnStatement, LexicalConditional, LexicalEquality
+
+from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality
+from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
+from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
+    LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment
+from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
+    LexicalDeclarationMethod, LexicalDeclarationThing
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
 IDENTIFIER = re.compile(IDENTIFIER_BASE)
@@ -21,10 +24,10 @@ OPERATORS = {
 
     '=': LexicalAssignment,
 
-    '+': FirstOrderLexicalBinary,
-    '-': FirstOrderLexicalBinary,
-    '/': SecondOrderLexicalBinary,
-    '*': SecondOrderLexicalBinary,
+    '+': FirstOrderLexicalBinaryOperation,
+    '-': FirstOrderLexicalBinaryOperation,
+    '/': SecondOrderLexicalBinaryOperation,
+    '*': SecondOrderLexicalBinaryOperation,
 
     '#': LexicalInlineComment
 }

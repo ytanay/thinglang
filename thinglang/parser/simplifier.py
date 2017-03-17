@@ -1,5 +1,5 @@
 from thinglang.common import ObtainableValue
-from thinglang.lexer.lexical_tokens import LexicalIdentifier
+from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import ReturnStatement, AssignmentOperation, MethodCall
 
 

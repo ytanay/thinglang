@@ -2,8 +2,9 @@ import re
 
 from thinglang.common import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifier
-from thinglang.lexer.lexical_tokens import LexicalInlineComment, LexicalGroupEnd, LexicalNumericalValue, \
-    LexicalIdentifier
+from thinglang.lexer.symbols.arithmetic import LexicalNumericalValue
+from thinglang.lexer.symbols import LexicalGroupEnd
+from thinglang.lexer.symbols.base import LexicalInlineComment, LexicalIdentifier
 from thinglang.parser.tokens import InlineString
 
 

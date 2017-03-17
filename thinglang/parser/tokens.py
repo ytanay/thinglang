@@ -1,5 +1,6 @@
 from thinglang.common import Describable, ImmediateValue, ObtainableValue
-from thinglang.lexer.lexical_tokens import LexicalIdentifier, LexicalEquality
+from thinglang.lexer.symbols.logic import LexicalEquality
+from thinglang.lexer.symbols.base import LexicalIdentifier
 
 
 class BaseToken(Describable):

@@ -1,16 +1,20 @@
 from thinglang.common import ValueType
-from thinglang.lexer.lexical_tokens import LexicalDeclarationThing, LexicalIdentifier, LexicalDeclarationMethod, \
-    LexicalParenthesesOpen, LexicalAccess, LexicalSeparator, LexicalParenthesesClose, \
-    LexicalIndent, LexicalAssignment, SecondOrderLexicalBinary, FirstOrderLexicalBinary, LexicalGroupEnd, \
-    LexicalArgumentListIndicator, LexicalReturnStatement, LexicalConditional, LexicalComparison
+from thinglang.lexer.symbols import LexicalGroupEnd
+
+from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional
+from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
+from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, LexicalIndent, \
+    LexicalAccess, LexicalAssignment, LexicalIdentifier
+from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
+    LexicalDeclarationMethod, LexicalDeclarationThing
 from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, ArgumentListPartial, MethodCall, \
     ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation, ReturnStatement, Conditional
 
 PATTERNS = [
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
-    ((ValueType, SecondOrderLexicalBinary, ValueType), ArithmeticOperation),  # 4 * 2
-    ((ValueType, FirstOrderLexicalBinary, ValueType), ArithmeticOperation),  # 4 + 2
+    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
+    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
     ((LexicalArgumentListIndicator, ValueType), ArgumentListPartial),  # with 2
     ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
