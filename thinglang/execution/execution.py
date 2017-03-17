@@ -108,6 +108,7 @@ class ExecutionEngine(object):
                 continue
 
             if target.children:
+            if target.ADVANCE:
                 targets = target.children + targets
 
     def print_header(self, str):
