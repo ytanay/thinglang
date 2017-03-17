@@ -11,7 +11,7 @@ class MethodDefinition(DefinitionPairToken):
         super(MethodDefinition, self).__init__(slice)
 
         if isinstance(slice[2], ArgumentList):
-            self.arguments = slice[2].value
+            self.arguments = slice[2]
         else:
             self.arguments = []
 

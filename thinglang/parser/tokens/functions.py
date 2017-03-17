@@ -8,6 +8,8 @@ class Access(BaseToken):
         super(Access, self).__init__(slice)
         self.target = [x.value for x in slice if isinstance(x, LexicalIdentifier)]
 
+    def describe(self):
+        return '.'.join(self.target)
 
 class ArgumentListPartial(BaseToken):
     def __init__(self, slice):
@@ -22,12 +24,18 @@ class ArgumentList(BaseToken):
     def __init__(self, slice):
         super(ArgumentList, self).__init__(slice)
         if isinstance(slice[0], ArgumentListPartial):
-            self.value = slice[0].value
+            self.arguments = slice[0].value
         else:
-            self.value = []
+            self.arguments = []
+
+    def __iter__(self):
+        return iter(self.arguments)
 
     def evaluate(self, stack):
-        return [value.evaluate(stack) for value in self.value]
+        return [value.evaluate(stack) for value in self.arguments]
+
+    def describe(self):
+        return self.arguments
 
 
 class MethodCall(BaseToken, ObtainableValue):
