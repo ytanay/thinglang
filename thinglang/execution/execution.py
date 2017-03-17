@@ -3,7 +3,7 @@ from collections import namedtuple
 
 from thinglang.common import ImmediateValue, ResolvableValue
 from thinglang.execution.vm import ITOutput
-from thinglang.parser.tokens import MethodCall, ReturnStatement, BaseToken, AssignmentOperation
+from thinglang.parser.tokens import MethodCall, ReturnStatement, BaseToken, AssignmentOperation, Conditional
 import collections
 
 class StackFrameTerminator(object):
@@ -107,7 +107,10 @@ class ExecutionEngine(object):
                     targets = context.children + [terminator] + targets
                 continue
 
-            if target.children:
+            if isinstance(target, Conditional):
+                if target.evaluate(stack):
+                    targets = target.children + targets
+
             if target.ADVANCE:
                 targets = target.children + targets
 
