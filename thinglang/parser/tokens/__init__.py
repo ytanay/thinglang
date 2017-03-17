@@ -38,7 +38,7 @@ class BaseToken(Describable, metaclass=abc.ABCMeta):
 
     def get(self, name):
         for child in self.children:
-            if child.value == name:
+            if child.name == name:
                 return child
 
     def tree(self, depth=1):
@@ -59,4 +59,4 @@ class RootToken(BaseToken, metaclass=abc.ABCMeta):
 class DefinitionPairToken(BaseToken):
     def __init__(self, slice):
         super(DefinitionPairToken, self).__init__(slice)
-        self.value = slice[1].value
+        self.name = slice[1].value

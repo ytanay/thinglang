@@ -34,6 +34,7 @@ class ExecutionEngine(object):
     def __enter__(self):
         print('ExecutionEngine: starting')
         print('Parsed tree: {}'.format(self.root.tree()))
+        assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
         self.print_header('Program execution start')
         return self
 
@@ -159,7 +160,7 @@ class ThingInstance(object):
     def __init__(self, cls):
         self.cls = cls
         self.methods = {
-            x.value: x for x in self.cls.children
+            x.name: x for x in self.cls.children
         }
         self.members = {}
 

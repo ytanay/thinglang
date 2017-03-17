@@ -20,15 +20,10 @@ class AssignmentOperation(BaseToken):
         return '{} {} = {}'.format(self.type, self.name, self.value)
 
 
-class InlineString(ImmediateValue):
+class InlineString(ImmediateValue):  # immediate string e.g. "hello world"
     def __init__(self, value):
         self.value = value
 
     def evaluate(self, stack):
         return self.value
 
-
-class ProcessedIndent(BaseToken):
-    def __init__(self, size, slice):
-        super(ProcessedIndent, self).__init__(slice)
-        self.value = size
