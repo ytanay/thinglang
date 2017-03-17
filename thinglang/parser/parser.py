@@ -2,9 +2,9 @@ from thinglang.common import ValueType
 from thinglang.lexer.lexical_tokens import LexicalDeclarationThing, LexicalIdentifier, LexicalDeclarationMethod, \
     LexicalParenthesesOpen, LexicalAccess, LexicalSeparator, LexicalParenthesesClose, \
     LexicalIndent, LexicalAssignment, SecondOrderLexicalBinary, FirstOrderLexicalBinary, LexicalGroupEnd, \
-    LexicalArgumentListIndicator, LexicalReturnStatement
+    LexicalArgumentListIndicator, LexicalReturnStatement, LexicalConditional, LexicalComparison
 from thinglang.parser.tokens import ThingDefinition, MethodDefinition, Access, ArgumentListPartial, MethodCall, \
-    ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation, ReturnStatement
+    ArgumentList, ArithmeticOperation, RootToken, AssignmentOperation, ReturnStatement, Conditional
 
 PATTERNS = [
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
@@ -22,7 +22,8 @@ PATTERNS = [
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),
-    ((LexicalReturnStatement, ValueType), ReturnStatement)
+    ((LexicalReturnStatement, ValueType), ReturnStatement),
+    ((LexicalConditional, ValueType, LexicalComparison, ValueType), Conditional)
 
 ]
 
@@ -68,7 +69,7 @@ def parse_group(group):
         Access(id-1, id-2) LEXICAL_PARENTHESES_OPEN STRING_VALUE LEXICAL_PARENTHESES_CLOSE
         Access(id-1, id-2) ArgumentListPartial([string value]) LEXICAL_PARENTHESES_CLOSE
         Access(id-1, id-2) ArgumentList([string value])
-        MethodCall(id-1, id-2, [string value])
+        MethodCall(targetAccess(id-1, id-2), args=[string value])
     Therefore, the MethodCall token would be returned for this group.
 
     Additionally, the parser converts LEXICAL_INDENTATION tokens to actual indentation value which it stores directly on finalized token.
@@ -91,9 +92,9 @@ def parse_group(group):
 def replace_in_place(group):
     """
     Given a list of lexical tokens, attempt to find partial matches, in order, using the replacements list defined above.
-    Whenever a match succeeds, the matching slice is spliced out of place, and replaced with a parsed token instance which performs basic logical on the slice.
+    Whenever a match succeeds, the matching slice is spliced out of place, and replaced with a parsed token instance.
     The list is modified in place.
-    :return: True if a replacement occurred, False otherwise
+    :return: True if a replacement occurred, None otherwise
     """
     for pattern, target in PATTERNS:
         size = len(pattern)
