@@ -12,8 +12,16 @@ def run(source):
 
     lexical_groups = list(lexer(source))
     tree = parse(lexical_groups)
+    validate(tree, None)
     root_node = simplify(tree)
 
     with ExecutionEngine(root_node) as engine:
         engine.execute()
         return engine.results()
+
+
+def validate(node, parent):
+    assert node.parent is parent
+    print('validating parent on {} = {}'.format(node, parent))
+    for child in node.children:
+        validate(child, node)
