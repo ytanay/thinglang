@@ -77,7 +77,7 @@ class LexicalDeclarationMethod(LexicalEntity): pass
 class LexicalArgumentListIndicator(LexicalEntity): pass
 class LexicalGroupEnd(LexicalEntity): pass
 class LexicalInlineComment(LexicalEntity): pass
-class LexicalReturnStatement(LexicalEntity): passclass LexicalReturnStatement(LexicalEntity): pass
+class LexicalReturnStatement(LexicalEntity): pass
 class LexicalConditional(LexicalEntity): pass
 
 class LexicalEquality(LexicalComparison): pass
