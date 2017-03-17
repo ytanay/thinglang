@@ -98,7 +98,9 @@ class ExecutionEngine(object):
                     self.log('Built in method, calling directly')
                     context(args)
                 else:
+                    self.log('Applying arguments {} -> {} -> {}'.format(context.arguments, target.arguments, args))
                     self.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
+
                     self.create_stack_frame(ThingInstance(context.parent))
 
                     for name, value in zip(context.arguments, args):
@@ -133,11 +135,19 @@ class ExecutionEngine(object):
         return context
 
     def set_context(self, target):
-        print('Target: {}'.format(target.context if isinstance(target, BaseToken) else target))
+        print('Target: {} ({})'.format(target.context if isinstance(target, BaseToken) else target, target))
+        self.log_stack()
         self.current_target = target
 
     def log(self, param):
         print('\t{}'.format(param))
+
+    def log_stack(self):
+        if not self.stack[-1].data:
+            return
+        print('\tSTACK:')
+        for key, value in self.stack[-1]:
+            print('\t\t{} -> {}'.format(key, value))
 
 
 class ThingInstance(object):
@@ -174,6 +184,10 @@ class StackFrame(object):
 
     def __contains__(self, item):
         return item in self.data
+
+    def __iter__(self):
+        for key, value in self.data.items():
+            yield key, value
 
     def enter(self):
         print('\tINCR<{}> -> <{}>'.format(self.idx, self.idx + 1))
