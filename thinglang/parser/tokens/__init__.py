@@ -18,6 +18,10 @@ class BaseToken(Describable, metaclass=abc.ABCMeta):
         else:
             self.context = None
 
+    def contextify(self, parent):
+        self.parent = parent
+        return self
+
     def attach(self, child):
         self.children.append(child)
         child.parent = self
@@ -51,6 +55,9 @@ class BaseToken(Describable, metaclass=abc.ABCMeta):
     def describe(self):
         return self.value if self.value is not None else ''
 
+    def insert_before(self, node):
+        siblings = self.parent.children
+        siblings.insert(siblings.index(self), node)
 
 class RootToken(BaseToken, metaclass=abc.ABCMeta):
     BLOCK = True
