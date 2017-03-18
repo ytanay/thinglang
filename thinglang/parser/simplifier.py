@@ -12,6 +12,19 @@ def simplify(tree):
         reduce_method_calls(method_call.value, method_call)
 
     return tree
+
+
+def unwrap_returns(tree):
+    had_change = False
+
+    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, ObtainableValue))):
+        siblings = child.parent.children
+        idx = siblings.index(child)
+        local_id = LexicalIdentifier(next(ids)).contextify(child.context)
+        siblings[idx:idx + 1] = [AssignmentOperation([None, local_id, None, child.value]).contextify(child.parent), ReturnStatement([None, local_id]).contextify(child.parent)]
+        had_change = True
+
+    return had_change
 class Transient(object):
     def __init__(self, idx):
         self.idx = idx
