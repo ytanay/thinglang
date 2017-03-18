@@ -3,16 +3,13 @@ import traceback
 from collections import namedtuple
 
 from thinglang.common import ResolvableValue
-from thinglang.execution.vm import ITOutput
+from thinglang.execution.builtins import ITOutput
+from thinglang.execution.classes import ThingInstance
+from thinglang.execution.stack import StackFrameTerminator, StackFrame
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
 from thinglang.parser.tokens.logic import Conditional
-
-
-class StackFrameTerminator(object):
-    def __init__(self, target_arg=None):
-        self.target_arg = target_arg
 
 STACK_FRAME_TERMINATOR = StackFrameTerminator()
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
@@ -153,57 +150,3 @@ class ExecutionEngine(object):
         print('\tSTACK:')
         for key, value in self.stack[-1]:
             print('\t\t{} -> {}'.format(key, value))
-
-
-class ThingInstance(object):
-
-    def __init__(self, cls):
-        self.cls = cls
-        self.methods = {
-            x.name: x for x in self.cls.children
-        }
-        self.members = {}
-
-    def __contains__(self, item):
-        return item in self.members or item in self.methods
-
-    def __getitem__(self, item):
-        return self.members.get(item) or self.methods.get(item)
-
-
-class StackFrame(object):
-
-    def __init__(self, instance):
-        self.instance = instance
-        self.data = {}
-        self.idx = 0
-        self.return_value = None
-
-    def __setitem__(self, key, value):
-        print('\tSET<{}> {}: {}'.format(self.idx, key, value))
-        self.data[key] = (self.idx, value)
-
-    def __getitem__(self, item):
-        print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
-        return self.data[item][1]
-
-    def __contains__(self, item):
-        return item in self.data
-
-    def __iter__(self):
-        for key, value in self.data.items():
-            yield key, value
-
-    def enter(self):
-        print('\tINCR<{}> -> <{}>'.format(self.idx, self.idx + 1))
-        self.idx += 1
-
-    def exit(self):
-        print('\tDECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
-        self.data = {
-            key: value for key, value in self.data.items() if value[1] != self.idx
-        }
-
-        self.idx -= 1
-
-
