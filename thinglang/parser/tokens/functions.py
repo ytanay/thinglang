@@ -36,9 +36,10 @@ class ArgumentListDecelerationPartial(ArgumentListPartial):
 
 
 class ArgumentList(BaseToken):
-    def __init__(self, slice):
+    def __init__(self, slice=None):
         super(ArgumentList, self).__init__(slice)
-        if isinstance(slice[0], ArgumentListPartial):
+
+        if slice and isinstance(slice[0], ArgumentListPartial):
             self.arguments = slice[0].value
         else:
             self.arguments = []
@@ -46,11 +47,17 @@ class ArgumentList(BaseToken):
     def __iter__(self):
         return iter(self.arguments)
 
+    def __len__(self):
+        return len(self.arguments)
+
     def evaluate(self, stack):
         return [value.evaluate(stack) for value in self.arguments]
 
     def describe(self):
         return self.arguments
+
+    def replace(self, original, replacement):
+        self.arguments = [replacement if x is original else x for x in self.arguments]
 
 
 class MethodCall(BaseToken, ObtainableValue):
