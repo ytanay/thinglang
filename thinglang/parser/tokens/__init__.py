@@ -59,6 +59,7 @@ class BaseToken(Describable, metaclass=abc.ABCMeta):
         siblings = self.parent.children
         siblings.insert(siblings.index(self), node)
 
+
 class RootToken(BaseToken, metaclass=abc.ABCMeta):
     BLOCK = True
 
