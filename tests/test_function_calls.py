@@ -100,3 +100,18 @@ def test_chained_calls():
         does get_13
             return 13
         """).output == """7 13\n182\n182\n3640""".strip()
+
+
+def test_arithmetic_over_method_calls():
+    assert run("""
+    thing Program
+        does start
+            number inter = self.get_13() + self.get_7() + self.get_7() * 3
+            Output.write(inter, self.get_7() + self.get_13(), 2 * inter * self.get_7())
+
+        does get_7
+            return 7
+
+        does get_13
+            return 13
+        """).output == """41 20 574""".strip()
