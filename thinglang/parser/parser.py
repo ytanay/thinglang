@@ -1,62 +1,10 @@
 import copy
 import pprint
 
-from thinglang.common import ValueType
 from thinglang.lexer.symbols import LexicalGroupEnd
-from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
-from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, LexicalIndent, \
-    LexicalAccess, LexicalAssignment, LexicalIdentifier
-from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
-    LexicalDeclarationMethod, LexicalDeclarationThing
-from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional
+from thinglang.lexer.symbols.base import LexicalIndent
+from thinglang.parser.patterns import REPLACEMENT_PASSES
 from thinglang.parser.tokens import RootToken
-from thinglang.parser.tokens.arithmetic import ArithmeticOperation
-from thinglang.parser.tokens.base import AssignmentOperation
-from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
-from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
-    ArgumentListDecelerationPartial
-from thinglang.parser.tokens.logic import Conditional
-
-PATTERNS = [
-
-    ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
-    ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
-    ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
-
-    ((LexicalArgumentListIndicator, ValueType), ArgumentListDecelerationPartial),  # with a
-
-    ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
-
-
-    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
-    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
-
-    ((ArgumentListPartial, SecondOrderLexicalBinaryOperation, ValueType), ArgumentListPartial),  # (4 * 2
-    ((ArgumentListPartial, FirstOrderLexicalBinaryOperation, ValueType), ArgumentListPartial),  # (4 + 2
-
-    ((LexicalParenthesesOpen, LexicalParenthesesClose), ArgumentList),  # ()
-
-    ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
-
-
-    ((ArgumentListDecelerationPartial, LexicalSeparator, ValueType), ArgumentListDecelerationPartial),  # (2, 3
-    ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
-
-    ((ArgumentListPartial, LexicalParenthesesClose), ArgumentList),  # (2, 3)
-    ((ArgumentListDecelerationPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
-
-
-
-    ((LexicalConditional, ValueType, LexicalComparison, ValueType), Conditional),  # if x eq y
-
-    ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
-
-    ((Access, ArgumentList), MethodCall),  # person.walk(...)
-
-    ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
-    ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
-
-]
 
 
 def parse(lexical_groups):
@@ -110,8 +58,9 @@ def parse_group(group):
 
     original = copy.deepcopy(group)
 
-    while replace_in_place(group):
-        pass
+    for pattern_set in REPLACEMENT_PASSES:
+        while replace_in_place(group, pattern_set):
+            pass
 
     process_indentation(group)
 
@@ -119,19 +68,19 @@ def parse_group(group):
         return
 
     if len(group) != 1:
-        raise RuntimeError('Cannot parse {}\nReduced until {}'.format(original, pprint.pformat(group)))
+        raise RuntimeError('Cannot parse {}\nReduced until {}'.format(pprint.pformat(original), pprint.pformat(group)))
 
     return group[0]
 
 
-def replace_in_place(group):
+def replace_in_place(group, pattern_set):
     """
     Given a list of lexical tokens, attempt to find partial matches, in order, using the replacements list defined above.
     Whenever a match succeeds, the matching slice is spliced out of place, and replaced with a parsed token instance.
     The list is modified in place.
     :return: True if a replacement occurred, None otherwise
     """
-    for pattern, target in PATTERNS:
+    for pattern, target in pattern_set:
         size = len(pattern)
         match_starts = filter_indices_by_type(group, pattern[0])
 
