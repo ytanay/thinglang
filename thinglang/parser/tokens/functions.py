@@ -64,6 +64,7 @@ class MethodCall(BaseToken, ObtainableValue):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
         self.target, self.arguments = slice
+        self.value = self
 
         if not self.arguments:
             self.arguments = ArgumentList()
