@@ -115,3 +115,18 @@ def test_arithmetic_over_method_calls():
         does get_13
             return 13
         """).output == """41 20 574""".strip()
+
+
+def test_recursion():
+    assert run("""
+    thing Program
+        does start
+            Output.write(self.factorial(10))
+
+        does factorial with n
+            if n eq 1
+                return 1
+            number val = n * self.factorial(n-1)
+            return val
+
+        """).output == """3628800""".strip()
