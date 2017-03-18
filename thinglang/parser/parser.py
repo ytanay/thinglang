@@ -87,6 +87,8 @@ def parse_group(group):
     :return:
     """
 
+    original = copy.deepcopy(group)
+
     while replace_in_place(group):
         pass
 
@@ -95,7 +97,9 @@ def parse_group(group):
     if not group:
         return
 
-    assert len(group) == 1, 'more than 1 element, {}'.format(group)
+    if len(group) != 1:
+        raise RuntimeError('Cannot parse {}\nReduced until {}'.format(original, pprint.pformat(group)))
+
     return group[0]
 
 
