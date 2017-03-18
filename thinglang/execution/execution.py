@@ -11,7 +11,6 @@ from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
 from thinglang.parser.tokens.logic import Conditional
 
-STACK_FRAME_TERMINATOR = StackFrameTerminator()
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
 
@@ -52,7 +51,7 @@ class ExecutionEngine(object):
         while tokens:
             stack = self.stack[-1]
             token = tokens.pop(0)
-            terminator = StackFrameTerminator()
+            terminator = None
 
             self.set_context(token)
 
@@ -108,7 +107,7 @@ class ExecutionEngine(object):
                     for name, value in zip(context.arguments, args):
                         self.stack[-1][name.value] = value
 
-                    tokens = context.children + [terminator] + tokens
+                    tokens = context.children + [terminator or StackFrameTerminator()] + tokens
                 continue
 
             if isinstance(token, Conditional):
