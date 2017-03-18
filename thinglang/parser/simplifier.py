@@ -1,5 +1,6 @@
 from thinglang.common import ObtainableValue
 from thinglang.lexer.symbols.base import LexicalIdentifier
+from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
 
@@ -25,6 +26,24 @@ def unwrap_returns(tree):
         had_change = True
 
     return had_change
+
+
+def reduce_method_calls(method_call, node, parent_call=None):
+    if not isinstance(method_call, (MethodCall, ArithmeticOperation)):
+        return
+    for argument in method_call.arguments:
+        if isinstance(argument, MethodCall):
+            reduce_method_calls(argument, node, parent_call=method_call)
+        if isinstance(argument, ArithmeticOperation):
+            for x in argument.arguments:
+                reduce_method_calls(x, node, parent_call=argument)
+
+    if parent_call is not None:
+        id, assignment = create_transient(method_call, node)
+        node.insert_before(assignment)
+        parent_call.replace_argument(method_call, id)
+
+
 class Transient(object):
     def __init__(self, idx):
         self.idx = idx
