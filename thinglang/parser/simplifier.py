@@ -48,32 +48,4 @@ def unwrap_returns(tree):
 
     return had_change
 
-def unwrap_method_calls(tree):
-    relevant = list(tree.find(is_compound))
 
-    if not relevant:
-        return False
-
-    child = relevant[0]
-
-    parent, siblings = child.parent, child.parent.children
-    idx = siblings.index(child)
-    new_args = []
-
-    if isinstance(child, AssignmentOperation):
-        child = child.value
-
-    for arg in child.arguments.value:
-        if isinstance(arg, ObtainableValue):
-            local_id = LexicalIdentifier(next(ids)).contextify(child.context)
-            op = AssignmentOperation([None, local_id, None, arg])
-            op.parent = parent
-            siblings.insert(idx, op)
-            new_args.append(local_id)
-        else:
-            new_args.append(arg)
-    print('Against {}, {} -> {}'.format(child.target, child.arguments, new_args))
-    assert len(child.arguments.value) == len(new_args)
-    child.arguments.value = new_args
-
-    return True
