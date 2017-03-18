@@ -73,6 +73,7 @@ def test_early_exit():
             Output.write(a, b)
         does add_or_multiply with a, b
             return a * b
+            Output.write("never should appear")
             return a + b
         """).output == """15 150""".strip()
 
