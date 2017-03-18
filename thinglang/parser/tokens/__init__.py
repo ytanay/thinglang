@@ -68,3 +68,15 @@ class DefinitionPairToken(BaseToken):
     def __init__(self, slice):
         super(DefinitionPairToken, self).__init__(slice)
         self.name = slice[1].value
+
+
+class Transient(object):
+
+    IDX_COUNTER = -1
+
+    def __init__(self):
+        self.idx = self.IDX_COUNTER
+        self.IDX_COUNTER += 1
+
+    def __str__(self):
+        return 'Transient({})'.format(self.idx)
