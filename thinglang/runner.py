@@ -1,3 +1,4 @@
+from thinglang import utils
 from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.parser import parse
@@ -8,6 +9,8 @@ def run(source):
     if not source:
         raise ValueError('Source cannot be empty')
 
+    utils.print_header('Source', source.strip())
+
     source = source.strip().replace(' ' * 4, '\t')
 
     lexical_groups = list(lexer(source))
@@ -15,6 +18,8 @@ def run(source):
     validate(tree)
     root_node = simplify(tree)
     validate(tree)
+
+    utils.print_header('Parsed AST', root_node.tree())
 
     with ExecutionEngine(root_node) as engine:
         engine.execute()

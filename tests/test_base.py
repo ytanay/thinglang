@@ -50,7 +50,6 @@ TESTS = {
 
 @pytest.mark.parametrize('test_case', generate_test_case_structure(TESTS), ids=lambda x: x[0])
 def test_base_operations(test_case):
-    print((generate_simple_output_program(test_case[1])))
 
     if isinstance(test_case[2], str):
         assert run(generate_simple_output_program(test_case[1])).output == test_case[2]
