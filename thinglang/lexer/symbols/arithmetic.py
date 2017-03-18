@@ -1,8 +1,8 @@
-from thinglang.common import ImmediateValue
+from thinglang.common import ValueType
 from thinglang.lexer.symbols import LexicalSymbol, LexicalBinaryOperation
 
 
-class LexicalNumericalValue(LexicalSymbol, ImmediateValue):
+class LexicalNumericalValue(LexicalSymbol, ValueType):
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)
         self.value = int(value)

@@ -1,4 +1,4 @@
-from thinglang.common import ObtainableValue, ValueType
+from thinglang.common import ValueType
 from thinglang.lexer.symbols import LexicalBinaryOperation
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken, DefinitionPairToken
@@ -60,7 +60,7 @@ class ArgumentList(BaseToken):
         self.arguments = [replacement if x is original else x for x in self.arguments]
 
 
-class MethodCall(BaseToken, ObtainableValue):
+class MethodCall(BaseToken, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
         self.target, self.arguments = slice

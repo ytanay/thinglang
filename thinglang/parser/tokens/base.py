@@ -1,4 +1,4 @@
-from thinglang.common import ImmediateValue
+from thinglang.common import ValueType
 from thinglang.parser.tokens import BaseToken
 
 
@@ -20,7 +20,7 @@ class AssignmentOperation(BaseToken):
         return '{} {} = {}'.format(self.type, self.name, self.value)
 
 
-class InlineString(ImmediateValue):  # immediate string e.g. "hello world"
+class InlineString(ValueType):  # immediate string e.g. "hello world"
     def __init__(self, value):
         self.value = value
 

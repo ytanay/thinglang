@@ -1,4 +1,4 @@
-from thinglang.common import ResolvableValue
+from thinglang.common import ValueType
 from thinglang.lexer.symbols import LexicalSymbol
 
 
@@ -38,7 +38,7 @@ class LexicalInlineComment(LexicalSymbol): pass
 class LexicalAssignment(LexicalSymbol): pass
 
 
-class LexicalIdentifier(LexicalSymbol, ResolvableValue):
+class LexicalIdentifier(LexicalSymbol, ValueType):
     def __init__(self, value):
         super(LexicalIdentifier, self).__init__(value)
         self.value = value

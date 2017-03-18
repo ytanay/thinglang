@@ -1,8 +1,8 @@
-from thinglang.common import ObtainableValue
+from thinglang.common import ValueType
 from thinglang.parser.tokens import BaseToken
 
 
-class ArithmeticOperation(BaseToken, ObtainableValue):
+class ArithmeticOperation(BaseToken, ValueType):
     OPERATIONS = {
         "+": lambda rhs, lhs: rhs + lhs,
         "*": lambda rhs, lhs: rhs * lhs,

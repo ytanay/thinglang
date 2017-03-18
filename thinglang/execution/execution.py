@@ -3,10 +3,10 @@ import traceback
 from collections import namedtuple
 
 from thinglang import utils
-from thinglang.common import ResolvableValue
 from thinglang.execution.builtins import ITOutput
 from thinglang.execution.classes import ThingInstance
 from thinglang.execution.stack import StackFrameTerminator, StackFrame
+from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
@@ -60,7 +60,7 @@ class ExecutionEngine(object):
                 continue
 
             if isinstance(token, ReturnStatement):
-                if isinstance(token.value, ResolvableValue):
+                if isinstance(token.value, LexicalIdentifier):
                     value = stack[token.value.value]
                 else:
                     value = token.value.value

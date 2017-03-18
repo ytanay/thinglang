@@ -1,10 +1,8 @@
-from thinglang.common import ObtainableValue
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import Transient
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-
 
 
 def simplify(tree):

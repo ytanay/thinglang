@@ -14,18 +14,6 @@ class ValueType(object):
     pass
 
 
-class ImmediateValue(ValueType):
-    pass
-
-
-class ResolvableValue(ValueType):
-    pass
-
-
-class ObtainableValue(ValueType):
-    pass
-
-
 class TokenContext(object):
 
     def __init__(self, line, number):
