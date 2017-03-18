@@ -27,26 +27,6 @@ def is_compound(node):
            (isinstance(node, AssignmentOperation) and is_compound(node.value))
 
 
-def simplify(tree):
-    while unwrap_method_calls(tree):
-        pass
-
-    while unwrap_returns(tree):
-        pass
-
-    return tree
-
-def unwrap_returns(tree):
-    had_change = False
-
-    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, ObtainableValue))):
-        siblings = child.parent.children
-        idx = siblings.index(child)
-        local_id = LexicalIdentifier(next(ids)).contextify(child.context)
-        siblings[idx:idx + 1] = [AssignmentOperation([None, local_id, None, child.value]), ReturnStatement([None, local_id])]
-        had_change = True
-
-    return had_change
 def create_transient(value, parent):
     local_id = LexicalIdentifier(next(ids))
     return local_id, AssignmentOperation([None, local_id, None, value]).contextify(parent.parent)
