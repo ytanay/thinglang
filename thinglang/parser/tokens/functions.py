@@ -71,6 +71,9 @@ class MethodCall(BaseToken, ObtainableValue):
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
+    def replace_argument(self, original, replacement):
+        self.arguments.replace(original, replacement)
+
 
 class ReturnStatement(DefinitionPairToken):
     def __init__(self, slice):
