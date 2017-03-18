@@ -66,7 +66,7 @@ class MethodCall(BaseToken, ObtainableValue):
         self.target, self.arguments = slice
 
         if not self.arguments:
-            self.arguments = []
+            self.arguments = ArgumentList()
 
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
