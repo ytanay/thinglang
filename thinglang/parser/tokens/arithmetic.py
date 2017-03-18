@@ -18,4 +18,10 @@ class ArithmeticOperation(BaseToken, ObtainableValue):
         return self.OPERATIONS[self.operator.operator](self.lhs.evaluate(stack), self.rhs.evaluate(stack))
 
     def describe(self):
-        return '{} {} {}'.format(self.lhs, self.operator, self.rhs)
+        return '|{} {} {}|'.format(self[0], self.operator, self[1])
+
+    def replace_argument(self, original, replacement):
+        self.arguments = [replacement if x is original else x for x in self.arguments]
+
+    def __getitem__(self, item):
+        return self.arguments[item]
