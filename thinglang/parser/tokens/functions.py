@@ -31,6 +31,9 @@ class ArgumentListPartial(BaseToken):
         return self.value[item]
 
 
+class ArgumentListDecelerationPartial(ArgumentListPartial):
+    pass
+
 
 class ArgumentList(BaseToken):
     def __init__(self, slice):

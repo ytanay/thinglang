@@ -14,16 +14,19 @@ from thinglang.parser.tokens.functions import Access, ArgumentListPartial, Argum
 from thinglang.parser.tokens.logic import Conditional
 
 PATTERNS = [
+    ((LexicalArgumentListIndicator, ValueType), ArgumentListDecelerationPartial),  # with a
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
     ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
     ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
     ((LexicalArgumentListIndicator, ValueType), ArgumentListPartial),  # with 2
     ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
+    ((ArgumentListDecelerationPartial, LexicalSeparator, ValueType), ArgumentListDecelerationPartial),  # (2, 3
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
     ((LexicalParenthesesOpen, LexicalParenthesesClose), ArgumentList),  # ()
     ((ArgumentListPartial, LexicalParenthesesClose), ArgumentList),  # (2, 3)
     ((ArgumentListPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
+    ((ArgumentListDecelerationPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
     ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
     ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
