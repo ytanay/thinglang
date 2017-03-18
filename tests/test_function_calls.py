@@ -126,7 +126,6 @@ def test_recursion():
         does factorial with n
             if n eq 1
                 return 1
-            number val = n * self.factorial(n-1)
-            return val
+            return n * self.factorial(n-1)
 
         """).output == """3628800""".strip()
