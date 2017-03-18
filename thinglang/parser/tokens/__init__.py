@@ -63,6 +63,8 @@ class BaseToken(Describable, metaclass=abc.ABCMeta):
 class RootToken(BaseToken, metaclass=abc.ABCMeta):
     BLOCK = True
 
+    def __init__(self):
+        super(RootToken, self).__init__(None)
 
 class DefinitionPairToken(BaseToken):
     def __init__(self, slice):
@@ -75,8 +77,8 @@ class Transient(object):
     IDX_COUNTER = -1
 
     def __init__(self):
-        self.idx = self.IDX_COUNTER
-        self.IDX_COUNTER += 1
+        self.idx = Transient.IDX_COUNTER
+        Transient.IDX_COUNTER += 1
 
     def __str__(self):
         return 'Transient({})'.format(self.idx)

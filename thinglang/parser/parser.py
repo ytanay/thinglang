@@ -15,7 +15,7 @@ def parse(lexical_groups):
     Each TokenNode in the tree contains n-children, where each child is also a token node.
     The root node of this tree is returned
     """
-    stack = [RootToken(None)]
+    stack = [RootToken()]
     processed_groups = [x for x in [parse_group(group) for group in lexical_groups] if x]
 
     for idx, node in enumerate(processed_groups):
@@ -45,11 +45,11 @@ def parse_group(group):
     For example, the source `Output.write("hello world")` would be emitted by the lexical analyzer as:
         LEXICAL_IDENTIFIER LEXICAL_ACCESS LEXICAL_IDENTIFIER LEXICAL_PARENTHESES_OPEN STRING_VALUE LEXICAL_PARENTHESES_CLOSE
     The parser would make the following replacements, in order:
-        Access(id-1, id-2) LEXICAL_PARENTHESES_OPEN STRING_VALUE LEXICAL_PARENTHESES_CLOSE
-        Access(id-1, id-2) ArgumentListPartial([string value]) LEXICAL_PARENTHESES_CLOSE
-        Access(id-1, id-2) ArgumentList([string value])
-        MethodCall(targetAccess(id-1, id-2), args=[string value])
-    Therefore, the MethodCall token would be returned for this group.
+        Access(Output, write) LEXICAL_PARENTHESES_OPEN STRING_VALUE LEXICAL_PARENTHESES_CLOSE
+        Access(Output, write) ArgumentListPartial(["hello world"]) LEXICAL_PARENTHESES_CLOSE
+        Access(Output, write) ArgumentList(["hello world"])
+        MethodCall(targetAccess(Output, write), args=["hello world"])
+    Therefore, a MethodCall token would be returned for this group.
 
     Additionally, the parser converts LEXICAL_INDENTATION tokens to actual indentation value which it stores directly on finalized token.
     :param group:
