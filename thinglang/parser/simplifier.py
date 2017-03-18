@@ -4,6 +4,14 @@ from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
 
 
+def simplify(tree):
+    while unwrap_returns(tree):
+        pass
+
+    for method_call in tree.find(lambda x: isinstance(getattr(x, 'value', None), (MethodCall, ArithmeticOperation))):
+        reduce_method_calls(method_call.value, method_call)
+
+    return tree
 class Transient(object):
     def __init__(self, idx):
         self.idx = idx
