@@ -47,5 +47,8 @@ def unwrap_returns(tree):
         had_change = True
 
     return had_change
+def create_transient(value, parent):
+    local_id = LexicalIdentifier(next(ids))
+    return local_id, AssignmentOperation([None, local_id, None, value]).contextify(parent.parent)
 
 
