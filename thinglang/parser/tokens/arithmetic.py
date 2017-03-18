@@ -12,10 +12,11 @@ class ArithmeticOperation(BaseToken, ObtainableValue):
 
     def __init__(self, slice):
         super(ArithmeticOperation, self).__init__(slice)
-        self.lhs, self.operator, self.rhs = slice
+        self.arguments = [slice[0], slice[2]]
+        self.operator = slice[1]
 
     def evaluate(self, stack):
-        return self.OPERATIONS[self.operator.operator](self.lhs.evaluate(stack), self.rhs.evaluate(stack))
+        return self.OPERATIONS[self.operator.operator](self[0].evaluate(stack), self[1].evaluate(stack))
 
     def describe(self):
         return '|{} {} {}|'.format(self[0], self.operator, self[1])
