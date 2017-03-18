@@ -20,7 +20,7 @@ def simplify(tree):
 def unwrap_returns(tree):
     had_change = False
 
-    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, ObtainableValue))):
+    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, (MethodCall, ArithmeticOperation)))):
         id, assignment = create_transient(child.value, child)
         siblings = child.parent.children
         idx = siblings.index(child)
