@@ -2,6 +2,7 @@ import collections
 import traceback
 from collections import namedtuple
 
+from thinglang import utils
 from thinglang.common import ResolvableValue
 from thinglang.execution.builtins import ITOutput
 from thinglang.execution.classes import ThingInstance
@@ -24,22 +25,17 @@ class ExecutionEngine(object):
 
         self.heap['Output'] = ITOutput()
 
-    def results(self):
-        return ExecutionOutput(output=self.heap['Output'].data.strip())
-
     def __enter__(self):
-        print('ExecutionEngine: starting')
-        print('Parsed tree: {}'.format(self.root.tree()))
         assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
-        self.print_header('Program execution start')
+        utils.print_header('Execution')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.print_header('Execution end')
-        print('ExecutionEngine: ended')
+
         if exc_val:
+            utils.print_header('Execution summary (exceptions)')
             print(''.join(traceback.format_exception(exc_type, exc_val, exc_tb)))
-        self.print_header('Output')
+        utils.print_header('Output')
         print(self.heap['Output'].data.strip())
 
     def execute(self):
@@ -58,7 +54,7 @@ class ExecutionEngine(object):
             if isinstance(token, StackFrameTerminator):  # Signifies the end of a function call
                 last_frame = self.stack.pop()
                 stack = self.stack[-1]
-                self.log('Stack frame termination, with return value {}, binding to {}'.format(last_frame.return_value, token.target_arg))
+                utils.log('Stack frame termination, with return value {}, binding to {}'.format(last_frame.return_value, token.target_arg))
                 if token.target_arg is not None:
                     stack[token.target_arg] = last_frame.return_value
                 continue
@@ -69,7 +65,7 @@ class ExecutionEngine(object):
                 else:
                     value = token.value.value
                 terminator = next((i for i, x in enumerate(tokens) if isinstance(x, StackFrameTerminator)))
-                self.log('Assigning return value {} on stack - cleaning execution targets up to terminator at {}'.format(value, terminator))
+                utils.log('Assigning return value {} on stack - cleaning execution targets up to terminator at {}'.format(value, terminator))
                 tokens[0:terminator] = []
                 self.stack[-1].return_value = value
                 continue
@@ -83,7 +79,7 @@ class ExecutionEngine(object):
                         token.name.value, token.context)
 
                 if isinstance(token.value, MethodCall):
-                    self.log('Assignment operation leading to method call, overriding terminator')
+                    utils.log('Assignment operation leading to method call, overriding terminator')
                     terminator = StackFrameTerminator(token.name.value)
                     token = token.value
                 else:
@@ -93,14 +89,14 @@ class ExecutionEngine(object):
                 context = self.resolve(self.stack[-1], token.target.target)
                 args = token.arguments.evaluate(self.stack[-1])
 
-                self.log('Method resolution: func={}, args={}'.format(context, args))
+                utils.log('Method resolution: func={}, args={}'.format(context, args))
 
                 if isinstance(context, collections.Callable):
-                    self.log('Built in method, calling directly')
+                    utils.log('Built in method, calling directly')
                     context(args)
                 else:
-                    self.log('Applying arguments {} -> {} -> {}'.format(context.arguments, token.arguments, args))
-                    self.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
+                    utils.log('Applying arguments {} -> {} -> {}'.format(context.arguments, token.arguments, args))
+                    utils.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
 
                     self.create_stack_frame(ThingInstance(context.parent))
                     assert len(context.arguments) == len(args), 'Method expected {} arguments but recieved {}'.format(len(context.arguments), len(args))
@@ -117,8 +113,8 @@ class ExecutionEngine(object):
             if token.ADVANCE:
                 tokens = token.children + tokens
 
-    def print_header(self, str):
-        print('{:#^80}'.format(' {} '.format(str)))
+    def results(self):
+        return ExecutionOutput(output=self.heap['Output'].data.strip())
 
     def create_stack_frame(self, instance):
         self.stack.append(StackFrame(instance))
@@ -139,9 +135,6 @@ class ExecutionEngine(object):
         print('Target: {} ({})'.format(target.context if isinstance(target, BaseToken) else target, target))
         self.log_stack()
         self.current_target = target
-
-    def log(self, param):
-        print('\t{}'.format(param))
 
     def log_stack(self):
         if not self.stack[-1].data:
