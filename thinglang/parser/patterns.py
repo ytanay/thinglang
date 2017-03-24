@@ -37,7 +37,6 @@ FIRST_PASS_PATTERNS = [
 
     ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
 
-
     ((ArgumentListDecelerationPartial, LexicalSeparator, ValueType), ArgumentListDecelerationPartial),  # (2, 3
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
 
