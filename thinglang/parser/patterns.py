@@ -11,7 +11,7 @@ from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
-from thinglang.parser.tokens.logic import Conditional
+from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse
 
 FIRST_PASS_PATTERNS = [
 
@@ -46,6 +46,8 @@ FIRST_PASS_PATTERNS = [
     ((LexicalConditional, ValueType, LexicalComparison, ValueType), Conditional),  # if x eq y
 
 
+    ((LexicalConditional, ValueType), Conditional),  # if x
+    ((LexicalElse, Conditional), ConditionalElse),
 
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
 
@@ -57,6 +59,7 @@ FIRST_PASS_PATTERNS = [
 SECOND_PASS_PATTERNS = [
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
     ((LexicalElse,), UnconditionalElse),
+
 ]
 
 
