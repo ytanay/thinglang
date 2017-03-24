@@ -13,6 +13,8 @@ class ArithmeticOperation(BaseToken, ValueType):
         LexicalDivision: lambda lhs, rhs: lhs / rhs,
         LexicalEquality: lambda lhs, rhs: lhs == rhs,
         LexicalInequality: lambda lhs, rhs: lhs != rhs,
+        LexicalGreaterThan: lambda lhs, rhs: lhs > rhs,
+        LexicalLessThan: lambda lhs, rhs: lhs < rhs
     }
 
     def __init__(self, slice):
