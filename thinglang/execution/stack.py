@@ -8,7 +8,10 @@ class StackFrame(object):
 
     def __setitem__(self, key, value):
         print('\tSET<{}> {}: {}'.format(self.idx, key, value))
-        self.data[key] = (self.idx, value)
+        if key in self.data:
+            self.data[key] = (self.data[key][0], value)
+        else:
+            self.data[key] = (self.idx, value)
 
     def __getitem__(self, item):
         print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
