@@ -12,7 +12,7 @@ from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-from thinglang.parser.tokens.logic import Conditional, ElseBranchInterface
+from thinglang.parser.tokens.logic import Conditional, ElseBranchInterface, Loop
 
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
@@ -112,6 +112,10 @@ class ExecutionEngine(object):
                 if token.evaluate(stack):
                     tokens = token.children + \
                              list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), tokens))  # Remove all directly following else-like branches
+
+            if isinstance(token, Loop):
+                if token.evaluate(stack):
+                    tokens = token.children + [token] + tokens
 
             if token.ADVANCE:
                 tokens = token.children + tokens
