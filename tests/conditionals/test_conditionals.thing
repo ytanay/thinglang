@@ -1,0 +1,9 @@
+# Output:
+# dog is dog
+thing Program
+    does start
+        if "dog" eq "dog"
+            Output.write("dog is dog")
+
+        if "dog" eq "cat"
+            Output.write("dog is cat")
