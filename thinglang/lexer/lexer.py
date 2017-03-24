@@ -52,7 +52,7 @@ def analyze_line(line):
 
 def finalize_group(group, termination_reason):
     if group in KEYWORDS:
-        return KEYWORDS[group](group)
+        return KEYWORDS[group](group) if KEYWORDS[group].EMITTABLE else None
 
     if group.isdigit():
         return LexicalNumericalValue(group)
@@ -68,6 +68,6 @@ def finalize_group(group, termination_reason):
 
 def contextualize_lexical_output(lexical_group, line, idx):
     for entity in lexical_group:
-        entity.context = TokenContext(line, idx)
-
-        yield entity
+        if entity is not None:
+            entity.context = TokenContext(line, idx)
+            yield entity
