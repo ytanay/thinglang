@@ -33,3 +33,15 @@ class ConditionalElse(Conditional, ElseBranchInterface):
 
     def describe(self):
         return 'otherwise if {}'.format(self.value)
+
+
+class Loop(BaseToken):
+    ADVANCE = False
+
+    def __init__(self, slice):
+        super(Loop, self).__init__(slice)
+        _, self.condition = slice
+
+    def evaluate(self, stack):
+        return self.condition.evaluate(stack)
+

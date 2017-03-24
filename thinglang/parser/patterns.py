@@ -6,13 +6,13 @@ from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthe
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing
 from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
-    LexicalEquality, LexicalInequality
+    LexicalEquality, LexicalInequality, LexicalRepeatWhile
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
-from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse
+from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
 
 FIRST_PASS_PATTERNS = [
 
@@ -46,6 +46,7 @@ FIRST_PASS_PATTERNS = [
 
 
     ((LexicalConditional, ValueType), Conditional),  # if x
+    ((LexicalRepeatWhile, ValueType), Loop),
     ((LexicalElse, Conditional), ConditionalElse),
 
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
