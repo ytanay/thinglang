@@ -42,10 +42,7 @@ FIRST_PASS_PATTERNS = [
     ((ArgumentListDecelerationPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
 
 
-
-    ((LexicalConditional, ValueType, LexicalComparison, ValueType), Conditional),  # if x eq y
-
-
+    ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # if x eq y
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalElse, Conditional), ConditionalElse),
 
