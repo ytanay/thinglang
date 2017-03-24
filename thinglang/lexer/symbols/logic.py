@@ -16,6 +16,20 @@ class LexicalElse(LexicalSymbol):  # otherwise
     pass
 
 
+class LexicalRepeat(LexicalSymbol):
+    EMITTABLE = False
+
+    @classmethod
+    def next_operator_set(cls, current, original):
+        if current is original:
+            return {'while': LexicalRepeatWhile}
+        return original
+
+
+class LexicalRepeatWhile(LexicalSymbol):  # repeat while
+    pass
+
+
 class LexicalEquality(LexicalComparison):  # lhs eq rhs
     pass
 

@@ -2,7 +2,7 @@ import re
 
 
 from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation, \
-    LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse
+    LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeat, LexicalRepeatWhile
 from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
     LexicalMultiplication
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
@@ -42,8 +42,12 @@ KEYWORDS = {
     'does': LexicalDeclarationMethod,
     'with': LexicalArgumentListIndicator,
     'return': LexicalReturnStatement,
+
     'if': LexicalConditional,
     'otherwise': LexicalElse,
+
+    'repeat': LexicalRepeat,
+    'while': LexicalRepeatWhile,
 
     'eq': LexicalEquality,
     'not': LexicalNegation,
