@@ -1,5 +1,6 @@
 # Output:
 # dog is dog
+
 thing Program
     does start
         if "dog" eq "dog"
