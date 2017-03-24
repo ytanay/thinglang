@@ -19,3 +19,7 @@ class Conditional(BaseToken):
 
     def evaluate(self, stack):
         return self.comparator(self.lhs.evaluate(stack), self.rhs.evaluate(stack))
+
+
+class UnconditionalElse(BaseToken):
+    pass
