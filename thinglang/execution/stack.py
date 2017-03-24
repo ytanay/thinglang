@@ -37,3 +37,6 @@ class StackFrameTerminator(object):
     def __init__(self, target_arg=None):
         self.target_arg = target_arg
 
+
+class StackScopeTerminator(object):
+    pass

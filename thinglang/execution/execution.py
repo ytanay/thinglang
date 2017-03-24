@@ -7,7 +7,7 @@ import itertools
 from thinglang import utils
 from thinglang.execution.builtins import ITOutput
 from thinglang.execution.classes import ThingInstance
-from thinglang.execution.stack import StackFrameTerminator, StackFrame
+from thinglang.execution.stack import StackFrameTerminator, StackFrame, StackScopeTerminator
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
@@ -61,6 +61,10 @@ class ExecutionEngine(object):
                     stack[token.target_arg] = last_frame.return_value
                 continue
 
+            if isinstance(token, StackScopeTerminator):
+                stack.exit()
+                continue
+
             if isinstance(token, ReturnStatement):
                 if isinstance(token.value, LexicalIdentifier):
                     value = stack[token.value.value]
@@ -110,8 +114,10 @@ class ExecutionEngine(object):
 
             if isinstance(token, Conditional):
                 if token.evaluate(stack):
+                    stack.enter()
                     tokens = token.children + \
-                             list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), tokens))  # Remove all directly following else-like branches
+                             [StackScopeTerminator()] + \
+                             list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), tokens)) # Remove all directly following else-like branches
 
             if isinstance(token, Loop):
                 if token.evaluate(stack):
