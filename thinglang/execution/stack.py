@@ -26,12 +26,15 @@ class StackFrame(object):
         self.idx += 1
 
     def exit(self):
+        assert self.idx > 0, 'Cannot exit lowest stack segment'
         print('\tDECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
         self.data = {
             key: value for key, value in self.data.items() if value[1] != self.idx
+            key: value for key, value in self.data.items() if value[0] != self.idx
         }
 
         self.idx -= 1
+
 
 class StackFrameTerminator(object):
     def __init__(self, target_arg=None):
