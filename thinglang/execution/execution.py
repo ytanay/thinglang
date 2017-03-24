@@ -2,6 +2,8 @@ import collections
 import traceback
 from collections import namedtuple
 
+import itertools
+
 from thinglang import utils
 from thinglang.execution.builtins import ITOutput
 from thinglang.execution.classes import ThingInstance
@@ -10,7 +12,7 @@ from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-from thinglang.parser.tokens.logic import Conditional, UnconditionalElse
+from thinglang.parser.tokens.logic import Conditional, ElseBranchInterface
 
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
@@ -108,9 +110,8 @@ class ExecutionEngine(object):
 
             if isinstance(token, Conditional):
                 if token.evaluate(stack):
-                    if isinstance(tokens[0], UnconditionalElse):  # unconditional else
-                        tokens.pop(0)
-                    tokens = token.children + tokens
+                    tokens = token.children + \
+                             list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), tokens))  # Remove all directly following else-like branches
 
             if token.ADVANCE:
                 tokens = token.children + tokens
