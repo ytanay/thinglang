@@ -5,7 +5,7 @@ from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthe
     LexicalAccess, LexicalAssignment, LexicalIdentifier
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing
-from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional
+from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
@@ -56,6 +56,7 @@ FIRST_PASS_PATTERNS = [
 
 SECOND_PASS_PATTERNS = [
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
+    ((LexicalElse,), UnconditionalElse),
 ]
 
 
