@@ -1,6 +1,7 @@
 import pytest
 
 from tests.utils import generate_simple_output_program, generate_test_case_structure
+from thinglang.execution.errors import RedeclaredVariable
 from thinglang.runner import run
 
 
@@ -47,13 +48,13 @@ TESTS = {
         ('Output.write(2 + 8 + 3)', '13'),
         ('Output.write(42 - 2 + 5)', '45'),
         ('Output.write(7 * 9 + 5)', '68'),
-        ('Output.write(5 + 7 * 9)', '68')
+        ('Output.write(5 * 7 + 9)', '44'),
     ],
     'method local stack + resolution': [
         (['number n = 5', 'Output.write(n)'], '5'),
         (['number n = 4', 'number m = 6', 'Output.write(n + m + 2)'], '12'),
         (['number n = 4', 'n = 7', 'Output.write(n)'], '7'),
-        (['number n = 4', 'number n = 7', 'Output.write(n)'], AssertionError)
+        (['number n = 4', 'number n = 7', 'Output.write(n)'], RedeclaredVariable)
     ]
 }
 

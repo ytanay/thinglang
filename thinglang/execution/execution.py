@@ -7,6 +7,7 @@ import itertools
 from thinglang import utils
 from thinglang.execution.builtins import ITOutput
 from thinglang.execution.classes import ThingInstance
+from thinglang.execution.errors import RedeclaredVariable
 from thinglang.execution.stack import StackFrameTerminator, StackFrame, StackScopeTerminator
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
@@ -77,12 +78,12 @@ class ExecutionEngine(object):
                 continue
 
             if isinstance(token, AssignmentOperation):
-                if token.method is token.DECELERATION:
-                    assert token.name.value not in stack, 'variable {} declaration but was found in stack'.format(
-                        token.name.value)
-                else:
-                    assert token.name.value in stack, 'variable {} reassignment but is not in stack {}'.format(
-                        token.name.value, token.context)
+                if token.method is token.DECELERATION and token.name.value in stack:
+                    raise RedeclaredVariable('variable {} declaration but was found in stack'.format(
+                        token.name.value))
+                elif token.method is token.REASSIGNMENT and token.name.value not in stack:
+                    raise RuntimeError('variable {} reassignment but is not in stack {}'.format(
+                        token.name.value, token.context))
 
                 if isinstance(token.value, MethodCall):
                     utils.log('Assignment operation leading to method call, overriding terminator')
