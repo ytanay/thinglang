@@ -25,3 +25,16 @@ inside after, i = 10
 outside after, i = 10""".strip()
 
 
+def test_stack_resolution_error_during_access_after_nested_deceleration():
+    with pytest.raises(UnknownVariable):
+        run("""
+thing Program
+    does start
+
+        if true
+            number i = 10
+            Output.write("inside after, i =", i)
+
+        Output.write("outside after, i =", i)
+
+    """)
