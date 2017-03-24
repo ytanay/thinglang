@@ -17,11 +17,15 @@ class Conditional(BaseToken):
         return self.value.evaluate(stack)
 
 
-class UnconditionalElse(BaseToken):
+class ElseBranchInterface(object):
     pass
 
 
-class ConditionalElse(Conditional):
+class UnconditionalElse(BaseToken, ElseBranchInterface):
+    pass
+
+
+class ConditionalElse(Conditional, ElseBranchInterface):
 
     def __init__(self, slice):
         super(ConditionalElse, self).__init__(slice)
