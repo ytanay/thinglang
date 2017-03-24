@@ -10,7 +10,7 @@ from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-from thinglang.parser.tokens.logic import Conditional
+from thinglang.parser.tokens.logic import Conditional, UnconditionalElse
 
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
@@ -108,6 +108,8 @@ class ExecutionEngine(object):
 
             if isinstance(token, Conditional):
                 if token.evaluate(stack):
+                    if isinstance(tokens[0], UnconditionalElse):  # unconditional else
+                        tokens.pop(0)
                     tokens = token.children + tokens
 
             if token.ADVANCE:
