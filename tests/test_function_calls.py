@@ -19,8 +19,7 @@ thing Program
     """).output == """
 before n= 1  m= 2
 hello 3
-after n= 1  m= 2
-    """.strip()
+after n= 1  m= 2""".strip()
 
 
 def test_function_return_values():
@@ -31,7 +30,7 @@ thing Program
         Output.write(result)
     does say_hello
         return 42
-    """).output == """42""".strip()
+    """).output == """42"""
 
 
 def test_multi_arg_function_calls():
@@ -48,8 +47,7 @@ thing Program
 
     """).output == """
 Hello from 10 year old Andy
-Hello from 19 year old Yotam
-    """.strip()
+Hello from 19 year old Yotam""".strip()
 
 
 def test_function_call_integration():
@@ -61,7 +59,7 @@ def test_function_call_integration():
             Output.write(a, b)
         does add with a, b
             return a + b
-        """).output == """15 25""".strip()
+        """).output == """15 25"""
 
 
 def test_early_exit():
@@ -75,10 +73,10 @@ def test_early_exit():
             return a * b
             Output.write("never should appear")
             return a + b
-        """).output == """15 150""".strip()
+        """).output == """15 150"""
 
 
-def test_chained_calls():
+def test_nested_function_calls():
     assert run("""
     thing Program
         does start
@@ -99,7 +97,7 @@ def test_chained_calls():
 
         does get_13
             return 13
-        """).output == """7 13\n182\n182\n3640""".strip()
+        """).output == """7 13\n182\n182\n3640"""
 
 
 def test_arithmetic_over_method_calls():
@@ -114,7 +112,7 @@ def test_arithmetic_over_method_calls():
 
         does get_13
             return 13
-        """).output == """41 20 574""".strip()
+        """).output == """41 20 574"""
 
 
 def test_recursion():
@@ -128,4 +126,4 @@ def test_recursion():
                 return 1
             return n * self.factorial(n-1)
 
-        """).output == """3628800""".strip()
+        """).output == """3628800"""

@@ -13,7 +13,7 @@ thing Program
         if "dog" eq "cat"
             Output.write("dog is cat")
 
-    """).output == """dog is dog""".strip()
+    """).output == """dog is dog"""
 
 
 def test_unconditional_else():
@@ -29,7 +29,7 @@ thing Program
             Output.write("dog is cat")
         otherwise
             Output.write("dog is not cat")
-    """).output == """dog is dog\ndog is not cat""".strip()
+    """).output == """dog is dog\ndog is not cat"""
 
 
 def test_conditional_else():
@@ -53,4 +53,4 @@ thing Program
             Output.write("dog is mouse")
         otherwise
             Output.write("dog is not cat and not mouse and not Dog")
-    """).output == """dog is dog\ndog is not cat and not mouse and not Dog""".strip()
+    """).output == """dog is dog\ndog is not cat and not mouse and not Dog"""
