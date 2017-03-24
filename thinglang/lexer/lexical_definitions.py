@@ -1,7 +1,7 @@
 import re
 
 
-from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality, LexicalElse
+from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation
 from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation, \
     LexicalAddition, LexicalSubtraction, LexicalDivision, LexicalMultiplication, LexicalBooleanTrue, LexicalBooleanFalse
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
@@ -40,7 +40,9 @@ KEYWORDS = {
     'return': LexicalReturnStatement,
     'if': LexicalConditional,
     'otherwise': LexicalElse,
+
     'eq': LexicalEquality,
+    'not': LexicalNegation,
 
     'true': LexicalBooleanTrue,
     'false': LexicalBooleanFalse

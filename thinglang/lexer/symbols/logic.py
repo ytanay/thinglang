@@ -17,3 +17,11 @@ class LexicalElse(LexicalSymbol):  # otherwise
 
 class LexicalEquality(LexicalComparison):  # lhs eq rhs
     pass
+
+
+class LexicalInequality(LexicalComparison):
+    pass
+
+
+class LexicalNegation(LexicalSymbol):
+    pass
