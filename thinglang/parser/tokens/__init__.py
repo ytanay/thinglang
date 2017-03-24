@@ -1,6 +1,6 @@
 import abc
 
-from thinglang.common import Describable
+from thinglang.utils.describable import Describable
 
 
 class BaseToken(Describable, metaclass=abc.ABCMeta):

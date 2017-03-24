@@ -1,7 +1,7 @@
 import pytest
 
 from thinglang.execution.errors import UnknownVariable, RedeclaredVariable
-from thinglang.runner import run
+from thinglang.thinglang import run
 
 
 def test_stack_resolution_in_block():

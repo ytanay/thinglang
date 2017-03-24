@@ -1,6 +1,6 @@
 import pytest
 
-from thinglang.runner import run
+from thinglang.thinglang import run
 
 
 def test_simple_conditionals():

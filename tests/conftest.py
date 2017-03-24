@@ -3,7 +3,6 @@ import os
 import itertools
 from collections import namedtuple
 
-from thinglang.utils import flatten_list
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_EXPECTATION_INDICATOR = '# Output:'

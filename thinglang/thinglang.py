@@ -21,6 +21,9 @@ def run(source):
 
     utils.print_header('Parsed AST', root_node.tree())
 
+    #utils.print_header('Bytecode', root_node.serialize())
+    # utils.print_header('Parsed bytecode', serialize(root_node.serialize()))
+
     with ExecutionEngine(root_node) as engine:
         engine.execute()
         return engine.results()

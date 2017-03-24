@@ -1,4 +1,4 @@
-from thinglang.common import ValueType
+from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.symbols import LexicalBinaryOperation
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken, DefinitionPairToken

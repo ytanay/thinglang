@@ -1,4 +1,4 @@
-from thinglang.common import ValueType
+from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
 from thinglang.lexer.symbols.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan

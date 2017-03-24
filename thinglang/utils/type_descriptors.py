@@ -1,0 +1,2 @@
+class ValueType(object):
+    pass

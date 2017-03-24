@@ -1,6 +1,6 @@
 import re
 
-from thinglang.common import TokenContext
+from thinglang.utils.token_context import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifier
 from thinglang.lexer.symbols.arithmetic import LexicalNumericalValue
 from thinglang.lexer.symbols import LexicalGroupEnd

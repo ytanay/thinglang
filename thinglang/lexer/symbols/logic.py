@@ -1,6 +1,6 @@
 import abc
 
-from thinglang.common import ValueType
+from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.symbols import LexicalSymbol
 
 
