@@ -38,6 +38,8 @@ TESTS = {
         ('Output.write("dog" eq "cat")', 'False'),
         ('Output.write("dog" not eq "cat")', 'True'),
         ('Output.write("dog" not eq "dog")', 'False'),
+        ('Output.write(5 > 2)', 'True'),
+        ('Output.write(2 > 5)', 'False'),
     ],
     'order of operations': [
         ('Output.write(2 + 8 + 3)', '13'),
