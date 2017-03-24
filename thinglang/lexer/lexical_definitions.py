@@ -38,6 +38,7 @@ KEYWORDS = {
     'with': LexicalArgumentListIndicator,
     'return': LexicalReturnStatement,
     'if': LexicalConditional,
+    'otherwise': LexicalElse,
     'eq': LexicalEquality
 }
 
