@@ -5,8 +5,9 @@ from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthe
     LexicalAccess, LexicalAssignment, LexicalIdentifier
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing
-from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse
-from thinglang.parser.tokens.arithmetic import ArithmeticOperation
+from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
+    LexicalEquality, LexicalInequality
+from thinglang.parser.tokens.arithmetic import ArithmeticOperation, ComparisonOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
@@ -23,6 +24,8 @@ FIRST_PASS_PATTERNS = [
 
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
 
+    ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # x eq y
+    ((LexicalNegation, LexicalEquality), LexicalInequality),
 
     ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
     ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
@@ -42,7 +45,6 @@ FIRST_PASS_PATTERNS = [
     ((ArgumentListDecelerationPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
 
 
-    ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # if x eq y
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalElse, Conditional), ConditionalElse),
 
