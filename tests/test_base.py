@@ -33,6 +33,12 @@ TESTS = {
         ('Output.write(7 * 9)', '63'),
         ('Output.write(5 / 2)', '2.5')
     ],
+    'boolean logic': [
+        ('Output.write("dog" eq "dog")', 'True'),
+        ('Output.write("dog" eq "cat")', 'False'),
+        ('Output.write("dog" not eq "cat")', 'True'),
+        ('Output.write("dog" not eq "dog")', 'False'),
+    ],
     'order of operations': [
         ('Output.write(2 + 8 + 3)', '13'),
         ('Output.write(42 - 2 + 5)', '45'),
