@@ -33,17 +33,3 @@ class LexicalMultiplication(SecondOrderLexicalBinaryOperation):
 
 class LexicalDivision(SecondOrderLexicalBinaryOperation):
     pass
-
-
-class LexicalBoolean(LexicalSymbol, ValueType):
-    pass
-
-
-class LexicalBooleanTrue(LexicalBoolean):
-    def evaluate(self, stack):
-        return True
-
-
-class LexicalBooleanFalse(LexicalBoolean):
-    def evaluate(self, stack):
-        return False

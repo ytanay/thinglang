@@ -1,5 +1,6 @@
 import abc
 
+from thinglang.common import ValueType
 from thinglang.lexer.symbols import LexicalSymbol
 
 
@@ -25,3 +26,25 @@ class LexicalInequality(LexicalComparison):
 
 class LexicalNegation(LexicalSymbol):
     pass
+
+
+class LexicalGreaterThan(LexicalComparison):
+    pass
+
+
+class LexicalLessThan(LexicalComparison):
+    pass
+
+
+class LexicalBoolean(LexicalSymbol, ValueType):
+    pass
+
+
+class LexicalBooleanTrue(LexicalBoolean):
+    def evaluate(self, stack):
+        return True
+
+
+class LexicalBooleanFalse(LexicalBoolean):
+    def evaluate(self, stack):
+        return False
