@@ -7,7 +7,7 @@ from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArg
     LexicalDeclarationMethod, LexicalDeclarationThing
 from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality
-from thinglang.parser.tokens.arithmetic import ArithmeticOperation, ComparisonOperation
+from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \

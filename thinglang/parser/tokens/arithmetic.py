@@ -1,7 +1,7 @@
 from thinglang.common import ValueType
 from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
-from thinglang.lexer.symbols.logic import LexicalEquality
+from thinglang.lexer.symbols.logic import LexicalEquality, LexicalInequality
 from thinglang.parser.tokens import BaseToken
 
 
@@ -11,7 +11,8 @@ class ArithmeticOperation(BaseToken, ValueType):
         LexicalMultiplication: lambda rhs, lhs: rhs * lhs,
         LexicalSubtraction: lambda rhs, lhs: rhs - lhs,
         LexicalDivision: lambda rhs, lhs: rhs / lhs,
-        LexicalEquality: lambda rhs, lhs: lhs == rhs
+        LexicalEquality: lambda rhs, lhs: lhs == rhs,
+        LexicalInequality: lambda rhs, lhs: rhs != lhs
     }
 
     def __init__(self, slice):
