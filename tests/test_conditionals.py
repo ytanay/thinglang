@@ -40,6 +40,17 @@ thing Program
             Output.write("dog is cat")
         otherwise if "dog" eq "dog"
             Output.write("dog is dog")
+        otherwise if "dog" eq "dog"
+            Output.write("dog is still dog")
         otherwise
             Output.write("dog is not dog and not cat")
-    """).output == """dog is dog\ndog is not cat""".strip()
+
+        if "dog" eq "cat"
+            Output.write("dog is cat")
+        otherwise if "dog" eq "Dog"
+            Output.write("dog is Dog")
+        otherwise if "dog" eq "mouse"
+            Output.write("dog is mouse")
+        otherwise
+            Output.write("dog is not cat and not mouse and not Dog")
+    """).output == """dog is dog\ndog is not cat and not mouse and not Dog""".strip()
