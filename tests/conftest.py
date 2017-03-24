@@ -9,6 +9,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 OUTPUT_EXPECTATION_INDICATOR = '# Output:'
 TEST_CASE = namedtuple('TEST_CASE', ['name', 'group', 'source', 'expected_output'])
 
+
 def read_case(group, file):
     with open(os.path.join(BASE_DIR, group, file)) as f:
         lines = f.readlines()
@@ -22,12 +23,12 @@ def read_case(group, file):
     return TEST_CASE(os.path.splitext(file)[0], group, source, expected_output)
 
 
-
 def collect_test_cases():
     dirs = [x for x in os.listdir(BASE_DIR) if os.path.isdir(os.path.join(BASE_DIR, x)) and not x.startswith('.')]
-    files = [(dir, file) for dir in dirs for file in os.listdir(dir)]
+    files = [(dir, file) for dir in dirs for file in os.listdir(os.path.join(BASE_DIR, dir))]
     cases = [read_case(*file) for file in files]
     return cases
+
 
 def pytest_generate_tests(metafunc):
     if 'source' in metafunc.fixturenames:
