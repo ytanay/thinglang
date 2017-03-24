@@ -1,8 +1,9 @@
 import re
 
 
-from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality
-from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
+from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality, LexicalElse
+from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation, \
+    LexicalAddition, LexicalSubtraction, LexicalDivision, LexicalMultiplication
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
     LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
@@ -23,10 +24,10 @@ OPERATORS = {
 
     '=': LexicalAssignment,
 
-    '+': FirstOrderLexicalBinaryOperation,
-    '-': FirstOrderLexicalBinaryOperation,
-    '/': SecondOrderLexicalBinaryOperation,
-    '*': SecondOrderLexicalBinaryOperation,
+    '+': LexicalAddition,
+    '-': LexicalSubtraction,
+    '/': LexicalDivision,
+    '*': LexicalMultiplication,
 
     '#': LexicalInlineComment
 }

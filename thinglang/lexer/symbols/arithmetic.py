@@ -15,5 +15,22 @@ class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, sub
     pass
 
 
-class SecondOrderLexicalBinaryOperation(LexicalBinaryOperation): # division, multiplication
+class SecondOrderLexicalBinaryOperation(LexicalBinaryOperation):  # division, multiplication
     pass
+
+
+class LexicalAddition(FirstOrderLexicalBinaryOperation):
+    pass
+
+
+class LexicalSubtraction(FirstOrderLexicalBinaryOperation):
+    pass
+
+
+class LexicalMultiplication(SecondOrderLexicalBinaryOperation):
+    pass
+
+
+class LexicalDivision(SecondOrderLexicalBinaryOperation):
+    pass
+
