@@ -1,3 +1,6 @@
+from thinglang.execution.errors import UnknownVariable
+
+
 class StackFrame(object):
 
     def __init__(self, instance):
@@ -14,6 +17,8 @@ class StackFrame(object):
             self.data[key] = (self.idx, value)
 
     def __getitem__(self, item):
+        if not item in self.data:
+            raise UnknownVariable('Variable {} not recognized in this scope'.format(item))
         print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
         return self.data[item][1]
 
@@ -32,7 +37,6 @@ class StackFrame(object):
         assert self.idx > 0, 'Cannot exit lowest stack segment'
         print('\tDECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
         self.data = {
-            key: value for key, value in self.data.items() if value[1] != self.idx
             key: value for key, value in self.data.items() if value[0] != self.idx
         }
 
