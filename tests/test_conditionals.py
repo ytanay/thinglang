@@ -16,6 +16,19 @@ thing Program
     """).output == """dog is dog"""
 
 
+def test_boolean_constant():
+    assert run("""
+thing Program
+    does start
+        if true
+            Output.write("true is truthy")
+
+        if false
+            Output.write("false is truthy")
+
+    """).output == """true is truthy"""
+
+
 def test_unconditional_else():
     assert run("""
 thing Program
