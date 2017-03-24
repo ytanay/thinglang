@@ -9,8 +9,10 @@ thing Program
     does start
         if "dog" eq "dog"
             Output.write("dog is dog")
+
         if "dog" eq "cat"
             Output.write("dog is cat")
+
     """).output == """dog is dog""".strip()
 
 
@@ -29,3 +31,15 @@ thing Program
             Output.write("dog is not cat")
     """).output == """dog is dog\ndog is not cat""".strip()
 
+
+def test_conditional_else():
+    assert run("""
+thing Program
+    does start
+        if "dog" eq "cat"
+            Output.write("dog is cat")
+        otherwise if "dog" eq "dog"
+            Output.write("dog is dog")
+        otherwise
+            Output.write("dog is not dog and not cat")
+    """).output == """dog is dog\ndog is not cat""".strip()
