@@ -55,6 +55,8 @@ thing Program
             Output.write("dog is dog")
         otherwise if "dog" eq "dog"
             Output.write("dog is still dog")
+        otherwise if true
+            Output.write("true is truthy")
         otherwise
             Output.write("dog is not dog and not cat")
 
