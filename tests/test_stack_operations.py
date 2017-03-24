@@ -1,6 +1,6 @@
 import pytest
 
-from thinglang.execution.errors import UnknownVariable
+from thinglang.execution.errors import UnknownVariable, RedeclaredVariable
 from thinglang.runner import run
 
 
@@ -37,4 +37,14 @@ thing Program
 
         Output.write("outside after, i =", i)
 
+    """)
+
+
+def test_error_in_duplicate_assignment():
+    with pytest.raises(RedeclaredVariable):
+        run("""
+thing Program
+    does start
+        number i = 0
+        number i = 1
     """)
