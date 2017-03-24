@@ -1,18 +1,18 @@
 from thinglang.common import ValueType
 from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
-from thinglang.lexer.symbols.logic import LexicalEquality, LexicalInequality
+from thinglang.lexer.symbols.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
 from thinglang.parser.tokens import BaseToken
 
 
 class ArithmeticOperation(BaseToken, ValueType):
     OPERATIONS = {
-        LexicalAddition: lambda rhs, lhs: rhs + lhs,
-        LexicalMultiplication: lambda rhs, lhs: rhs * lhs,
-        LexicalSubtraction: lambda rhs, lhs: rhs - lhs,
-        LexicalDivision: lambda rhs, lhs: rhs / lhs,
-        LexicalEquality: lambda rhs, lhs: lhs == rhs,
-        LexicalInequality: lambda rhs, lhs: rhs != lhs
+        LexicalAddition: lambda lhs, rhs: lhs + rhs,
+        LexicalMultiplication: lambda lhs, rhs: lhs * rhs,
+        LexicalSubtraction: lambda lhs, rhs: lhs - rhs,
+        LexicalDivision: lambda lhs, rhs: lhs / rhs,
+        LexicalEquality: lambda lhs, rhs: lhs == rhs,
+        LexicalInequality: lambda lhs, rhs: lhs != rhs,
     }
 
     def __init__(self, slice):
