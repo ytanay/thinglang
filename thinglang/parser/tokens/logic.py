@@ -22,4 +22,14 @@ class Conditional(BaseToken):
 
 
 class UnconditionalElse(BaseToken):
-    pass
+    pass    pass
+
+
+class ConditionalElse(Conditional):
+
+    def __init__(self, slice):
+        super(ConditionalElse, self).__init__(slice)
+        _, self.conditional = slice
+
+    def describe(self):
+        return 'otherwise if {}'.format(self.value)
