@@ -31,10 +31,6 @@ class ArgumentListPartial(BaseToken):
         return self.value[item]
 
 
-class ArgumentListDecelerationPartial(ArgumentListPartial):
-    pass
-
-
 class ArgumentList(BaseToken):
     def __init__(self, slice=None):
         super(ArgumentList, self).__init__(slice)
@@ -60,6 +56,20 @@ class ArgumentList(BaseToken):
         self.arguments = [replacement if x is original else x for x in self.arguments]
 
 
+
+class ArrayInitializationPartial(ArgumentListPartial):
+    pass
+
+
+class ArrayInitialization(ArgumentList, ValueType):
+    pass
+
+
+class ArgumentListDecelerationPartial(ArgumentListPartial):
+    pass
+
+
+
 class MethodCall(BaseToken, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
@@ -72,9 +82,15 @@ class MethodCall(BaseToken, ValueType):
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
-    def replace_argument(self, original, replacement):
+    def replace(self, original, replacement):
         self.arguments.replace(original, replacement)
 
+    def serialize(self):
+        return {
+            "type": "MethodCall",
+            "arguments": self.arguments,
+            "target": self.target
+        }
 
 class ReturnStatement(DefinitionPairToken):
     def __init__(self, slice):
