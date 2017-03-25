@@ -18,3 +18,12 @@ thing Program
         Output.write("2:", Input.get_line())
         """).output == "1: first line\n2: second line"
 
+
+def test_eof():
+    with pytest.raises(EOFError), patch('sys.stdin', io.StringIO('')):
+        assert run("""
+thing Program
+    does start
+        Input.get_line()
+        """)
+
