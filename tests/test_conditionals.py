@@ -1,5 +1,3 @@
-import pytest
-
 from thinglang.thinglang import run
 
 

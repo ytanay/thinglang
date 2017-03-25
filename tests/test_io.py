@@ -1,5 +1,3 @@
-import random
-import string
 from unittest.mock import patch
 
 import io
