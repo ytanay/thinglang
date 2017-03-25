@@ -1,3 +1,6 @@
+import random
+import string
+
 INDENT = '\n' + ' ' * 8
 
 
@@ -13,3 +16,10 @@ def generate_test_case_structure(dct):
         for idx, group in enumerate(groups):
             lst.append(('{} #{}'.format(name, idx + 1), group[0], group[1]))
     return lst
+
+
+def random_string():
+    def get_string():
+        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=random.randint(2, 50)))
+
+    return [get_string() for _ in range(random.randint(3, 8))]
