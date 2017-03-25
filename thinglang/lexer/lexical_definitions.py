@@ -6,7 +6,7 @@ from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality, L
 from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
     LexicalMultiplication
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
-    LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment
+    LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment, LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing
 
@@ -15,15 +15,19 @@ IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")
 
 OPERATORS = {
     ' ': None,
-    '(': LexicalParenthesesOpen,
-    ')': LexicalParenthesesClose,
-    '.': LexicalAccess,
 
     "\"": LexicalQuote,
-    ',': LexicalSeparator,
     "\t": LexicalIndent,
 
+    '.': LexicalAccess,
+    ',': LexicalSeparator,
     '=': LexicalAssignment,
+
+    '(': LexicalParenthesesOpen,
+    ')': LexicalParenthesesClose,
+
+    '[': LexicalBracketOpen,
+    ']': LexicalBracketClose,
 
     '+': LexicalAddition,
     '-': LexicalSubtraction,

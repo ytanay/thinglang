@@ -20,6 +20,14 @@ class LexicalParenthesesClose(LexicalSymbol):
     pass  # )
 
 
+class LexicalBracketOpen(LexicalSymbol):
+    pass  # [
+
+
+class LexicalBracketClose(LexicalSymbol):
+    pass  # ]
+
+
 class LexicalSeparator(LexicalSymbol):
     pass  # ,
 
