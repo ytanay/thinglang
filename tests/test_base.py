@@ -39,6 +39,7 @@ TESTS = {
         ('Output.write("dog" eq "cat")', 'False'),
         ('Output.write("dog" not eq "cat")', 'True'),
         ('Output.write("dog" not eq "dog")', 'False'),
+        ('Output.write("dog" not eq "")', 'True'),
         ('Output.write(5 > 2)', 'True'),
         ('Output.write(2 > 5)', 'False'),
         ('Output.write(5 < 2)', 'False'),

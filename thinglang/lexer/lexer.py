@@ -4,7 +4,7 @@ from thinglang.utils.token_context import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifier
 from thinglang.lexer.symbols.arithmetic import LexicalNumericalValue
 from thinglang.lexer.symbols import LexicalGroupEnd
-from thinglang.lexer.symbols.base import LexicalInlineComment, LexicalIdentifier
+from thinglang.lexer.symbols.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
 from thinglang.parser.tokens.base import InlineString
 
 
@@ -16,6 +16,7 @@ def lexer(source):
 def analyze_line(line):
     group = ""
     operator_working_set = OPERATORS
+    entity_class = None
 
     for char in line:
 
@@ -24,7 +25,7 @@ def analyze_line(line):
 
         else:  # i.e. if we are on an operator
 
-            if group:  # emit the collected group thus far
+            if group or entity_class is LexicalQuote:  # emit the collected group thus far - lexical quote check is to deal with empty strings
                 yield finalize_group(group, char)  # char is the character that terminated the group
 
             group = ""  # reset the group
@@ -63,7 +64,8 @@ def finalize_group(group, termination_reason):
     if is_identifier(group):
         return LexicalIdentifier(group)
 
-    raise RuntimeError('Lexer: cannot finalize group {}'.format(group))
+    if group:
+        raise RuntimeError('Lexer: cannot finalize group {}'.format(group))
 
 
 def contextualize_lexical_output(lexical_group, line, idx):
