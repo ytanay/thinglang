@@ -5,7 +5,7 @@ from collections import namedtuple
 import itertools
 
 from thinglang import utils
-from thinglang.execution.builtins import ITOutput
+from thinglang.execution.builtins import ThingObjectInput, ThingObjectOutput
 from thinglang.execution.classes import ThingInstance
 from thinglang.execution.errors import RedeclaredVariable
 from thinglang.execution.stack import StackFrameTerminator, StackFrame, StackScopeTerminator
@@ -26,7 +26,8 @@ class ExecutionEngine(object):
             x.value: x for x in root.children
         }
 
-        self.heap['Output'] = ITOutput()
+        self.heap['Output'] = ThingObjectOutput()
+        self.heap['Input'] = ThingObjectInput()
 
     def __enter__(self):
         assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
