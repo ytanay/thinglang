@@ -44,7 +44,7 @@ def reduce_method_calls(method_call, node, parent_call=None):
     if parent_call is not None:
         id, assignment = create_transient(method_call, node)
         node.insert_before(assignment)
-        parent_call.replace_argument(method_call, id)
+        parent_call.replace(method_call, id)
 
 
 def is_compound(node):

@@ -28,7 +28,7 @@ class ArithmeticOperation(BaseToken, ValueType):
     def describe(self):
         return '|{} {} {}|'.format(self[0], self.operator, self[1])
 
-    def replace_argument(self, original, replacement):
+    def replace(self, original, replacement):
         self.arguments = [replacement if x is original else x for x in self.arguments]
 
     def __getitem__(self, item):
