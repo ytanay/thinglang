@@ -1,6 +1,11 @@
+class ThingObjectBase(object):
+
+    def __getitem__(self, item):
+
+    def __contains__(self, item):
+        return hasattr(self, item)
 
 
-class ITOutput(object):
 
     def __init__(self):
         self.data = ""
@@ -13,3 +18,12 @@ class ITOutput(object):
 
     def __contains__(self, item):
         return hasattr(self, item)
+class ThingObjectInput(ThingObjectBase):
+
+    def __init__(self):
+        self.data = []
+
+    def get_line(self):
+        line = input()
+        self.data.append(line)
+        return line
