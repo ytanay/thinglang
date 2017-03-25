@@ -40,7 +40,7 @@ class ExecutionEngine(object):
             utils.print_header('Execution summary (exceptions)')
             print(''.join(traceback.format_exception(exc_type, exc_val, exc_tb)))
         utils.print_header('Output')
-        print(self.heap['Output'].data.strip())
+        print('\n'.join(self.heap['Output'].data))
 
     def execute(self):
         self.create_stack_frame(ThingInstance(self.root.get('Program')))
@@ -131,7 +131,7 @@ class ExecutionEngine(object):
                 tokens = token.children + tokens
 
     def results(self):
-        return ExecutionOutput(output=self.heap['Output'].data.strip())
+        return ExecutionOutput(output='\n'.join(self.heap['Output'].data))
 
     def create_stack_frame(self, instance):
         self.stack.append(StackFrame(instance))
