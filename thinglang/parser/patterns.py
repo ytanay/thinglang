@@ -2,7 +2,7 @@ from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.symbols import LexicalGroupEnd
 from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, \
-    LexicalAccess, LexicalAssignment, LexicalIdentifier
+    LexicalAccess, LexicalAssignment, LexicalIdentifier, LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing
 from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
@@ -11,7 +11,7 @@ from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
-    ArgumentListDecelerationPartial
+    ArgumentListDecelerationPartial, ArrayInitializationPartial, ArrayInitialization
 from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
 
 FIRST_PASS_PATTERNS = [
@@ -36,6 +36,10 @@ FIRST_PASS_PATTERNS = [
     ((LexicalParenthesesOpen, LexicalParenthesesClose), ArgumentList),  # ()
 
     ((LexicalParenthesesOpen, ValueType), ArgumentListPartial),  # (2
+
+    ((LexicalBracketOpen, ValueType), ArrayInitializationPartial),  # [2
+    ((ArrayInitializationPartial, LexicalSeparator, ValueType), ArrayInitializationPartial),  # (2, 3
+    ((ArrayInitializationPartial, LexicalBracketClose), ArrayInitialization),  # (2, 3)
 
     ((ArgumentListDecelerationPartial, LexicalSeparator, ValueType), ArgumentListDecelerationPartial),  # (2, 3
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
