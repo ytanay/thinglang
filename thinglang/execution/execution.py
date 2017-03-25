@@ -101,7 +101,9 @@ class ExecutionEngine(object):
 
                 if isinstance(context, collections.Callable):
                     utils.log('Built in method, calling directly')
-                    context(args)
+                    result = context(*args)
+                    if terminator is not None:
+                        stack[terminator.target_arg] = result
                 else:
                     utils.log('Applying arguments {} -> {} -> {}'.format(context.arguments, token.arguments, args))
                     utils.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
