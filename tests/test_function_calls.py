@@ -1,4 +1,4 @@
-from thinglang.thinglang import run
+from thinglang import run
 
 
 def test_zero_arg_function_calls():

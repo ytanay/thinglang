@@ -1,7 +1,7 @@
 import pytest
 
 from thinglang import utils
-from thinglang.thinglang import run
+from thinglang import run
 
 
 @pytest.mark.skip

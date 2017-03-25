@@ -1,4 +1,4 @@
-from thinglang.thinglang import run
+from thinglang import run
 
 
 def test_simple_arrays():

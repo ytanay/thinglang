@@ -6,7 +6,7 @@ import pytest
 
 from tests.utils import random_string
 from thinglang import utils
-from thinglang.thinglang import run
+from thinglang import run
 
 
 def test_input_single_line():

@@ -2,7 +2,7 @@ import pytest
 
 from tests.utils import generate_simple_output_program, generate_test_case_structure
 from thinglang.execution.errors import RedeclaredVariable
-from thinglang.thinglang import run
+from thinglang import run
 
 
 def test_empty_program():
