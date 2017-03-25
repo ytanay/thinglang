@@ -2,14 +2,16 @@ from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import Transient
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
-from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
+from thinglang.parser.tokens.functions import MethodCall, ReturnStatement, ArrayInitialization
+
+OBTAINABLE_VALUES = MethodCall, ArithmeticOperation, ArrayInitialization
 
 
 def simplify(tree):
     while unwrap_returns(tree):
         pass
 
-    for method_call in tree.find(lambda x: isinstance(getattr(x, 'value', None), (MethodCall, ArithmeticOperation))):
+    for method_call in tree.find(lambda x: isinstance(getattr(x, 'value', None), OBTAINABLE_VALUES)):
         reduce_method_calls(method_call.value, method_call)
 
     return tree
@@ -18,7 +20,7 @@ def simplify(tree):
 def unwrap_returns(tree):
     had_change = False
 
-    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, (MethodCall, ArithmeticOperation)))):
+    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, OBTAINABLE_VALUES))):
         id, assignment = create_transient(child.value, child)
         siblings = child.parent.children
         idx = siblings.index(child)
@@ -30,7 +32,7 @@ def unwrap_returns(tree):
 
 
 def reduce_method_calls(method_call, node, parent_call=None):
-    if not isinstance(method_call, (MethodCall, ArithmeticOperation)):
+    if not isinstance(method_call, OBTAINABLE_VALUES):
         return
     for argument in method_call.arguments:
         if isinstance(argument, MethodCall):
