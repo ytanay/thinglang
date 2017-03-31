@@ -1,3 +1,4 @@
+from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.utils.describable import Describable
 
 
@@ -71,13 +72,16 @@ class DefinitionPairToken(BaseToken):
         self.name = slice[1].value
 
 
-class Transient(object):
+class Transient(LexicalIdentifier):
 
     IDX_COUNTER = -1
 
     def __init__(self):
         self.idx = Transient.IDX_COUNTER
+        super().__init__(self.idx)
+
         Transient.IDX_COUNTER += 1
 
     def __str__(self):
         return 'Transient({})'.format(self.idx)
+
