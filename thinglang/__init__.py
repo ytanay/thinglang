@@ -1,4 +1,4 @@
-#from thinglang import utils
+from thinglang import utils
 from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.parser import parse
@@ -20,9 +20,6 @@ def run(source):
     validate(tree)
 
     utils.print_header('Parsed AST', root_node.tree())
-
-   # utils.print_header('Bytecode', json.dumps(root_node.serialize(), indent=4, cls=ASTEncoder))
-    # utils.print_header('Parsed bytecode', serialize(root_node.serialize()))
 
     with ExecutionEngine(root_node) as engine:
         engine.execute()
