@@ -47,6 +47,7 @@ class LexicalAssignment(LexicalSymbol): pass
 
 
 class LexicalIdentifier(LexicalSymbol, ValueType):
+
     def __init__(self, value):
         super(LexicalIdentifier, self).__init__(value)
         self.value = value
@@ -54,8 +55,8 @@ class LexicalIdentifier(LexicalSymbol, ValueType):
     def describe(self):
         return self.value
 
-    def evaluate(self, stack):
-        return stack[self.value]
+    def evaluate(self, resolver):
+        return resolver.resolve(self)
 
     def __hash__(self):
         return hash(self.value)
