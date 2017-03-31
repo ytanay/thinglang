@@ -36,7 +36,7 @@ class ExecutionEngine(object):
         self.resolver = Resolver(self.stack, self.heap)
 
     def __enter__(self):
-        assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
+        assert self.ast.get('Program') and self.ast.get('Program').get(LexicalIdentifier.constructor()), 'Program must have an entry point'
         utils.print_header('Execution')
         return self
 
@@ -50,6 +50,7 @@ class ExecutionEngine(object):
 
     def execute(self):
         self.create_stack_frame(ThingInstance(self.root.get('Program')))
+        root_instance = ThingInstance(self.ast.get('Program'))
 
         start = self.root.get('Program').get('start')
         tokens = start.children[:]  # clone the list of children

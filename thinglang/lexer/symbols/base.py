@@ -58,6 +58,10 @@ class LexicalIdentifier(LexicalSymbol, ValueType):
     def evaluate(self, resolver):
         return resolver.resolve(self)
 
+    @classmethod
+    def constructor(cls):
+        return cls("constructor")
+
     def __hash__(self):
         return hash(self.value)
 

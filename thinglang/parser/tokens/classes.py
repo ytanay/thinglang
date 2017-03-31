@@ -17,7 +17,7 @@ class MethodDefinition(DefinitionPairToken):
         super(MethodDefinition, self).__init__(slice)
 
         if isinstance(slice[0], LexicalDeclarationConstructor):
-            self.value = "constructor"
+            self.name = LexicalIdentifier.constructor()
             argument_list = slice[1]
         else:
             argument_list = slice[2]
