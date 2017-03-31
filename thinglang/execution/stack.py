@@ -39,6 +39,9 @@ class Frame(object):
         self.idx = 0
         self.return_value = None
 
+    def returns(self, value):
+        self.return_value = value
+
     def __setitem__(self, key, value):
         print('\tSET<{}> {}: {}'.format(self.idx, key, value))
         assert isinstance(key, LexicalIdentifier)
@@ -48,6 +51,7 @@ class Frame(object):
             self.data[key] = (self.idx, value)
 
     def __getitem__(self, item):
+
         if not item in self.data:
             raise UnknownVariable('Variable {} not recognized in this scope'.format(item))
         print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
