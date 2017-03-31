@@ -1,5 +1,6 @@
 from thinglang.execution.errors import UnknownVariable
 from thinglang.lexer.symbols.base import LexicalIdentifier
+from thinglang.parser.tokens.functions import Access
 
 UNRESOLVABLE_REFERENCE = object()
 
@@ -42,3 +43,10 @@ class Resolver(object):
         if value is UNRESOLVABLE_REFERENCE:
             raise UnknownVariable(f'Cannot find reference {identifier} in stack={self.stack}, heap={self.heap}')
         return value
+
+    def set(self, key, value):
+        if isinstance(key, Access):
+            container = self.resolve(key[:-1])
+            container[key[-1]] = value
+        else:
+            self.stack[key] = value

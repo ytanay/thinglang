@@ -107,7 +107,7 @@ class ExecutionEngine(object):
                     terminator = StackFrameTerminator(target.name)
                     target = target.value
                 else:
-                    self.stack[target.name] = target.value.evaluate(self.resolver)
+                    self.resolver.set(target.name, target.value.evaluate(self.resolver))
 
             if isinstance(target, MethodCall):
                 context = self.resolver.resolve(target.target)
