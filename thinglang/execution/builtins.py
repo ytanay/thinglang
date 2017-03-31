@@ -18,10 +18,14 @@ class ThingObjectOutput(ThingObjectBase):
 
 class ThingObjectInput(ThingObjectBase):
 
-    def __init__(self):
+    def __init__(self, heap):
         self.data = []
+        self.heap = heap
 
-    def get_line(self):
+    def get_line(self, line=None):
+        if line is not None:
+            self.heap['Output'].write(line)
+
         line = input()
         self.data.append(line)
         return line
