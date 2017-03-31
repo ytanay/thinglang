@@ -69,7 +69,7 @@ class RootToken(BaseToken):
 class DefinitionPairToken(BaseToken):
     def __init__(self, slice):
         super(DefinitionPairToken, self).__init__(slice)
-        self.name = slice[1].value
+        self.name = slice[1]
 
 
 class Transient(LexicalIdentifier):
