@@ -125,7 +125,8 @@ class ExecutionEngine(object):
                     utils.log(
                         f'Generating stack frame, copying {len(context.children)} target children to target list: {context.children}')
 
-                    self.stack.push(Frame(ThingInstance(context.parent)))
+                    instance = ThingInstance(context.parent) if target.constructing_call else self.resolver.resolve(target.target[:-1])
+                    self.stack.push(Frame(instance))
                     assert len(context.arguments) == len(args), 'Method expected {} arguments but recieved {}'.format(len(context.arguments), len(args))
                     for name, value in zip(context.arguments, args):
                         self.stack[name] = value
