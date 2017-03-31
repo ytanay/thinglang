@@ -9,6 +9,7 @@ from thinglang.execution.builtins import ThingObjectInput, ThingObjectOutput
 from thinglang.execution.classes import ThingInstance
 from thinglang.execution.errors import RedeclaredVariable
 from thinglang.execution.stack import StackFrameTerminator, StackFrame, StackScopeTerminator
+from thinglang.execution.resolver import Resolver
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.base import AssignmentOperation
@@ -32,6 +33,7 @@ class ExecutionEngine(object):
             LexicalIdentifier(x.INTERNAL_NAME): x(self.heap) for x in BUILTINS
         })
 
+        self.resolver = Resolver(self.stack, self.heap)
 
     def __enter__(self):
         assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
