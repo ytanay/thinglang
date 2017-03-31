@@ -22,7 +22,7 @@ thing Program
         Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
 ```
 
-Class initialziation, member definitions and all that jazz (doesn't run correctly yet, come back soon).
+Class initialization, member definitions and all that jazz (doesn't run correctly yet, come back soon).
 ```cs
 thing Person
     has text name
