@@ -8,10 +8,10 @@ from thinglang.parser.tokens.functions import ArgumentList
 class ThingDefinition(DefinitionPairToken):
 
     def __contains__(self, item):
-        return any(child.value == item for child in self.children)
+        return any(child.name == item for child in self.children)
 
     def __getitem__(self, item):
-        return [child for child in self.children if child.value == item][0]
+        return [child for child in self.children if child.name == item][0]
 
     def describe(self):
         return self.name
