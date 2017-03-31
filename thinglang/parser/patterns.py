@@ -4,14 +4,16 @@ from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation,
 from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, \
     LexicalAccess, LexicalAssignment, LexicalIdentifier, LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
-    LexicalDeclarationMethod, LexicalDeclarationThing
+    LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
+    LexicalClassInitialization
 from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
-from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition
+from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition, MemberDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
-    ArgumentListDecelerationPartial, ArrayInitializationPartial, ArrayInitialization
+    ArgumentListDecelerationPartial
+from thinglang.parser.tokens.types import ArrayInitializationPartial, ArrayInitialization
 from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
 
 FIRST_PASS_PATTERNS = [
@@ -19,6 +21,10 @@ FIRST_PASS_PATTERNS = [
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
+    ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),
+    ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
+
+    ((Access, ArgumentList), MethodCall),  # person.walk(...)
 
     ((LexicalArgumentListIndicator, ValueType), ArgumentListDecelerationPartial),  # with a
 
@@ -52,10 +58,12 @@ FIRST_PASS_PATTERNS = [
     ((LexicalRepeatWhile, ValueType), Loop),
     ((LexicalElse, Conditional), ConditionalElse),
 
-    ((Access, ArgumentList), MethodCall),  # person.walk(...)
 
     ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
     ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
+    ((Access, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
+
+    ((LexicalClassInitialization, LexicalIdentifier, ArgumentList), MethodCall)
 
 ]
 
