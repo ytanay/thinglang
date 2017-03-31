@@ -10,41 +10,41 @@ thing Program
         Output.write("hello world")
 ```
 
-A more involved example might look something like this:
+## Examples
+An example of method calls:
 ```cs
 thing Program
     does start
-        name = "Andy"
-        age = 10
-        self.say_hello(name, age)
+        text name = "Andy"
+        self.say_hello(name, 10)
 
     does say_hello with name, age
-        Output.write("Hello from ", age, "year old", name) # prints "Hello from 10 year old Andy"
+        Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
 ```
 
-This next example should work, but the syntax is still changing quite a bit so it might not compile.
+Class initialziation, member definitions and all that jazz (doesn't run correctly yet, come back soon).
 ```cs
 thing Person
-    has name, age
+    has text name
+    has number age
 
     created with name
         self.name = name
-        self.age = 0
-
-    does grow_up
-        self.age = self.age + 1
-
-    does say_hello with excitement_level
-        Output.write("Hello from", self.name, ", who's ", self.age, "and is always up for a fun game of tag.")
+        
+    does say_hello with repeat_count
+        repeat repeat_count times
+            Output.write("Hello from", self.name, ", who's ", self.age or "unknown", " years old and is always excited to get some coding done.")
 
 thing Program
     does start
-        name = Input.ask("What is your name?")
-        wants_to_grow_up = Input.ask("Do you want to grow up?") as boolean
-        person = create Person(name)
+        text name = Input.get_line("What is your name?")
+        
+        Person person = create Person(name)
+        
+        text age = Input.get_line("What is your age? Leave blank if you prefer not to answer.")
 
-        if wants_to_grow_up
-            person.grow_up()
+        if age
+            person.age = age
 
         person.say_hello()
 ```
