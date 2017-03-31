@@ -28,25 +28,25 @@ thing Person
     has text name
     has number age
 
-    created with name
+    setup with name
         self.name = name
-        
+
     does say_hello with repeat_count
-        repeat repeat_count times
-            Output.write("Hello from", self.name, ", who's ", self.age or "unknown", " years old and is always excited to get some coding done.")
+        number i = 0
+        repeat while i < repeat_count
+            Output.write("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
+            i = i + 1
+
 
 thing Program
-    does start
-        text name = Input.get_line("What is your name?")
-        
-        Person person = create Person(name)
-        
-        text age = Input.get_line("What is your age? Leave blank if you prefer not to answer.")
+    setup
+        Person person = create Person(Input.get_line("What is your name?"))
+        number age = Input.get_line("What is your age?") as number
 
         if age
             person.age = age
 
-        person.say_hello()
+        person.say_hello(Input.get_line("How excited are you?") as number)
 ```
 
 ## Execution Model
