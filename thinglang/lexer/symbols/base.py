@@ -62,3 +62,5 @@ class LexicalIdentifier(LexicalSymbol, ValueType):
 
     def __eq__(self, other):
         return type(other) == type(self) and self.value == other.value
+
+LexicalIdentifier.SELF = LexicalIdentifier("self")
