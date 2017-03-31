@@ -19,15 +19,19 @@ ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
 
 class ExecutionEngine(object):
-    def __init__(self, root):
-        self.root = root
-        self.stack = []
-        self.heap = {
-            x.name: x for x in root.children
+    def __init__(self, ast):
+        self.ast = ast
+
+        self.stack = Stack()
+
+        self.heap = {  # Collect all root level ThingDefinitions
+            x.name: x for x in ast.children
         }
 
-        self.heap['Output'] = ThingObjectOutput()
-        self.heap['Input'] = ThingObjectInput(self.heap)
+        self.heap.update({  # Mix in builtins, with a reference to the heap object
+            LexicalIdentifier(x.INTERNAL_NAME): x(self.heap) for x in BUILTINS
+        })
+
 
     def __enter__(self):
         assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
