@@ -1,3 +1,4 @@
+from thinglang.lexer.symbols.typing import LexicalCast
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.symbols import LexicalGroupEnd
 from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
@@ -13,9 +14,10 @@ from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition, MemberDefinition
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
-from thinglang.parser.tokens.types import ArrayInitializationPartial, ArrayInitialization
 from thinglang.parser.tokens.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
 from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
+
+Resolvable = ValueType, Access
 
 FIRST_PASS_PATTERNS = [
 
@@ -23,10 +25,11 @@ FIRST_PASS_PATTERNS = [
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
     ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),  # setup with a, b
-    ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition), # setup
+    ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition),  # setup
     ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
 
     ((ValueType, LexicalCast, LexicalIdentifier), CastOperation),
+
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
 
     ((LexicalArgumentListIndicator, ValueType), ArgumentListDecelerationPartial),  # with a
@@ -35,9 +38,6 @@ FIRST_PASS_PATTERNS = [
 
     ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # x eq y
     ((LexicalNegation, LexicalEquality), LexicalInequality),
-
-    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
-    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
 
     ((ArgumentListPartial, SecondOrderLexicalBinaryOperation, ValueType), ArgumentListPartial),  # (4 * 2
     ((ArgumentListPartial, FirstOrderLexicalBinaryOperation, ValueType), ArgumentListPartial),  # (4 + 2
@@ -52,10 +52,13 @@ FIRST_PASS_PATTERNS = [
 
     ((ArgumentListDecelerationPartial, LexicalSeparator, ValueType), ArgumentListDecelerationPartial),  # (2, 3
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
+    ((ArgumentListPartial, ArgumentList), ArgumentListPartial),
 
     ((ArgumentListPartial, LexicalParenthesesClose), ArgumentList),  # (2, 3)
     ((ArgumentListDecelerationPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
 
+    ((Resolvable, SecondOrderLexicalBinaryOperation, Resolvable), ArithmeticOperation),  # 4 * 2
+    ((Resolvable, FirstOrderLexicalBinaryOperation, Resolvable), ArithmeticOperation),  # 4 + 2
 
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalRepeatWhile, ValueType), Loop),
@@ -65,7 +68,9 @@ FIRST_PASS_PATTERNS = [
     ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
     ((Access, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
 
-    ((LexicalClassInitialization, LexicalIdentifier, ArgumentList), MethodCall)
+    ((LexicalClassInitialization, LexicalIdentifier, ArgumentList), MethodCall),
+
+    ((ArgumentListPartial, LexicalSeparator, Resolvable), ArgumentListPartial), # To deal with Access in argument lists
 
 ]
 
