@@ -1,4 +1,4 @@
-from thinglang.lexer.symbols.base import LexicalIdentifier
+from thinglang.lexer.symbols.base import LexicalIdentifier, LexicalAccess
 from thinglang.parser.tokens import BaseToken, DefinitionPairToken
 from thinglang.parser.tokens.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType
@@ -7,10 +7,10 @@ from thinglang.utils.type_descriptors import ValueType
 class Access(BaseToken):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
-        self.target = [x.value for x in slice if isinstance(x, LexicalIdentifier)]
+        self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
 
     def describe(self):
-        return '.'.join(self.target)
+        return '.'.join(str(x) for x in self.target)
 
 
 class ArgumentListPartial(ListInitializationPartial):
