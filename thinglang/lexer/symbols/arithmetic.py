@@ -7,7 +7,7 @@ class LexicalNumericalValue(LexicalSymbol, ValueType):
         super(LexicalNumericalValue, self).__init__(value)
         self.value = int(value)
 
-    def evaluate(self, stack):
+    def evaluate(self, _):
         return self.value
 
 

@@ -36,8 +36,8 @@ class ListInitialization(BaseToken):
     def __len__(self):
         return len(self.arguments)
 
-    def evaluate(self, stack):
-        return [value.evaluate(stack) for value in self.arguments]
+    def evaluate(self, resolver):
+        return [value.evaluate(resolver) for value in self.arguments]
 
     def describe(self):
         return self.arguments

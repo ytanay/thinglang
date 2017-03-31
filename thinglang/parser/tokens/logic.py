@@ -13,8 +13,8 @@ class Conditional(BaseToken):
     def describe(self):
         return 'if {}'.format(self.value)
 
-    def evaluate(self, stack):
-        return self.value.evaluate(stack)
+    def evaluate(self, resolver):
+        return self.value.evaluate(resolver)
 
 
 class ElseBranchInterface(object):
@@ -42,6 +42,6 @@ class Loop(BaseToken):
         super(Loop, self).__init__(slice)
         _, self.condition = slice
 
-    def evaluate(self, stack):
-        return self.condition.evaluate(stack)
+    def evaluate(self, resolver):
+        return self.condition.evaluate(resolver)
 

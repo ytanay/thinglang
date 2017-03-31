@@ -22,8 +22,8 @@ class ArithmeticOperation(BaseToken, ValueType):
         self.arguments = [slice[0], slice[2]]
         self.operator = type(slice[1])
 
-    def evaluate(self, stack):
-        return self.OPERATIONS[self.operator](self[0].evaluate(stack), self[1].evaluate(stack))
+    def evaluate(self, resolver):
+        return self.OPERATIONS[self.operator](self[0].evaluate(resolver), self[1].evaluate(resolver))
 
     def describe(self):
         return '|{} {} {}|'.format(self[0], self.operator, self[1])

@@ -24,7 +24,7 @@ class InlineString(ValueType):  # immediate string e.g. "hello world"
     def __init__(self, value):
         self.value = value
 
-    def evaluate(self, stack):
+    def evaluate(self, _):
         return self.value
 
     def serialize(self):
