@@ -80,9 +80,14 @@ class Frame(object):
 
 
 class StackFrameTerminator(object):
+
     def __init__(self, target_arg=None):
         self.target_arg = target_arg
+        self.constructor = False
 
+    def constructs(self, value):
+        self.constructor = value
+        return self
 
 class StackScopeTerminator(object):
     pass
