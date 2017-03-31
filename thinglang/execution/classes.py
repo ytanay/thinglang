@@ -1,3 +1,6 @@
+from thinglang.lexer.symbols.base import LexicalIdentifier
+
+
 class ThingInstance(object):
 
     def __init__(self, cls):
@@ -12,3 +15,6 @@ class ThingInstance(object):
 
     def __getitem__(self, item):
         return self.members.get(item) or self.methods.get(item)
+
+    def __str__(self):
+        return f'Thing<{self.cls}>(members={self.members}, methods={self.methods})'
