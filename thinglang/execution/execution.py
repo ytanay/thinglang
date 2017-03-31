@@ -131,7 +131,9 @@ class ExecutionEngine(object):
                     for name, value in zip(context.arguments, args):
                         self.stack[name] = value
 
-                    targets = context.children + [terminator or StackFrameTerminator()] + targets
+                    terminator = terminator or StackFrameTerminator()
+
+                    targets = context.children + [terminator.constructs(target.constructing_call)] + targets
                 continue
 
             if target.ADVANCE:
