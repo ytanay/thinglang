@@ -82,6 +82,7 @@ class ExecutionEngine(object):
                     self.stack[target.target_arg] = last_frame.instance
                 elif target.target_arg is not None:
                     self.stack[target.target_arg] = last_frame.return_value
+
                 continue
 
             if isinstance(target, StackScopeTerminator):
@@ -152,4 +153,8 @@ class ExecutionEngine(object):
             return
         print('\tSTACK:')
         for key, value in self.stack.data.items():
+            print('\t\t{} -> {}'.format(key, value))
+
+        print('\tMEMBERS:')
+        for key, value in self.stack.instance.members.items():
             print('\t\t{} -> {}'.format(key, value))
