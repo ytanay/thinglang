@@ -12,6 +12,9 @@ class Access(BaseToken):
     def describe(self):
         return '.'.join(str(x) for x in self.target)
 
+    def __getitem__(self, item):
+        return self.target[item]
+
 
 class ArgumentListPartial(ListInitializationPartial):
     pass
