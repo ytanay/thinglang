@@ -23,6 +23,7 @@ class Access(BaseToken):
 class ArgumentListPartial(ListInitializationPartial):
     pass
 
+
 class ArgumentListDecelerationPartial(ArgumentListPartial):
     pass
 

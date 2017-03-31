@@ -44,4 +44,3 @@ class Loop(BaseToken):
 
     def evaluate(self, resolver):
         return self.condition.evaluate(resolver)
-

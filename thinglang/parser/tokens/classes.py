@@ -16,6 +16,7 @@ class ThingDefinition(DefinitionPairToken):
     def describe(self):
         return self.name
 
+
 class MethodDefinition(BaseToken):
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)

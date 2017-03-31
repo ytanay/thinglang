@@ -1,6 +1,7 @@
 from thinglang.lexer.symbols import LexicalBinaryOperation
 from thinglang.parser.tokens import BaseToken
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
+from thinglang.utils.type_descriptors import ReplaceableArguments
 
 
 class ListInitializationPartial(BaseToken):
@@ -20,7 +21,7 @@ class ListInitializationPartial(BaseToken):
         return self.value[item]
 
 
-class ListInitialization(BaseToken):
+class ListInitialization(BaseToken, ReplaceableArguments):
 
     def __init__(self, slice=None):
         super(ListInitialization, self).__init__(slice)
@@ -42,5 +43,3 @@ class ListInitialization(BaseToken):
     def describe(self):
         return self.arguments
 
-    def replace(self, original, replacement):
-        self.arguments = [replacement if x is original else x for x in self.arguments]
