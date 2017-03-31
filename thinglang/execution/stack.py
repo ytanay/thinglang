@@ -1,4 +1,5 @@
 from thinglang.execution.errors import UnknownVariable
+from thinglang.lexer.symbols.base import LexicalIdentifier
 
 
 class Stack(object):
@@ -40,6 +41,7 @@ class Frame(object):
 
     def __setitem__(self, key, value):
         print('\tSET<{}> {}: {}'.format(self.idx, key, value))
+        assert isinstance(key, LexicalIdentifier)
         if key in self.data:
             self.data[key] = (self.data[key][0], value)
         else:
@@ -49,6 +51,7 @@ class Frame(object):
         if not item in self.data:
             raise UnknownVariable('Variable {} not recognized in this scope'.format(item))
         print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
+        assert isinstance(item, LexicalIdentifier)
         return self.data[item][1]
 
     def __contains__(self, item):
