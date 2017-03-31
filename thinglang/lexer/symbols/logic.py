@@ -51,7 +51,8 @@ class LexicalLessThan(LexicalComparison):
 
 
 class LexicalBoolean(LexicalSymbol, ValueType):
-    pass
+    def evaluate(self, stack):
+        raise NotImplementedError('Must implement evaluate')
 
 
 class LexicalBooleanTrue(LexicalBoolean):
