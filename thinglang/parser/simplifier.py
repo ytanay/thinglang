@@ -3,9 +3,9 @@ from thinglang.parser.tokens import Transient
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-from thinglang.parser.tokens.types import ArrayInitialization
+from thinglang.parser.tokens.types import ArrayInitialization, CastOperation
 
-OBTAINABLE_VALUES = MethodCall, ArithmeticOperation, ArrayInitialization
+OBTAINABLE_VALUES = MethodCall, ArithmeticOperation, ArrayInitialization, CastOperation
 
 
 def simplify(tree):
@@ -36,7 +36,7 @@ def reduce_method_calls(method_call, node, parent_call=None):
     if not isinstance(method_call, OBTAINABLE_VALUES):
         return
     for argument in method_call.arguments:
-        if isinstance(argument, MethodCall):
+        if isinstance(argument, (MethodCall, CastOperation)):
             reduce_method_calls(argument, node, parent_call=method_call)
         if isinstance(argument, ArithmeticOperation):
             for x in argument.arguments:
