@@ -23,11 +23,11 @@ class ExecutionEngine(object):
         self.root = root
         self.stack = []
         self.heap = {
-            x.value: x for x in root.children
+            x.name: x for x in root.children
         }
 
         self.heap['Output'] = ThingObjectOutput()
-        self.heap['Input'] = ThingObjectInput()
+        self.heap['Input'] = ThingObjectInput(self.heap)
 
     def __enter__(self):
         assert self.root.get('Program') and self.root.get('Program').get('start'), 'Program must have an entry point'
