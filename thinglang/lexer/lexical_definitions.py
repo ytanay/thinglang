@@ -10,6 +10,7 @@ from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthe
 from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
     LexicalClassInitialization
+from thinglang.lexer.symbols.typing import LexicalCast
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
 IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")
@@ -63,7 +64,9 @@ KEYWORDS = {
     'not': LexicalNegation,
 
     'true': LexicalBooleanTrue,
-    'false': LexicalBooleanFalse
+    'false': LexicalBooleanFalse,
+
+    'as': LexicalCast
 }
 
 
