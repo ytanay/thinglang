@@ -56,3 +56,9 @@ class LexicalIdentifier(LexicalSymbol, ValueType):
 
     def evaluate(self, stack):
         return stack[self.value]
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __eq__(self, other):
+        return type(other) == type(self) and self.value == other.value
