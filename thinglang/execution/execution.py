@@ -36,7 +36,7 @@ class ExecutionEngine(object):
         self.resolver = Resolver(self.stack, self.heap)
 
     def __enter__(self):
-        assert self.ast.get('Program') and self.ast.get('Program').get(LexicalIdentifier.constructor()), 'Program must have an entry point'
+        assert self.ast.get(LexicalIdentifier('Program')) and self.ast.get(LexicalIdentifier('Program')).get(LexicalIdentifier.constructor()), 'Program must have an entry point'
         utils.print_header('Execution')
         return self
 
@@ -48,7 +48,7 @@ class ExecutionEngine(object):
         print('\n'.join(self.heap[LexicalIdentifier('Output')].data))
 
     def execute(self):
-        root_instance = ThingInstance(self.ast.get('Program'))
+        root_instance = ThingInstance(self.ast.get(LexicalIdentifier('Program')))
         targets = root_instance.methods[LexicalIdentifier.constructor()].children
 
         self.stack.push(Frame(root_instance))  # Creates the root stack frame
