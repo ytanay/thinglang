@@ -5,13 +5,14 @@ from collections import namedtuple
 import itertools
 
 from thinglang import utils
-from thinglang.execution.builtins import ThingObjectInput, ThingObjectOutput
+from thinglang.execution.builtins import ThingObjectInput, ThingObjectOutput, BUILTINS
 from thinglang.execution.classes import ThingInstance
 from thinglang.execution.errors import RedeclaredVariable
-from thinglang.execution.stack import StackFrameTerminator, StackFrame, StackScopeTerminator
 from thinglang.execution.resolver import Resolver
+from thinglang.execution.stack import StackFrameTerminator, Stack, StackScopeTerminator, Frame
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken
+from thinglang.parser.tokens.arithmetic import ArithmeticOperation
 from thinglang.parser.tokens.base import AssignmentOperation
 from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
 from thinglang.parser.tokens.logic import Conditional, ElseBranchInterface, Loop
@@ -41,111 +42,113 @@ class ExecutionEngine(object):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-
         if exc_val:
             utils.print_header('Execution summary (exceptions)')
             print(''.join(traceback.format_exception(exc_type, exc_val, exc_tb)))
         utils.print_header('Output')
-        print('\n'.join(self.heap['Output'].data))
+        print('\n'.join(self.heap[LexicalIdentifier('Output')].data))
 
     def execute(self):
-        self.create_stack_frame(ThingInstance(self.root.get('Program')))
         root_instance = ThingInstance(self.ast.get('Program'))
+        targets = root_instance.methods[LexicalIdentifier.constructor()].children
 
-        start = self.root.get('Program').get('start')
-        tokens = start.children[:]  # clone the list of children
+        self.stack.push(Frame(root_instance))  # Creates the root stack frame
 
-        while tokens:
-            stack = self.stack[-1]
-            token = tokens.pop(0)
+        while targets:
+            target = targets.pop(0)
             terminator = None
 
-            self.set_context(token)
+            self.set_context(target)
 
-            if isinstance(token, StackFrameTerminator):  # Signifies the end of a function call
+            if isinstance(target, Conditional):
+                if target.evaluate(self.resolver):
+                    self.stack.enter()
+                    targets = target.children + \
+                             [StackScopeTerminator()] + \
+                             list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), targets)) # Remove all directly following else-like branches
+                continue
+
+            if isinstance(target, Loop):
+                if target.evaluate(self.resolver):
+                    targets = target.children + [target] + targets
+                continue
+
+            if isinstance(target, StackFrameTerminator):  # Signifies the end of a function call
                 last_frame = self.stack.pop()
-                stack = self.stack[-1]
-                utils.log('Stack frame termination, with return value {}, binding to {}'.format(last_frame.return_value, token.target_arg))
-                if token.target_arg is not None:
-                    stack[token.target_arg] = last_frame.return_value
+                utils.log('Stack frame termination, with return value {}, binding to {}'.format(last_frame.return_value, target.target_arg))
+
+                if target.target_arg is not None:
+                    self.stack[target.target_arg] = last_frame.return_value
                 continue
 
-            if isinstance(token, StackScopeTerminator):
-                stack.exit()
+            if isinstance(target, StackScopeTerminator):
+                self.stack.exit()
                 continue
 
-            if isinstance(token, ReturnStatement):
-                if isinstance(token.value, LexicalIdentifier):
-                    value = stack[token.value.value]
+            if isinstance(target, ReturnStatement):
+                value = target.value.evaluate(self.resolver)
+
+                terminator = next((i for i, x in enumerate(targets) if isinstance(x, StackFrameTerminator)))
+                targets[0:terminator] = []
+
+                utils.log(
+                    'Applying return value {} on stack - cleaning execution targets up to terminator at {}'.format(
+                        value, terminator))
+
+                self.stack.returns(value)
+                continue
+
+            if isinstance(target, AssignmentOperation):
+                if isinstance(target.value, MethodCall):
+                    utils.log(f'Assignment operation leading to method call, binding terminator to {target.name}')
+                    terminator = StackFrameTerminator(target.name)
+                    target = target.value
                 else:
-                    value = token.value.value
-                terminator = next((i for i, x in enumerate(tokens) if isinstance(x, StackFrameTerminator)))
-                utils.log('Assigning return value {} on stack - cleaning execution targets up to terminator at {}'.format(value, terminator))
-                tokens[0:terminator] = []
-                self.stack[-1].return_value = value
-                continue
+                    self.stack[target.name] = target.value.evaluate(self.resolver)
 
-            if isinstance(token, AssignmentOperation):
-                if token.method is token.DECELERATION and token.name.value in stack:
-                    raise RedeclaredVariable('variable {} declaration but was found in stack'.format(
-                        token.name.value))
-                elif token.method is token.REASSIGNMENT and token.name.value not in stack:
-                    raise RuntimeError('variable {} reassignment but is not in stack {}'.format(
-                        token.name.value, token.context))
+            if isinstance(target, MethodCall):
+                context = self.resolver.resolve(target.target)
+                args = target.arguments.evaluate(self.resolver)
 
-                if isinstance(token.value, MethodCall):
-                    utils.log('Assignment operation leading to method call, overriding terminator')
-                    terminator = StackFrameTerminator(token.name.value)
-                    token = token.value
-                else:
-                    stack[token.name.value] = token.value.evaluate(stack)
-
-            if isinstance(token, MethodCall):
-                context = self.resolve(self.stack[-1], token.target.target)
-                args = token.arguments.evaluate(self.stack[-1])
-
-                utils.log('Method resolution: func={}, args={}'.format(context, args))
+                utils.log(f'Method resolution: func={context}, args={args}')
 
                 if isinstance(context, collections.Callable):
                     utils.log('Built in method, calling directly')
                     result = context(*args)
                     if terminator is not None:
-                        stack[terminator.target_arg] = result
+                        self.stack[terminator.target_arg] = result
                 else:
-                    utils.log('Applying arguments {} -> {} -> {}'.format(context.arguments, token.arguments, args))
-                    utils.log('Generating stack frame, copying {} target children to target list: {}'.format(len(context.children), context.children))
+                    utils.log(f'Applying arguments {context.arguments} -> {target.arguments} -> {args}')
+                    utils.log(
+                        f'Generating stack frame, copying {len(context.children)} target children to target list: {context.children}')
 
-                    self.create_stack_frame(ThingInstance(context.parent))
+                    self.stack.push(Frame(ThingInstance(context.parent)))
                     assert len(context.arguments) == len(args), 'Method expected {} arguments but recieved {}'.format(len(context.arguments), len(args))
                     for name, value in zip(context.arguments, args):
-                        self.stack[-1][name.value] = value
+                        self.stack[name] = value
 
-                    tokens = context.children + [terminator or StackFrameTerminator()] + tokens
+                    targets = context.children + [terminator or StackFrameTerminator()] + targets
                 continue
 
-            if isinstance(token, Conditional):
-                if token.evaluate(stack):
-                    stack.enter()
-                    tokens = token.children + \
-                             [StackScopeTerminator()] + \
-                             list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), tokens)) # Remove all directly following else-like branches
 
-            if isinstance(token, Loop):
-                if token.evaluate(stack):
-                    tokens = token.children + [token] + tokens
-
-            if token.ADVANCE:
-                tokens = token.children + tokens
+            if target.ADVANCE:
+                targets = target.children + targets
 
     def results(self):
-        return ExecutionOutput(output='\n'.join(self.heap['Output'].data))
+        return ExecutionOutput(output='\n'.join(self.heap[LexicalIdentifier('Output')].data))
 
-    def create_stack_frame(self, instance):
-        self.stack.append(StackFrame(instance))
+    def push_frame(self, instance):
+        self.stack = Stack(instance)
+        self.frames.append(self.stack)
 
-    def resolve(self, stack, target):
+    def pop_frame(self):
+        frame = self.frames.pop()
+        self.stack = self.frames[-1]
+        return frame
+
+    def resolve(self, target):
         if target[0] == 'self':
-            context = stack.instance
+            context = self.stack.instance
             target = target[1:]
         else:
             context = self.heap
@@ -161,8 +164,8 @@ class ExecutionEngine(object):
         self.current_target = target
 
     def log_stack(self):
-        if not self.stack[-1].data:
+        if not self.stack.data:
             return
         print('\tSTACK:')
-        for key, value in self.stack[-1]:
+        for key, value in self.stack.data.items():
             print('\t\t{} -> {}'.format(key, value))
