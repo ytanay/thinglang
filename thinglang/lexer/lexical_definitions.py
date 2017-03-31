@@ -46,7 +46,7 @@ KEYWORDS = {
     'thing': LexicalDeclarationThing,
     'does': LexicalDeclarationMethod,
     'has': LexicalDeclarationMember,
-    'created': LexicalDeclarationConstructor,
+    'setup': LexicalDeclarationConstructor,
 
     'create': LexicalClassInitialization,
 
