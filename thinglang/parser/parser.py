@@ -21,8 +21,8 @@ def parse(lexical_groups):
 
     for idx, node in enumerate(processed_groups):
 
-        if isinstance(node, ThingDefinition) and len(stack) > 1:
-            stack.pop()
+        if isinstance(node, ThingDefinition):
+            stack = [stack[0]]
 
         parent = stack[-1]
 
