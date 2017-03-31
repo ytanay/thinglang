@@ -14,6 +14,7 @@ from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition, M
 from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
 from thinglang.parser.tokens.types import ArrayInitializationPartial, ArrayInitialization
+from thinglang.parser.tokens.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
 from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
 
 FIRST_PASS_PATTERNS = [
@@ -25,6 +26,7 @@ FIRST_PASS_PATTERNS = [
     ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition), # setup
     ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
 
+    ((ValueType, LexicalCast, LexicalIdentifier), CastOperation),
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
 
     ((LexicalArgumentListIndicator, ValueType), ArgumentListDecelerationPartial),  # with a
