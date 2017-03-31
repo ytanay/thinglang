@@ -1,11 +1,11 @@
-from thinglang.utils.type_descriptors import ValueType
+from thinglang.utils.type_descriptors import ValueType, ReplaceableArguments
 from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
 from thinglang.lexer.symbols.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
 from thinglang.parser.tokens import BaseToken
 
 
-class ArithmeticOperation(BaseToken, ValueType):
+class ArithmeticOperation(BaseToken, ValueType, ReplaceableArguments):
     OPERATIONS = {
         LexicalAddition: lambda lhs, rhs: lhs + rhs,
         LexicalMultiplication: lambda lhs, rhs: lhs * rhs,
@@ -27,9 +27,6 @@ class ArithmeticOperation(BaseToken, ValueType):
 
     def describe(self):
         return '|{} {} {}|'.format(self[0], self.operator, self[1])
-
-    def replace(self, original, replacement):
-        self.arguments = [replacement if x is original else x for x in self.arguments]
 
     def __getitem__(self, item):
         return self.arguments[item]
