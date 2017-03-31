@@ -1,4 +1,4 @@
-from thinglang.parser.tokens.base import ListInitializationPartial, ListInitialization
+from thinglang.parser.tokens.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType
 
 

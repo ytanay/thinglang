@@ -1,9 +1,7 @@
-import abc
-
 from thinglang.utils.describable import Describable
 
 
-class BaseToken(Describable, metaclass=abc.ABCMeta):
+class BaseToken(Describable):
     BLOCK = False
     ADVANCE = True
 
@@ -60,11 +58,12 @@ class BaseToken(Describable, metaclass=abc.ABCMeta):
         siblings.insert(siblings.index(self), node)
 
 
-class RootToken(BaseToken, metaclass=abc.ABCMeta):
+class RootToken(BaseToken):
     BLOCK = True
 
     def __init__(self):
         super(RootToken, self).__init__(None)
+
 
 class DefinitionPairToken(BaseToken):
     def __init__(self, slice):
