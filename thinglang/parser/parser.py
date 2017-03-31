@@ -5,6 +5,7 @@ from thinglang.lexer.symbols import LexicalGroupEnd
 from thinglang.lexer.symbols.base import LexicalIndent
 from thinglang.parser.patterns import REPLACEMENT_PASSES
 from thinglang.parser.tokens import RootToken
+from thinglang.parser.tokens.classes import ThingDefinition
 
 
 def parse(lexical_groups):
@@ -57,10 +58,11 @@ def parse_group(group):
     """
 
     original = copy.deepcopy(group)
+    stages = [original]
 
     for pattern_set in REPLACEMENT_PASSES:
         while replace_in_place(group, pattern_set):
-            pass
+            stages.append(copy.deepcopy(group))
 
     process_indentation(group)
 
@@ -68,7 +70,7 @@ def parse_group(group):
         return
 
     if len(group) != 1:
-        raise RuntimeError('Cannot parse {}\nReduced until {}'.format(pprint.pformat(original), pprint.pformat(group)))
+        raise RuntimeError('Cannot parse {}.\nLexical Output: {}\nReduced until {}\n\nStages: {}'.format(original[0].context, pprint.pformat(original), pprint.pformat(group), pprint.pformat(stages)))
 
     return group[0]
 
