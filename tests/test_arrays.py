@@ -4,7 +4,7 @@ from thinglang import run
 def test_simple_arrays():
     assert run("""
 thing Program
-    does start
+    setup
         array names = ["yotam", "andrew", "john"]
         Output.write(names)
 
@@ -14,7 +14,7 @@ thing Program
 def test_array_initialization_over_function_calls():
     assert run("""
 thing Program
-    does start
+    setup
         array numbers = self.build_array()
         Output.write(numbers)
 

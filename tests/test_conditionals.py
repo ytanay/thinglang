@@ -4,7 +4,7 @@ from thinglang import run
 def test_simple_conditionals():
     assert run("""
 thing Program
-    does start
+    setup
         if "dog" eq "dog"
             Output.write("dog is dog")
 
@@ -17,7 +17,7 @@ thing Program
 def test_boolean_constant():
     assert run("""
 thing Program
-    does start
+    setup
         if true
             Output.write("true is truthy")
 
@@ -30,7 +30,7 @@ thing Program
 def test_unconditional_else():
     assert run("""
 thing Program
-    does start
+    setup
         if "dog" eq "dog"
             Output.write("dog is dog")
         otherwise
@@ -46,7 +46,7 @@ thing Program
 def test_conditional_else():
     assert run("""
 thing Program
-    does start
+    setup
         if "dog" eq "cat"
             Output.write("dog is cat")
         otherwise if "dog" eq "dog"

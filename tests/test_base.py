@@ -13,7 +13,7 @@ def test_empty_program():
 def test_simple_output_program():
     assert run("""
 thing Program
-    does start
+    setup
         Output.write("test")
     """).output == 'test'
 

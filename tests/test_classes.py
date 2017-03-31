@@ -19,7 +19,7 @@ thing Person
 
 
 thing Program
-    does start
+    setup
         text name = "yotam"
         text wants_to_grow_up = true
         #text name = Input.get_line("What is your name?")

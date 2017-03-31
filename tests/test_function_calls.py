@@ -4,7 +4,7 @@ from thinglang import run
 def test_zero_arg_function_calls():
     assert run("""
 thing Program
-    does start
+    setup
         number n = 1
         number m = 2
         Output.write("before n=", n, " m=", m)
@@ -23,7 +23,7 @@ after n= 1  m= 2""".strip()
 def test_function_return_values():
     assert run("""
 thing Program
-    does start
+    setup
         number result = self.say_hello()
         Output.write(result)
     does say_hello
@@ -34,7 +34,7 @@ thing Program
 def test_multi_arg_function_calls():
     assert run("""
 thing Program
-    does start
+    setup
         text name = "Andy"
         number age = 10
         self.say_hello(name, age)
@@ -51,7 +51,7 @@ Hello from 19 year old Yotam""".strip()
 def test_function_call_integration():
     assert run("""
     thing Program
-        does start
+        setup
             number a = 15
             number b = self.add(a, 10)
             Output.write(a, b)
@@ -63,7 +63,7 @@ def test_function_call_integration():
 def test_early_exit():
     assert run("""
     thing Program
-        does start
+        setup
             number a = 15
             number b = self.add_or_multiply(a, 10)
             Output.write(a, b)
@@ -77,7 +77,7 @@ def test_early_exit():
 def test_nested_function_calls():
     assert run("""
     thing Program
-        does start
+        setup
             Output.write(self.get_7(), self.get_13())
             number res = self.mul(self.get_13(), self.add(self.get_7(), self.get_7()))
             Output.write(res)
@@ -101,7 +101,7 @@ def test_nested_function_calls():
 def test_arithmetic_over_method_calls():
     assert run("""
     thing Program
-        does start
+        setup
             number inter = self.get_13() + self.get_7() + self.get_7() * 3
             Output.write(inter, self.get_7() + self.get_13(), 2 * inter * self.get_7())
 
@@ -116,7 +116,7 @@ def test_arithmetic_over_method_calls():
 def test_recursion():
     assert run("""
     thing Program
-        does start
+        setup
             Output.write(self.factorial(10))
 
         does factorial with n

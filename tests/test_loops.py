@@ -4,7 +4,7 @@ from thinglang import run
 def test_simple_loop():
     assert run("""
 thing Program
-    does start
+    setup
         number i = 0
         repeat while i < 5
             Output.write("i =", i)
