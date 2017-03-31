@@ -1,3 +1,6 @@
+from thinglang.lexer.symbols.base import LexicalIdentifier
+
+
 class ThingObjectBase(object):
 
     def __getitem__(self, item):
@@ -27,7 +30,7 @@ class ThingObjectInput(ThingObjectBase):
 
     def get_line(self, line=None):
         if line is not None:
-            self.heap['Output'].write(line)
+            self.heap[LexicalIdentifier('Output')].write(line)
 
         line = input()
         self.data.append(line)
