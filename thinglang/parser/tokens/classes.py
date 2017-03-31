@@ -1,3 +1,5 @@
+from thinglang.lexer.symbols import LexicalGroupEnd
+from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.lexer.symbols.functions import LexicalDeclarationConstructor
 from thinglang.parser.tokens import DefinitionPairToken, BaseToken
 from thinglang.parser.tokens.functions import ArgumentList
@@ -11,8 +13,10 @@ class ThingDefinition(DefinitionPairToken):
     def __getitem__(self, item):
         return [child for child in self.children if child.value == item][0]
 
+    def describe(self):
+        return self.name
 
-class MethodDefinition(DefinitionPairToken):
+class MethodDefinition(BaseToken):
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
 
@@ -20,6 +24,7 @@ class MethodDefinition(DefinitionPairToken):
             self.name = LexicalIdentifier.constructor()
             argument_list = slice[1]
         else:
+            self.name = slice[1]
             argument_list = slice[2]
 
         if isinstance(argument_list, ArgumentList):
@@ -28,7 +33,7 @@ class MethodDefinition(DefinitionPairToken):
             self.arguments = ArgumentList()
 
     def describe(self):
-        return '{}, args={}'.format(self.value, self.arguments)
+        return '{}, args={}'.format(self.name, self.arguments)
 
 
 class MemberDefinition(BaseToken):
