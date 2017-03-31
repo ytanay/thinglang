@@ -1,8 +1,8 @@
-from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.symbols import LexicalBinaryOperation
 from thinglang.lexer.symbols.base import LexicalIdentifier
 from thinglang.parser.tokens import BaseToken, DefinitionPairToken
 from thinglang.parser.tokens.arithmetic import ArithmeticOperation
+from thinglang.utils.type_descriptors import ValueType
 
 
 class Access(BaseToken):
@@ -31,6 +31,10 @@ class ArgumentListPartial(BaseToken):
         return self.value[item]
 
 
+class ArgumentListDecelerationPartial(ArgumentListPartial):
+    pass
+
+
 class ArgumentList(BaseToken):
     def __init__(self, slice=None):
         super(ArgumentList, self).__init__(slice)
@@ -56,20 +60,6 @@ class ArgumentList(BaseToken):
         self.arguments = [replacement if x is original else x for x in self.arguments]
 
 
-
-class ArrayInitializationPartial(ArgumentListPartial):
-    pass
-
-
-class ArrayInitialization(ArgumentList, ValueType):
-    pass
-
-
-class ArgumentListDecelerationPartial(ArgumentListPartial):
-    pass
-
-
-
 class MethodCall(BaseToken, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
@@ -85,12 +75,6 @@ class MethodCall(BaseToken, ValueType):
     def replace(self, original, replacement):
         self.arguments.replace(original, replacement)
 
-    def serialize(self):
-        return {
-            "type": "MethodCall",
-            "arguments": self.arguments,
-            "target": self.target
-        }
 
 class ReturnStatement(DefinitionPairToken):
     def __init__(self, slice):
