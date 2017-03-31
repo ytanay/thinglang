@@ -1,34 +1,36 @@
+from unittest.mock import patch
+
+import io
+
 from thinglang import run
 
 
 def test_class_integration():
-    assert run("""
+    with patch('sys.stdin', io.StringIO('yotam\n19\n5')):
+        assert run("""
 thing Person
     has text name
     has number age
 
-    created with name
+    setup with name
         self.name = name
-        self.age = 0
 
-    does grow_up
-        self.age = self.age + 1
-
-    does say_hello with excitement_level
-        Output.write("Hello from", self.name, ", who's ", self.age, "and is always up for a fun game of tag.")
+    does say_hello with repeat_count
+        number i = 0
+        repeat while i < repeat_count
+            Output.write("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
+            i = i + 1
 
 
 thing Program
     setup
-        text name = "yotam"
-        text wants_to_grow_up = true
-        #text name = Input.get_line("What is your name?")
-        #text wants_to_grow_up = Input.get_line("Do you want to grow up?")
-        Person person = create Person(name)
+        Person person = create Person(Input.get_line("What is your name?"))
+        number age = Input.get_line("What is your age?") as number
 
-        if wants_to_grow_up
-            person.grow_up()
+        if age
+            person.age = age
 
-        person.say_hello()
-    """).output == """dog is dog"""
+        person.say_hello(Input.get_line("How excited are you?") as number)
+    """).output == "What is your name?\nWhat is your age?\nHow excited are you?\n" +\
+                   "\n".join("Hello number {} from yotam who's 19 years old and is always excited to get some coding done.".format(i) for i in range(5))
 
