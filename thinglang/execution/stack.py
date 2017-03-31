@@ -1,7 +1,36 @@
 from thinglang.execution.errors import UnknownVariable
 
 
-class StackFrame(object):
+class Stack(object):
+    def __init__(self):
+        self.frames = []
+
+    def __getitem__(self, item):
+        return self.frames[-1][item]
+
+    def __setitem__(self, key, value):
+        self.frames[-1][key] = value
+
+    def __contains__(self, item):
+        return item in self.frames[-1]
+
+    def __iter__(self):
+        return iter(self.frames[-1])
+
+    def push(self, frame):
+        self.frames.append(frame)
+
+    def pop(self):
+        return self.frames.pop()
+
+    def __getattr__(self, item):
+        return getattr(self.frames[-1], item)
+
+    def __str__(self):
+        return f'Stack<{len(self.frames)}>(locals={self.data}, instance={self.instance})'
+
+
+class Frame(object):
 
     def __init__(self, instance):
         self.instance = instance
