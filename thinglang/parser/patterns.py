@@ -21,7 +21,8 @@ FIRST_PASS_PATTERNS = [
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
-    ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),
+    ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),  # setup with a, b
+    ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition), # setup
     ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
 
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
@@ -58,7 +59,6 @@ FIRST_PASS_PATTERNS = [
     ((LexicalRepeatWhile, ValueType), Loop),
     ((LexicalElse, Conditional), ConditionalElse),
 
-
     ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
     ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
     ((Access, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
@@ -69,8 +69,7 @@ FIRST_PASS_PATTERNS = [
 
 SECOND_PASS_PATTERNS = [
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
-    ((LexicalElse,), UnconditionalElse),
-
+    ((LexicalElse,), UnconditionalElse)
 ]
 
 
