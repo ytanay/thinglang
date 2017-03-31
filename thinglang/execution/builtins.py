@@ -1,22 +1,25 @@
 class ThingObjectBase(object):
 
     def __getitem__(self, item):
-        return getattr(self, item)
+        return getattr(self, item.value)
 
     def __contains__(self, item):
-        return hasattr(self, item)
+        return hasattr(self, item.value)
 
 
 class ThingObjectOutput(ThingObjectBase):
+    INTERNAL_NAME = "Output"
 
-    def __init__(self):
+    def __init__(self, heap):
         self.data = []
+        self.heap = heap
 
     def write(self, *args):
         self.data.append(' '.join(str(x) for x in args))
 
 
 class ThingObjectInput(ThingObjectBase):
+    INTERNAL_NAME = "Input"
 
     def __init__(self, heap):
         self.data = []
@@ -29,3 +32,6 @@ class ThingObjectInput(ThingObjectBase):
         line = input()
         self.data.append(line)
         return line
+
+
+BUILTINS = ThingObjectOutput, ThingObjectInput
