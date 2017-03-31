@@ -56,7 +56,7 @@ def is_compound(node):
 
 
 def create_transient(value, parent):
-    local_id = LexicalIdentifier(Transient()).contextify(parent.context)
+    local_id = Transient().contextify(parent.context)
     return local_id, AssignmentOperation([None, local_id, None, value]).contextify(parent.parent)
 
 
