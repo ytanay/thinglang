@@ -23,7 +23,6 @@ ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 class ExecutionEngine(object):
     def __init__(self, ast):
         self.ast = ast
-
         self.stack = Stack()
 
         self.heap = {  # Collect all root level ThingDefinitions
@@ -130,33 +129,11 @@ class ExecutionEngine(object):
                     targets = context.children + [terminator or StackFrameTerminator()] + targets
                 continue
 
-
             if target.ADVANCE:
                 targets = target.children + targets
 
     def results(self):
         return ExecutionOutput(output='\n'.join(self.heap[LexicalIdentifier('Output')].data))
-
-    def push_frame(self, instance):
-        self.stack = Stack(instance)
-        self.frames.append(self.stack)
-
-    def pop_frame(self):
-        frame = self.frames.pop()
-        self.stack = self.frames[-1]
-        return frame
-
-    def resolve(self, target):
-        if target[0] == 'self':
-            context = self.stack.instance
-            target = target[1:]
-        else:
-            context = self.heap
-        for component in target:
-            if component not in context:
-                raise ValueError('Cannot find {} in {}'.format(component, context))
-            context = context[component]
-        return context
 
     def set_context(self, target):
         print('Target: {} ({})'.format(target.context if isinstance(target, BaseToken) else target, target))
