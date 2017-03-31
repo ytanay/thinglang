@@ -39,6 +39,7 @@ thing Program
     """)
 
 
+@pytest.mark.skip(reason="Implement static analysis on AST")
 def test_error_in_duplicate_assignment():
     with pytest.raises(RedeclaredVariable):
         run("""
