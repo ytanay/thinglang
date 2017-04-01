@@ -1,6 +1,7 @@
 from thinglang import utils
 from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
+from thinglang.parser.analyzer import analyze
 from thinglang.parser.parser import parse
 from thinglang.parser.simplifier import simplify
 
@@ -15,18 +16,12 @@ def run(source):
 
     lexical_groups = list(lexer(source))
     tree = parse(lexical_groups)
-    validate(tree)
+    analyze(tree)
     root_node = simplify(tree)
-    validate(tree)
+    analyze(tree)
 
     utils.print_header('Parsed AST', root_node.tree())
 
     with ExecutionEngine(root_node) as engine:
         engine.execute()
         return engine.results()
-
-
-def validate(node, parent=None):
-    assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
-    for child in node.children:
-        validate(child, node)
