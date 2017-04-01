@@ -13,6 +13,12 @@ def verify_method_definitions(ast):
             raise EmptyMethodBody()
 
 
+def verify_thing_definitions(ast):
+    for child in ast.find(lambda x: isinstance(x, ThingDefinition)):
+        if not child.children:
+            raise EmptyThingDefinition()
+
+
 def analyze(ast):
     analyze_method_resolution(ast)
     verify_method_definitions(ast)
