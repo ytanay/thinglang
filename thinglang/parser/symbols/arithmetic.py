@@ -1,11 +1,11 @@
 from thinglang.utils.type_descriptors import ValueType, ReplaceableArguments
-from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
+from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
-from thinglang.lexer.symbols.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
-from thinglang.parser.tokens import BaseToken
+from thinglang.lexer.tokens.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
+from thinglang.parser.symbols import BaseSymbol
 
 
-class ArithmeticOperation(BaseToken, ValueType, ReplaceableArguments):
+class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
     OPERATIONS = {
         LexicalAddition: lambda lhs, rhs: lhs + rhs,
         LexicalMultiplication: lambda lhs, rhs: lhs * rhs,

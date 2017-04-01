@@ -2,10 +2,10 @@ import re
 
 from thinglang.utils.token_context import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifier
-from thinglang.lexer.symbols.arithmetic import LexicalNumericalValue
-from thinglang.lexer.symbols import LexicalGroupEnd
-from thinglang.lexer.symbols.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
-from thinglang.parser.tokens.base import InlineString
+from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
+from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
+from thinglang.parser.symbols.base import InlineString
 
 
 def lexer(source):

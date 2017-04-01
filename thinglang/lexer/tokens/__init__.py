@@ -3,7 +3,7 @@ import abc
 from thinglang.utils.describable import Describable
 
 
-class LexicalSymbol(Describable):
+class LexicalToken(Describable):
     EMITTABLE = True
 
     def __init__(self, raw):
@@ -18,11 +18,11 @@ class LexicalSymbol(Describable):
         return self
 
 
-class LexicalBinaryOperation(LexicalSymbol, metaclass=abc.ABCMeta):
+class LexicalBinaryOperation(LexicalToken, metaclass=abc.ABCMeta):
     def __init__(self, operator):
         super(LexicalBinaryOperation, self).__init__(operator)
         self.operator = operator
 
 
-class LexicalGroupEnd(LexicalSymbol):
+class LexicalGroupEnd(LexicalToken):
     pass

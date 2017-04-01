@@ -1,9 +1,9 @@
-from thinglang.lexer.symbols.base import LexicalIdentifier
-from thinglang.parser.tokens import Transient
-from thinglang.parser.tokens.arithmetic import ArithmeticOperation
-from thinglang.parser.tokens.base import AssignmentOperation
-from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-from thinglang.parser.tokens.types import ArrayInitialization, CastOperation
+from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.symbols import Transient
+from thinglang.parser.symbols.arithmetic import ArithmeticOperation
+from thinglang.parser.symbols.base import AssignmentOperation
+from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
+from thinglang.parser.symbols.types import ArrayInitialization, CastOperation
 
 OBTAINABLE_VALUES = MethodCall, ArithmeticOperation, ArrayInitialization, CastOperation
 

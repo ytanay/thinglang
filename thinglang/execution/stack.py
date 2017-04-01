@@ -1,5 +1,5 @@
 from thinglang.execution.errors import UnknownVariable
-from thinglang.lexer.symbols.base import LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
 class Stack(object):

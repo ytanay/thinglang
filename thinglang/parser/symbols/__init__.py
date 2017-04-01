@@ -1,8 +1,8 @@
-from thinglang.lexer.symbols.base import LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.describable import Describable
 
 
-class BaseToken(Describable):
+class BaseSymbol(Describable):
     BLOCK = False
     ADVANCE = True
 
@@ -59,16 +59,16 @@ class BaseToken(Describable):
         siblings.insert(siblings.index(self), node)
 
 
-class RootToken(BaseToken):
+class RootSymbol(BaseSymbol):
     BLOCK = True
 
     def __init__(self):
-        super(RootToken, self).__init__(None)
+        super(RootSymbol, self).__init__(None)
 
 
-class DefinitionPairToken(BaseToken):
+class DefinitionPairSymbol(BaseSymbol):
     def __init__(self, slice):
-        super(DefinitionPairToken, self).__init__(slice)
+        super(DefinitionPairSymbol, self).__init__(slice)
         self.name = slice[1]
 
 

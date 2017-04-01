@@ -1,8 +1,8 @@
-from thinglang.parser.tokens import BaseToken
+from thinglang.parser.symbols import BaseSymbol
 from thinglang.utils.type_descriptors import ValueType
 
 
-class AssignmentOperation(BaseToken):
+class AssignmentOperation(BaseSymbol):
     DECELERATION = object()
     REASSIGNMENT = object()
 

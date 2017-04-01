@@ -1,8 +1,8 @@
 from thinglang.utils.type_descriptors import ValueType
-from thinglang.lexer.symbols import LexicalSymbol
+from thinglang.lexer.tokens import LexicalToken
 
 
-class LexicalQuote(LexicalSymbol):  # "
+class LexicalQuote(LexicalToken):  # "
     EMITTABLE = False
 
     @classmethod
@@ -12,41 +12,41 @@ class LexicalQuote(LexicalSymbol):  # "
         return original
 
 
-class LexicalParenthesesOpen(LexicalSymbol):
+class LexicalParenthesesOpen(LexicalToken):
     pass  # (
 
 
-class LexicalParenthesesClose(LexicalSymbol):
+class LexicalParenthesesClose(LexicalToken):
     pass  # )
 
 
-class LexicalBracketOpen(LexicalSymbol):
+class LexicalBracketOpen(LexicalToken):
     pass  # [
 
 
-class LexicalBracketClose(LexicalSymbol):
+class LexicalBracketClose(LexicalToken):
     pass  # ]
 
 
-class LexicalSeparator(LexicalSymbol):
+class LexicalSeparator(LexicalToken):
     pass  # ,
 
 
-class LexicalIndent(LexicalSymbol):
+class LexicalIndent(LexicalToken):
     pass  # <TAB>
 
 
-class LexicalAccess(LexicalSymbol):
+class LexicalAccess(LexicalToken):
     pass  # a.b
 
 
-class LexicalInlineComment(LexicalSymbol): pass
+class LexicalInlineComment(LexicalToken): pass
 
 
-class LexicalAssignment(LexicalSymbol): pass
+class LexicalAssignment(LexicalToken): pass
 
 
-class LexicalIdentifier(LexicalSymbol, ValueType):
+class LexicalIdentifier(LexicalToken, ValueType):
 
     def __init__(self, value):
         super(LexicalIdentifier, self).__init__(value)

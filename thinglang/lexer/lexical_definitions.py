@@ -1,16 +1,16 @@
 import re
 
 
-from thinglang.lexer.symbols.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation, \
+from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation, \
     LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeat, LexicalRepeatWhile
-from thinglang.lexer.symbols.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
+from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
     LexicalMultiplication
-from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
+from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
     LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment, LexicalBracketOpen, LexicalBracketClose
-from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
+from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
     LexicalClassInitialization
-from thinglang.lexer.symbols.typing import LexicalCast
+from thinglang.lexer.tokens.typing import LexicalCast
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
 IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")

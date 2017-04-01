@@ -1,11 +1,11 @@
-from thinglang.lexer.symbols import LexicalGroupEnd
-from thinglang.lexer.symbols.base import LexicalIdentifier
-from thinglang.lexer.symbols.functions import LexicalDeclarationConstructor
-from thinglang.parser.tokens import DefinitionPairToken, BaseToken
-from thinglang.parser.tokens.functions import ArgumentList
+from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor
+from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
+from thinglang.parser.symbols.functions import ArgumentList
 
 
-class ThingDefinition(DefinitionPairToken):
+class ThingDefinition(DefinitionPairSymbol):
 
     def __contains__(self, item):
         return any(child.name == item for child in self.children)
@@ -17,7 +17,7 @@ class ThingDefinition(DefinitionPairToken):
         return self.name
 
 
-class MethodDefinition(BaseToken):
+class MethodDefinition(BaseSymbol):
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
 
@@ -37,7 +37,7 @@ class MethodDefinition(BaseToken):
         return '{}, args={}'.format(self.name, self.arguments)
 
 
-class MemberDefinition(BaseToken):
+class MemberDefinition(BaseSymbol):
     def __init__(self, slice):
         super(MemberDefinition, self).__init__(slice)
 

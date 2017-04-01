@@ -1,11 +1,11 @@
 import copy
 import pprint
 
-from thinglang.lexer.symbols import LexicalGroupEnd
-from thinglang.lexer.symbols.base import LexicalIndent
+from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens.base import LexicalIndent
 from thinglang.parser.patterns import REPLACEMENT_PASSES
-from thinglang.parser.tokens import RootToken
-from thinglang.parser.tokens.classes import ThingDefinition
+from thinglang.parser.symbols import RootSymbol
+from thinglang.parser.symbols.classes import ThingDefinition
 
 
 def parse(lexical_groups):
@@ -16,7 +16,7 @@ def parse(lexical_groups):
     Each TokenNode in the tree contains n-children, where each child is also a token node.
     The root node of this tree is returned
     """
-    stack = [RootToken()]
+    stack = [RootSymbol()]
     processed_groups = [x for x in [parse_group(group) for group in lexical_groups] if x]
 
     for idx, node in enumerate(processed_groups):

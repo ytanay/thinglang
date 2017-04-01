@@ -1,4 +1,4 @@
-from thinglang.lexer.symbols.base import LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
 class ThingObjectBase(object):

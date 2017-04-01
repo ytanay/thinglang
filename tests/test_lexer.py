@@ -1,5 +1,5 @@
 from thinglang.lexer.lexer import analyze_line
-from thinglang.parser.tokens.base import InlineString
+from thinglang.parser.symbols.base import InlineString
 
 
 def test_empty_string():

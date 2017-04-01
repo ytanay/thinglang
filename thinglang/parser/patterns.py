@@ -1,21 +1,21 @@
-from thinglang.lexer.symbols.typing import LexicalCast
+from thinglang.lexer.tokens.typing import LexicalCast
 from thinglang.utils.type_descriptors import ValueType
-from thinglang.lexer.symbols import LexicalGroupEnd
-from thinglang.lexer.symbols.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
-from thinglang.lexer.symbols.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, \
+from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
+from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, \
     LexicalAccess, LexicalAssignment, LexicalIdentifier, LexicalBracketOpen, LexicalBracketClose
-from thinglang.lexer.symbols.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
+from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
     LexicalClassInitialization
-from thinglang.lexer.symbols.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
+from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile
-from thinglang.parser.tokens.arithmetic import ArithmeticOperation
-from thinglang.parser.tokens.base import AssignmentOperation
-from thinglang.parser.tokens.classes import ThingDefinition, MethodDefinition, MemberDefinition
-from thinglang.parser.tokens.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
+from thinglang.parser.symbols.arithmetic import ArithmeticOperation
+from thinglang.parser.symbols.base import AssignmentOperation
+from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition, MemberDefinition
+from thinglang.parser.symbols.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
-from thinglang.parser.tokens.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
-from thinglang.parser.tokens.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
+from thinglang.parser.symbols.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
+from thinglang.parser.symbols.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
 
 Resolvable = ValueType, Access
 

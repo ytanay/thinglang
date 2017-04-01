@@ -1,8 +1,8 @@
-from thinglang.lexer.symbols.logic import LexicalEquality
-from thinglang.parser.tokens import BaseToken
+from thinglang.lexer.tokens.logic import LexicalEquality
+from thinglang.parser.symbols import BaseSymbol
 
 
-class Conditional(BaseToken):
+class Conditional(BaseSymbol):
 
     ADVANCE = False
 
@@ -21,7 +21,7 @@ class ElseBranchInterface(object):
     pass
 
 
-class UnconditionalElse(BaseToken, ElseBranchInterface):
+class UnconditionalElse(BaseSymbol, ElseBranchInterface):
     pass
 
 
@@ -35,7 +35,7 @@ class ConditionalElse(Conditional, ElseBranchInterface):
         return 'otherwise if {}'.format(self.value)
 
 
-class Loop(BaseToken):
+class Loop(BaseSymbol):
     ADVANCE = False
 
     def __init__(self, slice):

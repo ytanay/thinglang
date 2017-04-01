@@ -1,11 +1,11 @@
-from thinglang.lexer.symbols.base import  LexicalAccess, LexicalIdentifier
-from thinglang.lexer.symbols.functions import LexicalClassInitialization
-from thinglang.parser.tokens import BaseToken, DefinitionPairToken
-from thinglang.parser.tokens.collections import ListInitializationPartial, ListInitialization
+from thinglang.lexer.tokens.base import  LexicalAccess, LexicalIdentifier
+from thinglang.lexer.tokens.functions import LexicalClassInitialization
+from thinglang.parser.symbols import BaseSymbol, DefinitionPairSymbol
+from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType
 
 
-class Access(BaseToken):
+class Access(BaseSymbol):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
         self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
@@ -32,7 +32,7 @@ class ArgumentList(ListInitialization):
     pass
 
 
-class MethodCall(BaseToken, ValueType):
+class MethodCall(BaseSymbol, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
         self.value = self
@@ -56,7 +56,7 @@ class MethodCall(BaseToken, ValueType):
         self.arguments.replace(original, replacement)
 
 
-class ReturnStatement(DefinitionPairToken):
+class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):
         super().__init__(slice)
         self.value = slice[1]

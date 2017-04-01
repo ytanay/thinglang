@@ -1,6 +1,6 @@
 from thinglang.execution.errors import UnknownVariable
-from thinglang.lexer.symbols.base import LexicalIdentifier
-from thinglang.parser.tokens.functions import Access
+from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.symbols.functions import Access
 
 UNRESOLVABLE_REFERENCE = object()
 
