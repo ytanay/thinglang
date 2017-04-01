@@ -32,7 +32,15 @@ def analyze_method_resolution(ast):
             raise ArgumentCountMismatch()
 
 
+def validate_tree_hierarchy(node, parent=None):
+    assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
+
+    for child in node.children:
+        validate_tree_hierarchy(child, node)
+
+
 def analyze(ast):
+    validate_tree_hierarchy(ast)
     analyze_method_resolution(ast)
     verify_method_definitions(ast)
     verify_thing_definitions(ast)
