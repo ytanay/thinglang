@@ -10,12 +10,12 @@ from thinglang.execution.classes import ThingInstance
 from thinglang.execution.errors import RedeclaredVariable
 from thinglang.execution.resolver import Resolver
 from thinglang.execution.stack import StackFrameTerminator, Stack, StackScopeTerminator, Frame
-from thinglang.lexer.symbols.base import LexicalIdentifier
-from thinglang.parser.tokens import BaseToken
-from thinglang.parser.tokens.arithmetic import ArithmeticOperation
-from thinglang.parser.tokens.base import AssignmentOperation
-from thinglang.parser.tokens.functions import MethodCall, ReturnStatement
-from thinglang.parser.tokens.logic import Conditional, ElseBranchInterface, Loop
+from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols.arithmetic import ArithmeticOperation
+from thinglang.parser.symbols.base import AssignmentOperation
+from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
+from thinglang.parser.symbols.logic import Conditional, ElseBranchInterface, Loop
 
 ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
 
@@ -144,7 +144,7 @@ class ExecutionEngine(object):
         return ExecutionOutput(output='\n'.join(self.heap[LexicalIdentifier('Output')].data))
 
     def set_context(self, target):
-        print('Target: {} ({})'.format(target.context if isinstance(target, BaseToken) else target, target))
+        print('Target: {} ({})'.format(target.context if isinstance(target, BaseSymbol) else target, target))
         self.log_stack()
         self.current_target = target
 
