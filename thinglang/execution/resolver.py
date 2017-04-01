@@ -20,7 +20,7 @@ class Resolver(object):
 
             self.validate(identifier, UNRESOLVABLE_REFERENCE)
 
-        if identifier[0] == LexicalIdentifier.SELF:
+        if identifier[0].is_self():
             return self.validate(identifier, self.search(identifier[1:], self.stack.instance))
 
         stack_value = self.search(identifier, self.stack)

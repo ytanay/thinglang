@@ -58,6 +58,9 @@ class LexicalIdentifier(LexicalToken, ValueType):
     def evaluate(self, resolver):
         return resolver.resolve(self)
 
+    def is_self(self):
+        return self == LexicalIdentifier.SELF
+
     @classmethod
     def constructor(cls):
         return cls("constructor")
@@ -67,5 +70,6 @@ class LexicalIdentifier(LexicalToken, ValueType):
 
     def __eq__(self, other):
         return type(other) == type(self) and self.value == other.value
+
 
 LexicalIdentifier.SELF = LexicalIdentifier("self")
