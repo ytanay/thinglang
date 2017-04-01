@@ -16,4 +16,7 @@ class EmptyMethodBody(Exception):
 
 class EmptyThingDefinition(Exception):
     pass
+
+
+class ArgumentCountMismatch(Exception):
     pass
