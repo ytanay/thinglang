@@ -10,9 +10,9 @@ def run(source):
     if not source:
         raise ValueError('Source cannot be empty')
 
-    utils.print_header('Source', source.strip())
-
     source = source.strip().replace(' ' * 4, '\t')
+
+    utils.print_header('Source', source)
 
     lexical_groups = list(lexer(source))
     tree = parse(lexical_groups)
