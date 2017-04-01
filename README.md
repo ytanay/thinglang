@@ -1,7 +1,7 @@
 # thinglang
 [![Build Status](https://travis-ci.org/ytanay/thinglang.svg?branch=master)](https://travis-ci.org/ytanay/thinglang)
 
-Thinglang is a simple Python-like language I'm toying around with to get some experience on how a parser/compiler pair might be written using a high level language (surprise - the high level language I've chosen is Python!)
+Thinglang is a Python-inspired language I'm toying around with to get some experience on how a parser/compiler pair might be written using a high level language (surprise - the high level language I've chosen is Python!)
 
 The syntax is modeled as something that might be explainable to an elementary school student reasonably easily. Hello World looks like this:
 ```cs
@@ -22,7 +22,7 @@ thing Program
         Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
 ```
 
-Class initialization, member definitions and all that jazz (doesn't run correctly yet, come back soon).
+Class initialization, member definitions and all that jazz:
 ```cs
 thing Person
     has text name
