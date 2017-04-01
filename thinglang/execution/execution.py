@@ -1,29 +1,27 @@
 import collections
 import traceback
-from collections import namedtuple
 
-import itertools
 
 from thinglang import utils
-from thinglang.execution.builtins import ThingObjectInput, ThingObjectOutput, BUILTINS
+from thinglang.execution.builtins import BUILTINS
 from thinglang.execution.classes import ThingInstance
-from thinglang.execution.errors import RedeclaredVariable
 from thinglang.execution.resolver import Resolver
 from thinglang.execution.stack import StackFrameTerminator, Stack, StackScopeTerminator, Frame
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
 from thinglang.parser.symbols.logic import Conditional, ElseBranchInterface, Loop
 
-ExecutionOutput = namedtuple('ExecutionOutput', ['output'])
+ExecutionOutput = collections.namedtuple('ExecutionOutput', ['output'])
 
 
 class ExecutionEngine(object):
     def __init__(self, ast):
         self.ast = ast
         self.stack = Stack()
+        self.targets = collections.deque()
+        self.current_target = None
 
         self.heap = {  # Collect all root level ThingDefinitions
             x.name: x for x in ast.children
@@ -49,34 +47,30 @@ class ExecutionEngine(object):
 
     def execute(self):
         root_instance = ThingInstance(self.ast.get(LexicalIdentifier('Program')))
-        targets = root_instance.methods[LexicalIdentifier.constructor()].children
+        self.targets.extend(root_instance.methods[LexicalIdentifier.constructor()].children)
 
         self.stack.push(Frame(root_instance))  # Creates the root stack frame
 
-        while targets:
-            target = targets.pop(0)
+        while self.targets:
+            target = self.get_target()
             terminator = None
-
-            self.set_context(target)
 
             if isinstance(target, Conditional):
                 if target.evaluate(self.resolver):
                     self.stack.enter()
-                    targets = target.children + \
-                             [StackScopeTerminator()] + \
-                             list(itertools.dropwhile(lambda x: isinstance(x, ElseBranchInterface), targets)) # Remove all directly following else-like branches
+                    self.drop_while(ElseBranchInterface) # Remove all directly following else-like branches
+                    self.add_targets(target.children, [StackScopeTerminator()])
+
                 continue
 
             if isinstance(target, Loop):
                 if target.evaluate(self.resolver):
-                    targets = target.children + [target] + targets
+                    self.add_targets(target.children, [target])
                 continue
 
             if isinstance(target, StackFrameTerminator):  # Signifies the end of a function call
                 last_frame = self.stack.pop()
                 utils.log('Stack frame termination, with return value {}, binding to {}'.format(last_frame.return_value, target.target_arg))
-
-                # TODO: verify no returns in constructor
 
                 if target.constructor:
                     self.stack[target.target_arg] = last_frame.instance
@@ -92,8 +86,7 @@ class ExecutionEngine(object):
             if isinstance(target, ReturnStatement):
                 value = target.value.evaluate(self.resolver)
 
-                terminator = next((i for i, x in enumerate(targets) if isinstance(x, StackFrameTerminator)))
-                targets[0:terminator] = []
+                self.drop_until(StackFrameTerminator)
 
                 utils.log(
                     'Applying return value {} on stack - cleaning execution targets up to terminator at {}'.format(
@@ -132,29 +125,44 @@ class ExecutionEngine(object):
                     for name, value in zip(context.arguments, args):
                         self.stack[name] = value
 
-                    terminator = terminator or StackFrameTerminator()
+                    terminator = (terminator or StackFrameTerminator()).constructs(target.constructing_call)
+                    self.add_targets(context.children, [terminator])
 
-                    targets = context.children + [terminator.constructs(target.constructing_call)] + targets
                 continue
 
             if target.ADVANCE:
-                targets = target.children + targets
+                self.add_targets(target.children)
 
     def results(self):
         return ExecutionOutput(output='\n'.join(self.heap[LexicalIdentifier('Output')].data))
 
-    def set_context(self, target):
-        print('Target: {} ({})'.format(target.context if isinstance(target, BaseSymbol) else target, target))
+    def log_stack(self):
+        if self.stack.data:
+            print('\tSTACK:')
+            for key, value in self.stack.data.items():
+                print('\t\t{} -> {}'.format(key, value))
+
+        if self.stack.instance.members:
+            print('\tMEMBERS:')
+            for key, value in self.stack.instance.members.items():
+                print('\t\t{} -> {}'.format(key, value))
+
+    def get_target(self):
+        target = self.targets.popleft()
+        print(f'Target: {target.context if isinstance(target, BaseSymbol) else target} ({target})')
         self.log_stack()
         self.current_target = target
+        return target
 
-    def log_stack(self):
-        if not self.stack.data:
-            return
-        print('\tSTACK:')
-        for key, value in self.stack.data.items():
-            print('\t\t{} -> {}'.format(key, value))
+    def drop_until(self, cls):
+        while self.targets and not isinstance(self.targets[0], cls):
+            self.targets.popleft()
 
-        print('\tMEMBERS:')
-        for key, value in self.stack.instance.members.items():
-            print('\t\t{} -> {}'.format(key, value))
+    def drop_while(self, cls):
+        while self.targets and isinstance(self.targets[0], cls):
+            self.targets.popleft()
+
+    def add_targets(self, *args):
+        for arg in reversed(args):
+            self.targets.extendleft(reversed(arg))
+
