@@ -13,3 +13,18 @@ thing Program
         return 10
     """)
 
+
+def test_empty_method_body():
+    with pytest.raises(EmptyMethodBody):
+        run("""
+thing Program
+    setup
+    does start
+    """)
+
+
+def test_empty_thing_definition():
+    with pytest.raises(EmptyThingDefinition):
+        run("""
+thing Program
+    """)
