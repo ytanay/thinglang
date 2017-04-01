@@ -28,3 +28,19 @@ def test_empty_thing_definition():
         run("""
 thing Program
     """)
+
+
+@pytest.mark.parametrize('line', ['', '1', '1, 2, 3'])
+def test_argument_count_mismatch(line):
+    with pytest.raises(ArgumentCountMismatch):
+        run(f"""
+thing Program
+    setup
+        self.add({line})
+
+    does add with a, b
+        return a + b
+
+thing Person
+
+    """)
