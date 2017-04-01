@@ -1,3 +1,5 @@
+import collections
+
 from thinglang.lexer.tokens.typing import LexicalCast
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalGroupEnd
@@ -19,7 +21,7 @@ from thinglang.parser.symbols.logic import Conditional, UnconditionalElse, Condi
 
 Resolvable = ValueType, Access
 
-FIRST_PASS_PATTERNS = [
+FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significant in parsing patterns
 
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
@@ -72,12 +74,12 @@ FIRST_PASS_PATTERNS = [
 
     ((ArgumentListPartial, LexicalSeparator, Resolvable), ArgumentListPartial), # To deal with Access in argument lists
 
-]
+])
 
-SECOND_PASS_PATTERNS = [
+SECOND_PASS_PATTERNS = collections.OrderedDict([
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
     ((LexicalElse,), UnconditionalElse)
-]
+])
 
 
 REPLACEMENT_PASSES = FIRST_PASS_PATTERNS, SECOND_PASS_PATTERNS

@@ -85,7 +85,7 @@ def replace_in_place(group, pattern_set):
     The list is modified in place.
     :return: True if a replacement occurred, None otherwise
     """
-    for pattern, target in pattern_set:
+    for pattern, target in pattern_set.items():
         size = len(pattern)
         match_starts = filter_indices_by_type(group, pattern[0])
 
