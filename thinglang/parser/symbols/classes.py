@@ -33,6 +33,9 @@ class MethodDefinition(BaseSymbol):
         else:
             self.arguments = ArgumentList()
 
+    def is_constructor(self):
+        return self.name == LexicalIdentifier.constructor()
+
     def describe(self):
         return '{}, args={}'.format(self.name, self.arguments)
 
