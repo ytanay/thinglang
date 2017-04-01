@@ -4,3 +4,16 @@ class UnknownVariable(Exception):
 
 class RedeclaredVariable(Exception):
     pass
+
+
+class ReturnInConstructorError(Exception):
+    pass
+
+
+class EmptyMethodBody(Exception):
+    pass
+
+
+class EmptyThingDefinition(Exception):
+    pass
+    pass
