@@ -53,12 +53,12 @@ thing Program
 ## Static Analysis
 The static analyzer takes the AST created by the parser and performs a number of checks and transformations which result in what thinglang calls a bounded-reduced AST. 
 
-**Bounding** is the process which takes every general-case deceleration, lookup and assignment of every variable, instance, method, and member, and resolves is such that a direct link is attached between the definition and every subsequent reference. During this process, the AST is implcitly validated and any unresolved references trigger an appropriate error.
+**Bounding** is the process which takes every general-case deceleration, lookup and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference. During this process, the AST is implcitly validated and any unresolved references trigger an appropriate error.
 
 
 When type checking is implemented (soon?), bounding will also verify the type integrity of every reference.
 
-**Reduction** is the process by which nodes containing certain nested operations (e.g. nested method calls) are been simplified into a series of assignment operations. For example:
+**Reduction** is the process by which nodes containing certain nested operations (e.g. nested method calls) are simplified into a series of assignment operations. For example:
 ```cs
 number val = f(g(), h(), i(j(), k()))
 ```
