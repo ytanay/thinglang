@@ -1,4 +1,7 @@
+import inspect
+
 from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.utils import tree_utils
 from thinglang.utils.describable import Describable
 
 
@@ -25,19 +28,29 @@ class BaseSymbol(Describable):
         self.children.append(child)
         child.parent = self
 
-    def find(self, predicate):
+    @tree_utils.predicated
+    def find(self, predicate, single=False):
         results = []
 
         for child in self.children:
             results.extend(child.find(predicate))
 
-            if predicate(child):
-                results.append(child)
-
         if predicate(self):
             results.append(self)
 
+        if single:
+            #assert len(results) == 1
+            return results[0] if results else None
+
         return results
+
+    @tree_utils.predicated
+    def upwards(self, predicate):
+        context = self
+        while context:
+            if predicate(context):
+                return context
+            context = context.parent
 
     def get(self, name):
         for child in self.children:
