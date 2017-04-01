@@ -49,10 +49,33 @@ thing Program
         person.say_hello(Input.get_line("How excited are you?") as number)
 ```
 
+
+## Static Analysis
+The static analyzer takes the AST created by the parser and performs a number of checks and transformations which result in what thinglang calls a bounded-reduced AST. 
+
+**Bounding** is the process which takes every general-case deceleration, lookup and assignment of every variable, instance, method, and member, and resolves is such that a direct link is attached between the definition and every subsequent reference. During this process, the AST is implcitly validated and any unresolved references trigger an appropriate error.
+
+
+When type checking is implemented (soon?), bounding will also verify the type integrity of every reference.
+
+**Reduction** is the process by which nodes containing certain nested operations (e.g. nested method calls) are been simplified into a series of assignment operations. For example:
+```cs
+number val = f(g(), h(), i(j(), k()))
+```
+Is transformed into:
+```cs
+Transient<number> t0 = j()
+Transient<number> t1 = k()
+Transient<number> t2 = i(t0, t1)
+Transient<number> t3 = g()
+Transient<number> t4 = h()
+Transient<number> t5 = f(t3, t4, t2)
+```
+
 ## Execution Model
 
 ### Preamble
-Execution can begin after a reduced AST is created (this AST can generally be directly represented as thinglang bytecode, and should be thought of this way).
+Execution can begin after a bounded-reduced AST is created (see above; this AST can generally be directly represented as thinglang bytecode, and should be thought of this way).
 
 The initialization sequence for any program goes roughly like this:
 1. A program-global "heap" space is created, and first-order builtins are initialized inside it (currently, this means the `Input` and `Output` objects).
