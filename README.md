@@ -6,16 +6,16 @@ Thinglang is a Python-inspired language I'm toying around with to get some exper
 The syntax is modeled as something that might be explainable to an elementary school student reasonably easily. Hello World looks like this:
 ```cs
 thing Program
-    does start
-        Output.write("hello world")
+    setup
+        Output.write("hello world")
 ```
 
 ## Examples
 An example of method calls:
 ```cs
 thing Program
-    does start
-        text name = "Andy"
+    setup 
+        text name = "Andy"
         self.say_hello(name, 10)
 
     does say_hello with name, age
