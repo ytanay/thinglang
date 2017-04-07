@@ -37,11 +37,7 @@ def inspects(*args):
         return func
     return decorator
 
-def validate_tree_hierarchy(node, parent=None):
-    assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
 
-    for child in node.children:
-        validate_tree_hierarchy(child, node)
 class Analysis(object):
     def __init__(self, ast):
         self.ast = ast
@@ -60,6 +56,7 @@ class Analysis(object):
     def traverse(self, node=None, parent=None):
         node = node or self.ast
 
+        assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
         if node.implements(AssignmentOperation):
             self.scoping[node.name] = True
 
