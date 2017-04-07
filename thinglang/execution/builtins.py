@@ -1,7 +1,17 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
+INTERNAL_MEMBER = object()
 
-class ThingObjectBase(object):
+
+class ThingObjectMeta(type):
+    def __new__(mcs, name, bases, dct):
+        if bases[0] is not object:
+            dct['EXPORTS'] = {LexicalIdentifier(k): INTERNAL_MEMBER for k, v in dct.items() if not k.startswith('_') and callable(v)}
+
+        return super(ThingObjectMeta, mcs).__new__(mcs, name, bases, dct)
+
+
+class ThingObjectBase(object, metaclass=ThingObjectMeta):
 
     def __getitem__(self, item):
         return getattr(self, item.value)
@@ -38,3 +48,4 @@ class ThingObjectInput(ThingObjectBase):
 
 
 BUILTINS = ThingObjectOutput, ThingObjectInput
+
