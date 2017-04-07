@@ -18,8 +18,7 @@ from thinglang.parser.symbols.functions import Access, ArgumentListPartial, Argu
     ArgumentListDecelerationPartial
 from thinglang.parser.symbols.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
 from thinglang.parser.symbols.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
-
-Resolvable = ValueType, Access
+from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 
 FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significant in parsing patterns
 
@@ -59,8 +58,8 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
     ((ArgumentListPartial, LexicalParenthesesClose), ArgumentList),  # (2, 3)
     ((ArgumentListDecelerationPartial, LexicalGroupEnd), ArgumentList),  # (2, 3)
 
-    ((Resolvable, SecondOrderLexicalBinaryOperation, Resolvable), ArithmeticOperation),  # 4 * 2
-    ((Resolvable, FirstOrderLexicalBinaryOperation, Resolvable), ArithmeticOperation),  # 4 + 2
+    ((POTENTIALLY_RESOLVABLE, SecondOrderLexicalBinaryOperation, POTENTIALLY_RESOLVABLE), ArithmeticOperation),  # 4 * 2
+    ((POTENTIALLY_RESOLVABLE, FirstOrderLexicalBinaryOperation, POTENTIALLY_RESOLVABLE), ArithmeticOperation),  # 4 + 2
 
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalRepeatWhile, ValueType), Loop),
@@ -72,7 +71,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 
     ((LexicalClassInitialization, LexicalIdentifier, ArgumentList), MethodCall),
 
-    ((ArgumentListPartial, LexicalSeparator, Resolvable), ArgumentListPartial), # To deal with Access in argument lists
+    ((ArgumentListPartial, LexicalSeparator, POTENTIALLY_RESOLVABLE), ArgumentListPartial), # To deal with Access in argument lists
 
 ])
 
