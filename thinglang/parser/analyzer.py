@@ -1,5 +1,6 @@
 import types
 
+from thinglang.execution.builtins import BUILTINS, INTERNAL_MEMBER
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
     ArgumentCountMismatch, UnresolvedReference
 from thinglang.execution.resolver import Resolver
@@ -9,9 +10,8 @@ from thinglang.parser.errors import ParseErrors
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
 from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
-from thinglang.utils.collection_utils import  emit_recursively
-
-
+from thinglang.utils.collection_utils import emit_recursively
+from thinglang.utils.union_types import ACCESS_TYPES
 
 
 def analyze_method_resolution(ast):
@@ -39,7 +39,7 @@ class Analysis(object):
         self.ast = ast
         self.errors = []
         self.scoping = Frame(expected_key_type=object)
-        heap = {  # Mix in builtins, with a reference to the heap object
+        heap = {
             LexicalIdentifier(x.INTERNAL_NAME): x.EXPORTS for x in BUILTINS
         }
         heap.update({
