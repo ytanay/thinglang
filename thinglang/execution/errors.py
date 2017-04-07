@@ -1,22 +1,25 @@
-class UnknownVariable(Exception):
+from thinglang.utils.exception_utils import ThinglangException
+
+
+class UnresolvedReference(ThinglangException):
     pass
 
 
-class RedeclaredVariable(Exception):
+class RedeclaredVariable(ThinglangException):
     pass
 
 
-class ReturnInConstructorError(Exception):
+class ReturnInConstructorError(ThinglangException):
     pass
 
 
-class EmptyMethodBody(Exception):
+class EmptyMethodBody(ThinglangException):
     pass
 
 
-class EmptyThingDefinition(Exception):
+class EmptyThingDefinition(ThinglangException):
     pass
 
 
-class ArgumentCountMismatch(Exception):
+class ArgumentCountMismatch(ThinglangException):
     pass
