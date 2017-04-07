@@ -55,6 +55,9 @@ class MethodCall(BaseSymbol, ValueType):
     def replace(self, original, replacement):
         self.arguments.replace(original, replacement)
 
+    def references(self):
+        return self.target, self.arguments
+
 
 class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):

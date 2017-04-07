@@ -17,6 +17,9 @@ class Conditional(BaseSymbol):
     def evaluate(self, resolver):
         return self.value.evaluate(resolver)
 
+    def references(self):
+        return self.value
+
 
 class ElseBranchInterface(object):
     SCOPING = True
@@ -36,6 +39,9 @@ class ConditionalElse(Conditional, ElseBranchInterface):
     def describe(self):
         return 'otherwise if {}'.format(self.value)
 
+    def references(self):
+        return self.conditional.references()
+
 
 class Loop(BaseSymbol):
     ADVANCE = False
@@ -47,3 +53,6 @@ class Loop(BaseSymbol):
 
     def evaluate(self, resolver):
         return self.condition.evaluate(resolver)
+
+    def references(self):
+        return self.condition.references()

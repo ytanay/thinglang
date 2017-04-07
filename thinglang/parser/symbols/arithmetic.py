@@ -30,3 +30,6 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
 
     def __getitem__(self, item):
         return self.arguments[item]
+
+    def references(self):
+        return self.arguments
