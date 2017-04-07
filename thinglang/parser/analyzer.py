@@ -48,6 +48,31 @@ class Analysis(object):
         })
         self.resolver = Resolver(self.scoping, heap)
 
+    def run(self):
+        self.traverse()
+        return self
+
+    def traverse(self, node=None, parent=None):
+        node = node or self.ast
+
+        if node.implements(AssignmentOperation):
+            self.scoping[node.name] = True
+
+        if node.references():
+            for ref in (x for x in emit_recursively(node.references(), (Access, LexicalIdentifier)) if not self.validate_scoping(x)):
+                self.report_exception(UnresolvedReference(ref))
+
+        if node.SCOPING:
+            self.scoping.enter()
+
+        for child in node.children:
+            self.traverse(child, node)
+
+        if node.SCOPING:
+            self.scoping.exit()
+
+    def validate_scoping(self, reference):
+        return self.resolver.lookup(reference) is not Resolver.UNRESOLVED_REFERENCE
 
 def analyze(ast):
     validate_tree_hierarchy(ast)
