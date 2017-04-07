@@ -92,6 +92,10 @@ class Analysis(object):
         if not node.children:
             yield EmptyMethodBody()
 
+        if node.is_constructor() and list(node.find(lambda x: isinstance(x, ReturnStatement))):
+            raise ReturnInConstructorError(node)
+
+
 def analyze(ast):
     validate_tree_hierarchy(ast)
     analyze_method_resolution(ast)
