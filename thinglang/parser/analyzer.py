@@ -61,6 +61,7 @@ class Analysis(object):
         if node.implements(ThingDefinition):
             self.scoping.instance = node
 
+        self.inspect(node)
         if node.implements(AssignmentOperation):
             self.scoping[node.name] = True
 
@@ -80,6 +81,15 @@ class Analysis(object):
     def validate_scoping(self, reference):
         return self.resolver.lookup(reference) is not Resolver.UNRESOLVED_REFERENCE
 
+
+    def inspect(self, node):
+        for inspection in Analysis.INSPECTIONS:
+            if isinstance(node, inspection.inspected_types):
+                self.errors.extend(inspection(node))
+
+    def report_exception(self, error):
+        self.errors.append(error)
+
     @classmethod
     @inspects(ThingDefinition)
     def verify_thing_definitions(cls, node):
@@ -96,6 +106,7 @@ class Analysis(object):
             raise ReturnInConstructorError(node)
 
 
+Analysis.INSPECTIONS = [getattr(Analysis, member) for member in dir(Analysis) if hasattr(getattr(Analysis, member), 'inspected_types')]
 def analyze(ast):
     validate_tree_hierarchy(ast)
     analyze_method_resolution(ast)
