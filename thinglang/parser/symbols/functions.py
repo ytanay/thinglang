@@ -19,6 +19,9 @@ class Access(BaseSymbol):
     def __getitem__(self, item):
         return self.target[item]
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.target == other.target
+
 
 class ArgumentListPartial(ListInitializationPartial):
     pass
@@ -44,7 +47,6 @@ class MethodCall(BaseSymbol, ValueType):
         else:
             self.target, self.arguments = slice
             self.constructing_call = False
-
 
         if not self.arguments:
             self.arguments = ArgumentList()
