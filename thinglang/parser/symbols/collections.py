@@ -37,6 +37,9 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
     def __len__(self):
         return len(self.arguments)
 
+    def __getitem__(self, item):
+        return self.arguments[item]
+
     def evaluate(self, resolver):
         return [value.evaluate(resolver) for value in self.arguments]
 
