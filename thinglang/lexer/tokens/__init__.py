@@ -8,6 +8,7 @@ class LexicalToken(Describable):
 
     def __init__(self, raw):
         self.raw = raw
+        self.context = None
 
     @classmethod
     def next_operator_set(cls, current, original):
