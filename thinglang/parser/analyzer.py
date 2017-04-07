@@ -39,7 +39,9 @@ class Analysis(object):
         self.ast = ast
         self.errors = []
         self.scoping = Frame(expected_key_type=object)
-        heap = {LexicalIdentifier("Output"): {LexicalIdentifier("write"): {}}}
+        heap = {  # Mix in builtins, with a reference to the heap object
+            LexicalIdentifier(x.INTERNAL_NAME): x.EXPORTS for x in BUILTINS
+        }
         heap.update({
             x.name: x for x in self.ast.children
         })
