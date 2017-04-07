@@ -93,21 +93,19 @@ class Analysis(object):
     def mark_variable_deceleration(self, node):
         self.scoping[node.name] = True
 
-    @classmethod
+
     @inspects(ThingDefinition)
-    def verify_thing_definitions(cls, node):
+    def verify_thing_definitions(self, node):
         if not node.children:
             yield EmptyThingDefinition()
 
-    @classmethod
     @inspects(MethodDefinition)
-    def verify_method_definitions(cls, node):
+    def verify_method_definitions(self, node):
         if not node.children:
             yield EmptyMethodBody()
 
         if node.is_constructor() and list(node.find(lambda x: isinstance(x, ReturnStatement))):
             raise ReturnInConstructorError(node)
-
 
 
 def analyze(ast):
