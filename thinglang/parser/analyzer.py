@@ -80,6 +80,12 @@ class Analysis(object):
     def validate_scoping(self, reference):
         return self.resolver.lookup(reference) is not Resolver.UNRESOLVED_REFERENCE
 
+    @classmethod
+    @inspects(ThingDefinition)
+    def verify_thing_definitions(cls, node):
+        if not node.children:
+            yield EmptyThingDefinition()
+
 def analyze(ast):
     validate_tree_hierarchy(ast)
     analyze_method_resolution(ast)
