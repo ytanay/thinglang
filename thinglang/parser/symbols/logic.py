@@ -5,6 +5,7 @@ from thinglang.parser.symbols import BaseSymbol
 class Conditional(BaseSymbol):
 
     ADVANCE = False
+    SCOPING = True
 
     def __init__(self, slice):
         super(Conditional, self).__init__(slice)
@@ -18,6 +19,7 @@ class Conditional(BaseSymbol):
 
 
 class ElseBranchInterface(object):
+    SCOPING = True
     pass
 
 
@@ -37,6 +39,7 @@ class ConditionalElse(Conditional, ElseBranchInterface):
 
 class Loop(BaseSymbol):
     ADVANCE = False
+    SCOPING = True
 
     def __init__(self, slice):
         super(Loop, self).__init__(slice)

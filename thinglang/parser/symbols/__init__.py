@@ -6,7 +6,7 @@ from thinglang.utils.describable import Describable
 
 
 class BaseSymbol(Describable):
-    BLOCK = False
+    SCOPING = False
     ADVANCE = True
 
     def __init__(self, slice):
@@ -71,10 +71,11 @@ class BaseSymbol(Describable):
         siblings = self.parent.children
         siblings.insert(siblings.index(self), node)
 
+    def references(self):
+        return ()
+
 
 class RootSymbol(BaseSymbol):
-    BLOCK = True
-
     def __init__(self):
         super(RootSymbol, self).__init__(None)
 
