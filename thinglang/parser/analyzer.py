@@ -58,9 +58,6 @@ class Analysis(object):
 
         assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
 
-        if node.implements(ThingDefinition):
-            self.scoping.instance = node
-
         self.inspect(node)
 
         if node.SCOPING:
@@ -98,6 +95,8 @@ class Analysis(object):
 
     @inspects(ThingDefinition)
     def verify_thing_definitions(self, node):
+        self.scoping.instance = node
+
         if not node.children:
             yield EmptyThingDefinition()
 
