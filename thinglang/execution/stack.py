@@ -1,4 +1,4 @@
-from thinglang.execution.errors import UnknownVariable
+from thinglang.execution.errors import UnresolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
@@ -33,18 +33,19 @@ class Stack(object):
 
 class Frame(object):
 
-    def __init__(self, instance):
+    def __init__(self, instance=None, expected_key_type=LexicalIdentifier):
         self.instance = instance
         self.data = {}
         self.idx = 0
         self.return_value = None
+        self.expected_key_type = expected_key_type
 
     def returns(self, value):
         self.return_value = value
 
     def __setitem__(self, key, value):
         print('\tSET<{}> {}: {}'.format(self.idx, key, value))
-        assert isinstance(key, LexicalIdentifier)
+        assert isinstance(key, self.expected_key_type)
         if key in self.data:
             self.data[key] = (self.data[key][0], value)
         else:
@@ -53,9 +54,9 @@ class Frame(object):
     def __getitem__(self, item):
 
         if not item in self.data:
-            raise UnknownVariable('Variable {} not recognized in this scope'.format(item))
+            raise UnresolvedReference('Variable {} not recognized in this scope'.format(item))
         print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
-        assert isinstance(item, LexicalIdentifier)
+        assert isinstance(item, self.expected_key_type)
         return self.data[item][1]
 
     def __contains__(self, item):
@@ -77,6 +78,9 @@ class Frame(object):
         }
 
         self.idx -= 1
+
+    def __str__(self):
+        return str(self.data)
 
 
 class StackFrameTerminator(object):
