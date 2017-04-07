@@ -78,7 +78,8 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 
 SECOND_PASS_PATTERNS = collections.OrderedDict([
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
-    ((LexicalElse,), UnconditionalElse)
+    ((LexicalElse,), UnconditionalElse),
+    ((LexicalIdentifier, ArgumentList), MethodCall),  # person.walk(...)
 ])
 
 
