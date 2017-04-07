@@ -37,6 +37,16 @@ def validate_tree_hierarchy(node, parent=None):
 
     for child in node.children:
         validate_tree_hierarchy(child, node)
+class Analysis(object):
+    def __init__(self, ast):
+        self.ast = ast
+        self.errors = []
+        self.scoping = Frame(expected_key_type=object)
+        heap = {LexicalIdentifier("Output"): {LexicalIdentifier("write"): {}}}
+        heap.update({
+            x.name: x for x in self.ast.children
+        })
+        self.resolver = Resolver(self.scoping, heap)
 
 
 def analyze(ast):
