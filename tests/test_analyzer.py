@@ -2,7 +2,7 @@ import pytest
 
 from thinglang import run
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch, UnresolvedReference
+    ArgumentCountMismatch, UnresolvedReference, DuplicateDeclaration
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.errors import ParseErrors
 from thinglang.parser.symbols.functions import Access
@@ -36,7 +36,6 @@ def test_empty_thing_definition():
         run("""
 thing Program
     """)
-
 
 
 def test_undefined_variable_exceptions():
@@ -91,7 +90,6 @@ thing ExternalClass
 
         UnresolvedReference(LexicalIdentifier("arg3")),
         UnresolvedReference(LexicalIdentifier("out1")),
-
     )
 
 
@@ -121,7 +119,6 @@ thing ExternalClass
         UnresolvedReference(LexicalIdentifier("do_something")),
         UnresolvedReference(Access([LexicalIdentifier.self(), LexicalIdentifier("missing_thing")])),
         UnresolvedReference(Access([LexicalIdentifier("ExternalClass"), LexicalIdentifier("missing_thing")]))
-
     )
 
 
@@ -139,3 +136,20 @@ thing Program
     """)
 
     assert error.value == ArgumentCountMismatch(2, line.count(',') + 1 if line else 0)
+
+
+def test_duplicate_deceleration():
+    with pytest.raises(ParseErrors) as error:
+        run("""
+thing Program
+    setup
+        i = 1
+        number i = 1
+        number i = 2
+
+    """)
+
+    assert error.value.args == (
+        UnresolvedReference(LexicalIdentifier("i")),
+        DuplicateDeclaration(LexicalIdentifier("i"))
+    )
