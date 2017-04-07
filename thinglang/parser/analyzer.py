@@ -87,9 +87,9 @@ class Analysis(object):
 
     @inspects()
     def verify_reference_dependencies(self, node):
-        if node.references():
-            for ref in (x for x in emit_recursively(node.references(), (Access, LexicalIdentifier)) if not self.validate_scoping(x)):
-                yield UnresolvedReference(ref)
+        refs = emit_recursively(node.references(), ACCESS_TYPES)
+        for ref in (ref for ref in refs if self.resolver.lookup(self.normalize_reference_access(ref)) is Resolver.UNRESOLVED_REFERENCE):
+            yield UnresolvedReference(ref)
 
     @inspects(AssignmentOperation)
     def mark_variable_deceleration(self, node):
