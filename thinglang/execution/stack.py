@@ -82,6 +82,13 @@ class Frame(object):
     def __str__(self):
         return str(self.data)
 
+    def reset(self, data):
+        self.idx = 0
+        self.data = {
+            key: (self.idx, value) for key, value in data.items()
+        } if data else {}
+
+
 
 class StackFrameTerminator(object):
 
