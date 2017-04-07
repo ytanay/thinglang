@@ -58,8 +58,8 @@ thing Program
 
         Output.write(out1, out2, in1)
 
-    does real_thing
-        Output.write("at Program:real_thing")
+    does real_thing with arg1, arg2
+        Output.write("at Program:real_thing", arg1, arg2, arg3, out1)
 
 
 thing ExternalClass
@@ -88,6 +88,9 @@ thing ExternalClass
 
         UnresolvedReference(LexicalIdentifier("out2")),  # Outer statement
         UnresolvedReference(LexicalIdentifier("in1")),
+
+        UnresolvedReference(LexicalIdentifier("arg3")),
+        UnresolvedReference(LexicalIdentifier("out1")),
 
     )
 
