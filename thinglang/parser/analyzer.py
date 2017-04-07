@@ -55,6 +55,8 @@ class Analysis(object):
         })
         self.resolver = Resolver(self.scoping, heap)
 
+        self.inspections = [getattr(self, member) for member in dir(self) if hasattr(getattr(self, member), 'inspected_types')]
+
     def run(self):
         self.traverse()
         return self
@@ -112,8 +114,6 @@ class Analysis(object):
         if node.is_constructor() and list(node.find(lambda x: isinstance(x, ReturnStatement))):
             raise ReturnInConstructorError(node)
 
-
-Analysis.INSPECTIONS = [getattr(Analysis, member) for member in dir(Analysis) if hasattr(getattr(Analysis, member), 'inspected_types')]
 
 
 def analyze(ast):
