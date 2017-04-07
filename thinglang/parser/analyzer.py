@@ -2,7 +2,7 @@ import types
 
 from thinglang.execution.builtins import BUILTINS, INTERNAL_MEMBER
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch, UnresolvedReference, DuplicateDeclaration
+    ArgumentCountMismatch, UnresolvedReference, DuplicateDeclaration, IndeterminateType
 from thinglang.execution.resolver import Resolver
 from thinglang.execution.stack import Frame
 from thinglang.lexer.tokens.base import LexicalIdentifier

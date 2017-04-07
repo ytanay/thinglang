@@ -5,6 +5,7 @@ from thinglang.utils.type_descriptors import ValueType
 class AssignmentOperation(BaseSymbol):
     DECELERATION = object()
     REASSIGNMENT = object()
+    INDETERMINATE = object()
 
     def __init__(self, slice):
         super(AssignmentOperation, self).__init__(slice)
@@ -14,7 +15,7 @@ class AssignmentOperation(BaseSymbol):
         else:
             self.name, _, self.value = slice
             self.method = self.REASSIGNMENT
-            self.type = 'INDETERMINATE'
+            self.type = self.INDETERMINATE
 
     def describe(self):
         return '{} {} = {}'.format(self.type, self.name, self.value)

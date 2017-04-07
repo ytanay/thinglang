@@ -21,6 +21,10 @@ class EmptyThingDefinition(ThinglangException):
     pass
 
 
+class IndeterminateType(ThinglangException):
+    pass
+
+
 class ArgumentCountMismatch(ThinglangException):
     def __init__(self, expected, actual):
         super(ArgumentCountMismatch, self).__init__(expected, actual)
