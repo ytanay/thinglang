@@ -5,7 +5,7 @@ class UnresolvedReference(ThinglangException):
     pass
 
 
-class RedeclaredVariable(ThinglangException):
+class DuplicateDeclaration(ThinglangException):
     pass
 
 

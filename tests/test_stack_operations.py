@@ -1,6 +1,6 @@
 import pytest
 
-from thinglang.execution.errors import UnresolvedReference, RedeclaredVariable
+from thinglang.execution.errors import UnresolvedReference, DuplicateDeclaration
 from thinglang import run
 
 
