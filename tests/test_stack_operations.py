@@ -3,6 +3,10 @@ import pytest
 from thinglang.execution.errors import UnresolvedReference, DuplicateDeclaration
 from thinglang import run
 
+"""
+These may be redundant with static analysis
+"""
+
 
 def test_stack_resolution_in_block():
     assert run("""

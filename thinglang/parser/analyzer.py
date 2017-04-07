@@ -2,7 +2,7 @@ import types
 
 from thinglang.execution.builtins import BUILTINS, INTERNAL_MEMBER
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch, UnresolvedReference
+    ArgumentCountMismatch, UnresolvedReference, DuplicateDeclaration
 from thinglang.execution.resolver import Resolver
 from thinglang.execution.stack import Frame
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -88,13 +88,18 @@ class Analysis(object):
     @inspects()
     def verify_reference_dependencies(self, node):
         refs = emit_recursively(node.references(), ACCESS_TYPES)
-        for ref in (ref for ref in refs if self.resolver.lookup(self.normalize_reference_access(ref)) is Resolver.UNRESOLVED_REFERENCE):
+
+        for ref in (x for x in refs if self.resolver.lookup(self.normalize_reference_access(x)) is Resolver.UNRESOLVED_REFERENCE):
             yield UnresolvedReference(ref)
 
     @inspects(AssignmentOperation)
     def mark_variable_deceleration(self, node):
         if node.name.implements(LexicalIdentifier):
-            self.scoping[node.name] = node.type
+            if node.method is AssignmentOperation.DECELERATION:
+                if self.resolver.lookup(node.name) is not Resolver.UNRESOLVED_REFERENCE:
+                    yield DuplicateDeclaration(node.name)
+                else:
+                    self.scoping[node.name] = node.type
         elif self.resolver.lookup(self.normalize_reference_access(node.name)) is Resolver.UNRESOLVED_REFERENCE:
             yield UnresolvedReference(node.name)
 
