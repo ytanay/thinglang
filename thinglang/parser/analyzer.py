@@ -1,3 +1,5 @@
+import types
+
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
     ArgumentCountMismatch, UnresolvedReference
 from thinglang.execution.resolver import Resolver
@@ -10,19 +12,6 @@ from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Acce
 from thinglang.utils.collection_utils import  emit_recursively
 
 
-def verify_method_definitions(ast):
-    for child in ast.find(lambda x: isinstance(x, MethodDefinition)):
-        if child.is_constructor() and list(child.find(lambda x: isinstance(x, ReturnStatement))):
-            raise ReturnInConstructorError(child)
-
-        if not child.children:
-            raise EmptyMethodBody()
-
-
-def verify_thing_definitions(ast):
-    for child in ast.find(lambda x: isinstance(x, ThingDefinition)):
-        if not child.children:
-            raise EmptyThingDefinition()
 
 
 def analyze_method_resolution(ast):
@@ -36,6 +25,7 @@ def analyze_method_resolution(ast):
             print('Warning: method resolution cannot be validated!')
         elif len(child.arguments) != len(thing_definition.find(MethodDefinition, lambda x: x.name == child.target[1], single=True).arguments):
             raise ArgumentCountMismatch()
+
 
 def inspects(*args):
     def decorator(func):
@@ -83,11 +73,12 @@ class Analysis(object):
     def validate_scoping(self, reference):
         return self.resolver.lookup(reference) is not Resolver.UNRESOLVED_REFERENCE
 
-
     def inspect(self, node):
-        for inspection in Analysis.INSPECTIONS:
-            if isinstance(node, inspection.inspected_types):
-                self.errors.extend(inspection(node))
+        for inspection in self.inspections:
+            if not inspection.inspected_types or isinstance(node, inspection.inspected_types):
+                result = inspection(node)
+                if isinstance(result, types.GeneratorType):
+                    self.errors.extend(result)
 
     def report_exception(self, error):
         self.errors.append(error)
