@@ -1,6 +1,6 @@
 import pytest
 
-from thinglang.execution.errors import UnknownVariable, RedeclaredVariable
+from thinglang.execution.errors import UnresolvedReference, RedeclaredVariable
 from thinglang import run
 
 
@@ -25,7 +25,7 @@ outside after, i = 10""".strip()
 
 
 def test_stack_resolution_error_during_access_after_nested_deceleration():
-    with pytest.raises(UnknownVariable):
+    with pytest.raises(UnresolvedReference):
         run("""
 thing Program
     setup
