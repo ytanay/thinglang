@@ -19,6 +19,10 @@ class AssignmentOperation(BaseSymbol):
     def describe(self):
         return '{} {} = {}'.format(self.type, self.name, self.value)
 
+    def references(self):
+        if self.method is self.REASSIGNMENT:
+            return self.name
+
 
 class InlineString(ValueType):  # immediate string e.g. "hello world"
     def __init__(self, value):
