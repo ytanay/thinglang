@@ -115,8 +115,10 @@ class Analysis(object):
 
 
 Analysis.INSPECTIONS = [getattr(Analysis, member) for member in dir(Analysis) if hasattr(getattr(Analysis, member), 'inspected_types')]
+
+
 def analyze(ast):
-    validate_tree_hierarchy(ast)
-    analyze_method_resolution(ast)
-    verify_method_definitions(ast)
-    verify_thing_definitions(ast)
+
+    analysis = Analysis(ast).run()
+    if analysis.errors:
+        raise ParseErrors(*analysis.errors) if len(analysis.errors) > 1 else analysis.errors[0]
