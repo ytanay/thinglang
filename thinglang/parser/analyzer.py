@@ -98,6 +98,11 @@ class Analysis(object):
         elif self.resolver.lookup(self.normalize_reference_access(node.name)) is Resolver.UNRESOLVED_REFERENCE:
             yield UnresolvedReference(node.name)
 
+    @inspects(MethodCall)
+    def verify_method_call_arity(self, node):
+        definition = self.resolver.lookup(self.normalize_reference_access(node.target))
+        if definition not in (INTERNAL_MEMBER, Resolver.UNRESOLVED_REFERENCE) and len(definition.arguments) != len(node.arguments):
+            yield ArgumentCountMismatch(expected=len(definition.arguments), actual=len(node.arguments))
 
     @inspects(ThingDefinition)
     def verify_thing_definitions(self, node):
