@@ -57,6 +57,10 @@ class Analysis(object):
         node = node or self.ast
 
         assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
+
+        if node.implements(ThingDefinition):
+            self.scoping.instance = node
+
         if node.implements(AssignmentOperation):
             self.scoping[node.name] = True
 
