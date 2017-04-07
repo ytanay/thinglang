@@ -12,3 +12,10 @@ def predicated(func):
         return func(self, predicate_func, **kwargs)
 
     return wrapped
+
+
+def inspects(*args):
+    def decorator(func):
+        func.inspected_types = args
+        return func
+    return decorator

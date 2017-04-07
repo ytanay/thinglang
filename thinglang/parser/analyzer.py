@@ -11,28 +11,8 @@ from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
 from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
 from thinglang.utils.collection_utils import emit_recursively
+from thinglang.utils.tree_utils import inspects
 from thinglang.utils.union_types import ACCESS_TYPES
-
-
-def analyze_method_resolution(ast):
-    for child in ast.find(MethodCall):
-        if child.target[0].is_self():
-            thing_definition = child.upwards(ThingDefinition)
-        else:
-            thing_definition = ast.find(ThingDefinition, lambda x: x.name == child.target[0], single=True)
-
-        if thing_definition is None:
-            print('Warning: method resolution cannot be validated!')
-        elif len(child.arguments) != len(thing_definition.find(MethodDefinition, lambda x: x.name == child.target[1], single=True).arguments):
-            raise ArgumentCountMismatch()
-
-
-def inspects(*args):
-    def decorator(func):
-        func.inspected_types = args
-        return func
-    return decorator
-
 
 
 class Analysis(object):
@@ -51,6 +31,10 @@ class Analysis(object):
 
     def run(self):
         self.traverse()
+
+        if self.errors:
+            raise ParseErrors(*self.errors) if len(self.errors) > 1 else self.errors[0]
+
         return self
 
     def traverse(self, node=None, parent=None):
@@ -127,11 +111,3 @@ class Analysis(object):
 
         if node.is_constructor() and list(node.find(lambda x: isinstance(x, ReturnStatement))):
             yield ReturnInConstructorError(node)
-
-
-
-def analyze(ast):
-
-    analysis = Analysis(ast).run()
-    if analysis.errors:
-        raise ParseErrors(*analysis.errors) if len(analysis.errors) > 1 else analysis.errors[0]

@@ -3,8 +3,6 @@ from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols.functions import Access
 
 
-
-
 class Resolver(object):
 
     UNRESOLVED_REFERENCE = object()
