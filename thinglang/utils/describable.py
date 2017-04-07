@@ -8,3 +8,6 @@ class Describable(object):
 
     def describe(self):
         return self.__dict__ if self.__dict__ else ''
+
+    def implements(self, cls):
+        return isinstance(self, cls)
