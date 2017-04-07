@@ -127,7 +127,7 @@ thing ExternalClass
 
 @pytest.mark.parametrize('line', ['', '1', '1, 2, 3'])
 def test_argument_count_mismatch(line):
-    with pytest.raises(ArgumentCountMismatch):
+    with pytest.raises(ArgumentCountMismatch) as error:
         run(f"""
 thing Program
     setup
@@ -136,6 +136,6 @@ thing Program
     does add with a, b
         return a + b
 
-thing Person
-
     """)
+
+    assert error.value == ArgumentCountMismatch(2, line.count(',') + 1 if line else 0)
