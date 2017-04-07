@@ -71,8 +71,6 @@ class Analysis(object):
 
         self.inspect(node)
 
-        if node.implements(AssignmentOperation):
-            self.scoping[node.name] = True
 
         if node.references():
             for ref in (x for x in emit_recursively(node.references(), (Access, LexicalIdentifier)) if not self.validate_scoping(x)):
@@ -98,6 +96,11 @@ class Analysis(object):
 
     def report_exception(self, error):
         self.errors.append(error)
+
+
+    @inspects(AssignmentOperation)
+    def mark_variable_deceleration(self, node):
+        self.scoping[node.name] = True
 
     @classmethod
     @inspects(ThingDefinition)
