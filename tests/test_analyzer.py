@@ -2,7 +2,10 @@ import pytest
 
 from thinglang import run
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch
+    ArgumentCountMismatch, UnresolvedReference
+from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.errors import ParseErrors
+from thinglang.parser.symbols.functions import Access
 
 
 def test_return_in_constructor():
@@ -15,12 +18,17 @@ thing Program
 
 
 def test_empty_method_body():
-    with pytest.raises(EmptyMethodBody):
+    with pytest.raises(ParseErrors) as error:
         run("""
 thing Program
     setup
     does start
     """)
+
+    assert error.value.args == (
+        EmptyMethodBody(),
+        EmptyMethodBody()
+    )
 
 
 def test_empty_thing_definition():
