@@ -31,6 +31,11 @@ def analyze_method_resolution(ast):
         elif len(child.arguments) != len(thing_definition.find(MethodDefinition, lambda x: x.name == child.target[1], single=True).arguments):
             raise ArgumentCountMismatch()
 
+def inspects(*args):
+    def decorator(func):
+        func.inspected_types = args
+        return func
+    return decorator
 
 def validate_tree_hierarchy(node, parent=None):
     assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
