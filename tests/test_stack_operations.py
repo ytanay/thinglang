@@ -37,14 +37,3 @@ thing Program
         Output.write("outside after, i =", i)
 
     """)
-
-
-@pytest.mark.skip(reason="Implement static analysis on AST")
-def test_error_in_duplicate_assignment():
-    with pytest.raises(RedeclaredVariable):
-        run("""
-thing Program
-    setup
-        number i = 0
-        number i = 1
-    """)
