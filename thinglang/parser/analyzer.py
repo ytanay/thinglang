@@ -34,6 +34,7 @@ def inspects(*args):
     return decorator
 
 
+
 class Analysis(object):
     def __init__(self, ast):
         self.ast = ast
@@ -46,7 +47,6 @@ class Analysis(object):
             x.name: x for x in self.ast.children
         })
         self.resolver = Resolver(self.scoping, heap)
-
         self.inspections = [getattr(self, member) for member in dir(self) if hasattr(getattr(self, member), 'inspected_types')]
 
     def run(self):
@@ -121,7 +121,8 @@ class Analysis(object):
             yield EmptyMethodBody()
 
         if node.is_constructor() and list(node.find(lambda x: isinstance(x, ReturnStatement))):
-            raise ReturnInConstructorError(node)
+            yield ReturnInConstructorError(node)
+
 
 
 def analyze(ast):
