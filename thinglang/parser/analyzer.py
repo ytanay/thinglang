@@ -93,7 +93,10 @@ class Analysis(object):
 
     @inspects(AssignmentOperation)
     def mark_variable_deceleration(self, node):
-        self.scoping[node.name] = True
+        if node.name.implements(LexicalIdentifier):
+            self.scoping[node.name] = node.type
+        elif self.resolver.lookup(self.normalize_reference_access(node.name)) is Resolver.UNRESOLVED_REFERENCE:
+            yield UnresolvedReference(node.name)
 
 
     @inspects(ThingDefinition)
