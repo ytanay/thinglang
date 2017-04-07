@@ -89,6 +89,39 @@ thing ExternalClass
         UnresolvedReference(LexicalIdentifier("out2")),  # Outer statement
         UnresolvedReference(LexicalIdentifier("in1")),
 
+    )
+
+
+def test_method_call_reference_resolution():
+    with pytest.raises(ParseErrors) as error:
+        run("""
+thing Program
+    setup
+        do_something()
+
+        self.real_thing()
+        self.missing_thing()
+
+        ExternalClass.real_thing()
+        ExternalClass.missing_thing()
+
+    does real_thing
+        Output.write("at Program:real_thing")
+
+
+thing ExternalClass
+    does real_thing
+        Output.write("at real_thing")
+    """)
+
+    assert error.value.args == (
+        UnresolvedReference(LexicalIdentifier("do_something")),
+        UnresolvedReference(Access([LexicalIdentifier.self(), LexicalIdentifier("missing_thing")])),
+        UnresolvedReference(Access([LexicalIdentifier("ExternalClass"), LexicalIdentifier("missing_thing")]))
+
+    )
+
+
 @pytest.mark.parametrize('line', ['', '1', '1, 2, 3'])
 def test_argument_count_mismatch(line):
     with pytest.raises(ArgumentCountMismatch):
