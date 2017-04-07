@@ -58,7 +58,7 @@ class ExecutionEngine(object):
             if isinstance(target, Conditional):
                 if target.evaluate(self.resolver):
                     self.stack.enter()
-                    self.drop_while(ElseBranchInterface) # Remove all directly following else-like branches
+                    self.drop_while(ElseBranchInterface)  # Remove all directly following else-like branches
                     self.add_targets(target.children, [StackScopeTerminator()])
 
                 continue
