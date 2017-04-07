@@ -86,6 +86,12 @@ class Analysis(object):
         if not node.children:
             yield EmptyThingDefinition()
 
+    @classmethod
+    @inspects(MethodDefinition)
+    def verify_method_definitions(cls, node):
+        if not node.children:
+            yield EmptyMethodBody()
+
 def analyze(ast):
     validate_tree_hierarchy(ast)
     analyze_method_resolution(ast)
