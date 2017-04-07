@@ -113,6 +113,10 @@ class Analysis(object):
 
     @inspects(MethodDefinition)
     def verify_method_definitions(self, node):
+        self.scoping.reset({
+            x: True for x in node.arguments
+        })
+
         if not node.children:
             yield EmptyMethodBody()
 
