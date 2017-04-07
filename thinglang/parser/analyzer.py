@@ -69,9 +69,6 @@ class Analysis(object):
         if node.SCOPING:
             self.scoping.exit()
 
-    def validate_scoping(self, reference):
-        return self.resolver.lookup(reference) is not Resolver.UNRESOLVED_REFERENCE
-
     def inspect(self, node):
         for inspection in self.inspections:
             if not inspection.inspected_types or isinstance(node, inspection.inspected_types):
