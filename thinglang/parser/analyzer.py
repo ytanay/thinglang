@@ -79,6 +79,12 @@ class Analysis(object):
     def report_exception(self, error):
         self.errors.append(error)
 
+    def normalize_reference_access(self, access):
+        if access.implements(LexicalIdentifier):
+            return access
+        target = access[0] if access[0].is_self() or access[0] not in self.scoping else self.scoping[access[0]]
+        return Access([target] + access[1:])
+
     @inspects()
     def verify_reference_dependencies(self, node):
         if node.references():
