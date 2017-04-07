@@ -1,7 +1,14 @@
 from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch
+    ArgumentCountMismatch, UnresolvedReference
+from thinglang.execution.resolver import Resolver
+from thinglang.execution.stack import Frame
+from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.errors import ParseErrors
+from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
-from thinglang.parser.symbols.functions import ReturnStatement, MethodCall
+from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
+from thinglang.utils.collection_utils import flatten_list, flatten_recursively, emit_recursively
 
 
 def verify_method_definitions(ast):
@@ -62,6 +69,7 @@ class Analysis(object):
             self.scoping.instance = node
 
         self.inspect(node)
+
         if node.implements(AssignmentOperation):
             self.scoping[node.name] = True
 
