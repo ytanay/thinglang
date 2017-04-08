@@ -1,68 +1,39 @@
 import types
 
 from thinglang.execution.builtins import BUILTINS, INTERNAL_MEMBER
-from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch, UnresolvedReference, DuplicateDeclaration, IndeterminateType
 from thinglang.execution.resolver import Resolver
-from thinglang.execution.stack import Frame
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.errors import ParseErrors
+from thinglang.parser.errors import ParseErrors, UnresolvedReference, DuplicateDeclaration, ReturnInConstructorError, \
+    EmptyMethodBody, EmptyThingDefinition, IndeterminateType, ArgumentCountMismatch
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
 from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
 from thinglang.utils import collection_utils
 from thinglang.utils.collection_utils import emit_recursively
-from thinglang.utils.tree_utils import inspects
+from thinglang.utils.tree_utils import inspects, TreeTraversal
 from thinglang.utils.union_types import ACCESS_TYPES
 
 
-class Analysis(object):
+class Analysis(TreeTraversal):
     def __init__(self, ast):
-        self.ast = ast
-        self.errors = []
-        self.scoping = Frame(expected_key_type=object)
-        self.resolver = Resolver(self.scoping, collection_utils.combine(
-        {
+        super(Analysis, self).__init__(ast)
+        self.resolver = Resolver(self.scoping, collection_utils.combine({
             LexicalIdentifier(x.INTERNAL_NAME): x.EXPORTS for x in BUILTINS
         }, {
             x.name: x for x in self.ast.children
         }))
-        self.inspections = [getattr(self, member) for member in dir(self) if
-                            hasattr(getattr(self, member), 'inspected_types')]
 
     def run(self):
-        self.traverse()
+        super().run()
 
-        if self.errors:
-            raise ParseErrors(*self.errors) if len(self.errors) > 1 else self.errors[0]
+        if self.results:
+            raise ParseErrors(*self.results) if len(self.results) > 1 else self.results[0]
 
         return self
 
-    def traverse(self, node=None, parent=None):
-        node = node or self.ast
-
+    def inspect(self, node, parent):
         assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
-
-        self.inspect(node)
-
-        if node.SCOPING:
-            self.scoping.enter()
-
-        for child in node.children:
-            self.traverse(child, node)
-
-        if node.SCOPING:
-            self.scoping.exit()
-
-    def inspect(self, node):
-        for inspection in self.inspections:
-            if not inspection.inspected_types or isinstance(node, inspection.inspected_types):
-                result = inspection(node)
-                if isinstance(result, types.GeneratorType):
-                    self.errors.extend(result)
-
-    def report_exception(self, error):
-        self.errors.append(error)
+        super().inspect(node, parent)
 
     def normalize_reference_access(self, access):
         if access.implements(LexicalIdentifier):
