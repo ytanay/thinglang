@@ -1,7 +1,7 @@
 from thinglang import utils
 from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
-from thinglang.parser.analyzer import Analysis
+from thinglang.parser.analyzer import Analyzer
 from thinglang.parser.parser import parse
 from thinglang.parser.simplifier import Simplifier
 
@@ -18,7 +18,7 @@ def run(source):
     ast = parse(lexical_groups)
 
     Simplifier(ast).run()
-    Analysis(ast).run()
+    Analyzer(ast).run()
 
     utils.print_header('Parsed AST', ast.tree())
 

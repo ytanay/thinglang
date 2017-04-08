@@ -14,9 +14,9 @@ from thinglang.utils.tree_utils import inspects, TreeTraversal
 from thinglang.utils.union_types import ACCESS_TYPES
 
 
-class Analysis(TreeTraversal):
+class Analyzer(TreeTraversal):
     def __init__(self, ast):
-        super(Analysis, self).__init__(ast)
+        super(Analyzer, self).__init__(ast)
         self.resolver = Resolver(self.scoping, collection_utils.combine({
             LexicalIdentifier(x.INTERNAL_NAME): x.EXPORTS for x in BUILTINS
         }, {
