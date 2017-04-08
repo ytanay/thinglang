@@ -1,5 +1,7 @@
 import types
 
+from thinglang.execution.stack import Frame
+
 
 def predicated(func):
     def wrapped(self, cls=object, predicate=lambda x: True, **kwargs):
@@ -19,3 +21,35 @@ def inspects(*args):
         func.inspected_types = args
         return func
     return decorator
+
+
+class TreeTraversal(object):
+
+    def __init__(self, ast):
+        self.ast = ast
+        self.results = []
+        self.scoping = Frame(expected_key_type=object)
+        self.inspections = [getattr(self, member) for member in dir(self) if
+                            hasattr(getattr(self, member), 'predicate')]
+
+    def run(self):
+        self.traverse(self.ast)
+
+    def traverse(self, node, parent=None):
+        self.inspect(node, parent)
+
+        if node.SCOPING:
+            self.scoping.enter()
+
+        for child in node.children:
+            self.traverse(child, node)
+
+        if node.SCOPING:
+            self.scoping.exit()
+
+    def inspect(self, node, parent):
+        for inspection in self.inspections:
+            if inspection.predicate(node):
+                result = inspection(node)
+                if isinstance(result, types.GeneratorType):
+                    self.results.extend(result)
