@@ -3,7 +3,7 @@ from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.analyzer import Analysis
 from thinglang.parser.parser import parse
-from thinglang.parser.simplifier import simplify
+from thinglang.parser.simplifier import Simplifier
 
 
 def run(source):
@@ -15,13 +15,13 @@ def run(source):
     utils.print_header('Source', source)
 
     lexical_groups = list(lexer(source))
-    tree = parse(lexical_groups)
-    root_node = simplify(tree)
+    ast = parse(lexical_groups)
 
-    Analysis(tree).run()
+    Simplifier(ast).run()
+    Analysis(ast).run()
 
-    utils.print_header('Parsed AST', root_node.tree())
+    utils.print_header('Parsed AST', ast.tree())
 
-    with ExecutionEngine(root_node) as engine:
+    with ExecutionEngine(ast) as engine:
         engine.execute()
         return engine.results()
