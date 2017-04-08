@@ -1,4 +1,4 @@
-from thinglang.execution.errors import UnresolvedReference
+from thinglang.parser.errors import UnresolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
