@@ -78,7 +78,7 @@ def test_nested_function_calls():
     assert run("""
     thing Program
         setup
-            Output.write(self.get_7(), self.get_13())
+            Output.write(self.get_20(), self.get_13())
             number res = self.mul(self.get_13(), self.add(self.get_7(), self.get_7()))
             Output.write(res)
             Output.write(self.mul(self.get_13(), self.add(self.get_7(), self.get_7())))
@@ -95,7 +95,10 @@ def test_nested_function_calls():
 
         does get_13
             return 13
-        """).output == """7 13\n182\n182\n3640"""
+
+        does get_20
+            return self.get_7() + self.get_13()
+        """).output == """20 13\n182\n182\n3640"""
 
 
 def test_arithmetic_over_method_calls():
