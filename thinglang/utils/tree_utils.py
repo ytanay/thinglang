@@ -10,15 +10,21 @@ def predicated(func):
 
         assert cls is not object or not predicate(None), 'Must provide CLS or predicate'
 
-        predicate_func = lambda node: (isinstance(node, cls) and predicate(node))
+        def predicate_func(node):
+            return isinstance(node, cls) and predicate(node)
+
         return func(self, predicate_func, **kwargs)
 
     return wrapped
 
 
-def inspects(*args):
+def inspects(*args, predicate=None):
+    if predicate is None:
+        def predicate(node):
+            return isinstance(node, args) if args else True
+
     def decorator(func):
-        func.inspected_types = args
+        func.predicate = predicate
         return func
     return decorator
 
