@@ -80,13 +80,22 @@ class Analysis(object):
     @inspects(AssignmentOperation)
     def mark_variable_deceleration(self, node):
         if node.name.implements(LexicalIdentifier):
-            if node.method is AssignmentOperation.DECELERATION:
+            if node.method is AssignmentOperation.DECELERATION:  # Decelerations must be strongly typed
                 if self.resolver.lookup(node.name) is not Resolver.UNRESOLVED_REFERENCE:
                     yield DuplicateDeclaration(node.name)
                 else:
                     self.scoping[node.name] = node.type
-        elif self.resolver.lookup(self.normalize_reference_access(node.name)) is Resolver.UNRESOLVED_REFERENCE:
-            yield UnresolvedReference(node.name)
+            elif node.name in self.scoping:
+                node.type = self.scoping[node.name]
+        else:
+            member_ref = self.resolver.lookup(self.normalize_reference_access(node.name))
+            if member_ref is Resolver.UNRESOLVED_REFERENCE:
+                yield UnresolvedReference(node.name)
+            else:
+                node.type = member_ref.type
+
+        if not list(self.verify_reference_dependencies(node)) and node.type is AssignmentOperation.INDETERMINATE:
+            yield IndeterminateType(node)
 
     @inspects(MethodCall)
     def verify_method_call_arity(self, node):
