@@ -10,6 +10,7 @@ from thinglang.parser.errors import ParseErrors
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
 from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
+from thinglang.utils import collection_utils
 from thinglang.utils.collection_utils import emit_recursively
 from thinglang.utils.tree_utils import inspects
 from thinglang.utils.union_types import ACCESS_TYPES
@@ -20,14 +21,14 @@ class Analysis(object):
         self.ast = ast
         self.errors = []
         self.scoping = Frame(expected_key_type=object)
-        heap = {
+        self.resolver = Resolver(self.scoping, collection_utils.combine(
+        {
             LexicalIdentifier(x.INTERNAL_NAME): x.EXPORTS for x in BUILTINS
-        }
-        heap.update({
+        }, {
             x.name: x for x in self.ast.children
-        })
-        self.resolver = Resolver(self.scoping, heap)
-        self.inspections = [getattr(self, member) for member in dir(self) if hasattr(getattr(self, member), 'inspected_types')]
+        }))
+        self.inspections = [getattr(self, member) for member in dir(self) if
+                            hasattr(getattr(self, member), 'inspected_types')]
 
     def run(self):
         self.traverse()

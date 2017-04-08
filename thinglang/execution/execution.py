@@ -12,6 +12,7 @@ from thinglang.parser.symbols import BaseSymbol
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
 from thinglang.parser.symbols.logic import Conditional, ElseBranchInterface, Loop
+from thinglang.utils import collection_utils
 
 ExecutionOutput = collections.namedtuple('ExecutionOutput', ['output'])
 
@@ -22,16 +23,13 @@ class ExecutionEngine(object):
         self.stack = Stack()
         self.targets = collections.deque()
         self.current_target = None
-
-        self.heap = {  # Collect all root level ThingDefinitions
+        self.heap = {}
+        self.resolver = Resolver(self.stack, collection_utils.combine(self.heap,
+        {  # Collect all root level ThingDefinitions
             x.name: x for x in ast.children
-        }
-
-        self.heap.update({  # Mix in builtins, with a reference to the heap object
+        }, {  # Mix in builtins, with a reference to the heap object
             LexicalIdentifier(x.INTERNAL_NAME): x(self.heap) for x in BUILTINS
-        })
-
-        self.resolver = Resolver(self.stack, self.heap)
+        }))
 
     def __enter__(self):
         assert self.ast.get(LexicalIdentifier('Program')) and self.ast.get(LexicalIdentifier('Program')).get(LexicalIdentifier.constructor()), 'Program must have an entry point'
