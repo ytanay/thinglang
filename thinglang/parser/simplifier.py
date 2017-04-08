@@ -9,8 +9,6 @@ OBTAINABLE_VALUES = MethodCall, ArithmeticOperation, ArrayInitialization, CastOp
 
 
 def simplify(tree):
-    while unwrap_returns(tree):
-        pass
 
     for method_call in tree.find(lambda x: isinstance(getattr(x, 'value', None), OBTAINABLE_VALUES)):
         reduce_method_calls(method_call.value, method_call)
@@ -18,18 +16,6 @@ def simplify(tree):
     return tree
 
 
-def unwrap_returns(tree):
-    had_change = False
-
-    for child in set(tree.find(lambda x: isinstance(x, ReturnStatement) and isinstance(x.value, OBTAINABLE_VALUES))):
-        id, assignment = create_transient(child.value, child)
-        siblings = child.parent.children
-        idx = siblings.index(child)
-
-        siblings[idx:idx + 1] = [assignment, ReturnStatement([None, id]).contextify(child.parent)]
-        had_change = True
-
-    return had_change
 
 
 def reduce_method_calls(method_call, node, parent_call=None):
