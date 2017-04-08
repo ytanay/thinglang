@@ -11,3 +11,7 @@ class Describable(object):
 
     def implements(self, cls):
         return isinstance(self, cls)
+
+    @classmethod
+    def construct(cls, slice):
+        return cls(slice)

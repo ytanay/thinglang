@@ -93,7 +93,7 @@ def replace_in_place(group, pattern_set):
             slice = group[match_start:match_start + size]
 
             if match_pattern(pattern, slice):
-                group[match_start:match_start + size] = [target(slice)]
+                group[match_start:match_start + size] = [target.construct(slice)]
                 return True
 
 
