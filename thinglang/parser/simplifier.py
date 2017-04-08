@@ -1,46 +1,43 @@
-from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import Transient
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
-from thinglang.parser.symbols.types import ArrayInitialization, CastOperation
-
-OBTAINABLE_VALUES = MethodCall, ArithmeticOperation, ArrayInitialization, CastOperation
-
-
-def simplify(tree):
-
-    for method_call in tree.find(lambda x: isinstance(getattr(x, 'value', None), OBTAINABLE_VALUES)):
-        reduce_method_calls(method_call.value, method_call)
-
-    return tree
+from thinglang.parser.symbols.functions import MethodCall
+from thinglang.parser.symbols.types import CastOperation
+from thinglang.utils.tree_utils import TreeTraversal, inspects
+from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
 
 
+class Simplifier(TreeTraversal):
 
+    @inspects(predicate=lambda x: isinstance(getattr(x, 'value', None), POTENTIALLY_OBTAINABLE))
+    def inspect_obtainable_operations(self, node):
+        return self.unwrap_method_calls(node.value, node)
 
-def reduce_method_calls(method_call, node, parent_call=None):
-    if not isinstance(method_call, OBTAINABLE_VALUES):
-        return
-    for argument in method_call.arguments:
-        if isinstance(argument, (MethodCall, CastOperation)):
-            reduce_method_calls(argument, node, parent_call=method_call)
-        if isinstance(argument, ArithmeticOperation):
-            for x in argument.arguments:
-                reduce_method_calls(x, node, parent_call=argument)
+    def unwrap_method_calls(self, method_call, node, parent_call=None):
+        if not isinstance(method_call, POTENTIALLY_OBTAINABLE):
+            return
 
-    if parent_call is not None:
-        id, assignment = create_transient(method_call, node)
-        node.insert_before(assignment)
-        parent_call.replace(method_call, id)
+        for argument in method_call.arguments:
+            if isinstance(argument, (MethodCall, CastOperation)):
+                self.unwrap_method_calls(argument, node, parent_call=method_call)
+            if isinstance(argument, ArithmeticOperation):
+                for x in argument.arguments:
+                    self.unwrap_method_calls(x, node, parent_call=argument)
 
+        if parent_call is not None:
+            id, assignment = self.create_transient(method_call, node)
+            node.insert_before(assignment)
+            parent_call.replace(method_call, id)
 
-def is_compound(node):
-    if not node:
-        return False
-    return (isinstance(node, MethodCall) and any(isinstance(arg, MethodCall) for arg in node.arguments.value)) or \
-           (isinstance(node, AssignmentOperation) and is_compound(node.value))
+    @classmethod
+    def is_compound(cls, node):
+        if not node:
+            return False
+        return (isinstance(node, MethodCall) and any(isinstance(arg, MethodCall) for arg in node.arguments.value)) or \
+               (isinstance(node, AssignmentOperation) and cls.is_compound(node.value))
 
+    @staticmethod
+    def create_transient(value, parent):
+        local_id = Transient().contextify(parent.context)
+        return local_id, AssignmentOperation([None, local_id, None, value]).contextify(parent.parent)
 
-def create_transient(value, parent):
-    local_id = Transient().contextify(parent.context)
-    return local_id, AssignmentOperation([None, local_id, None, value]).contextify(parent.parent)
