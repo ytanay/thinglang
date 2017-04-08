@@ -49,6 +49,8 @@ TESTS = {
         ('Output.write(42 - 2 + 5)', '45'),
         ('Output.write(7 * 9 + 5)', '68'),
         ('Output.write(5 * 7 + 9)', '44'),
+        ('Output.write(5 * (7 + 9))', '80'),
+        ('Output.write(5 * (7 + 9 + 1) * 2)', '170'),
     ],
     'method local stack + resolution': [
         (['number n = 5', 'Output.write(n)'], '5'),
