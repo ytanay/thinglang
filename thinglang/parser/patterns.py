@@ -1,6 +1,8 @@
 import collections
 
 from thinglang.lexer.tokens.typing import LexicalCast
+from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
+from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
@@ -60,6 +62,10 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 
     ((POTENTIALLY_RESOLVABLE, SecondOrderLexicalBinaryOperation, POTENTIALLY_RESOLVABLE), ArithmeticOperation),  # 4 * 2
     ((POTENTIALLY_RESOLVABLE, FirstOrderLexicalBinaryOperation, POTENTIALLY_RESOLVABLE), ArithmeticOperation),  # 4 + 2
+
+    ((ListInitializationPartial, SecondOrderLexicalBinaryOperation, ListInitialization), ConstrainedArithmeticOperation),  # 4 * 2
+    ((ListInitializationPartial, FirstOrderLexicalBinaryOperation, ListInitialization), ConstrainedArithmeticOperation),  # 4 + 2
+
 
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalRepeatWhile, ValueType), Loop),
