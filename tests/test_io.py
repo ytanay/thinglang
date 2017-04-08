@@ -1,12 +1,11 @@
-from unittest.mock import patch
-
 import io
+from unittest.mock import patch
 
 import pytest
 
-from tests.utils import random_string
-from thinglang import utils
+from tests.infrastructure.test_utils import random_string
 from thinglang import run
+from thinglang import utils
 
 
 def test_input_single_line():

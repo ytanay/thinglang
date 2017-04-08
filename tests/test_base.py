@@ -1,7 +1,6 @@
 import pytest
 
-from tests.utils import generate_simple_output_program, generate_test_case_structure
-from thinglang.execution.errors import DuplicateDeclaration
+from tests.infrastructure.test_utils import generate_simple_output_program, generate_test_case_structure
 from thinglang import run
 
 
@@ -55,7 +54,6 @@ TESTS = {
         (['number n = 5', 'Output.write(n)'], '5'),
         (['number n = 4', 'number m = 6', 'Output.write(n + m + 2)'], '12'),
         (['number n = 4', 'n = 7', 'Output.write(n)'], '7'),
-       # (['number n = 4', 'number n = 7', 'Output.write(n)'], DuplicateDeclaration) # TODO: dependent on static analysis for AST variable declerations
     ]
 }
 

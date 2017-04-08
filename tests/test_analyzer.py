@@ -1,10 +1,9 @@
 import pytest
 
 from thinglang import run
-from thinglang.execution.errors import ReturnInConstructorError, EmptyMethodBody, EmptyThingDefinition, \
-    ArgumentCountMismatch, UnresolvedReference, DuplicateDeclaration
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.errors import ParseErrors
+from thinglang.parser.errors import ParseErrors, UnresolvedReference, DuplicateDeclaration, ReturnInConstructorError, \
+    EmptyMethodBody, EmptyThingDefinition, ArgumentCountMismatch
 from thinglang.parser.symbols.functions import Access
 
 

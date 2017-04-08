@@ -1,6 +1,6 @@
 import pytest
 
-from thinglang.execution.errors import UnresolvedReference, DuplicateDeclaration
+from thinglang.parser.errors import UnresolvedReference
 from thinglang import run
 
 """

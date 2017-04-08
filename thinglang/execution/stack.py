@@ -1,4 +1,4 @@
-from thinglang.execution.errors import UnresolvedReference
+from thinglang.parser.errors import UnresolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
@@ -89,7 +89,6 @@ class Frame(object):
         } if data else {}
 
 
-
 class StackFrameTerminator(object):
 
     def __init__(self, target_arg=None):
@@ -99,6 +98,7 @@ class StackFrameTerminator(object):
     def constructs(self, value):
         self.constructor = value
         return self
+
 
 class StackScopeTerminator(object):
     pass
