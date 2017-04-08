@@ -1,4 +1,4 @@
-from thinglang.lexer.tokens.base import  LexicalAccess, LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.symbols import BaseSymbol, DefinitionPairSymbol
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
