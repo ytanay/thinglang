@@ -60,6 +60,10 @@ class MethodCall(BaseSymbol, ValueType):
     def references(self):
         return self.target, self.arguments
 
+    @classmethod
+    def create_constructing_call(cls, target, arguments=None):
+        return cls([LexicalClassInitialization(None), target, arguments if arguments is not None else ArgumentList()])
+
 
 class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):
