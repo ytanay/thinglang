@@ -23,6 +23,10 @@ class AssignmentOperation(BaseSymbol):
     def references(self):
         return (self.name, self.value.references()) if self.intent is self.REASSIGNMENT else self.value.references()
 
+    @classmethod
+    def create(cls, name, value, type=None):
+        return cls(([type] if type is not None else []) + [name, None, value])
+
 
 class InlineString(ValueType):  # immediate string e.g. "hello world"
     def __init__(self, value):
