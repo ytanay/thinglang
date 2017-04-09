@@ -18,7 +18,7 @@ class Conditional(BaseSymbol):
         return self.value.evaluate(resolver)
 
     def references(self):
-        return self.value
+        return self.value,
 
 
 class ElseBranchInterface(object):
@@ -55,7 +55,13 @@ class Loop(BaseSymbol):
         return self.condition.evaluate(resolver)
 
     def references(self):
-        return self.condition.references()class IterativeLoop(BaseSymbol):
+        return self.condition.references()
+
+    def describe(self):
+        return str(self.condition)
+
+
+class IterativeLoop(BaseSymbol):
 
     EXECUTABLE = False
 
