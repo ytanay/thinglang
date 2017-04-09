@@ -20,3 +20,13 @@ thing Program
         Output.write(i.next(), i.next(), i.next(), i.next(), i.next())
     """).output == """0 1 2 3 None"""
 
+
+def test_range_generator_shortcut():
+    assert run("""
+thing Program
+    setup
+        Range i = 0..3
+        Output.write(i.next(), i.next(), i.next(), i.next(), i.next())
+    """).output == """0 1 2 3 None"""
+
+
