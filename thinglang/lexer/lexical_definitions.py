@@ -2,7 +2,8 @@ import re
 
 
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation, \
-    LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeat, LexicalRepeatWhile
+    LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeat, LexicalRepeatWhile, \
+    LexicalIn, LexicalRepeatFor
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
     LexicalMultiplication
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
@@ -59,6 +60,8 @@ KEYWORDS = {
 
     'repeat': LexicalRepeat,
     'while': LexicalRepeatWhile,
+    'in': LexicalIn,
+    'for': LexicalRepeatFor,
 
     'eq': LexicalEquality,
     'not': LexicalNegation,
