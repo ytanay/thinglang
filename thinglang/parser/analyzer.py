@@ -51,7 +51,7 @@ class Analyzer(TreeTraversal):
     @inspects(AssignmentOperation)
     def mark_variable_deceleration(self, node):
         if node.name.implements(LexicalIdentifier):
-            if node.method is AssignmentOperation.DECELERATION:  # Decelerations must be strongly typed
+            if node.intent is AssignmentOperation.DECELERATION:  # Decelerations must be strongly typed
                 if self.resolver.lookup(node.name) is not Resolver.UNRESOLVED_REFERENCE:
                     yield DuplicateDeclaration(node.name)
                 else:

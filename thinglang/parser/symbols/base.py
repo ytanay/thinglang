@@ -11,10 +11,10 @@ class AssignmentOperation(BaseSymbol):
         super(AssignmentOperation, self).__init__(slice)
         if len(slice) == 4:
             self.type, self.name, _, self.value = slice
-            self.method = self.DECELERATION
+            self.intent = self.DECELERATION
         else:
             self.name, _, self.value = slice
-            self.method = self.REASSIGNMENT
+            self.intent = self.REASSIGNMENT
             self.type = self.INDETERMINATE
 
     def describe(self):
