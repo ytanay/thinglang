@@ -8,6 +8,7 @@ from thinglang.utils.describable import Describable
 class BaseSymbol(Describable):
     SCOPING = False
     ADVANCE = True
+    EXECUTABLE = True
 
     def __init__(self, slice):
         self.children = []
