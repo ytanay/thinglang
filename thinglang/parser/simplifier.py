@@ -37,7 +37,7 @@ class Simplifier(TreeTraversal):
                (isinstance(node, AssignmentOperation) and cls.is_compound(node.value))
 
     @staticmethod
-    def create_transient(value, parent):
+    def create_transient(value, parent, type=None):
         local_id = Transient().contextify(parent.context)
-        return local_id, AssignmentOperation([None, local_id, None, value]).contextify(parent.parent)
+        return local_id, AssignmentOperation([type, local_id, None, value]).contextify(parent.parent)
 
