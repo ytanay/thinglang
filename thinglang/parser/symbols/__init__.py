@@ -98,7 +98,7 @@ class DefinitionPairSymbol(BaseSymbol):
 
 class Transient(LexicalIdentifier):
 
-    IDX_COUNTER = -1
+    IDX_COUNTER = 0
 
     def __init__(self):
         self.idx = Transient.IDX_COUNTER
