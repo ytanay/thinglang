@@ -24,6 +24,12 @@ class BaseSymbol(Describable):
         self.parent = parent
         return self
 
+    def populate(self, children):
+        for child in children:
+            child.parent = self
+        self.children = children
+        return self
+
     def attach(self, child):
         self.children.append(child)
         child.parent = self
