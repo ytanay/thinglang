@@ -3,7 +3,7 @@ thing Range
     has number current
 
     setup with start, end
-        self.current = start -1
+        self.current = start - 1
         self.end = end
 
     does next
