@@ -12,14 +12,14 @@ from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgu
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
     LexicalClassInitialization
 from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
-    LexicalEquality, LexicalInequality, LexicalRepeatWhile
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
+    LexicalEquality, LexicalInequality, LexicalRepeatWhile, LexicalIn, LexicalRepeatFor
+from thinglang.parser.symbols.arithmetic import ArithmeticOperation, RangeGenerator
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition, MemberDefinition
 from thinglang.parser.symbols.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
 from thinglang.parser.symbols.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
-from thinglang.parser.symbols.logic import Conditional, UnconditionalElse, ConditionalElse, Loop
+from thinglang.parser.symbols.logic import Conditional, UnconditionalElse, ConditionalElse, Loop, IterativeLoop
 from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 
 FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significant in parsing patterns
@@ -39,7 +39,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
 
-    ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # x eq y
+    ((POTENTIALLY_RESOLVABLE, LexicalComparison, POTENTIALLY_RESOLVABLE), ArithmeticOperation),  # x eq y
     ((LexicalNegation, LexicalEquality), LexicalInequality),
 
     ((ArgumentListPartial, SecondOrderLexicalBinaryOperation, ValueType), ArgumentListPartial),  # (4 * 2
@@ -83,7 +83,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 ])
 
 SECOND_PASS_PATTERNS = collections.OrderedDict([
-    ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
+    ((LexicalReturnStatement, POTENTIALLY_RESOLVABLE), ReturnStatement),  # return 2
     ((LexicalElse,), UnconditionalElse),
     ((LexicalIdentifier, ArgumentList), MethodCall),  # person.walk(...)
 ])
