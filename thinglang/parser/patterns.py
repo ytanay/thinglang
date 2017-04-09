@@ -69,6 +69,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
     ((ValueType, LexicalAccess, LexicalAccess, ValueType), RangeGenerator),
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalRepeatWhile, ValueType), Loop),
+    ((LexicalRepeatFor, LexicalIdentifier, LexicalIn, ValueType), IterativeLoop),
     ((LexicalElse, Conditional), ConditionalElse),
 
     ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
