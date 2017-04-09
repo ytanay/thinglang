@@ -1,13 +1,35 @@
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import Transient
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.functions import MethodCall
+from thinglang.parser.symbols.functions import MethodCall, Access, ArgumentList
+from thinglang.parser.symbols.logic import IterativeLoop, Loop
 from thinglang.parser.symbols.types import CastOperation
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
 
 
 class Simplifier(TreeTraversal):
+
+
+    @inspects(IterativeLoop)
+    def unwrap_iterative_loops(self, node):
+        generator_id, generator_assignment = self.create_transient(node.generator, node, LexicalIdentifier('Range'))
+        initial_assignment = AssignmentOperation.create(node.name, MethodCall([Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]), LexicalIdentifier('number')).contextify(node.parent)
+        iterative_assignment = AssignmentOperation.create(node.name, MethodCall(
+            [Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]))
+
+        node.insert_before(generator_assignment)
+        node.insert_before(initial_assignment)
+
+
+        node.children.append(iterative_assignment)
+        loop = Loop([None, node.name]).contextify(node.parent).populate(node.children)
+
+        node.insert_before(loop)
+        node.remove()
+
+
 
     @inspects(predicate=lambda x: isinstance(getattr(x, 'value', None), POTENTIALLY_OBTAINABLE))
     def inspect_obtainable_operations(self, node):
