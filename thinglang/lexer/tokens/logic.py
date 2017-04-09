@@ -22,7 +22,7 @@ class LexicalRepeat(LexicalToken):
     @classmethod
     def next_operator_set(cls, current, original):
         if current is original:
-            return {'while': LexicalRepeatWhile}
+            return {'while': LexicalRepeatWhile, 'for': LexicalRepeatFor}
         return original
 
 
@@ -47,6 +47,14 @@ class LexicalGreaterThan(LexicalComparison):
 
 
 class LexicalLessThan(LexicalComparison):
+    pass
+
+
+class LexicalIn(LexicalToken):
+    pass
+
+
+class LexicalRepeatFor(LexicalToken):
     pass
 
 
