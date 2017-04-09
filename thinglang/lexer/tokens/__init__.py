@@ -18,6 +18,9 @@ class LexicalToken(Describable):
         self.context = context
         return self
 
+    def references(self):
+        return ()
+
 
 class LexicalBinaryOperation(LexicalToken, metaclass=abc.ABCMeta):
     def __init__(self, operator):

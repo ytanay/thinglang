@@ -33,3 +33,6 @@ class InlineString(ValueType):  # immediate string e.g. "hello world"
 
     def serialize(self):
         return self.evaluate(None)
+
+    def references(self):
+        return ()
