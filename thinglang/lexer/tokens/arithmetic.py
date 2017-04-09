@@ -10,6 +10,9 @@ class LexicalNumericalValue(LexicalToken, ValueType):
     def evaluate(self, _):
         return self.value
 
+    def describe(self):
+        return self.value
+
 
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction
     pass
