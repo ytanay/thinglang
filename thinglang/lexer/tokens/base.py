@@ -75,3 +75,5 @@ class LexicalIdentifier(LexicalToken, ValueType):
     def __eq__(self, other):
         return type(other) == type(self) and self.value == other.value
 
+    def references(self):
+        return self
