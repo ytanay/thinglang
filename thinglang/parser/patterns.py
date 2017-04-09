@@ -2,7 +2,7 @@ import collections
 
 from thinglang.lexer.tokens.typing import LexicalCast
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
-from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation
+from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation, RangeGenerator
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
@@ -13,7 +13,7 @@ from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgu
     LexicalClassInitialization
 from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile, LexicalIn, LexicalRepeatFor
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation, RangeGenerator
+from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition, MemberDefinition
 from thinglang.parser.symbols.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
