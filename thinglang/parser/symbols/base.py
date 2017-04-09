@@ -21,8 +21,7 @@ class AssignmentOperation(BaseSymbol):
         return '{} {} = {}'.format(self.type, self.name, self.value)
 
     def references(self):
-        if self.method is self.REASSIGNMENT:
-            return self.name
+        return (self.name, self.value.references()) if self.intent is self.REASSIGNMENT else self.value.references()
 
 
 class InlineString(ValueType):  # immediate string e.g. "hello world"
