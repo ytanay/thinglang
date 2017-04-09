@@ -1,3 +1,5 @@
+import pytest
+
 from thinglang import run
 
 
@@ -30,3 +32,10 @@ thing Program
     """).output == """0 1 2 3 None"""
 
 
+def test_range_loop():
+    assert run("""
+    thing Program
+        setup
+            repeat for i in 1..4
+                Output.write("i =", i)
+        """).output == """i = 1\ni = 2\ni = 3\ni = 4"""
