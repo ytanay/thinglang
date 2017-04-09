@@ -55,4 +55,13 @@ class Loop(BaseSymbol):
         return self.condition.evaluate(resolver)
 
     def references(self):
-        return self.condition.references()
+        return self.condition.references()class IterativeLoop(BaseSymbol):
+
+    EXECUTABLE = False
+
+    def __init__(self, slice):
+        super().__init__(slice)
+        self.name, self.generator = slice[1], slice[3]
+
+    def describe(self):
+        return 'for {self.name} in {self.generator}'
