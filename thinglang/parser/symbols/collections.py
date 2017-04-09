@@ -1,4 +1,5 @@
 from thinglang.lexer.tokens import LexicalBinaryOperation
+from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose
 from thinglang.parser.symbols import BaseSymbol
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.utils.type_descriptors import ReplaceableArguments
@@ -26,10 +27,12 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
     def __init__(self, slice=None):
         super(ListInitialization, self).__init__(slice)
 
-        if slice and isinstance(slice[0], ListInitializationPartial):
+        if not slice or len(slice) == 2 and isinstance(slice[0], LexicalParenthesesOpen) and isinstance(slice[1], LexicalParenthesesClose):
+            self.arguments = []
+        elif isinstance(slice[0], ListInitializationPartial):
             self.arguments = slice[0].value
         else:
-            self.arguments = []
+            self.arguments = slice
 
     def __iter__(self):
         return iter(self.arguments)
