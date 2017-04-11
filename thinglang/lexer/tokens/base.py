@@ -52,8 +52,8 @@ class LexicalIdentifier(LexicalToken, ValueType):
         super(LexicalIdentifier, self).__init__(value)
         self.value = value
 
-    def describe(self):
-        return self.value
+    def __str__(self):
+        return '{{{}}}'.format(self.value)
 
     def evaluate(self, resolver):
         return resolver.resolve(self)
