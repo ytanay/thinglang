@@ -22,6 +22,10 @@ class Access(BaseSymbol):
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target
 
+    @classmethod
+    def create(cls, target):
+        return cls([LexicalIdentifier(x) if not isinstance(x, LexicalIdentifier) else x for x in target])
+
 
 class ArgumentListPartial(ListInitializationPartial):
     pass
@@ -63,6 +67,10 @@ class MethodCall(BaseSymbol, ValueType):
     @classmethod
     def create_constructing_call(cls, target, arguments=None):
         return cls([LexicalClassInitialization(None), target, arguments if arguments is not None else ArgumentList()])
+
+    @classmethod
+    def create(cls, target, arguments=None):
+        return cls([Access.create(target), arguments])
 
 
 class ReturnStatement(DefinitionPairSymbol):
