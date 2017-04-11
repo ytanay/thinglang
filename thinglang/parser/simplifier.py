@@ -11,13 +11,11 @@ from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
 
 class Simplifier(TreeTraversal):
 
-
     @inspects(IterativeLoop)
     def unwrap_iterative_loops(self, node):
         generator_id, generator_declaration, generator_assignment = self.create_transient(node.generator, node, LexicalIdentifier('Range'))
-        initial_assignment = AssignmentOperation.create(node.name, MethodCall([Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]), LexicalIdentifier('number')).contextify(node.parent)
-        iterative_assignment = AssignmentOperation.create(node.name, MethodCall(
-            [Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]))
+        initial_assignment = AssignmentOperation.create(node.name, MethodCall.create([generator_id, 'next']), LexicalIdentifier('number')).contextify(node.parent)
+        iterative_assignment = AssignmentOperation.create(node.name, MethodCall.create([generator_id, 'next']))
 
         condition, condition_declaration, condition_assignment = self.create_transient(MethodCall.create([generator_id, 'has_next']), node, LexicalIdentifier('boolean'))
 
@@ -32,7 +30,6 @@ class Simplifier(TreeTraversal):
 
         node.insert_before(loop)
         node.remove()
-
 
     @inspects(predicate=lambda x: isinstance(getattr(x, 'value', None), POTENTIALLY_OBTAINABLE))
     def inspect_obtainable_operations(self, node):
