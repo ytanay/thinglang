@@ -14,7 +14,7 @@ class Simplifier(TreeTraversal):
 
     @inspects(IterativeLoop)
     def unwrap_iterative_loops(self, node):
-        generator_id, generator_assignment = self.create_transient(node.generator, node, LexicalIdentifier('Range'))
+        generator_id, generator_declaration, generator_assignment = self.create_transient(node.generator, node, LexicalIdentifier('Range'))
         initial_assignment = AssignmentOperation.create(node.name, MethodCall([Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]), LexicalIdentifier('number')).contextify(node.parent)
         iterative_assignment = AssignmentOperation.create(node.name, MethodCall(
             [Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]))
@@ -47,8 +47,8 @@ class Simplifier(TreeTraversal):
                     self.unwrap_method_calls(x, node, parent_call=argument)
 
         if parent_call is not None:
-            id, assignment = self.create_transient(method_call, node)
-            node.insert_before(assignment)
+            id, declaration, assignment = self.create_transient(method_call, node)
+            node.insert_before(declaration)
             parent_call.replace(method_call, id)
 
     @classmethod
@@ -61,5 +61,5 @@ class Simplifier(TreeTraversal):
     @staticmethod
     def create_transient(value, parent, type=None):
         local_id = Transient().contextify(parent.context)
-        return local_id, AssignmentOperation([type, local_id, None, value]).contextify(parent.parent)
+        return local_id, AssignmentOperation([type, local_id, None, value]).contextify(parent.parent), AssignmentOperation([local_id, None, value]).contextify(parent.parent)
 
