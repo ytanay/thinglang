@@ -17,7 +17,7 @@ class BaseSymbol(Describable):
         self.raw_slice = slice
         self.parent = None
         if slice:
-            self.context = slice[-1].context
+            self.context = [x for x in slice if x is not None][0].context
         else:
             self.context = None
 
