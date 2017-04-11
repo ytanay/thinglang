@@ -10,3 +10,6 @@ thing Range
         if self.current < self.end
             self.current = self.current + 1
             return self.current
+
+    does has_next
+        return self.current < self.end
