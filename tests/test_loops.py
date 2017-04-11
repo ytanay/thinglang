@@ -36,6 +36,6 @@ def test_range_loop():
     assert run("""
     thing Program
         setup
-            repeat for i in 1..4
+            repeat for i in 0..4
                 Output.write("i =", i)
-        """).output == """i = 1\ni = 2\ni = 3\ni = 4"""
+        """).output == """i = 0\ni = 1\ni = 2\ni = 3"""
