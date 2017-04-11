@@ -5,7 +5,7 @@ from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalIndent
 from thinglang.parser.patterns import REPLACEMENT_PASSES
 from thinglang.parser.symbols import RootSymbol
-from thinglang.parser.symbols.classes import ThingDefinition
+from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
 
 
 def parse(lexical_groups):
@@ -23,6 +23,9 @@ def parse(lexical_groups):
 
         if isinstance(node, ThingDefinition):
             stack = [stack[0]]
+
+        if isinstance(node, MethodDefinition):
+            stack = [stack[0], stack[1]]
 
         parent = stack[-1]
 
