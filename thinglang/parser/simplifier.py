@@ -19,16 +19,19 @@ class Simplifier(TreeTraversal):
         iterative_assignment = AssignmentOperation.create(node.name, MethodCall(
             [Access([generator_id, LexicalIdentifier('next')]), ArgumentList()]))
 
-        node.insert_before(generator_assignment)
-        node.insert_before(initial_assignment)
+        condition, condition_declaration, condition_assignment = self.create_transient(MethodCall.create([generator_id, 'has_next']), node, LexicalIdentifier('boolean'))
 
+        node.insert_before(generator_declaration)
+        node.insert_before(initial_assignment)
+        node.insert_before(condition_declaration)
 
         node.children.append(iterative_assignment)
-        loop = Loop([None, node.name]).contextify(node.parent).populate(node.children)
+        node.children.append(condition_assignment)
+
+        loop = Loop([None, condition]).contextify(node.parent).populate(node.children)
 
         node.insert_before(loop)
         node.remove()
-
 
 
     @inspects(predicate=lambda x: isinstance(getattr(x, 'value', None), POTENTIALLY_OBTAINABLE))
