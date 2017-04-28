@@ -54,7 +54,7 @@ The original prototypical implementation of thinglang was written in pure Python
 
 This execution model of thinglang was easy to implement, but also rather inefficient: it exploits Python's dynamic typing to execute a thinglang AST directly, using its nodes as execution symbols. The mechanism operates over the following state:
 1. a list of Symbols Pending Execution (SPE).
-2. A stack of frames. Each frame is a mapping of lexical identifiers (e.g. "name", "age") to a pair of [scope grouping, value]. When a scope is destroyed (e.g. exit from a loop), entries owned by that scope are removed using their scope grouping.
+2. A stack of frames. Each frame is a mapping of lexical identifiers (e.g. "name", "age") to a pair of `[scope grouping, value]`. When a scope is destroyed (e.g. exit from a loop), entries owned by that scope are removed using their scope grouping.
 
 The execution loop operates as follows: a symbol from the SPE is popped off the front, processed (reading/modifying the stack and heap as needed) and, depending on the symbol, leads to a change in the SPE.
 
@@ -65,12 +65,12 @@ This design has proven tricky to optimize; it depends on many cycles of runtime 
 Since this project has proved interesting thus far, the next stage is to implement a new execution model. The parsing and compilation will remain in Python for now.
 
 Tasks for a new C++ based thinglang VM:
-- [] Type resolution during static analysis
-- [] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
-- [] Minimal standard library (strings/lists/maps/math) written in thinglang, transpiled to C++
-- [] Bytecode generation from compiler
-- [] Execution infra in C++ (stack frame containers/thing instance containers, etc...)
-- [] Basic execution loop
+- [ ] Type resolution during static analysis
+- [ ] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
+- [ ] Minimal standard library (strings/lists/maps/math) written in thinglang, transpiled to C++
+- [ ] Bytecode generation from compiler
+- [ ] Execution infra in C++ (stack frame containers/thing instance containers, etc...)
+- [ ] Basic execution loop
 
 
 ## General Overview
