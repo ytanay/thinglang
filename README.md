@@ -1,9 +1,9 @@
 # thinglang
 [![Build Status](https://travis-ci.org/ytanay/thinglang.svg?branch=master)](https://travis-ci.org/ytanay/thinglang)
 
-Thinglang is a Python-inspired language I'm toying around with to get some experience on how a parser/compiler pair might be written using a high level language (surprise - the high level language I've chosen is Python!)
+Thinglang is a Python-inspired language I'm toying around with to get some experience on writing a parser/compiler for a high level language.
 
-The syntax is modeled as something that might be explainable to an elementary school student reasonably easily. Hello World looks like this:
+The syntax attempts to extract the core concepts of OOP into familiar terms and concepts (i.e. meant to be explainable to an elementary school student reasonably easily). Hello World looks like this:
 ```cs
 thing Program
     setup
@@ -49,8 +49,33 @@ thing Program
         person.say_hello(Input.get_line("How excited are you?") as number)
 ```
 
+## Specification
+The original prototypical implementation of thinglang was written in pure Python as an exercise to learn about the components that make up a high level programming language: lexical analysis, parsing, static analysis, compilation and execution.
 
-## Static Analysis
+This execution model of thinglang was easy to implement, but also rather inefficient: it exploits Python's dynamic typing to execute a thinglang AST directly, using its nodes as execution symbols. The mechanism operates over the following state:
+1. a list of Symbols Pending Execution (SPE).
+2. A stack of frames. Each frame is a mapping of lexical identifiers (e.g. "name", "age") to a pair of [scope grouping, value]. When a scope is destroyed (e.g. exit from a loop), entries owned by that scope are removed using their scope grouping.
+
+The execution loop operates as follows: a symbol from the SPE is popped off the front, processed (reading/modifying the stack and heap as needed) and, depending on the symbol, leads to a change in the SPE.
+
+For example, an AssignmentOperation symbol may modify a stack variable while a Conditional symbol might inject its children into the SPE if its condition holds true.
+
+This design has proven tricky to optimize; it depends on many cycles of runtime resolution, despite the fact that every reference is statically analyzed and resolved during compilation. It incurs additional overhead caused by heavy manipulation of the SPE and reliance on dynamic typing in the interpreter itself. In short, it makes thinglang's static typing somewhat redundant by squandering the type information contained in the thinglang syntax.
+
+Since this project has proved interesting thus far, the next stage is to implement a new execution model. The parsing and compilation will remain in Python for now.
+
+Tasks for a new C++ based thinglang VM:
+- [] Type resolution during static analysis
+- [] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
+- [] Minimal standard library (strings/lists/maps/math) written in thinglang, transpiled to C++
+- [] Bytecode generation from compiler
+- [] Execution infra in C++ (stack frame containers/thing instance containers, etc...)
+- [] Basic execution loop
+
+
+## General Overview
+
+### Static Analysis
 The static analyzer takes the AST created by the parser and performs a number of checks and transformations which result in what thinglang calls a bounded-reduced AST. 
 
 **Bounding** is the process which takes every general-case deceleration, lookup and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference. During this process, the AST is implcitly validated and any unresolved references trigger an appropriate error.
@@ -72,9 +97,9 @@ Transient<number> t4 = h()
 Transient<number> t5 = f(t3, t4, t2)
 ```
 
-## Execution Model
+### Execution Model
 
-### Preamble
+#### Preamble
 Execution can begin after a bounded-reduced AST is created (see above; this AST can generally be directly represented as thinglang bytecode, and should be thought of this way).
 
 The initialization sequence for any program goes roughly like this:
@@ -84,14 +109,14 @@ The initialization sequence for any program goes roughly like this:
 4. A root level stack frame is created, and contains a reference to the newly created `Thing<Program>` instance.
 5. Every direct child of `MethodDefinition<constructor>` of `Thing<Program>` is copied into the *targets array*, and execution begins.
 
-### Execution pipeline
+#### Execution pipeline
 Every iteration of the execution pipeline beings by popping of a target from the beginning of the *targets array*. Examples of execution targets include instances of `AssignmentOperation`, `MethodCall`, `Conditional`, `Loop`, and even `ReturnStatement`s.
 
 While a target is processed it can (and frequently does) affect the *targets array*. For example, a `Conditional` will copy its direct children in the positive branch to the *targets array* if its condition is evaluated as `true`, or the its direct children in the negative (i.e. "else") branch if its condition is evaluated as `false`. A `Loop` will copy its direct children **and itself** to the *targets array* if its condition evaluates as true (this is what makes it loop).
 
 We'll look at a few examples of more intricate execution targets below.
 
-#### Method calls
+##### Method calls
 Method calls involve a bit of extra handholding. Described below is the general procedure for executing most method calls (the procedure for instance construction - i.e. creating a new `Thing` instance - is a bit different, and will be described seperately):
 
 1. The target instance is looked up, first on the stack, then on the heap.
