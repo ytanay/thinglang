@@ -84,6 +84,13 @@ class BaseSymbol(Describable):
     def references(self):
         return ()
 
+    def transpile(self):
+        return '?{}?'.format(self)
+
+    def transpile_children(self, indent=0):
+        sep = '\t' * indent
+        return sep + ('\n' + sep).join(x.transpile() for x in self.children)
+
 
 class RootSymbol(BaseSymbol):
     def __init__(self):
