@@ -27,6 +27,12 @@ class AssignmentOperation(BaseSymbol):
     def create(cls, name, value, type=None):
         return cls(([type] if type is not None else []) + [name, None, value])
 
+    def transpile(self):
+        if self.intent is self.DECELERATION:
+            return '{} {} = {};'.format(self.type.transpile(), self.name.transpile(), self.value.transpile())
+        elif self.intent is self.REASSIGNMENT:
+            return '{} = {};'.format(self.name.transpile(), self.value.transpile())
+
 
 class InlineString(ValueType):  # immediate string e.g. "hello world"
     def __init__(self, value):

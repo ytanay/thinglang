@@ -1,3 +1,4 @@
+from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
 from thinglang.lexer.tokens.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
@@ -33,3 +34,6 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
 
     def references(self):
         return self.arguments
+
+    def transpile(self):
+        return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
