@@ -7,15 +7,16 @@ class LexicalToken(Describable):
     EMITTABLE = True
     ALLOW_EMPTY = False
 
-    def __init__(self, raw):
+    def __init__(self, raw, value=None):
         self.raw = raw
+        self.value = value
         self.context = None
 
     @classmethod
     def next_operator_set(cls, current, original):
         return current
 
-    def contextify(self, context):
+    def set_context(self, context):
         self.context = context
         return self
 
@@ -24,6 +25,7 @@ class LexicalToken(Describable):
 
     def transpile(self):
         return self.value
+
 
 class LexicalBinaryOperation(LexicalToken, metaclass=abc.ABCMeta):
     def __init__(self, operator):
