@@ -28,6 +28,7 @@ def run(source):
 
     Simplifier(ast).run()
 
+    utils.print_header('C++ Transpilation', ast.transpile_children())
     utils.print_header('Parsed AST', ast.tree())
 
     Analyzer(ast).run()
