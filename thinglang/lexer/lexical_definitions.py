@@ -72,6 +72,10 @@ KEYWORDS = {
     'as': LexicalCast
 }
 
+REVERSE_OPERATORS = {
+    v: k for k, v in OPERATORS.items()
+}
+
 
 def is_identifier(component):
     return bool(IDENTIFIER_STANDALONE.match(component))
