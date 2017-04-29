@@ -13,6 +13,10 @@ class ThingObjectMeta(type):
 
 class ThingObjectBase(object, metaclass=ThingObjectMeta):
 
+    def __init__(self, heap):
+        super(ThingObjectBase, self).__init__()
+        self.heap = heap
+
     def __getitem__(self, item):
         return getattr(self, item.value)
 
@@ -24,8 +28,8 @@ class ThingObjectOutput(ThingObjectBase):
     INTERNAL_NAME = "Output"
 
     def __init__(self, heap):
+        super().__init__(heap)
         self.data = []
-        self.heap = heap
 
     def write(self, *args):
         self.data.append(' '.join(str(x) for x in args))
@@ -35,8 +39,8 @@ class ThingObjectInput(ThingObjectBase):
     INTERNAL_NAME = "Input"
 
     def __init__(self, heap):
+        super().__init__(heap)
         self.data = []
-        self.heap = heap
 
     def get_line(self, line=None):
         if line is not None:
