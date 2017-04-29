@@ -1,7 +1,7 @@
 import re
 
 from thinglang.utils.token_context import TokenContext
-from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, is_identifier
+from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
@@ -73,3 +73,7 @@ def contextualize_lexical_output(lexical_group, line, idx):
         if entity is not None:
             entity.context = TokenContext(line, idx)
             yield entity
+
+
+def is_identifier(component):
+    return bool(IDENTIFIER_STANDALONE.match(component))

@@ -81,6 +81,3 @@ REVERSE_OPERATORS.update({
     LexicalInequality: '!='
 })
 
-
-def is_identifier(component):
-    return bool(IDENTIFIER_STANDALONE.match(component))
