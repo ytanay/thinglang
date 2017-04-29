@@ -41,20 +41,23 @@ class LexicalAccess(LexicalToken):
     pass  # a.b
 
 
-class LexicalInlineComment(LexicalToken): pass
+class LexicalInlineComment(LexicalToken):
+    pass
 
 
-class LexicalAssignment(LexicalToken): pass
+class LexicalAssignment(LexicalToken):
+    pass
 
 
 class LexicalIdentifier(LexicalToken, ValueType):
+    TYPE_INDICATOR = object()
 
-    def __init__(self, value):
-        super(LexicalIdentifier, self).__init__(value)
-        self.value = value
+    def __init__(self, value, type=None):
+        super(LexicalIdentifier, self).__init__(value, value)
+        self.type = type
 
     def __str__(self):
-        return '{{{}}}'.format(self.value)
+        return '{{{}:{}}}'.format(self.value, self.type) if self.type else '{{{}}}'.format(self.value)
 
     def evaluate(self, resolver):
         return resolver.resolve(self)
