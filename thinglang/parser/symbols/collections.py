@@ -49,3 +49,5 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
     def describe(self):
         return self.arguments
 
+    def transpile(self, definition=False):
+        return ', '.join(f'{"TOUnknown " if definition else ""}{x.transpile()}' for x in self.arguments)

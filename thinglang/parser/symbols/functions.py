@@ -26,6 +26,12 @@ class Access(BaseSymbol):
     def create(cls, target):
         return cls([LexicalIdentifier(x) if not isinstance(x, LexicalIdentifier) else x for x in target])
 
+    def transpile(self):
+        if self.target[0].is_self():
+            return self.target[0].transpile() + '->' + '.'.join(x.transpile() for x in self.target[1:])
+
+        return '.'.join(x.transpile() for x in self.target)
+
 
 class ArgumentListPartial(ListInitializationPartial):
     pass
@@ -72,8 +78,14 @@ class MethodCall(BaseSymbol, ValueType):
     def create(cls, target, arguments=None):
         return cls([Access.create(target), arguments])
 
+    def transpile(self):
+        return f'{self.target.transpile()}({self.arguments.transpile()});'
+
 
 class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):
         super().__init__(slice)
         self.value = slice[1]
+
+    def transpile(self):
+        return 'return {};'.format(self.value.transpile())

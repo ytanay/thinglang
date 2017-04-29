@@ -20,6 +20,8 @@ class Conditional(BaseSymbol):
     def references(self):
         return self.value,
 
+    def transpile(self):
+        return 'if({}) {{\n{}\n\t\t}}'.format(self.value.transpile(), self.transpile_children(indent=3))
 
 class ElseBranchInterface(object):
     SCOPING = True

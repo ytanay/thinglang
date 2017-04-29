@@ -16,6 +16,9 @@ class ThingDefinition(DefinitionPairSymbol):
     def describe(self):
         return self.name
 
+    def transpile(self):
+        return 'class {} {{\npublic:\n{}\n}};'.format(self.name.value, self.transpile_children(indent=1))
+
 
 class MethodDefinition(BaseSymbol):
     def __init__(self, slice):
@@ -39,6 +42,9 @@ class MethodDefinition(BaseSymbol):
     def describe(self):
         return '{}, args={}'.format(self.name, self.arguments)
 
+    def transpile(self):
+        return '{}{}({}) {{\n{}\n\t}}'.format('TUNknown ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
+
 
 class MemberDefinition(BaseSymbol):
     def __init__(self, slice):
@@ -48,3 +54,6 @@ class MemberDefinition(BaseSymbol):
 
     def describe(self):
         return 'has {} {}'.format(self.type, self.name)
+
+    def transpile(self):
+        return '{} {};'.format(self.type.transpile(), self.name.transpile())
