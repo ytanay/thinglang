@@ -18,13 +18,14 @@ def predicated(func):
     return wrapped
 
 
-def inspects(*args, predicate=None):
+def inspects(*args, predicate=None, priority=0):
     if predicate is None:
         def predicate(node):
             return isinstance(node, args) if args else True
 
     def decorator(func):
         func.predicate = predicate
+        func.priority = priority
         return func
     return decorator
 
@@ -35,8 +36,8 @@ class TreeTraversal(object):
         self.ast = ast
         self.results = []
         self.scoping = Frame(expected_key_type=object)
-        self.inspections = [getattr(self, member) for member in dir(self) if
-                            hasattr(getattr(self, member), 'predicate')]
+        self.inspections = sorted((getattr(self, member) for member in dir(self) if
+                            hasattr(getattr(self, member), 'predicate')), key=lambda x: x.priority)
 
     def run(self):
         self.traverse(self.ast)
