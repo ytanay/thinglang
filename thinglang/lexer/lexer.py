@@ -25,7 +25,7 @@ def analyze_line(line):
 
         else:  # i.e. if we are on an operator
 
-            if group or entity_class is LexicalQuote:  # emit the collected group thus far - lexical quote check is to deal with empty strings
+            if group or (entity_class and entity_class.ALLOW_EMPTY):  # emit the collected group thus far
                 yield finalize_group(group, char)  # char is the character that terminated the group
 
             group = ""  # reset the group
