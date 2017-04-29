@@ -77,3 +77,8 @@ class LexicalIdentifier(LexicalToken, ValueType):
 
     def references(self):
         return self
+
+    def transpile(self):
+        if self.is_self():
+            return 'this'
+        return self.value

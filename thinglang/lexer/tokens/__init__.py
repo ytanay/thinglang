@@ -21,6 +21,8 @@ class LexicalToken(Describable):
     def references(self):
         return ()
 
+    def transpile(self):
+        return self.value
 
 class LexicalBinaryOperation(LexicalToken, metaclass=abc.ABCMeta):
     def __init__(self, operator):

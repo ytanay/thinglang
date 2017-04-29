@@ -40,3 +40,6 @@ class InlineString(ValueType):  # immediate string e.g. "hello world"
 
     def references(self):
         return ()
+
+    def transpile(self):
+        return f'"{self.value}"'
