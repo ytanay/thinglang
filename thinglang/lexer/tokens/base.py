@@ -57,13 +57,25 @@ class LexicalIdentifier(LexicalToken, ValueType):
         self.type = type
 
     def __str__(self):
-        return '{{{}:{}}}'.format(self.value, self.type) if self.type else '{{{}}}'.format(self.value)
+        if self.type is self.TYPE_INDICATOR:
+            return '<{}>'.format(self.value)
+        return '{{{}:{}}}'.format(self.value, self.type or '<?>')
 
     def evaluate(self, resolver):
         return resolver.resolve(self)
 
     def is_self(self):
-        return self == LexicalIdentifier("self")
+        return self == self.self()
+
+    def references(self):
+        return self
+
+
+    def __hash__(self):
+        return hash(self.value)
+
+    def __eq__(self, other):
+        return type(other) == type(self) and self.value == other.value and self.type == other.type
 
     @classmethod
     def constructor(cls):
@@ -72,17 +84,3 @@ class LexicalIdentifier(LexicalToken, ValueType):
     @classmethod
     def self(cls):
         return cls("self")
-
-    def __hash__(self):
-        return hash(self.value)
-
-    def __eq__(self, other):
-        return type(other) == type(self) and self.value == other.value
-
-    def references(self):
-        return self
-
-    def transpile(self):
-        if self.is_self():
-            return 'this'
-        return self.value
