@@ -3,7 +3,7 @@ import re
 
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation, \
     LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeat, LexicalRepeatWhile, \
-    LexicalIn, LexicalRepeatFor
+    LexicalIn, LexicalRepeatFor, LexicalInequality
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
     LexicalMultiplication
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
@@ -75,6 +75,11 @@ KEYWORDS = {
 REVERSE_OPERATORS = {
     v: k for k, v in OPERATORS.items()
 }
+
+REVERSE_OPERATORS.update({
+    LexicalEquality: "==",
+    LexicalInequality: '!='
+})
 
 
 def is_identifier(component):
