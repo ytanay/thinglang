@@ -15,7 +15,7 @@ def collect_includes():
     return '\n' + '\n'.join(open(f).read() for f in files)
 
 
-def run(source):
+def compiler(source):
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -32,6 +32,12 @@ def run(source):
     utils.print_header('Parsed AST', ast.tree())
 
     Analyzer(ast).run()
+
+    return ast
+
+
+def run(source):
+    ast = compiler(source)
 
     with ExecutionEngine(ast) as engine:
         engine.execute()
