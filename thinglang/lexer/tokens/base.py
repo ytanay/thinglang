@@ -70,12 +70,19 @@ class LexicalIdentifier(LexicalToken, ValueType):
     def references(self):
         return self
 
+    def resolve_type(self):
+        return self.type
+
+    def transpile(self):
+        if self.is_self():
+            return 'this'
+        return self.value
 
     def __hash__(self):
         return hash(self.value)
 
     def __eq__(self, other):
-        return type(other) == type(self) and self.value == other.value and self.type == other.type
+        return type(other) == type(self) and self.value == other.value
 
     @classmethod
     def constructor(cls):
