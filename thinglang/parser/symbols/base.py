@@ -1,3 +1,5 @@
+from thinglang.lexer.tokens import LexicalToken
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol
 from thinglang.utils.type_descriptors import ValueType
 
@@ -10,15 +12,15 @@ class AssignmentOperation(BaseSymbol):
     def __init__(self, slice):
         super(AssignmentOperation, self).__init__(slice)
         if len(slice) == 4:
-            self.type, self.name, _, self.value = slice
+            _1, self.name, _2, self.value = slice
+            self.name.type = slice[0]
             self.intent = self.DECELERATION
         else:
             self.name, _, self.value = slice
             self.intent = self.REASSIGNMENT
-            self.type = self.INDETERMINATE
 
     def describe(self):
-        return '{} {} = {}'.format(self.type, self.name, self.value)
+        return '{} = {}'.format(self.name, self.value)
 
     def references(self):
         return (self.name, self.value.references()) if self.intent is self.REASSIGNMENT else self.value.references()
@@ -29,13 +31,16 @@ class AssignmentOperation(BaseSymbol):
 
     def transpile(self):
         if self.intent is self.DECELERATION:
-            return '{} {} = {};'.format(self.type.transpile(), self.name.transpile(), self.value.transpile())
+            return '{} {} = {};'.format(self.name.type.transpile(), self.name.transpile(), self.value.transpile())
         elif self.intent is self.REASSIGNMENT:
             return '{} = {};'.format(self.name.transpile(), self.value.transpile())
 
 
-class InlineString(ValueType):  # immediate string e.g. "hello world"
+class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
+    TYPE = LexicalIdentifier("text")
+
     def __init__(self, value):
+        super().__init__(None)
         self.value = value
 
     def evaluate(self, _):
@@ -49,3 +54,6 @@ class InlineString(ValueType):  # immediate string e.g. "hello world"
 
     def transpile(self):
         return f'"{self.value}"'
+
+    def type(self):
+        return self.TYPE

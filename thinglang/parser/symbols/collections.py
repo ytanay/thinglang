@@ -6,14 +6,22 @@ from thinglang.utils.type_descriptors import ReplaceableArguments
 
 
 class ListInitializationPartial(BaseSymbol):
+    STRICTLY_TYPED = False
+
     def __init__(self, slice):
         super(ListInitializationPartial, self).__init__(slice)
         if len(slice) == 3 and isinstance(slice[1], LexicalBinaryOperation):
             self.value = slice[0].value[:-1] + [ArithmeticOperation([slice[0][-1]] + slice[1:])]
-        elif isinstance(slice[0], ListInitializationPartial):
-            self.value = slice[0].value + [slice[2]]
+            return
+
+        if self.STRICTLY_TYPED:
+            slice[-2].type = "type"
+            slice[-1].type = slice[-2]
+
+        if isinstance(slice[0], ListInitializationPartial):
+            self.value = slice[0].value + [slice[-1]]
         else:
-            self.value = [slice[1]]
+            self.value = [slice[-1]]
 
     def __len__(self):
         return len(self.value)
