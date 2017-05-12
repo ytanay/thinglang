@@ -5,6 +5,7 @@ from thinglang.execution.resolver import Resolver
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.errors import ParseErrors, UnresolvedReference, DuplicateDeclaration, ReturnInConstructorError, \
     EmptyMethodBody, EmptyThingDefinition, IndeterminateType, ArgumentCountMismatch
+from thinglang.parser.symbols import Transient
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
 from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
@@ -42,6 +43,12 @@ class Analyzer(TreeTraversal):
         target = access[0] if access[0].is_self() or access[0] not in self.scoping else self.scoping[access[0]]
         return Access([target] + access[1:])
 
+    def resolve_type(self, value):
+        if value.implements(ACCESS_TYPES):
+            return self.resolver.lookup(self.normalize_reference_access(value)).type
+        else:
+            return value.resolve_type()
+
     @inspects()
     def verify_reference_dependencies(self, node):
         refs = emit_recursively(node.references(), ACCESS_TYPES)
@@ -51,22 +58,40 @@ class Analyzer(TreeTraversal):
 
     @inspects(AssignmentOperation)
     def mark_variable_deceleration(self, node):
-        if node.name.implements(LexicalIdentifier):
-            if node.intent is AssignmentOperation.DECELERATION:  # Decelerations must be strongly typed
-                if self.resolver.lookup(node.name) is not Resolver.UNRESOLVED_REFERENCE:
-                    yield DuplicateDeclaration(node.name)
-                else:
-                    self.scoping[node.name] = node.type
-            elif node.name in self.scoping:
-                node.type = self.scoping[node.name]
-        else:
-            member_ref = self.resolver.lookup(self.normalize_reference_access(node.name))
-            if member_ref is Resolver.UNRESOLVED_REFERENCE:
-                yield UnresolvedReference(node.name)
-            else:
-                node.type = member_ref.type
 
-        if not list(self.verify_reference_dependencies(node)) and node.type is AssignmentOperation.INDETERMINATE:
+        if node.intent is AssignmentOperation.DECELERATION:
+
+            # When inspecting a declaration, we verify that the variable hasn't been previously declared in this scope,
+            # and store an indication that we have visited it
+
+            assert node.name.implements(LexicalIdentifier), 'Can only declare a local variable'
+
+            if not node.name.type:
+                assert node.name.implements(Transient), 'Only transient variables may be missing a type during analysis'
+                node.name.type = self.resolve_type(node.value)
+
+            target_type = node.name.type
+
+            if self.resolver.lookup(node.name) is not Resolver.UNRESOLVED_REFERENCE:
+                yield DuplicateDeclaration(node.name)
+            else:
+                self.scoping[node.name] = node.name
+        else:
+
+            # When inspecting an assignment, we verify the type of the variable and the value match
+
+            value_type = self.resolve_type(node.value)
+            member_ref = self.resolver.lookup(self.normalize_reference_access(node.name))
+
+            if member_ref is Resolver.UNRESOLVED_REFERENCE:
+                return
+
+            target_type = member_ref.type
+
+            if value_type is not target_type:
+                yield Exception('Type mismatch {} / {}'.format(value_type, target_type))
+
+        if not target_type:
             yield IndeterminateType(node)
 
     @inspects(MethodCall)
@@ -93,3 +118,9 @@ class Analyzer(TreeTraversal):
 
         if node.is_constructor() and list(node.find(lambda x: isinstance(x, ReturnStatement))):
             yield ReturnInConstructorError(node)
+
+    @inspects(ReturnStatement)
+    def update_method_definition_return(self, node):
+        method_definition = node.upwards(MethodDefinition)
+        member_definition = self.resolver.lookup(self.normalize_reference_access(node.value)).type if node.value.implements(ACCESS_TYPES) else node.value.resolve_type()
+        method_definition.set_type(member_definition)
