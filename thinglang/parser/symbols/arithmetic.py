@@ -23,6 +23,7 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
         self.arguments = [slice[0], slice[2]]
         self.operator = type(slice[1])
 
+
     def evaluate(self, resolver):
         return self.OPERATIONS[self.operator](self[0].evaluate(resolver), self[1].evaluate(resolver))
 
@@ -37,3 +38,7 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
 
     def transpile(self):
         return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
+
+    def resolve_type(self):
+        assert all(x.resolve_type() == self.arguments[0].resolve_type() for x in self.arguments)
+        return self.arguments[0].resolve_type()
