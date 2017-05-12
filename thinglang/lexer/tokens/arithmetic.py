@@ -1,8 +1,10 @@
+from thinglang.builtins import TT_NUMBER
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalToken, LexicalBinaryOperation
 
 
 class LexicalNumericalValue(LexicalToken, ValueType):
+
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)
         self.value = int(value)
@@ -12,6 +14,10 @@ class LexicalNumericalValue(LexicalToken, ValueType):
 
     def describe(self):
         return self.value
+
+    @staticmethod
+    def resolve_type():
+        return TT_NUMBER
 
 
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction
