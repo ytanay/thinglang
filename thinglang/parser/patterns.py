@@ -35,7 +35,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 
     ((Access, ArgumentList), MethodCall),  # person.walk(...)
 
-    ((LexicalArgumentListIndicator, ValueType), ArgumentListDecelerationPartial),  # with a
+    ((LexicalArgumentListIndicator, LexicalIdentifier, ValueType), ArgumentListDecelerationPartial),  # with a
 
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
 
@@ -53,7 +53,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
     ((ArrayInitializationPartial, LexicalSeparator, ValueType), ArrayInitializationPartial),  # (2, 3
     ((ArrayInitializationPartial, LexicalBracketClose), ArrayInitialization),  # (2, 3)
 
-    ((ArgumentListDecelerationPartial, LexicalSeparator, ValueType), ArgumentListDecelerationPartial),  # (2, 3
+    ((ArgumentListDecelerationPartial, LexicalSeparator, LexicalIdentifier, ValueType), ArgumentListDecelerationPartial),  # (2, 3
     ((ArgumentListPartial, LexicalSeparator, ValueType), ArgumentListPartial),  # (2, 3
     ((ArgumentListPartial, ArgumentList), ArgumentListPartial),
 

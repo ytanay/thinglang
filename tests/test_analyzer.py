@@ -42,11 +42,11 @@ def test_undefined_variable_exceptions():
         run("""
 thing Program
     setup
-        text out1 = "value of ou1"
+        Text out1 = "value of ou1"
         Output.write(out1, out2, out3)
 
         if some_condition
-            text in1 = "value of in1"
+            Text in1 = "value of in1"
             Output.write(out1, in1, out3)
         otherwise if operand1 + operand2 < operand3
             Output.write(out1, in1)
@@ -56,7 +56,7 @@ thing Program
 
         Output.write(out1, out2, in1)
 
-    does real_thing with arg1, arg2
+    does real_thing with Text arg1, Text arg2
         Output.write("at Program:real_thing", arg1, arg2, arg3, out1)
 
 
@@ -129,7 +129,7 @@ thing Program
     setup
         self.add({line})
 
-    does add with a, b
+    does add with Number a, Number b
         return a + b
 
     """)
@@ -147,7 +147,7 @@ thing Program
         number i = 2
 
     """)
-
+    print(error.value.args)
     assert error.value.args == (
         UnresolvedReference(LexicalIdentifier("i")),
         DuplicateDeclaration(LexicalIdentifier("i"))
