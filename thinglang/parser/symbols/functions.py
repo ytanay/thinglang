@@ -9,12 +9,13 @@ class Access(BaseSymbol):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
         self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
+        self.type = None
 
     def evaluate(self, resolver):
         return resolver.resolve(self)
 
     def describe(self):
-        return '.'.join(str(x) for x in self.target)
+        return '{}:{}'.format('.'.join(str(x) for x in self.target), self.type)
 
     def __getitem__(self, item):
         return self.target[item]
@@ -38,6 +39,7 @@ class ArgumentListPartial(ListInitializationPartial):
 
 
 class ArgumentListDecelerationPartial(ArgumentListPartial):
+    STRICTLY_TYPED = True
     pass
 
 
@@ -51,7 +53,7 @@ class MethodCall(BaseSymbol, ValueType):
         self.value = self
 
         if isinstance(slice[0], LexicalClassInitialization):
-            self.target = Access([slice[1], LexicalIdentifier.constructor().contextify(slice[0])])
+            self.target = Access([slice[1], LexicalIdentifier.constructor().set_context(slice[0])])
             self.arguments = slice[2]
             self.constructing_call = True
         else:
@@ -78,8 +80,8 @@ class MethodCall(BaseSymbol, ValueType):
     def create(cls, target, arguments=None):
         return cls([Access.create(target), arguments])
 
-    def transpile(self):
-        return f'{self.target.transpile()}({self.arguments.transpile()});'
+    def transpile(self, orphan=True):
+        return f'{self.target.transpile()}({self.arguments.transpile()}){";" if orphan else ""}'
 
 
 class ReturnStatement(DefinitionPairSymbol):

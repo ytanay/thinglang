@@ -50,4 +50,4 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
         return self.arguments
 
     def transpile(self, definition=False):
-        return ', '.join(f'{"TOUnknown " if definition else ""}{x.transpile()}' for x in self.arguments)
+        return ', '.join(f'{x.type.transpile() + " " if definition else ""}{x.transpile()}' for x in self.arguments)

@@ -9,7 +9,8 @@ class ArrayInitializationPartial(ListInitializationPartial):
 
 
 class ArrayInitialization(ListInitialization, ValueType):
-    pass
+    def transpile(self, definition=False):
+        return '[{}]'.format(super(ArrayInitialization, self).transpile(definition=definition))
 
 
 class CastOperation(BaseSymbol, ValueType, ReplaceableArguments):

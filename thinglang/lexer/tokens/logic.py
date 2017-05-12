@@ -64,10 +64,18 @@ class LexicalBoolean(LexicalToken, ValueType):
 
 
 class LexicalBooleanTrue(LexicalBoolean):
+
+    def transpile(self):
+        return 'true'
+
     def evaluate(self, _):
         return True
 
 
 class LexicalBooleanFalse(LexicalBoolean):
+
+    def transpile(self):
+        return 'false'
+
     def evaluate(self, _):
         return False

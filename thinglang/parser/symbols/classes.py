@@ -36,6 +36,8 @@ class MethodDefinition(BaseSymbol):
         else:
             self.arguments = ArgumentList()
 
+        self.return_type = None
+
     def is_constructor(self):
         return self.name == LexicalIdentifier.constructor()
 
@@ -43,8 +45,13 @@ class MethodDefinition(BaseSymbol):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
-        return '{}{}({}) {{\n{}\n\t}}'.format('TUNknown ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
+        return '{}{}({}) {{\n{}\n\t}}'.format(self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
 
+    def set_type(self, type):
+        if not self.return_type:
+            self.return_type = type
+        elif type is not self.return_type:
+          raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
 
 class MemberDefinition(BaseSymbol):
     def __init__(self, slice):
