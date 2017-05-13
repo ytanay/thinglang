@@ -8,4 +8,7 @@ compiler:
 os:
    - linux
 
-script: ./run_build.sh
+after_install:
+    - sudo apt-get -y upgrade cmake
+
+script: ./test.sh
