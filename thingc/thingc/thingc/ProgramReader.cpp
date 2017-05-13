@@ -19,3 +19,24 @@ void ProgramReader::read_header()
 
 	std::cerr << "thinglang bytecode version: " << version << ", total size: " << program_size << ", data size: " << data_size << std::endl;
 }
+PThingInstance ProgramReader::read_data_block() {
+	auto type = read<int32_t>();
+
+	switch (type) {
+	case -1: {
+		auto size = read_size();
+		auto data = read(size);
+		std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
+		return PThingInstance(new TextInstance(data));
+	}
+	case -2: {
+		auto data = read<int32_t>();
+		std::cerr << "\tReading int: " << data << std::endl;
+		return PThingInstance(new NumberInstance(data));
+	}
+
+	default:
+		throw std::exception("Unknown static data type");
+
+	}
+}
