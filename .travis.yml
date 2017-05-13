@@ -1,4 +1,17 @@
 language: cpp
+sudo: required
+
 compiler:
-- clang
-script: cmake thingc/
+    - clang
+
+before_install:
+    - sudo apt-get -y upgrade cmake
+
+before_script:
+    - mkdir build
+    - cd build
+    - cmake ../thingc
+
+script:
+    - pwd
+    - make
