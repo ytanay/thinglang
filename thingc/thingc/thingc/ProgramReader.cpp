@@ -19,6 +19,21 @@ void ProgramReader::read_header()
 
 	std::cerr << "thinglang bytecode version: " << version << ", total size: " << program_size << ", data size: " << data_size << std::endl;
 }
+
+std::vector<PThingInstance> ProgramReader::read_data() {
+	std::cerr << "Reading data section..." << std::endl;
+
+	std::vector<PThingInstance> static_data;
+
+	while (in_data()) {
+		static_data.push_back(read_data_block());
+	}
+
+	return static_data;
+
+}
+
+
 PThingInstance ProgramReader::read_data_block() {
 	auto type = read<int32_t>();
 
