@@ -11,4 +11,7 @@ os:
 after_install:
     - sudo apt-get -y upgrade cmake
 
+before_script:
+    - chmod 755 test.sh
+
 script: ./test.sh
