@@ -15,7 +15,7 @@ def collect_includes():
     return '\n' + '\n'.join(open(f).read() for f in files)
 
 
-def compile(source):
+def compiler(source):
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -27,26 +27,8 @@ def compile(source):
 
     return ast
 
-
 def run(source):
-    if not source:
-        raise ValueError('Source cannot be empty')
-
-    source = (source + collect_includes()).strip().replace(' ' * 4, '\t')
-
-    utils.print_header('Source', source)
-
-    lexical_groups = list(lexer(source))
-    ast = parse(lexical_groups)
-
-    utils.print_header('C++ Transpilation', ast.transpile_children())
-
-    Simplifier(ast).run()
-
-
-    utils.print_header('Parsed AST', ast.tree())
-
-    Analyzer(ast).run()
+    ast = compiler(source)
 
     with ExecutionEngine(ast) as engine:
         engine.execute()
