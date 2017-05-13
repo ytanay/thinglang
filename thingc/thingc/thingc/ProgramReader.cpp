@@ -55,3 +55,19 @@ PThingInstance ProgramReader::read_data_block() {
 
 	}
 }
+MethodDefinition ProgramReader::read_method(size_t size) {
+	uint32_t frame_size = read_size();
+	uint32_t arguments = read_size();
+	uint32_t last_index = index + size;
+
+	std::cerr << "\tEncountered method (size=" << size << ", frame size=" << frame_size << ", args=" << arguments << ")" << std::endl;
+	std::vector<Symbol> symbols;
+
+
+	while (index < last_index) {
+		symbols.push_back(read_symbol());
+	}
+
+	return MethodDefinition(frame_size, arguments, symbols);
+}
+
