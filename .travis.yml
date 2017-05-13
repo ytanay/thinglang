@@ -1,17 +1,11 @@
 language: cpp
 sudo: required
+dist: trusty
 
 compiler:
-    - clang
+    - g++
 
-before_install:
-    - sudo apt-get -y upgrade cmake
+os:
+   - linux
 
-before_script:
-    - mkdir build
-    - cd build
-    - cmake ../thingc
-
-script:
-    - pwd
-    - make
+script: ./run_build.sh
