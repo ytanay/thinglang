@@ -107,3 +107,41 @@ MethodDefinition ProgramReader::read_method(size_t size) {
 	return MethodDefinition(frame_size, arguments, symbols);
 }
 
+Symbol ProgramReader::read_symbol() {
+	auto opcode = read_opcode();
+	std::cerr << "\t\t\tReading symbol " << (int)opcode << std::endl;
+
+	switch (opcode) {
+
+	case Opcode::PUSH_CONST: {
+		auto data_index = read_size();
+		return Symbol(Opcode::PUSH_CONST, data_index);
+	}
+
+	case Opcode::PUSH: {
+		auto data_index = read_size();
+		return Symbol(Opcode::PUSH, data_index);
+	}
+
+	case Opcode::PRINT: {
+		return Symbol(Opcode::PRINT);
+	}
+
+	case Opcode::CALL_INTERNAL: {
+		return Symbol(Opcode::CALL_INTERNAL, read_size());
+	}
+
+	case Opcode::RETURN: {
+		return Symbol(Opcode::RETURN);
+	}
+
+	case Opcode::CALL:
+		return Symbol(Opcode::CALL, read_size());
+
+	case Opcode::CALL_METHOD:
+		return Symbol(Opcode::CALL_METHOD, read_size());
+
+	default:
+		throw std::exception(std::string("Unknown opcode " + std::to_string((int)opcode)).c_str());
+	}
+}
