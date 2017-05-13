@@ -1,5 +1,17 @@
 #include "ProgramReader.h"
+
+
 const std::string ProgramReader::MAGIC = "THING";
+
+ProgramInfo ProgramReader::process()
+{
+	read_header();
+
+	auto data = read_data();
+	auto code = read_code();
+	return ProgramInfo(data, code);
+}
+
 void ProgramReader::read_header()
 {
 	if (!file.is_open()) {
