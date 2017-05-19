@@ -2,7 +2,7 @@ thing Range
     has number end
     has number current
 
-    setup with start, end
+    setup with number start, number end
         self.current = start - 1
         self.end = end
 
