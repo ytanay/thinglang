@@ -1,3 +1,4 @@
+from thinglang.compiler import BytecodeSymbols
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.symbols import BaseSymbol, DefinitionPairSymbol
@@ -82,6 +83,19 @@ class MethodCall(BaseSymbol, ValueType):
 
     def transpile(self, orphan=True):
         return f'{self.target.transpile()}({self.arguments.transpile()}){";" if orphan else ""}'
+
+    def statics(self):
+        yield from self.arguments.statics()
+
+    def compile(self, context):
+        for arg in self.arguments:
+            if arg.STATIC:
+                id = context.append_static(arg)
+                yield BytecodeSymbols.push_static(id)
+            else:
+                raise Exception('cannot push non-statics')
+
+        yield BytecodeSymbols.call(-2, 1)
 
 
 class ReturnStatement(DefinitionPairSymbol):

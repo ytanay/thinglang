@@ -1,3 +1,5 @@
+import struct
+
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol
@@ -37,6 +39,7 @@ class AssignmentOperation(BaseSymbol):
 
 
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
+    STATIC = True
     TYPE = LexicalIdentifier("text")
 
     def __init__(self, value):
@@ -46,8 +49,8 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def evaluate(self, _):
         return self.value
 
-    def serialize(self):
-        return self.evaluate(None)
+    def serialize(self, context):
+        context.append_static(struct.pack('<iI', -1, len(self.value)) + bytes(self.value, 'utf-8'))
 
     def references(self):
         return ()

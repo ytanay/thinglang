@@ -1,4 +1,3 @@
-from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor
 from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
@@ -6,6 +5,7 @@ from thinglang.parser.symbols.functions import ArgumentList
 
 
 class ThingDefinition(DefinitionPairSymbol):
+    SERIALIZATION = '<II'
 
     def __contains__(self, item):
         return any(child.name == item for child in self.children)
@@ -19,8 +19,19 @@ class ThingDefinition(DefinitionPairSymbol):
     def transpile(self):
         return 'class {} {{\npublic:\n{}\n}};'.format(self.name.value, self.transpile_children(indent=1))
 
+    def members(self):
+        return [x for x in self.children if x.implements(MemberDefinition)]
+
+    def methods(self):
+        return [x for x in self.children if x.implements(MethodDefinition)]
+
+    def serialize(self, context):
+        return len(self.members()), len(self.methods())
+
 
 class MethodDefinition(BaseSymbol):
+    SERIALIZATION = '<III'
+
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
 
@@ -47,11 +58,15 @@ class MethodDefinition(BaseSymbol):
     def transpile(self):
         return '{}{}({}) {{\n{}\n\t}}'.format(self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
 
+    def serialize(self, context):
+        return 0, 0, len(self.arguments)
+
     def set_type(self, type):
         if not self.return_type:
             self.return_type = type
         elif type is not self.return_type:
           raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
+
 
 class MemberDefinition(BaseSymbol):
     def __init__(self, slice):
