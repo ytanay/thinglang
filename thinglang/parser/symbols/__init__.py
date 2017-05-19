@@ -1,5 +1,7 @@
 import inspect
 
+import struct
+
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils import tree_utils
 from thinglang.utils.describable import Describable
@@ -9,6 +11,7 @@ class BaseSymbol(Describable):
     SCOPING = False
     ADVANCE = True
     EXECUTABLE = True
+    SERIALIZATION = None
 
     def __init__(self, slice):
         self.children = []
@@ -84,6 +87,9 @@ class BaseSymbol(Describable):
     def references(self):
         return ()
 
+    def statics(self):
+        return ()
+
     def transpile(self):
         return '?{}?'.format(self)
 
@@ -91,10 +97,18 @@ class BaseSymbol(Describable):
         sep = '\t' * indent
         return sep + ('\n' + sep).join(x.transpile() for x in self.children)
 
+    def serialize(self, context):
+        return ()
+
+    def compile(self, context):
+        if self.SERIALIZATION:
+            return struct.pack(self.SERIALIZATION, *self.serialize(context))
+
 
 class RootSymbol(BaseSymbol):
     def __init__(self):
         super(RootSymbol, self).__init__(None)
+
 
 
 class DefinitionPairSymbol(BaseSymbol):

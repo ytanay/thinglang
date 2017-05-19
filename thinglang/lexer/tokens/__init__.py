@@ -5,6 +5,7 @@ from thinglang.utils.describable import Describable
 
 class LexicalToken(Describable):
     EMITTABLE = True
+    STATIC = False
     ALLOW_EMPTY = False
 
     def __init__(self, raw, value=None):
