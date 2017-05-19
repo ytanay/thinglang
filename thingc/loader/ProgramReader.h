@@ -33,7 +33,6 @@ public:
 	Symbol read_symbol();
 
 
-
 	template <typename T>
 	T read() {
 		T val;

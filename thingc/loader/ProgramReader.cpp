@@ -1,5 +1,5 @@
 #include "ProgramReader.h"
-
+#include "../types/InternalTypes.h"
 
 const std::string ProgramReader::MAGIC = "THING";
 
@@ -47,16 +47,16 @@ std::vector<PThingInstance> ProgramReader::read_data() {
 
 
 PThingInstance ProgramReader::read_data_block() {
-	auto type = read<int32_t>();
+	auto type = static_cast<InternalTypes >(read<int32_t>());
 
 	switch (type) {
-	case -1: {
+	case InternalTypes::TEXT: {
 		auto size = read_size();
 		auto data = read(size);
 		std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
 		return PThingInstance(new TextInstance(data));
 	}
-	case -2: {
+	case InternalTypes::NUMBER: {
 		auto data = read<int32_t>();
 		std::cerr << "\tReading int: " << data << std::endl;
 		return PThingInstance(new NumberInstance(data));
@@ -69,8 +69,6 @@ PThingInstance ProgramReader::read_data_block() {
 }
 
 std::vector<TypeInfo> ProgramReader::read_code() {
-	
-
 	std::cerr << "Reading program..." << std::endl;
 	std::vector<TypeInfo> user_types;
 
@@ -125,33 +123,21 @@ Symbol ProgramReader::read_symbol() {
 
 	switch (opcode) {
 
-	case Opcode::PUSH_CONST: {
-		auto data_index = read_size();
-		return Symbol(Opcode::PUSH_CONST, data_index);
-	}
-
+    case Opcode ::PUSH_STATIC:
 	case Opcode::PUSH: {
 		auto data_index = read_size();
-		return Symbol(Opcode::PUSH, data_index);
+		return Symbol(opcode, data_index);
 	}
 
-	case Opcode::PRINT: {
-		return Symbol(Opcode::PRINT);
-	}
-
-	case Opcode::CALL_INTERNAL: {
-		return Symbol(Opcode::CALL_INTERNAL, read_size());
-	}
-
+	case Opcode::PRINT:
 	case Opcode::RETURN: {
-		return Symbol(Opcode::RETURN);
+		return Symbol(opcode);
 	}
 
 	case Opcode::CALL:
-		return Symbol(Opcode::CALL, read_size());
-
 	case Opcode::CALL_METHOD:
-		return Symbol(Opcode::CALL_METHOD, read_size());
+    case Opcode::CALL_INTERNAL:
+		return Symbol(opcode, read_size());
 
 	default:
 		throw RuntimeError(std::string("Unknown opcode " + std::to_string((int)opcode)).c_str());
