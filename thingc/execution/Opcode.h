@@ -5,7 +5,7 @@ enum class Opcode {
 	NOP = 1,
 	
 	PUSH = 2,
-	PUSH_CONST = 3,
+	PUSH_STATIC = 3,
 	POP = 4,
 	SET = 5,
 	
