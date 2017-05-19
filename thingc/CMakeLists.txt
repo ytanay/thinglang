@@ -18,7 +18,7 @@ set(SOURCE_FILES
         types/NoneType.cpp
         types/NumberInstance.cpp
         types/TextInstance.cpp
-        types/TypeInfo.cpp)
+        types/TypeInfo.cpp builtins/BuiltinOutput.cpp builtins/BuiltinOutput.h)
 
 
 
