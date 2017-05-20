@@ -1,11 +1,11 @@
 #include <iostream>
-#include <string>
 
 #include "Symbol.h"
 #include "Program.h"
 
 
 void Symbol::execute() {
+	std::cerr << "Executing symbol " << (int)this->opcode << ": " << this->target << ", " << this->secondary << std::endl;
 	switch (this->opcode) {
 
 	case Opcode::NOP:
@@ -16,7 +16,7 @@ void Symbol::execute() {
 		break;
 	}
 
-	case Opcode::PUSH_CONST: {
+	case Opcode::PUSH_STATIC: {
 		Program::push(Program::data(target));
 		break;
 	};
@@ -39,8 +39,7 @@ void Symbol::execute() {
 		break;
 
 	case Opcode::CALL_INTERNAL: {
-		auto instance = Program::top();
-		instance->call_internal(this->target);
+		Program::internals[this->target]->call_internal(this->secondary);
 		break;
 	}
 
