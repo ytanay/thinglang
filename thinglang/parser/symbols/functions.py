@@ -95,8 +95,10 @@ class MethodCall(BaseSymbol, ValueType):
             else:
                 raise Exception('cannot push non-statics')
 
-        yield BytecodeSymbols.call(-2, 1)
-
+        if self.target[0].is_self():
+            context.append(BytecodeSymbols.call_method(1))
+        else:
+            context.append(BytecodeSymbols.call_internal(0, 0))
 
 class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):
