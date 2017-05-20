@@ -46,11 +46,9 @@ class CompilationContext(object):
 
         return header + data + code
 
-    def append_static(self, param):
-        data = list(param)
-        if data:
-            print('Adding {}'.format(data))
-            self.data.extend(x.serialize() for x in data)
+    def append_static(self, data):
+        self.data.append(data)
+        return len(self.data) - 1
 
 
 class Compiler(TreeTraversal):
