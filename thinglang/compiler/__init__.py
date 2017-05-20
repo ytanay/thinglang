@@ -42,7 +42,7 @@ class CompilationContext(object):
     def finalize(self):
         code = bytes().join(x if isinstance(x, bytes) else struct.pack(x[0], *x[1:]) for x in self.symbols)
         data = bytes().join(x for x in self.data)
-        header = bytes('THING', 'utf-8') + struct.pack('<II', len(data) + len(code), len(data))
+        header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
 
         return header + data + code
 
@@ -51,18 +51,3 @@ class CompilationContext(object):
         return len(self.data) - 1
 
 
-class Compiler(TreeTraversal):
-
-    def __init__(self, ast):
-        super(Compiler, self).__init__(ast)
-        self.context = CompilationContext()
-
-    @inspects(priority=0)
-    def extract_static_data(self, node):
-        #self.context.append_static(node.statics())
-        pass
-
-    @inspects(priority=1)
-    def compile_dfs(self, node):
-        print('DFS inspection on node {}'.format(node))
-        self.context.append(node.compile(self.context))
