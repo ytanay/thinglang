@@ -28,9 +28,9 @@ public:
 	PThingInstance read_data_block();
 
 	std::vector<TypeInfo> read_code();
-	TypeInfo read_class(uint32_t size);
-	MethodDefinition read_method(size_t size);
-	Symbol read_symbol();
+	TypeInfo read_class();
+	MethodDefinition read_method();
+	Symbol read_symbol(Opcode opcode);
 
 
 	template <typename T>
