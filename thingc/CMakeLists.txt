@@ -10,6 +10,7 @@ set(SOURCE_FILES
 
         errors/RuntimeError.cpp
 
+        execution/Program.h
         execution/Program.cpp
         execution/Symbol.cpp
 
@@ -18,7 +19,11 @@ set(SOURCE_FILES
         types/NoneType.cpp
         types/NumberInstance.cpp
         types/TextInstance.cpp
-        types/TypeInfo.cpp builtins/BuiltinOutput.cpp builtins/BuiltinOutput.h)
+        types/TypeInfo.cpp
+
+        builtins/BuiltinOutput.cpp
+        builtins/BuiltinOutput.h
+        loader/ProgramContents.h)
 
 
 
