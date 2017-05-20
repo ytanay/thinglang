@@ -19,7 +19,7 @@ def compiler(source):
     if not source:
         raise ValueError('Source cannot be empty')
 
-    source = (source + collect_includes()).strip().replace(' ' * 4, '\t')
+    source = source.strip().replace(' ' * 4, '\t')
     lexical_groups = list(lexer(source))
     ast = parse(lexical_groups)
     Simplifier(ast).run()
