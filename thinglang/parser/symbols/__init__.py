@@ -2,6 +2,7 @@ import inspect
 
 import struct
 
+from thinglang.compiler import CompilationContext
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils import tree_utils
 from thinglang.utils.describable import Describable
@@ -97,18 +98,29 @@ class BaseSymbol(Describable):
         sep = '\t' * indent
         return sep + ('\n' + sep).join(x.transpile() for x in self.children)
 
-    def serialize(self, context):
-        return ()
+    def serialization(self):
+        return NotImplementedError('must implement serialization')
+
+    def serialize(self):
+        return struct.pack(self.SERIALIZATION, *self.serialization())
 
     def compile(self, context):
+        print('Compiling {}'.format(self))
         if self.SERIALIZATION:
-            return struct.pack(self.SERIALIZATION, *self.serialize(context))
+            context.append(self.serialize())
+
+        for child in self.children:
+            child.compile(context)
 
 
 class RootSymbol(BaseSymbol):
     def __init__(self):
         super(RootSymbol, self).__init__(None)
 
+    def compile(self, context=None):
+        context = context or CompilationContext()
+        super(RootSymbol, self).compile(context)
+        return context
 
 
 class DefinitionPairSymbol(BaseSymbol):
