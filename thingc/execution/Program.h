@@ -64,13 +64,15 @@ public:
 	static void start() {
 		types[1].instantiate();
 	}
-	
+
+    static std::vector<PThingInstance> internals;
 
 private:
 	Program() {}
 
 	static std::stack<PThingInstance> stack;
 	static std::vector<PThingInstance> static_data;
+
 	static std::stack<Frame> frames;
 	static std::vector<TypeInfo> types;
 	static PThingInstance current_instance;
