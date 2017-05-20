@@ -1,3 +1,4 @@
+from thinglang.compiler import OPCODES, BytecodeSymbols
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor
 from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
@@ -25,12 +26,12 @@ class ThingDefinition(DefinitionPairSymbol):
     def methods(self):
         return [x for x in self.children if x.implements(MethodDefinition)]
 
-    def serialize(self, context):
+    def serialization(self):
         return len(self.members()), len(self.methods())
 
 
 class MethodDefinition(BaseSymbol):
-    SERIALIZATION = '<III'
+    SERIALIZATION = '<II'
 
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
@@ -58,14 +59,18 @@ class MethodDefinition(BaseSymbol):
     def transpile(self):
         return '{}{}({}) {{\n{}\n\t}}'.format(self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
 
-    def serialize(self, context):
-        return 0, 0, len(self.arguments)
+    def serialization(self):
+        return 0, len(self.arguments)
 
     def set_type(self, type):
         if not self.return_type:
             self.return_type = type
         elif type is not self.return_type:
           raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
+
+    def compile(self, context):
+        super(MethodDefinition, self).compile(context)
+        context.append(BytecodeSymbols.method_end())
 
 
 class MemberDefinition(BaseSymbol):
