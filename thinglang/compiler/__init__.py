@@ -34,8 +34,10 @@ class CompilationContext(object):
         self.data = []
 
     def append(self, symbol):
-        if symbol:
+        if isinstance(symbol, bytes):
             self.symbols.append(symbol)
+        elif symbol:
+            self.symbols.extend(symbol)
 
     def finalize(self):
         code = bytes().join(x if isinstance(x, bytes) else struct.pack(x[0], *x[1:]) for x in self.symbols)
