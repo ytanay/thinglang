@@ -5,6 +5,7 @@ import re
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ENUM_PARSER = re.compile(r'(.*)\s*?=\s*?(\d+)')
 
+
 def read_opcodes():
     with open(os.path.join(BASE_DIR, '..', '..', 'thingc', 'execution', 'Opcode.h')) as f:
         for line in f:

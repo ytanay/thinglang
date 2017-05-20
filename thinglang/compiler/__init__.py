@@ -1,18 +1,30 @@
 import struct
 
-import collections
-
+from thinglang.compiler.opcodes import OPCODES
 from thinglang.utils.tree_utils import TreeTraversal, inspects
+
 
 class BytecodeSymbols(object):
 
     @classmethod
     def push_static(cls, id):
-        return struct.pack('<BI', 3, id)
+        return struct.pack('<BI', OPCODES['PUSH_STATIC'], id)
 
     @classmethod
     def call(cls, thing, idx):
-        return struct.pack('<BI', 3, id)
+        return struct.pack('<BII', OPCODES['CALL'], thing, idx)
+
+    @classmethod
+    def call_internal(cls, thing, idx):
+        return struct.pack('<BII', OPCODES['CALL_INTERNAL'], thing, idx)
+
+    @classmethod
+    def method_end(cls):
+        return struct.pack('<B', OPCODES['METHOD_END'])
+
+    @classmethod
+    def call_method(cls, idx):
+        return struct.pack('<BI', OPCODES['CALL_METHOD'], idx)
 
 
 class CompilationContext(object):
