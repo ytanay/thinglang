@@ -49,8 +49,8 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def evaluate(self, _):
         return self.value
 
-    def serialize(self, context):
-        context.append_static(struct.pack('<iI', -1, len(self.value)) + bytes(self.value, 'utf-8'))
+    def serialize(self):
+        return struct.pack('<iI', -1, len(self.value)) + bytes(self.value, 'utf-8')
 
     def references(self):
         return ()
