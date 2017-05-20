@@ -90,8 +90,8 @@ class MethodCall(BaseSymbol, ValueType):
     def compile(self, context):
         for arg in self.arguments:
             if arg.STATIC:
-                id = context.append_static(arg)
-                yield BytecodeSymbols.push_static(id)
+                id = context.append_static(arg.serialize())
+                context.append(BytecodeSymbols.push_static(id))
             else:
                 raise Exception('cannot push non-statics')
 
