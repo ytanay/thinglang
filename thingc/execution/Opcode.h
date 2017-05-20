@@ -14,6 +14,8 @@ enum class Opcode {
 	CALL_INTERNAL = 8,
 	RETURN = 9,
 
-	PRINT = 10
+	PRINT = 10,
+
+    METHOD_END = 11
 };
 
