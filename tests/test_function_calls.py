@@ -40,7 +40,7 @@ thing Program
         self.say_hello(name, age)
         self.say_hello("Yotam", 19)
 
-    does say_hello with name, age
+    does say_hello with text name, number age
         Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
 
     """).output == """
@@ -55,7 +55,7 @@ def test_function_call_integration():
             number a = 15
             number b = self.add(a, 10)
             Output.write(a, b)
-        does add with a, b
+        does add with number a, number b
             return a + b
         """).output == """15 25"""
 
@@ -67,7 +67,7 @@ def test_early_exit():
             number a = 15
             number b = self.add_or_multiply(a, 10)
             Output.write(a, b)
-        does add_or_multiply with a, b
+        does add_or_multiply with number a, number b
             return a * b
             Output.write("never should appear")
             return a + b
@@ -84,10 +84,10 @@ def test_nested_function_calls():
             Output.write(self.mul(self.get_13(), self.add(self.get_7(), self.get_7())))
             Output.write(self.mul(self.add(self.get_7(), self.get_13()), res))
 
-        does add with a, b
+        does add with number a, number b
             return a + b
 
-        does mul with a, b
+        does mul with number a, number b
             return a * b
 
         does get_7
@@ -122,7 +122,7 @@ def test_recursion():
         setup
             Output.write(self.factorial(10))
 
-        does factorial with n
+        does factorial with number n
             if n eq 1
                 return 1
             return n * self.factorial(n-1)
