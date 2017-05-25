@@ -28,62 +28,56 @@ thing Person
     has text name
     has number age
 
-    setup with name
+    setup with text name
         self.name = name
 
-    does say_hello with repeat_count
-        number i = 0
-        repeat while i < repeat_count
+    does say_hello with number repeat_count
+        repeat for number i in 0..repeat_count
             Output.write("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
-            i = i + 1
-
+            
 
 thing Program
     setup
         Person person = create Person(Input.get_line("What is your name?"))
         number age = Input.get_line("What is your age?") as number
-
-        if age
+    
+        if age not eq 0
             person.age = age
-
+    
         person.say_hello(Input.get_line("How excited are you?") as number)
 ```
 
-## Specification
-The original prototypical implementation of thinglang was written in pure Python as an exercise to learn about the components that make up a high level programming language: lexical analysis, parsing, static analysis, compilation and execution.
-
-This execution model of thinglang was easy to implement, but also rather inefficient: it exploits Python's dynamic typing to execute a thinglang AST directly, using its nodes as execution symbols. The mechanism operates over the following state:
-1. a list of Symbols Pending Execution (SPE).
-2. A stack of frames. Each frame is a mapping of lexical identifiers (e.g. "name", "age") to a pair of `[scope grouping, value]`. When a scope is destroyed (e.g. exit from a loop), entries owned by that scope are removed using their scope grouping.
-
-The execution loop operates as follows: a symbol from the SPE is popped off the front, processed (reading/modifying the stack and heap as needed) and, depending on the symbol, leads to a change in the SPE.
-
-For example, an AssignmentOperation symbol may modify a stack variable while a Conditional symbol might inject its children into the SPE if its condition holds true.
-
-This design has proven tricky to optimize; it depends on many cycles of runtime resolution, despite the fact that every reference is statically analyzed and resolved during compilation. It incurs additional overhead caused by heavy manipulation of the SPE and reliance on dynamic typing in the interpreter itself. In short, it makes thinglang's static typing somewhat redundant by squandering the type information contained in the thinglang syntax.
-
-Since this project has proved interesting thus far, the next stage is to implement a new execution model. The parsing and compilation will remain in Python for now.
-
-Tasks for a new C++ based thinglang VM:
-- [ ] Type resolution during static analysis
-- [ ] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
-- [ ] Minimal standard library (strings/lists/maps/math) written in thinglang, transpiled to C++
-- [ ] Bytecode generation from compiler
-- [ ] Execution infra in C++ (stack frame containers/thing instance containers, etc...)
-- [ ] Basic execution loop
-
-
 ## General Overview
+The original prototypical implementation of thinglang was written in Python as an exercise to learn about the components that make up a high level programming language and its runtime: lexical analysis, parsing, static analysis, compilation and execution. 
+
+### Lexical Analysis + Parsing
+The process involved a line-by-line lexical tokenization process, which was transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer  will emit the following stream for this line: `[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]`. What follows is the likely pattern transformation for this line:
+
+```
+[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1)]) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
+[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1), NUMERIC(2)]) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
+[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1), NUMERIC(2), NUMERIC(3)]) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
+[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)]) L_PAREN_CLOSE L_EQ NUMERIC(2)]
+[L_IF L_SELF ACCESS ID(average) ArgListPartial([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_PAREN_CLOSE L_EQ NUMERIC(2)]
+[L_IF L_SELF ACCESS ID(average) ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_EQ NUMERIC(2)]
+[L_IF Access([L_SELF, ID(average)]) ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_EQ NUMERIC(2)]
+[L_IF MethodCall(target=[L_SELF, ID(average)], args=ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_EQ NUMERIC(2)]
+[L_IF LogicalOperation(lhs=MethodCall(target=[L_SELF, ID(average)], args=ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]), rhs=NUMERIC(2), type=EQ))]
+[Conditional(LogicalOperation(lhs=MethodCall(target=[L_SELF, ID(average)], args=ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]), rhs=NUMERIC(2), type=EQ)))]
+```
+
+The object of this process is to reduce the token stream of a line to a single compound AST node. If at any point no transformations can be applied, and there is more than one element remaining from the original stream, the parser fails on the line. 
+
+The output of the parser is an AST of compound nodes.
+
 
 ### Static Analysis
-The static analyzer takes the AST created by the parser and performs a number of checks and transformations which result in what thinglang calls a bounded-reduced AST. 
+The AST undergoes two important processes: reduction and binding.
 
-**Bounding** is the process which takes every general-case deceleration, lookup and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference. During this process, the AST is implcitly validated and any unresolved references trigger an appropriate error.
+**Binding** is the process which inspects decelerations, usage and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference (essentially, indexing every reference against its matching declaration). During this process, the AST is implicitly and any unresolved references and type mismatches trigger an appropriate error.
 
 
-When type checking is implemented (soon?), bounding will also verify the type integrity of every reference.
-
-**Reduction** is the process by which nodes containing certain nested operations (e.g. nested method calls) are simplified into a series of assignment operations. For example:
+**Reduction** is the process by which compound nodes containing nested operations (e.g. nested method calls) are simplified into a series of non-compound i instructions. For example:
 ```cs
 number val = f(g(), h(), i(j(), k()))
 ```
@@ -97,10 +91,36 @@ Transient<number> t4 = h()
 Transient<number> t5 = f(t3, t4, t2)
 ```
 
-### Execution Model
+### Execution
 
-#### Preamble
-Execution can begin after a bounded-reduced AST is created (see above; this AST can generally be directly represented as thinglang bytecode, and should be thought of this way).
+The original execution model of thinglang was easy to implement, but also rather inefficient: it exploits Python's dynamic typing to execute the thinglang AST directly, using its nodes as execution symbols. The mechanism operates over the following state:
+1. a list of Symbols Pending Execution (SPE).
+2. A stack of frames. Each frame is a mapping of lexical identifiers (e.g. "name", "age") to a pair of `[scope grouping, value]`. When a scope is destroyed (e.g. exit from a loop), entries owned by that scope are removed using their scope grouping.
+
+The execution loop operates as follows: a symbol from the SPE is popped off the front, processed (reading/modifying the stack and heap as needed) and, depending on the symbol, leads to a change in the SPE.
+
+For example, an AssignmentOperation symbol may modify a stack variable while a Conditional symbol might inject its children into the SPE if its condition holds true.
+
+This design has proven tricky to optimize; it depends on many cycles of runtime resolution, despite the fact that every reference is statically analyzed and resolved during compilation. It incurs additional overhead caused by heavy manipulation of the SPE and reliance on dynamic typing in the interpreter itself. In short, it makes thinglang's static typing somewhat redundant by squandering the type information contained in the thinglang syntax.
+
+
+### Seriously though, execution
+Since this project has proved interesting thus far, the next stage is to implement a new execution model. The parsing and compilation will remain in Python for now, but with a new twist - bytecode generation!
+
+Tasks for a new C++ based thinglang VM:
+- [x] Minimal execution infra in C++ (stack frame containers/thing instance containers, etc...)
+- [x] Basic execution loop
+- [ ] Type resolution and better reference indexing during static analysis
+- [ ] Bytecode generation from thinglang compiler
+- [ ] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
+- [ ] Barebones standard library (strings/lists/maps/math) written in thinglang, transpiled to C++
+
+
+### The Archives 
+
+This is a description of the old Python-based execution model - it's slow, but still pretty nifty. 
+
+Execution can begin after a bounded-reduced AST is created (see above)
 
 The initialization sequence for any program goes roughly like this:
 1. A program-global "heap" space is created, and first-order builtins are initialized inside it (currently, this means the `Input` and `Output` objects).
@@ -109,14 +129,14 @@ The initialization sequence for any program goes roughly like this:
 4. A root level stack frame is created, and contains a reference to the newly created `Thing<Program>` instance.
 5. Every direct child of `MethodDefinition<constructor>` of `Thing<Program>` is copied into the *targets array*, and execution begins.
 
-#### Execution pipeline
+#### Pipeline
 Every iteration of the execution pipeline beings by popping of a target from the beginning of the *targets array*. Examples of execution targets include instances of `AssignmentOperation`, `MethodCall`, `Conditional`, `Loop`, and even `ReturnStatement`s.
 
 While a target is processed it can (and frequently does) affect the *targets array*. For example, a `Conditional` will copy its direct children in the positive branch to the *targets array* if its condition is evaluated as `true`, or the its direct children in the negative (i.e. "else") branch if its condition is evaluated as `false`. A `Loop` will copy its direct children **and itself** to the *targets array* if its condition evaluates as true (this is what makes it loop).
 
 We'll look at a few examples of more intricate execution targets below.
 
-##### Method calls
+#### Method calls
 Method calls involve a bit of extra handholding. Described below is the general procedure for executing most method calls (the procedure for instance construction - i.e. creating a new `Thing` instance - is a bit different, and will be described seperately):
 
 1. The target instance is looked up, first on the stack, then on the heap.
