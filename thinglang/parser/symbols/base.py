@@ -4,6 +4,7 @@ from thinglang.compiler import CompilationContext, BytecodeSymbols
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols.functions import MethodCall
 from thinglang.utils.type_descriptors import ValueType
 
 
@@ -40,7 +41,11 @@ class AssignmentOperation(BaseSymbol):
             return '{} = {};'.format(self.name.transpile(), self.value.transpile())
 
     def compile(self, context: CompilationContext):
-        context.append(BytecodeSymbols.set_static(self.target, context.append_static(self.value.serialize())))
+        if self.value.implements(MethodCall):
+            self.value.compile(context, returns=True)
+            context.append(BytecodeSymbols.set(self.target))
+        elif self.value.STATIC:
+            context.append(BytecodeSymbols.set_static(self.target, context.append_static(self.value.serialize())))
 
 
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
