@@ -94,7 +94,7 @@ class CompilationContext(object):
         return len(self.data) - 1
 
     def current_index(self):
-        return len(self.symbols)
+        return len(self.symbols) - 1
 
     def push_down(self, value):
         if value.STATIC:
