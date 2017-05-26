@@ -76,12 +76,13 @@ class CompilationContext(object):
 
     def append(self, symbol):
         if isinstance(symbol, bytes):
+        if isinstance(symbol, (ResolvableInstruction, bytes)):
             self.symbols.append(symbol)
         elif symbol:
             self.symbols.extend(symbol)
 
     def finalize(self):
-        code = bytes().join(x if isinstance(x, bytes) else struct.pack(x[0], *x[1:]) for x in self.symbols)
+        code = bytes().join(x.resolve() if isinstance(x, ResolvableInstruction) else x for x in self.symbols)
         data = bytes().join(x for x in self.data)
         header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
 
