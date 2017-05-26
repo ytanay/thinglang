@@ -137,8 +137,11 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
             return Symbol(opcode, read_size());
 
         case Opcode::CALL:
-        case Opcode::CALL_INTERNAL:
-            return Symbol(opcode, read_size(), read_size());
+        case Opcode::CALL_INTERNAL: {
+            auto target = read_size();
+            auto value = read_size();
+            return Symbol(opcode, target, value);
+        }
 
         default:
             throw RuntimeError(std::string("Unknown opcode " + std::to_string((int)opcode)).c_str());
