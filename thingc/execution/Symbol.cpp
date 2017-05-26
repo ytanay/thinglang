@@ -46,7 +46,6 @@ int Symbol::execute() {
 		auto instance = Program::instance();
 		auto method = instance->method(target);
 
-
 		method.execute();
 		break;
 	}
@@ -65,8 +64,10 @@ int Symbol::execute() {
 		break;
 	}
 
-	default: 
-		throw RuntimeError("Cannot handle symbol " + std::to_string((int) this->opcode));
+    case Opcode::JUMP: {
+        return target;
+    }
+
 	case Opcode::CONDITIONAL_JUMP: {
 		auto value = Program::pop();
 		if(!value->boolean()){

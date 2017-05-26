@@ -117,14 +117,14 @@ MethodDefinition ProgramReader::read_method() {
 }
 
 Symbol ProgramReader::read_symbol(Opcode opcode) {
-    std::cerr << "\t\t\tReading symbol " << describe(opcode) << std::endl;
-
     switch (opcode) {
 
 
         case Opcode::SET:
         case Opcode::PUSH_STATIC:
-        case Opcode::PUSH: {
+        case Opcode::PUSH:
+        case Opcode::CALL_METHOD:
+        case Opcode::JUMP:
         case Opcode::CONDITIONAL_JUMP: {
             return Symbol(opcode, read_size());
         }
@@ -135,10 +135,6 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::RETURN: {
             return Symbol(opcode);
         }
-
-
-        case Opcode::CALL_METHOD:
-            return Symbol(opcode, read_size());
 
         case Opcode::SET_STATIC:
         case Opcode::CALL:

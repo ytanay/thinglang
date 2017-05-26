@@ -20,11 +20,11 @@ enum class Opcode {
 	CALL_INTERNAL = 10,
 	RETURN = 11,
 
-	PRINT = 12,
+    JUMP = 12,
     CONDITIONAL_JUMP = 13,
 
-    METHOD_END = 13
 	PRINT = 14,
+
     METHOD_END = 15
 };
 
@@ -64,8 +64,11 @@ inline std::string describe(Opcode o){
          case Opcode::PRINT:
              return "PRINT";
 
+         case Opcode::JUMP:
+             return "JUMP";
          case Opcode::CONDITIONAL_JUMP:
              return "CONDITIONAL_JUMP";
+
          default:
              return "Unknown opcode";
     }
