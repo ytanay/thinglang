@@ -91,6 +91,14 @@ class Indexer(TreeTraversal):
             arg if arg.STATIC else ResolvedReference(self.locals.get(arg)) for arg in node.arguments
         ]
 
+        if node.target[0].is_self():
+            target = self.context.current_thing
+            for x in node.target[1:]:
+                target = target[x]
+            node.resolved_target = ResolvedReference(target.index)
+
+        print(node, node.arguments)
+
     def process_declaration(self, node):
         if node in self.locals:
             raise Exception('Duplicate decleration')
