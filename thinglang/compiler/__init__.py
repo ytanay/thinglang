@@ -1,14 +1,22 @@
 import struct
 
 from thinglang.compiler.opcodes import OPCODES
-from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 
 class BytecodeSymbols(object):
 
     @classmethod
+    def push(cls, id):
+        return struct.pack('<BI', OPCODES['PUSH'], id)
+
+    @classmethod
     def push_static(cls, id):
         return struct.pack('<BI', OPCODES['PUSH_STATIC'], id)
+
+    @classmethod
+    def set_static(cls, idx, val):
+        print('set', idx, val)
+        return struct.pack('<BII', OPCODES['SET_STATIC'], idx, val)
 
     @classmethod
     def call(cls, thing, idx):
