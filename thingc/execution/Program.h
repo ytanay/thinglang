@@ -45,7 +45,7 @@ public:
 	}
 
 	static void create_frame(unsigned int size) {
-		frames.push({});
+		frames.push(Frame(size));
 	}
 
 	static void pop_frame() {
