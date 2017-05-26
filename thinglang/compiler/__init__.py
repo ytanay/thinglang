@@ -75,11 +75,12 @@ class CompilationContext(object):
         self.data = []
 
     def append(self, symbol):
-        if isinstance(symbol, bytes):
+        idx = len(self.symbols)
         if isinstance(symbol, (ResolvableInstruction, bytes)):
             self.symbols.append(symbol)
         elif symbol:
             self.symbols.extend(symbol)
+        return symbol, idx
 
     def finalize(self):
         code = bytes().join(x.resolve() if isinstance(x, ResolvableInstruction) else x for x in self.symbols)
@@ -100,3 +101,6 @@ class CompilationContext(object):
             self.append(BytecodeSymbols.push_static(self.append_static(value.serialize())))
         else:
             raise Exception('Cannot push down non-static')
+
+    def last(self):
+        return self.symbols[-1], len(self.symbols) - 1
