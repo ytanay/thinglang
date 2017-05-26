@@ -91,7 +91,7 @@ class Indexer(TreeTraversal):
         The reference indexing for method calls involves 2 separate processes - resolving the method target,
         and resolving each and every argument
         """
-        print(node)
+
         node.arguments = [
             arg if arg.STATIC else ResolvedReference(self.locals.get(arg)) for arg in node.arguments
         ]
@@ -102,18 +102,14 @@ class Indexer(TreeTraversal):
                 target = target[x]
             node.resolved_target = ResolvedReference(target.index)
 
-        print(node, node.arguments)
-
     def process_declaration(self, node):
         if node in self.locals:
-            raise Exception('Duplicate decleration')
+            raise Exception('Duplicate declaration')
         else:
-            print('Setting a local variable')
             node.target = self.locals.add(node.name)
 
     def process_assignment(self, node: AssignmentOperation):
         if node.name.implements(LexicalIdentifier):
             node.target = self.locals.get(node.name)
-            print('For {}, idx is {}'.format(node.name, self.locals.get(node.name)))
         else:
             raise Exception('cannot resolve references yet!')
