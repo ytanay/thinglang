@@ -3,6 +3,15 @@ import struct
 from thinglang.compiler.opcodes import OPCODES
 
 
+class ResolvableInstruction(object):
+
+    def __init__(self, format, opcode, *args):
+        self.format, self.opcode, self.args = format, opcode, args
+
+    def resolve(self):
+        return struct.pack(self.format, self.opcode, *self.args)
+
+
 class BytecodeSymbols(object):
 
     @classmethod
