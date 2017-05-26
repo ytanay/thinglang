@@ -65,6 +65,8 @@ class MethodCall(BaseSymbol, ValueType):
         if not self.arguments:
             self.arguments = ArgumentList()
 
+        self.resolved_target = None
+
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
@@ -99,7 +101,7 @@ class MethodCall(BaseSymbol, ValueType):
                 raise Exception('Strange argument type {}'.format(arg))
 
         if self.target[0].is_self():
-            context.append(BytecodeSymbols.call_method(1))
+            context.append(BytecodeSymbols.call_method(self.resolved_target.index))
         else:
             context.append(BytecodeSymbols.call_internal(0, 0))
 
