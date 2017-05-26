@@ -1,3 +1,5 @@
+import itertools
+
 from thinglang.compiler.allocation import LinearMemoryAllocationLayout
 from thinglang.compiler.references import ResolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -52,24 +54,23 @@ class Indexer(TreeTraversal):
 
     def __init__(self, ast):
         super().__init__(ast)
-        self.instance_members, self.locals, self.current_method = None, None, None
+        self.context = IndexerContext()
+        self.locals = None
 
     def run(self):
         super(Indexer, self).run()
-        self.current_method.frame_size = self.locals.next_index
+        self.context.set_last_frame_size(self.locals.next_index)
 
     @inspects(ThingDefinition)
     def set_thing_context(self, node: ThingDefinition) -> None:
-        self.instance_members = {
-            member.name: (idx, member) for idx, member in enumerate(node.members())
-        }
+        self.context.over(node)
 
     @inspects(MethodDefinition)
     def set_method_context(self, node: MethodDefinition) -> None:
-        if self.current_method:
-            self.current_method.frame_size = self.locals.next_index
+        if self.locals:
+            self.context.set_last_frame_size(self.locals.next_index)
 
-        self.current_method = node
+        self.context.set_method(node)
         self.locals = LinearMemoryAllocationLayout({
             argument: idx for idx, argument in enumerate(node.arguments)
         })
