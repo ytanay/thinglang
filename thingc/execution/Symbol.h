@@ -11,10 +11,6 @@ public:
 	Symbol(Opcode opcode, unsigned int target) : opcode(opcode), target(target) {};
     Symbol(Opcode opcode, unsigned int target, unsigned int secondary) : opcode(opcode), target(target), secondary(secondary) {};
 
-
-    int execute();
-
-private:
 	Opcode opcode;
 	unsigned int target = 0;
     unsigned int secondary = 0;
