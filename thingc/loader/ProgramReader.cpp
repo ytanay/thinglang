@@ -108,9 +108,9 @@ MethodDefinition ProgramReader::read_method() {
     std::vector<Symbol> symbols;
 
     for(auto opcode = read_opcode(); opcode != Opcode::METHOD_END; opcode = read_opcode()){
+        std::cerr << "\t\t\tReading symbol " << symbols.size() << " " << describe(opcode) << std::endl;
         auto symbol = read_symbol(opcode);
         symbols.push_back(symbol);
-        //bytecode.push_back(symbol);
     }
 
     return MethodDefinition(frame_size, arguments, symbols);
