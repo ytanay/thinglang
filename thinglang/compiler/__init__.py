@@ -59,6 +59,14 @@ class BytecodeSymbols(object):
     def returns(cls):
         return struct.pack('<B', OPCODES['RETURN'])
 
+    @classmethod
+    def conditional_jump(cls, idx=None):
+        return ResolvableInstruction('<BI', OPCODES['CONDITIONAL_JUMP'], idx)
+
+    @classmethod
+    def jump(cls, idx=None):
+        return ResolvableInstruction('<BI', OPCODES['JUMP'], idx)
+
 
 class CompilationContext(object):
 
