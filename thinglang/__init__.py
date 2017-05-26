@@ -1,6 +1,7 @@
 import os
 
 from thinglang import utils
+from thinglang.compiler.indexer import Indexer
 from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.analyzer import Analyzer
@@ -23,6 +24,7 @@ def compiler(source):
     lexical_groups = list(lexer(source))
     ast = parse(lexical_groups)
     Simplifier(ast).run()
+    Indexer(ast).run()
     Analyzer(ast).run()
 
     return ast
