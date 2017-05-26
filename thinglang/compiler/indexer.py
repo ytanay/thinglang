@@ -7,6 +7,29 @@ from thinglang.parser.symbols.functions import MethodCall
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 
+class IndexerContext(object):
+    def __init__(self):
+        self.instance_members, self.locals, self.current_method, self.current_thing = None, None, None, None
+        self.method_index = 0
+        self.things = []
+
+    def over(self, thing_definition):
+        self.current_thing = thing_definition
+        self.things.append(thing_definition)
+        self.instance_members = {
+            member.name: (idx, member) for idx, member in enumerate(thing_definition.members())
+        }
+
+    def set_last_frame_size(self, size):
+        if self.current_method:
+            self.current_method.frame_size = size
+
+    def set_method(self, node):
+        self.current_method = node
+        node.index = self.method_index
+        self.method_index += 1
+
+
 class Collator(TreeTraversal):
 
     def __init__(self, ast):
