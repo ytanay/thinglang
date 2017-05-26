@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 #include "../execution/Program.h"
 #include "../containers/ThingInstance.h"
@@ -13,6 +14,10 @@ public:
 
 	virtual std::string text() const override {
 		return std::to_string(val);
+	}
+
+    bool boolean() const override {
+		return val != 0;
 	}
 
 	static void add() {
