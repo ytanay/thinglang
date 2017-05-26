@@ -82,6 +82,10 @@ class BaseSymbol(Describable):
         siblings = self.parent.children
         siblings.insert(siblings.index(self), node)
 
+    def next_sibling(self):
+        siblings = self.parent.children
+        return siblings[siblings.index(self) + 1]
+
     def remove(self):
         self.parent.children.remove(self)
 
