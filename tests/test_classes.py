@@ -12,10 +12,10 @@ thing Person
     has text name
     has number age
 
-    setup with name
+    setup with text name
         self.name = name
 
-    does say_hello with repeat_count
+    does say_hello with number repeat_count
         number i = 0
         repeat while i < repeat_count
             Output.write("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
