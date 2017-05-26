@@ -7,6 +7,10 @@
 void Symbol::execute() {
 	std::cerr << "Executing symbol " << describe(this->opcode) << ": " << this->target << ", " << this->secondary << std::endl;
 	switch (this->opcode) {
+int Symbol::execute() {
+    std::cerr << "Executing symbol " << describe(this->opcode) << ": " << this->target << ", " << this->secondary << std::endl;
+
+    switch (this->opcode) {
 
 	case Opcode::NOP:
 		break;
@@ -69,4 +73,5 @@ void Symbol::execute() {
 		break;
 
 	}
+	return 1;
 }
