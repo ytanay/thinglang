@@ -117,7 +117,7 @@ MethodDefinition ProgramReader::read_method() {
 }
 
 Symbol ProgramReader::read_symbol(Opcode opcode) {
-    std::cerr << "\t\t\tReading symbol " << (int)opcode << std::endl;
+    std::cerr << "\t\t\tReading symbol " << describe(opcode) << std::endl;
 
     switch (opcode) {
 

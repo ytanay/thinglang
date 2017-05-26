@@ -5,7 +5,7 @@
 
 
 void Symbol::execute() {
-	std::cerr << "Executing symbol " << (int)this->opcode << ": " << this->target << ", " << this->secondary << std::endl;
+	std::cerr << "Executing symbol " << describe(this->opcode) << ": " << this->target << ", " << this->secondary << std::endl;
 	switch (this->opcode) {
 
 	case Opcode::NOP:
