@@ -125,6 +125,7 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::SET:
         case Opcode::PUSH_STATIC:
         case Opcode::PUSH: {
+        case Opcode::CONDITIONAL_JUMP: {
             return Symbol(opcode, read_size());
         }
 
