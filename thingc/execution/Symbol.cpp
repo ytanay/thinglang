@@ -16,9 +16,25 @@ void Symbol::execute() {
         break;
     };
 
+	case Opcode ::PUSH_NULL: {
+		Program::push(NULL);
+		break;
+	}
+
+	case Opcode::POP: {
+		Program::pop();
+		break;
+	}
+
     case Opcode::SET_STATIC: {
         Program::frame()[this->target] = Program::data(secondary);
-    }
+    	break;
+	}
+
+	case Opcode::SET: {
+		Program::frame()[this->target] = Program::pop();
+		break;
+	}
 
 	case Opcode::PUSH_STATIC: {
 		Program::push(Program::data(target));
