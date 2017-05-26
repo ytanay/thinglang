@@ -122,11 +122,14 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
     switch (opcode) {
 
 
+        case Opcode::SET:
         case Opcode::PUSH_STATIC:
         case Opcode::PUSH: {
             return Symbol(opcode, read_size());
         }
 
+        case Opcode::POP:
+        case Opcode::PUSH_NULL:
         case Opcode::PRINT:
         case Opcode::RETURN: {
             return Symbol(opcode);

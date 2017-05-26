@@ -8,19 +8,21 @@ enum class Opcode {
 	
 	PUSH = 2, // pushes a reference into the stack
 	PUSH_STATIC = 3, // pushes static data into the stack
-	POP = 4, // pop anything to void
+    PUSH_NULL = 4,
 
-	SET = 5, // pop a reference from the stack and assign it
-	SET_STATIC = 6, // set a reference to static data
+	POP = 5, // pop anything to void
 
-	CALL = 7,
-	CALL_METHOD = 8,
-	CALL_INTERNAL = 9,
-	RETURN = 10,
+	SET = 6, // pop a reference from the stack and assign it
+	SET_STATIC = 7, // set a reference to static data
 
-	PRINT = 11,
+	CALL = 8,
+	CALL_METHOD = 9,
+	CALL_INTERNAL = 10,
+	RETURN = 11,
 
-    METHOD_END = 12
+	PRINT = 12,
+
+    METHOD_END = 13
 };
 
 inline std::string describe(Opcode o){
@@ -34,6 +36,10 @@ inline std::string describe(Opcode o){
              return "PUSH";
          case Opcode::PUSH_STATIC:
              return "PUSH_STATIC";
+
+         case Opcode::PUSH_NULL:
+             return "PUSH_NULL";
+
          case Opcode::POP:
              return "POP";
 
