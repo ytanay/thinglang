@@ -1,3 +1,4 @@
+from thinglang.compiler import CompilationContext, BytecodeSymbols
 from thinglang.lexer.tokens.logic import LexicalEquality
 from thinglang.parser.symbols import BaseSymbol
 
@@ -11,6 +12,9 @@ class Conditional(BaseSymbol):
         super(Conditional, self).__init__(slice)
         _, self.value = slice
 
+        if self.value.implements(Conditional):
+            self.value = self.value.value
+
     def describe(self):
         return 'if {}'.format(self.value)
 
@@ -23,13 +27,25 @@ class Conditional(BaseSymbol):
     def transpile(self):
         return 'if({}) {{\n{}\n\t\t}}'.format(self.value.transpile(), self.transpile_children(indent=3))
 
+    def compile(self, context: CompilationContext):
+        context.push_down(self.value)
+        instruction, idx = context.append(BytecodeSymbols.conditional_jump())
+        super(Conditional, self).compile(context)
+        if self.next_sibling().implements(UnconditionalElse):
+            context.append(BytecodeSymbols.jump())
+        instruction.args = context.current_index() - idx,
+
+
 class ElseBranchInterface(object):
     SCOPING = True
     pass
 
 
 class UnconditionalElse(BaseSymbol, ElseBranchInterface):
-    pass
+    def compile(self, context: CompilationContext):
+        jump, idx = context.last()
+        super(UnconditionalElse, self).compile(context)
+        jump.args = context.current_index() - idx,
 
 
 class ConditionalElse(Conditional, ElseBranchInterface):
