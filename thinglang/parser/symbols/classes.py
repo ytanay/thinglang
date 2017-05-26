@@ -2,7 +2,7 @@ from thinglang.compiler import OPCODES, BytecodeSymbols
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor
 from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
-from thinglang.parser.symbols.functions import ArgumentList
+from thinglang.parser.symbols.functions import ArgumentList, ReturnStatement
 
 
 class ThingDefinition(DefinitionPairSymbol):
@@ -79,6 +79,8 @@ class MethodDefinition(BaseSymbol):
 
     def compile(self, context):
         super(MethodDefinition, self).compile(context)
+        if not self.is_constructor() and not self.children[-1].implements(ReturnStatement):
+            context.append(BytecodeSymbols.push_null())
         context.append(BytecodeSymbols.method_end())
 
 
