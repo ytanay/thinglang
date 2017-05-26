@@ -12,9 +12,13 @@ void Symbol::execute() {
 		break;
 
 	case Opcode::PUSH: {
-		Program::push(Program::frame()[this->target]);
-		break;
-	}
+        Program::push(Program::frame()[this->target]);
+        break;
+    };
+
+    case Opcode::SET_STATIC: {
+        Program::frame()[this->target] = Program::data(secondary);
+    }
 
 	case Opcode::PUSH_STATIC: {
 		Program::push(Program::data(target));
