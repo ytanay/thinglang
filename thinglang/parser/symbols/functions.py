@@ -91,7 +91,7 @@ class MethodCall(BaseSymbol, ValueType):
         yield from self.arguments.statics()
 
     def compile(self, context):
-        for arg in self.arguments:
+        for arg in reversed(self.arguments):
             if isinstance(arg, ResolvedReference):
                 context.append(BytecodeSymbols.push(arg.index))
             elif arg.STATIC:
