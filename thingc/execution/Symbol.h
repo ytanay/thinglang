@@ -12,7 +12,7 @@ public:
     Symbol(Opcode opcode, unsigned int target, unsigned int secondary) : opcode(opcode), target(target), secondary(secondary) {};
 
 
-    void execute();
+    int execute();
 
 private:
 	Opcode opcode;
