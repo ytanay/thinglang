@@ -1,4 +1,5 @@
 from thinglang.compiler import BytecodeSymbols
+from thinglang.compiler.indexer import ResolvedReference
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.symbols import BaseSymbol, DefinitionPairSymbol
@@ -89,16 +90,19 @@ class MethodCall(BaseSymbol, ValueType):
 
     def compile(self, context):
         for arg in self.arguments:
-            if arg.STATIC:
+            if isinstance(arg, ResolvedReference):
+                context.append(BytecodeSymbols.push(arg.index))
+            elif arg.STATIC:
                 id = context.append_static(arg.serialize())
                 context.append(BytecodeSymbols.push_static(id))
             else:
-                raise Exception('cannot push non-statics')
+                raise Exception('Strange argument type {}'.format(arg))
 
         if self.target[0].is_self():
             context.append(BytecodeSymbols.call_method(1))
         else:
             context.append(BytecodeSymbols.call_internal(0, 0))
+
 
 class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):
