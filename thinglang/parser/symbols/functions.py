@@ -90,7 +90,7 @@ class MethodCall(BaseSymbol, ValueType):
     def statics(self):
         yield from self.arguments.statics()
 
-    def compile(self, context):
+    def compile(self, context, returns=False):
         for arg in reversed(self.arguments):
             if isinstance(arg, ResolvedReference):
                 context.append(BytecodeSymbols.push(arg.index))
@@ -102,8 +102,14 @@ class MethodCall(BaseSymbol, ValueType):
 
         if self.target[0].is_self():
             context.append(BytecodeSymbols.call_method(self.resolved_target.index))
+            if not returns:
+                print('Adding pop {}'.format(self))
+                context.append(BytecodeSymbols.pop())  # pop the return value, if the method does not return
+
         else:
             context.append(BytecodeSymbols.call_internal(0, 0))
+
+
 
 
 class ReturnStatement(DefinitionPairSymbol):
@@ -113,3 +119,10 @@ class ReturnStatement(DefinitionPairSymbol):
 
     def transpile(self):
         return 'return {};'.format(self.value.transpile())
+
+    def compile(self, context):
+        if self.value.STATIC:
+            context.append(BytecodeSymbols.push_static(context.append_static(self.value.serialize())))
+        else:
+            raise Exception('Cannot return non-static')
+        context.append(BytecodeSymbols.returns())
