@@ -15,8 +15,12 @@ class BytecodeSymbols(object):
 
     @classmethod
     def set_static(cls, idx, val):
-        print('set', idx, val)
         return struct.pack('<BII', OPCODES['SET_STATIC'], idx, val)
+
+    @classmethod
+    def set(cls, idx):
+        return struct.pack('<BI', OPCODES['SET'], idx)
+
 
     @classmethod
     def call(cls, thing, idx):
@@ -33,6 +37,18 @@ class BytecodeSymbols(object):
     @classmethod
     def call_method(cls, idx):
         return struct.pack('<BI', OPCODES['CALL_METHOD'], idx)
+
+    @classmethod
+    def pop(cls):
+        return struct.pack('<B', OPCODES['POP'])
+
+    @classmethod
+    def push_null(cls):
+        return struct.pack('<B', OPCODES['PUSH_NULL'])
+
+    @classmethod
+    def returns(cls):
+        return struct.pack('<B', OPCODES['RETURN'])
 
 
 class CompilationContext(object):
