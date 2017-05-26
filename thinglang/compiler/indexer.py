@@ -82,6 +82,9 @@ class Indexer(TreeTraversal):
         elif node.intent is AssignmentOperation.REASSIGNMENT:
             self.process_assignment(node)
 
+        if node.value.implements(MethodCall):
+            self.inspect_method_call(node.value)
+
     @inspects(MethodCall)
     def inspect_method_call(self, node: MethodCall) -> None:
         """
