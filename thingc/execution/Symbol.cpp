@@ -4,9 +4,6 @@
 #include "Program.h"
 
 
-void Symbol::execute() {
-	std::cerr << "Executing symbol " << describe(this->opcode) << ": " << this->target << ", " << this->secondary << std::endl;
-	switch (this->opcode) {
 int Symbol::execute() {
     std::cerr << "Executing symbol " << describe(this->opcode) << ": " << this->target << ", " << this->secondary << std::endl;
 
@@ -70,8 +67,17 @@ int Symbol::execute() {
 
 	default: 
 		throw RuntimeError("Cannot handle symbol " + std::to_string((int) this->opcode));
+	case Opcode::CONDITIONAL_JUMP: {
+		auto value = Program::pop();
+		if(!value->boolean()){
+			return target;
+		}
 		break;
-
 	}
+
+	default: 
+		throw RuntimeError("Cannot handle symbol " + describe(opcode) + " (" + std::to_string((int) this->opcode) + ")");
+	}
+
 	return 1;
 }
