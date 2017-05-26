@@ -51,7 +51,12 @@ thing Program
 The original prototypical implementation of thinglang was written in Python as an exercise to learn about the components that make up a high level programming language and its runtime: lexical analysis, parsing, static analysis, compilation and execution. 
 
 ### Lexical Analysis + Parsing
-The process involved a line-by-line lexical tokenization process, which was transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer  will emit the following stream for this line: `[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]`. What follows is the likely pattern transformation for this line:
+The process involved a line-by-line lexical tokenization process, which was transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer  will emit the following stream for this line: 
+```
+[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
+```
+
+What follows is the likely pattern transformation the stream will undergo:
 
 ```
 [L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1)]) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
