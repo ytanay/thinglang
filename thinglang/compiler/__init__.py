@@ -74,4 +74,8 @@ class CompilationContext(object):
         self.data.append(data)
         return len(self.data) - 1
 
-
+    def push_down(self, value):
+        if value.STATIC:
+            self.append(BytecodeSymbols.push_static(self.append_static(value.serialize())))
+        else:
+            raise Exception('Cannot push down non-static')

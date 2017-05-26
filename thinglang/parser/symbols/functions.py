@@ -110,8 +110,6 @@ class MethodCall(BaseSymbol, ValueType):
             context.append(BytecodeSymbols.call_internal(0, 0))
 
 
-
-
 class ReturnStatement(DefinitionPairSymbol):
     def __init__(self, slice):
         super().__init__(slice)
@@ -121,8 +119,5 @@ class ReturnStatement(DefinitionPairSymbol):
         return 'return {};'.format(self.value.transpile())
 
     def compile(self, context):
-        if self.value.STATIC:
-            context.append(BytecodeSymbols.push_static(context.append_static(self.value.serialize())))
-        else:
-            raise Exception('Cannot return non-static')
+        context.push_down(self.value)
         context.append(BytecodeSymbols.returns())
