@@ -104,13 +104,16 @@ class BaseSymbol(Describable):
     def serialize(self):
         return struct.pack(self.SERIALIZATION, *self.serialization())
 
-    def compile(self, context):
+    def compile(self, context: CompilationContext):
         print('Compiling {}'.format(self))
         if self.SERIALIZATION:
             context.append(self.serialize())
 
         for child in self.children:
             child.compile(context)
+
+        if not self.SERIALIZATION and not self.children:
+            raise Exception('Cannot compile {}!'.format(self))
 
 
 class RootSymbol(BaseSymbol):
