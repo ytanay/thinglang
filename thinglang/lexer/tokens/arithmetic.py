@@ -1,3 +1,5 @@
+import struct
+
 from thinglang.builtins import TT_NUMBER
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalToken, LexicalBinaryOperation
@@ -14,6 +16,9 @@ class LexicalNumericalValue(LexicalToken, ValueType):
 
     def describe(self):
         return self.value
+
+    def serialize(self):
+        return struct.pack('<ii', -2, self.value)
 
     @staticmethod
     def resolve_type():
