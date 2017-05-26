@@ -49,6 +49,7 @@ class MethodDefinition(BaseSymbol):
             self.arguments = ArgumentList()
 
         self.return_type = None
+        self.frame_size = None
 
     def is_constructor(self):
         return self.name == LexicalIdentifier.constructor()
@@ -60,7 +61,7 @@ class MethodDefinition(BaseSymbol):
         return '{}{}({}) {{\n{}\n\t}}'.format(self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
 
     def serialization(self):
-        return 0, len(self.arguments)
+        return self.frame_size, len(self.arguments)
 
     def set_type(self, type):
         if not self.return_type:
