@@ -121,10 +121,10 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
 
     switch (opcode) {
 
-        case Opcode ::PUSH_STATIC:
+
+        case Opcode::PUSH_STATIC:
         case Opcode::PUSH: {
-            auto data_index = read_size();
-            return Symbol(opcode, data_index);
+            return Symbol(opcode, read_size());
         }
 
         case Opcode::PRINT:
@@ -136,6 +136,7 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::CALL_METHOD:
             return Symbol(opcode, read_size());
 
+        case Opcode::SET_STATIC:
         case Opcode::CALL:
         case Opcode::CALL_INTERNAL: {
             auto target = read_size();
