@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 enum class Opcode {
 	INVALID = 0,
 	NOP = 1,
@@ -20,3 +22,40 @@ enum class Opcode {
 
     METHOD_END = 12
 };
+
+inline std::string describe(Opcode o){
+     switch (o){
+         case Opcode::INVALID:
+             return "INVALID";
+         case Opcode::NOP:
+             return "NOP";
+
+         case Opcode::PUSH:
+             return "PUSH";
+         case Opcode::PUSH_STATIC:
+             return "PUSH_STATIC";
+         case Opcode::POP:
+             return "POP";
+
+         case Opcode::SET:
+             return "SET";
+
+         case Opcode::SET_STATIC:
+             return "SET_STATIC";
+
+         case Opcode::CALL:
+             return "CALL";
+         case Opcode::CALL_METHOD:
+             return "CALL_METHOD";
+         case Opcode::CALL_INTERNAL:
+             return "CALL_INTERNAL";
+
+         case Opcode::RETURN:
+             return "RETURN";
+         case Opcode::PRINT:
+             return "PRINT";
+
+         default:
+             return "Unknown opcode";
+    }
+}
