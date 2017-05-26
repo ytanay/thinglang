@@ -7,6 +7,8 @@ from thinglang.lexer.tokens import LexicalToken, LexicalBinaryOperation
 
 class LexicalNumericalValue(LexicalToken, ValueType):
 
+    STATIC = True
+
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)
         self.value = int(value)

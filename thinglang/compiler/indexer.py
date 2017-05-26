@@ -88,6 +88,7 @@ class Indexer(TreeTraversal):
         The reference indexing for method calls involves 2 separate processes - resolving the method target,
         and resolving each and every argument
         """
+        print(node)
         node.arguments = [
             arg if arg.STATIC else ResolvedReference(self.locals.get(arg)) for arg in node.arguments
         ]

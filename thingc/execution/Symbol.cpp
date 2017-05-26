@@ -28,11 +28,7 @@ void Symbol::execute() {
 	case Opcode::CALL_METHOD: {
 		auto instance = Program::instance();
 		auto method = instance->method(target);
-		Program::create_frame(method.frame_size);
 
-		for (unsigned int i = 0; i < method.arguments; i++) {
-			Program::frame().push_back(Program::pop());
-		}
 
 		method.execute();
 		break;
