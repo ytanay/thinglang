@@ -33,7 +33,7 @@ class Conditional(BaseSymbol):
         super(Conditional, self).compile(context)
         if self.next_sibling().implements(UnconditionalElse):
             context.append(BytecodeSymbols.jump())
-        instruction.args = context.current_index() - idx,
+        instruction.args = context.current_index() - 1,
 
 
 class ElseBranchInterface(object):
@@ -45,7 +45,7 @@ class UnconditionalElse(BaseSymbol, ElseBranchInterface):
     def compile(self, context: CompilationContext):
         jump, idx = context.last()
         super(UnconditionalElse, self).compile(context)
-        jump.args = context.current_index() - idx,
+        jump.args = context.current_index() - 1,
 
 
 class ConditionalElse(Conditional, ElseBranchInterface):
