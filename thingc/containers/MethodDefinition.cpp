@@ -1,3 +1,4 @@
+#include <iostream>
 #include "MethodDefinition.h"
 #include "../execution/Program.h"
 
@@ -10,7 +11,11 @@ void MethodDefinition::execute()
         Program::frame()[i] = Program::pop();
     }
 
-    for (auto symbol : this->symbols) {
-		symbol.execute();
+    int counter = 0;
+    for (auto it = symbols.begin(); it < symbols.end();) {
+		std::cerr << "[" << counter << "] ";
+        auto next = it->execute();
+        it += next;
+        counter += next;
 	};
 }
