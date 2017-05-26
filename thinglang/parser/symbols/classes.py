@@ -29,6 +29,13 @@ class ThingDefinition(DefinitionPairSymbol):
     def serialization(self):
         return len(self.members()), len(self.methods())
 
+    def finalize(self):
+        first_method = self.methods()[0]
+        if not first_method.is_constructor:
+            print('Creating default constructor!')
+            index = self.children.index(first_method)
+            self.children.insert(index, MethodDefinition([LexicalDeclarationConstructor, None]))
+
 
 class MethodDefinition(BaseSymbol):
     SERIALIZATION = '<II'
@@ -50,6 +57,7 @@ class MethodDefinition(BaseSymbol):
 
         self.return_type = None
         self.frame_size = None
+        self.index = None
 
     def is_constructor(self):
         return self.name == LexicalIdentifier.constructor()
