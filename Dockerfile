@@ -10,7 +10,7 @@ RUN ./cmake-install.sh --skip-license
 
 ADD thingc app-src
 RUN mkdir app-src/build
-WORKDIR build
+WORKDIR app-src/build
 RUN cmake ..
 RUN make
 
