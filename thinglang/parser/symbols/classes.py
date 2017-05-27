@@ -75,13 +75,16 @@ class MethodDefinition(BaseSymbol):
         if not self.return_type:
             self.return_type = type
         elif type is not self.return_type:
+          return # TODO: reenable
           raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
 
     def compile(self, context):
+        context.method_start()
         super(MethodDefinition, self).compile(context)
         if not self.is_constructor() and not self.children[-1].implements(ReturnStatement):
             context.append(BytecodeSymbols.push_null())
-        context.append(BytecodeSymbols.method_end())
+
+        context.method_end()
 
 
 class MemberDefinition(BaseSymbol):
