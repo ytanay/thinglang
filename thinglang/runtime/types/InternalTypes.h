@@ -5,4 +5,3 @@ enum class InternalTypes {
     TEXT = -1,
     NUMBER = -2
 };
-

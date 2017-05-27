@@ -3,17 +3,15 @@
 
 const std::string ProgramReader::MAGIC = "THING";
 
-ProgramInfo ProgramReader::process()
-{
-	read_header();
+ProgramInfo ProgramReader::process() {
+    read_header();
 
-	auto data = read_data();
-	auto code = read_code();
-	return ProgramInfo(data, code);
+    auto data = read_data();
+    auto code = read_code();
+    return ProgramInfo(data, code);
 }
 
-void ProgramReader::read_header()
-{
+void ProgramReader::read_header() {
     if (!file.is_open()) {
         throw RuntimeError("Cannot open file");
     }
@@ -29,7 +27,8 @@ void ProgramReader::read_header()
     data_size = read<uint32_t>();
     index = 0; // reset the index, since the program_size in the header does not include the header itself
 
-    std::cerr << "thinglang bytecode version: " << version << ", total size: " << program_size << ", data size: " << data_size << std::endl;
+    std::cerr << "thinglang bytecode version: " << version << ", total size: " << program_size << ", data size: "
+              << data_size << std::endl;
 }
 
 std::vector<PThingInstance> ProgramReader::read_data() {
@@ -77,9 +76,9 @@ std::vector<TypeInfo> ProgramReader::read_code() {
     }
 
     if (index != program_size) {
-        throw RuntimeError(std::string("Index mismatch " + std::to_string(index) + ", " + std::to_string(program_size)).c_str());
-    }
-    else {
+        throw RuntimeError(
+                std::string("Index mismatch " + std::to_string(index) + ", " + std::to_string(program_size)).c_str());
+    } else {
         std::cerr << "Program processed successfully" << std::endl << std::endl;
     }
 
@@ -90,10 +89,11 @@ std::vector<TypeInfo> ProgramReader::read_code() {
 TypeInfo ProgramReader::read_class() {
     auto member_count = read_size();
     auto method_count = read_size();
-    std::cerr << "\tEncountered class of " << member_count << " members and " << method_count << " methods" << std::endl;
+    std::cerr << "\tEncountered class of " << member_count << " members and " << method_count << " methods"
+              << std::endl;
     std::vector<MethodDefinition> methods;
 
-    for(int i = 0; i < method_count; i++){
+    for (int i = 0; i < method_count; i++) {
         methods.push_back(read_method());
     }
     return TypeInfo("Unknown class", "", methods);
@@ -107,8 +107,9 @@ MethodDefinition ProgramReader::read_method() {
     std::cerr << "\tEncountered method (frame size=" << frame_size << ", args=" << arguments << ")" << std::endl;
     std::vector<Symbol> symbols;
 
-    for(auto opcode = read_opcode(); opcode != Opcode::METHOD_END; opcode = read_opcode()){
-        std::cerr << "\t\t\tReading symbol [" << symbols.size() << "] " << describe(opcode) << " (" << int(opcode) << ")" << std::endl;
+    for (auto opcode = read_opcode(); opcode != Opcode::METHOD_END; opcode = read_opcode()) {
+        std::cerr << "\t\t\tReading symbol [" << symbols.size() << "] " << describe(opcode) << " (" << int(opcode)
+                  << ")" << std::endl;
         auto symbol = read_symbol(opcode);
         symbols.push_back(symbol);
     }
@@ -145,6 +146,6 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         }
 
         default:
-            throw RuntimeError(std::string("Unknown opcode " + std::to_string((int)opcode)).c_str());
+            throw RuntimeError(std::string("Unknown opcode " + std::to_string((int) opcode)).c_str());
     }
 }

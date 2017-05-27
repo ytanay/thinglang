@@ -8,14 +8,17 @@
 class TypeInfo {
 
 public:
-	TypeInfo(const std::string& name) : name(name) {};
-	TypeInfo(const std::string& name, std::string members, std::vector<MethodDefinition>& methods) : name(name), members(members), methods(methods) {};
-	
-	void instantiate();
+    TypeInfo(const std::string &name) : name(name) {};
+
+    TypeInfo(const std::string &name, std::string members, std::vector<MethodDefinition> &methods) : name(name),
+                                                                                                     members(members),
+                                                                                                     methods(methods) {};
+
+    void instantiate();
 
 private:
-	std::string name;
-	std::string members;
-	std::vector<MethodDefinition> methods;
+    std::string name;
+    std::string members;
+    std::vector<MethodDefinition> methods;
 };
 

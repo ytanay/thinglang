@@ -4,21 +4,23 @@
 #include "../execution/Program.h"
 
 
-void MethodDefinition::execute()
-{
-	Program::create_frame(frame_size);
+void MethodDefinition::execute() {
+    Program::create_frame(frame_size);
 
     for (unsigned int i = 0; i < arguments; i++) {
         Program::frame()[i] = Program::pop();
     }
 
-    for (int counter = 0 ; counter < symbols.size();) {
+    for (int counter = 0; counter < symbols.size();) {
         auto symbol = symbols[counter];
 
-        std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", " << symbol.secondary << " -> [";
-        std::for_each(Program::frame().begin(), Program::frame().end(), [](const PThingInstance& thing){std::cerr << (thing ? thing->text() : "?")  << ",";});
+        std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", "
+                  << symbol.secondary << " -> [";
+        std::for_each(Program::frame().begin(), Program::frame().end(),
+                      [](const PThingInstance &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
         std::cerr << "] -> ";
-        std::for_each(Program::static_data.begin(), Program::static_data.end(), [](const PThingInstance& thing){std::cerr << (thing ? thing->text() : "?")  << ",";});
+        std::for_each(Program::static_data.begin(), Program::static_data.end(),
+                      [](const PThingInstance &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
         std::cerr << "]" << std::endl;
 
 
@@ -32,7 +34,7 @@ void MethodDefinition::execute()
                 break;
             };
 
-            case Opcode ::PUSH_NULL: {
+            case Opcode::PUSH_NULL: {
                 Program::push(NULL);
                 break;
             }
@@ -91,7 +93,7 @@ void MethodDefinition::execute()
 
             case Opcode::CONDITIONAL_JUMP: {
                 auto value = Program::pop();
-                if(!value->boolean()){
+                if (!value->boolean()) {
                     counter = symbol.target;
                     continue;
                 }
@@ -99,11 +101,13 @@ void MethodDefinition::execute()
             }
 
             default:
-                throw RuntimeError("Cannot handle symbol " + describe(symbol.opcode) + " (" + std::to_string((int) symbol.opcode) + ")");
+                throw RuntimeError(
+                        "Cannot handle symbol " + describe(symbol.opcode) + " (" + std::to_string((int) symbol.opcode) +
+                        ")");
         }
 
 
         counter++;
-	};
+    };
 }
 

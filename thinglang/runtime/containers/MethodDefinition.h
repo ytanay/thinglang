@@ -6,15 +6,18 @@
 
 class MethodDefinition {
 public:
-	MethodDefinition() : frame_size(0), arguments(0) {};
-	MethodDefinition(unsigned int frame_size, unsigned int arguments, std::vector<Symbol> symbols) : frame_size(frame_size), arguments(arguments), symbols(symbols) {};
+    MethodDefinition() : frame_size(0), arguments(0) {};
 
-	void execute();
-	unsigned int frame_size;
-	unsigned int arguments;
+    MethodDefinition(unsigned int frame_size, unsigned int arguments, std::vector<Symbol> symbols) : frame_size(
+            frame_size), arguments(arguments), symbols(symbols) {};
+
+    void execute();
+
+    unsigned int frame_size;
+    unsigned int arguments;
 
 private:
-	std::vector<Symbol> symbols;
+    std::vector<Symbol> symbols;
 
 };
 

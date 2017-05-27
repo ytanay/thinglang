@@ -4,7 +4,7 @@
 
 class NoneType : public TypeInfo {
 public:
-	NoneType() : TypeInfo("None") {};
+    NoneType() : TypeInfo("None") {};
 
 };
 
