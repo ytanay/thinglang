@@ -8,9 +8,6 @@ ADD https://cmake.org/files/v3.8/cmake-3.8.1-Linux-x86_64.sh cmake-install.sh
 RUN chmod +x ./cmake-install.sh
 RUN ./cmake-install.sh --skip-license
 
-ADD thingc app-src
-VOLUME build app-src/build
-WORKDIR app-src/build
-RUN cmake ..
-CMD make
-
+ADD . app-src
+WORKDIR /app-src
+CMD ./build.sh

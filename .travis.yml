@@ -9,4 +9,5 @@ install:
     - docker build -t thingc .
 
 script:
-    - docker run thingc
+    - mkdir build-output
+    - docker run -v $(pwd)/build-output:/app-src/build-output -it thingc
