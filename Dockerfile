@@ -9,8 +9,8 @@ RUN chmod +x ./cmake-install.sh
 RUN ./cmake-install.sh --skip-license
 
 ADD thingc app-src
-RUN mkdir app-src/build
+VOLUME build app-src/build
 WORKDIR app-src/build
 RUN cmake ..
-RUN make
+CMD make
 
