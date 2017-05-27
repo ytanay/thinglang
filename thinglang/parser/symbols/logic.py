@@ -78,6 +78,17 @@ class Loop(BaseSymbol):
     def describe(self):
         return str(self.condition)
 
+    def compile(self, context: CompilationContext):
+        idx = context.push_down(self.condition)
+        print('IDX is {}'.format(idx))
+        jump, _ = context.append(BytecodeSymbols.conditional_jump())
+
+        super(Loop, self).compile(context)
+
+        context.append(BytecodeSymbols.jump(idx))
+
+        jump.args = context.current_index(),
+
 
 class IterativeLoop(BaseSymbol):
 
