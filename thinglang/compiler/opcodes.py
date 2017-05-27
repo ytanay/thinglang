@@ -7,7 +7,7 @@ ENUM_PARSER = re.compile(r'(.*)\s*?=\s*?(\d+)')
 
 
 def read_opcodes():
-    with open(os.path.join(BASE_DIR, '..', '..', 'thingc', 'execution', 'Opcode.h')) as f:
+    with open(os.path.join(BASE_DIR, '..', 'serialization', 'Opcode.h')) as f:
         for line in f:
             if 'enum class Opcode' in line:
                 break
