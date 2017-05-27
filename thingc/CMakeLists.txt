@@ -26,5 +26,5 @@ set(SOURCE_FILES
         )
 
 
-
+SET(CMAKE_EXE_LINKER_FLAGS "-static")
 add_executable(thingc ${SOURCE_FILES})
