@@ -50,7 +50,14 @@ void MethodDefinition::execute()
             case Opcode::PUSH_STATIC: {
                 Program::push(Program::data(symbol.target));
                 break;
-            };
+            }
+
+            case Opcode::CALL: {
+                auto instance = Program::top();
+                instance->call_method(symbol.target);
+
+                break;
+            }
 
             case Opcode::CALL_METHOD: {
                 auto instance = Program::instance();

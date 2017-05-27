@@ -17,7 +17,6 @@ int main(int argc, char** argv) {
 
     auto reader = ProgramReader(argv[1]);
 
-
     try {
         auto info = reader.process();
         Program::load(info);
