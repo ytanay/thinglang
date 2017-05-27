@@ -3,10 +3,13 @@ import itertools
 from thinglang.compiler.allocation import LinearMemoryAllocationLayout
 from thinglang.compiler.references import ResolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.symbols import BaseSymbol
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.symbols.functions import MethodCall
+from thinglang.utils import collection_utils
 from thinglang.utils.tree_utils import TreeTraversal, inspects
+from thinglang.utils.union_types import ACCESS_TYPES
 
 
 class IndexerContext(object):
@@ -84,6 +87,12 @@ class Indexer(TreeTraversal):
 
         if node.value.implements(MethodCall):
             self.inspect_method_call(node.value)
+
+    @inspects(object)
+    def process_reference_dependencies(self, node: BaseSymbol):
+        for x in collection_utils.emit_recursively(node.references(), ACCESS_TYPES):
+            if x.implements(LexicalIdentifier):
+                x.index = self.locals.get(x)
 
     @inspects(MethodCall)
     def inspect_method_call(self, node: MethodCall) -> None:
