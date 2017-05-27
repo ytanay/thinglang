@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
+#include <iostream>
 
 #include "../errors/RuntimeError.h"
 #include "MethodDefinition.h"
@@ -15,7 +16,7 @@ typedef void (*InternalMethod)();
 class ThingInstance {
 public:
 	ThingInstance(std::vector<MethodDefinition> methods) : methods(methods) {};
-	ThingInstance(std::vector<InternalMethod> internals) : internals(internals) {};
+	ThingInstance(std::vector<InternalMethod> internals) : internals(internals) {std::cerr << "Created with " << internals.size() << std::endl;};
 
 	virtual bool boolean() const {
 		throw RuntimeError("cannot convert to boolean");
