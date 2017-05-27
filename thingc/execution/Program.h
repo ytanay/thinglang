@@ -66,12 +66,13 @@ public:
 	}
 
     static std::vector<PThingInstance> internals;
+    static std::vector<PThingInstance> static_data;
 
 private:
 	Program() {}
 
 	static std::stack<PThingInstance> stack;
-	static std::vector<PThingInstance> static_data;
+
 
 	static std::stack<Frame> frames;
 	static std::vector<TypeInfo> types;
