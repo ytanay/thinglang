@@ -1,6 +1,7 @@
 import struct
 
 from thinglang.compiler.opcodes import OPCODES
+from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
 class ResolvableInstruction(object):
@@ -73,6 +74,7 @@ class CompilationContext(object):
     def __init__(self):
         self.symbols = []
         self.data = []
+        self.current_method = []
 
     def append(self, symbol):
         if isinstance(symbol, (ResolvableInstruction, bytes)):
@@ -82,7 +84,6 @@ class CompilationContext(object):
         return symbol, self.current_index()
 
     def finalize(self):
-        code = bytes().join(x.resolve() if isinstance(x, ResolvableInstruction) else x for x in self.symbols)
         code = bytes().join(x.resolve() if isinstance(x, ResolvableInstruction) else x for x in self.symbols + self.current_method)
         data = bytes().join(x for x in self.data)
         header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
@@ -100,9 +101,13 @@ class CompilationContext(object):
         idx = self.current_index()
         if value.STATIC:
             self.append(BytecodeSymbols.push_static(self.append_static(value.serialize())))
+        elif value.implements(LexicalIdentifier):
+            assert value.index is not None, 'Unresolved reference {}'.format(value)
+            self.append(BytecodeSymbols.push(value.index))
         else:
-            raise Exception('Cannot push down non-static')
+            value.compile(self)
         return idx
+
     def method_start(self):
         self.symbols += self.current_method
         self.current_method = []
