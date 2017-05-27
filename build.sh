@@ -5,3 +5,4 @@ cd /app-src/thingc/build
 cmake ..
 make
 cp * /app-src/build-output
+/app-src/build-output/thingc
