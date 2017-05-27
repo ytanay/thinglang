@@ -26,9 +26,9 @@ def compiler(source):
     Simplifier(ast).run()
     Collator(ast).run()
     Indexer(ast).run()
-    #Analyzer(ast).run()
 
     return ast
+
 
 def run(source):
     ast = compiler(source)

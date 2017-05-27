@@ -44,7 +44,6 @@ class Frame(object):
         self.return_value = value
 
     def __setitem__(self, key, value):
-        print('\tSET<{}> {}: {}'.format(self.idx, key, value))
         assert isinstance(key, self.expected_key_type)
         if key in self.data:
             self.data[key] = (self.data[key][0], value)
@@ -52,10 +51,9 @@ class Frame(object):
             self.data[key] = (self.idx, value)
 
     def __getitem__(self, item):
-
         if not item in self.data:
             raise UnresolvedReference('Variable {} not recognized in this scope'.format(item))
-        print('\tGET<{}> {}: {}'.format(self.idx, item, self.data[item][1]))
+
         assert isinstance(item, self.expected_key_type)
         return self.data[item][1]
 
@@ -67,12 +65,10 @@ class Frame(object):
             yield key, value
 
     def enter(self):
-        print('\tINCR<{}> -> <{}>'.format(self.idx, self.idx + 1))
         self.idx += 1
 
     def exit(self):
         assert self.idx > 0, 'Cannot exit lowest stack segment'
-        print('\tDECR<{}> -> <{}>'.format(self.idx, self.idx - 1))
         self.data = {
             key: value for key, value in self.data.items() if value[0] != self.idx
         }

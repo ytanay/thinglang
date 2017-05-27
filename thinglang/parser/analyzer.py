@@ -34,7 +34,7 @@ class Analyzer(TreeTraversal):
 
     def inspect(self, node, parent):
         assert node.parent is parent, 'expected node {} to have parent {} but got {}'.format(node, parent, node.parent)
-        assert node.EXECUTABLE, 'unexecutable node remains in AST after simplification {}'.format(node)
+        assert node.EXECUTABLE, 'unexecutable node remains in AST after reduction {}'.format(node)
         super().inspect(node, parent)
 
     def normalize_reference_access(self, access):
