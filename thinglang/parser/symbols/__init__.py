@@ -13,6 +13,7 @@ class BaseSymbol(Describable):
     ADVANCE = True
     EXECUTABLE = True
     SERIALIZATION = None
+    STATIC = False
 
     def __init__(self, slice):
         self.children = []
