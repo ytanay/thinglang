@@ -1,3 +1,4 @@
+from thinglang.compiler import CompilationContext, BytecodeSymbols
 from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
@@ -38,6 +39,11 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
 
     def transpile(self):
         return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
+
+    def compile(self, context: CompilationContext, returns=True):
+        context.push_down(self.arguments[1])
+        context.push_down(self.arguments[0])
+        context.append(BytecodeSymbols.call(3 if self.operator is LexicalGreaterThan else 2))
 
     def resolve_type(self):
         assert all(x.resolve_type() == self.arguments[0].resolve_type() for x in self.arguments)
