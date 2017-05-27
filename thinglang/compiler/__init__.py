@@ -75,15 +75,15 @@ class CompilationContext(object):
         self.data = []
 
     def append(self, symbol):
-        idx = len(self.symbols)
         if isinstance(symbol, (ResolvableInstruction, bytes)):
-            self.symbols.append(symbol)
+            self.current_method.append(symbol)
         elif symbol:
-            self.symbols.extend(symbol)
-        return symbol, idx
+            self.current_method.extend(symbol)
+        return symbol, self.current_index()
 
     def finalize(self):
         code = bytes().join(x.resolve() if isinstance(x, ResolvableInstruction) else x for x in self.symbols)
+        code = bytes().join(x.resolve() if isinstance(x, ResolvableInstruction) else x for x in self.symbols + self.current_method)
         data = bytes().join(x for x in self.data)
         header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
 
@@ -94,13 +94,21 @@ class CompilationContext(object):
         return len(self.data) - 1
 
     def current_index(self):
-        return len(self.symbols) - 1
+        return len(self.current_method) - 1
 
     def push_down(self, value):
+        idx = self.current_index()
         if value.STATIC:
             self.append(BytecodeSymbols.push_static(self.append_static(value.serialize())))
         else:
             raise Exception('Cannot push down non-static')
+        return idx
+    def method_start(self):
+        self.symbols += self.current_method
+        self.current_method = []
+
+    def method_end(self):
+        self.current_method.append(BytecodeSymbols.method_end())
 
     def last(self):
-        return self.symbols[-1], len(self.symbols) - 1
+        return self.current_method[-1], len(self.current_method) - 1
