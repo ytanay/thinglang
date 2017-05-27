@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include "MethodDefinition.h"
 #include "../execution/Program.h"
 
@@ -14,7 +15,11 @@ void MethodDefinition::execute()
     for (int counter = 0 ; counter < symbols.size();) {
         auto symbol = symbols[counter];
 
-        std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", " << symbol.secondary << std::endl;
+        std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", " << symbol.secondary << " -> [";
+        std::for_each(Program::frame().begin(), Program::frame().end(), [](const PThingInstance& thing){std::cerr << (thing ? thing->text() : "?")  << ",";});
+        std::cerr << "] -> ";
+        std::for_each(Program::static_data.begin(), Program::static_data.end(), [](const PThingInstance& thing){std::cerr << (thing ? thing->text() : "?")  << ",";});
+        std::cerr << "]" << std::endl;
 
 
         switch (symbol.opcode) {
