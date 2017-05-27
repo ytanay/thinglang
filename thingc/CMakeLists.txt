@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.7)
 project(thingc)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
 set(SOURCE_FILES
         main.cpp
@@ -23,7 +23,7 @@ set(SOURCE_FILES
 
         builtins/BuiltinOutput.cpp
         builtins/BuiltinOutput.h
-        loader/ProgramContents.h)
+        )
 
 
 
