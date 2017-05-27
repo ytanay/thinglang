@@ -31,10 +31,9 @@ class BytecodeSymbols(object):
     def set(cls, idx):
         return struct.pack('<BI', OPCODES['SET'], idx)
 
-
     @classmethod
-    def call(cls, thing, idx):
-        return struct.pack('<BII', OPCODES['CALL'], thing, idx)
+    def call(cls, idx):
+        return struct.pack('<BI', OPCODES['CALL'], idx)
 
     @classmethod
     def call_internal(cls, thing, idx):
