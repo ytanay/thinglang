@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Opcode.h"
+#include "../../serialization/Opcode.h"
 
 class Symbol {
 

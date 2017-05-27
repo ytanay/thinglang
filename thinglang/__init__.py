@@ -16,7 +16,7 @@ def collect_includes():
     return '\n' + '\n'.join(open(f).read() for f in files)
 
 
-def compiler(source):
+def preprocess(source):
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -24,6 +24,11 @@ def compiler(source):
     lexical_groups = list(lexer(source))
     ast = parse(lexical_groups)
     Simplifier(ast).run()
+
+    return ast
+
+
+def compiler(ast):
     Collator(ast).run()
     Indexer(ast).run()
 
@@ -31,7 +36,8 @@ def compiler(source):
 
 
 def run(source):
-    ast = compiler(source)
+    ast = preprocess(source)
+    #Analyzer(ast).run()
 
     with ExecutionEngine(ast) as engine:
         engine.execute()
