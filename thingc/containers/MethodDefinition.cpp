@@ -61,9 +61,7 @@ void MethodDefinition::execute()
 
             case Opcode::CALL_METHOD: {
                 auto instance = Program::instance();
-                auto method = instance->method(symbol.target);
-
-                method.execute();
+                instance->call_method(symbol.target);
                 break;
             }
 

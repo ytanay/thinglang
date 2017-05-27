@@ -33,21 +33,17 @@ public:
 	virtual ThingInstance& copy() const {
         throw RuntimeError("copy not supported for this class");
 	}
-	
-	virtual void call(unsigned int target) {
-		
-		methods[target].execute();
-	}
+
 
 	virtual void call_internal (unsigned int target) {
 		internals[target]();
 	}
 
-	MethodDefinition method(unsigned int target) const {
-		return methods[target];
+	virtual void call_method(unsigned int target) {
+		methods[target].execute();
 	}
 
-private:
+protected:
 	std::vector<ThingInstance> fields;
 	std::vector<MethodDefinition> methods;
 	std::vector<InternalMethod> internals;
