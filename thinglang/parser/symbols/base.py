@@ -4,6 +4,7 @@ from thinglang.compiler import CompilationContext, BytecodeSymbols
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.functions import MethodCall
 from thinglang.utils.type_descriptors import ValueType
 
@@ -41,9 +42,11 @@ class AssignmentOperation(BaseSymbol):
             return '{} = {};'.format(self.name.transpile(), self.value.transpile())
 
     def compile(self, context: CompilationContext):
-        if self.value.implements(MethodCall):
+        if self.value.implements((MethodCall, ArithmeticOperation)):
             self.value.compile(context, returns=True)
             context.append(BytecodeSymbols.set(self.target))
+        elif self.value.implements(LexicalIdentifier):
+            context.append(BytecodeSymbols.copy(self.target, self.value))
         elif self.value.STATIC:
             context.append(BytecodeSymbols.set_static(self.target, context.append_static(self.value.serialize())))
 
