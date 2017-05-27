@@ -108,7 +108,7 @@ MethodDefinition ProgramReader::read_method() {
     std::vector<Symbol> symbols;
 
     for(auto opcode = read_opcode(); opcode != Opcode::METHOD_END; opcode = read_opcode()){
-        std::cerr << "\t\t\tReading symbol " << symbols.size() << " " << describe(opcode) << std::endl;
+        std::cerr << "\t\t\tReading symbol [" << symbols.size() << "] " << describe(opcode) << " (" << int(opcode) << ")" << std::endl;
         auto symbol = read_symbol(opcode);
         symbols.push_back(symbol);
     }
@@ -124,6 +124,7 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::PUSH_STATIC:
         case Opcode::PUSH:
         case Opcode::CALL_METHOD:
+        case Opcode::CALL:
         case Opcode::JUMP:
         case Opcode::CONDITIONAL_JUMP: {
             return Symbol(opcode, read_size());
@@ -137,7 +138,6 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         }
 
         case Opcode::SET_STATIC:
-        case Opcode::CALL:
         case Opcode::CALL_INTERNAL: {
             auto target = read_size();
             auto value = read_size();
