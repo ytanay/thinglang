@@ -1,0 +1,9 @@
+/*
+{
+    "expected_output": "Hello, world!"
+}
+*/
+
+thing Program
+    setup
+        Output.write("Hello, world!")

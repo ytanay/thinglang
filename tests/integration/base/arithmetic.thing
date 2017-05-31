@@ -1,0 +1,16 @@
+/*
+{
+    "expected_output": ["10", "15", "25", "40"]
+}
+*/
+
+thing Program
+    setup
+        number a = 10
+        number b = 3 * 5
+        number c = a + b
+        number d = a + 10 * 3
+        Output.write(a)
+        Output.write(b)
+        Output.write(c)
+        Output.write(d)

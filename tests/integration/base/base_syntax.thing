@@ -1,0 +1,13 @@
+/*
+{
+    "expected_output": ["Operators + in strings", "Yotam"]
+}
+*/
+
+thing Program
+    setup
+        Output.write("Operators + in strings") # inline comments
+        text name = "Yotam" # Local variables
+        number i = 10
+        #Output.write(name, i, "inline", 5)
+        Output.write(name)
