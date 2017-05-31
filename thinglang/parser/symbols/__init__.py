@@ -140,6 +140,9 @@ class RootSymbol(BaseSymbol):
         super(RootSymbol, self).compile(context)
         return context
 
+    def transpile(self):
+        return self.transpile_children()
+
 
 class DefinitionPairSymbol(BaseSymbol):
     def __init__(self, slice):

@@ -60,5 +60,8 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
     def statics(self):
         return [x for x in self.arguments if x.STATIC]
 
-    def transpile(self, definition=False):
+    def transpile(self, definition=False, pops=False):
+        if pops:
+            self_pop = '\t\tauto self = static_cast<this_type*>(Program::pop().get());\n'
+            return self_pop + '\n'.join('\t\tauto {} = static_cast<this_type*>(Program::pop().get());'.format(x.transpile()) for x in self.arguments)
         return ', '.join(f'{x.type.transpile() + " " if definition else ""}{x.transpile()}' for x in self.arguments)

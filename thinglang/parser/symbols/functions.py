@@ -30,10 +30,10 @@ class Access(BaseSymbol):
         return cls([LexicalIdentifier(x) if not isinstance(x, LexicalIdentifier) else x for x in target])
 
     def transpile(self):
-        if self.target[0].is_self():
-            return self.target[0].transpile() + '->' + '.'.join(x.transpile() for x in self.target[1:])
+        #if self.target[0].is_self():
+        #    return self.target[0].transpile() + '->' + '->'.join(x.transpile() for x in self.target[1:])
 
-        return '.'.join(x.transpile() for x in self.target)
+        return '->'.join(x.transpile() for x in self.target)
 
 
 class ArgumentListPartial(ListInitializationPartial):
@@ -110,13 +110,15 @@ class MethodCall(BaseSymbol, ValueType):
             context.append(BytecodeSymbols.call_internal(0, 0))
 
 
-class ReturnStatement(DefinitionPairSymbol):
+class ReturnStatement(BaseSymbol):
     def __init__(self, slice):
         super().__init__(slice)
-        self.value = slice[1]
+        self.value = slice[1] if len(slice) == 2 else None
 
     def transpile(self):
-        return 'return {};'.format(self.value.transpile())
+        if self.value:
+            return 'Program::push(PThingInstance(new this_type({}))); return;'.format(self.value.transpile())
+        return 'Program::push(PThingInstance(NULL)); return;'
 
     def compile(self, context):
         context.push_down(self.value)
