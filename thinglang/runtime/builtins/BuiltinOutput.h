@@ -11,7 +11,7 @@ public:
     BuiltinOutput() : ThingInstance(BuiltinOutput::methods) {};
 
     static void write() {
-        auto str = static_cast<TextInstance *>(Program::pop().get());
+        auto str = static_cast<TextNamespace::TextInstance *>(Program::pop().get());
         std::cout << str->text() << std::endl;
     }
 

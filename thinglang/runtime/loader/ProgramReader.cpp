@@ -48,19 +48,19 @@ std::vector<PThingInstance> ProgramReader::read_data() {
 
 
 PThingInstance ProgramReader::read_data_block() {
-    auto type = static_cast<InternalTypes >(read<int32_t>());
+    auto type = static_cast<InternalTypes>(read<int32_t>());
 
     switch (type) {
         case InternalTypes::TEXT: {
             auto size = read_size();
             auto data = read(size);
             std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
-            return PThingInstance(new TextInstance(data));
+            return PThingInstance(new TextNamespace::TextInstance(data));
         }
         case InternalTypes::NUMBER: {
             auto data = read<int32_t>();
             std::cerr << "\tReading int: " << data << std::endl;
-            return PThingInstance(new NumberInstance(data));
+            return PThingInstance(new NumberNamespace::NumberInstance(data));
         }
 
         default:
