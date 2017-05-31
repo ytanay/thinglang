@@ -1,7 +1,9 @@
 from thinglang.compiler import OPCODES, BytecodeSymbols
+from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor
 from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
+from thinglang.parser.symbols.base import InlineString
 from thinglang.parser.symbols.functions import ArgumentList, ReturnStatement
 
 
@@ -18,7 +20,22 @@ class ThingDefinition(DefinitionPairSymbol):
         return self.name
 
     def transpile(self):
-        return 'class {} {{\npublic:\n{}\n}};'.format(self.name.value, self.transpile_children(indent=1))
+        name = '{}Instance'.format(self.name.transpile().capitalize())
+        constructor = '\t{}({}) : val(val), ThingInstance(this_type::methods) {{}}'.format(
+            name,
+            ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members())
+        )
+
+        return '\n'.join([
+            'class {};'.format(name),
+            'typedef {} this_type;'.format(name),
+            'class {} : public ThingInstance {{\npublic:\n{}\n{}\n{}\n{}\n}};'.format(
+                name,
+                constructor,
+                templates.FOUNDATION_VIRTUALS.format(first_member=self.members()[0].name.transpile()),
+                '\tstatic const std::vector<InternalMethod> methods;',
+                self.transpile_children(indent=1))
+        ])
 
     def members(self):
         return [x for x in self.children if x.implements(MemberDefinition)]
@@ -66,7 +83,12 @@ class MethodDefinition(BaseSymbol):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
-        return '{}{}({}) {{\n{}\n\t}}'.format(self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '', (self.parent.name if self.is_constructor() else self.name).value, self.arguments.transpile(definition=True), self.transpile_children(2))
+        return 'static {}{}({}) {{\n{}\n{}\n\t}}'.format(
+            self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '',
+            (self.parent.name if self.is_constructor() else self.name).transpile(),
+            '',  # Pop directly from stack, otherwise: self.arguments.transpile(definition=True),
+            self.arguments.transpile(pops=True),
+            self.transpile_children(2))
 
     def serialization(self):
         return self.frame_size, len(self.arguments)
@@ -92,6 +114,9 @@ class MemberDefinition(BaseSymbol):
         super(MemberDefinition, self).__init__(slice)
 
         _, self.type, self.name = slice
+
+        if self.type.implements(InlineString):
+            self.type = LexicalIdentifier(self.type.value)
 
     def describe(self):
         return 'has {} {}'.format(self.type, self.name)
