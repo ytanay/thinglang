@@ -1,4 +1,5 @@
 import inspect
+import itertools
 
 import struct
 
@@ -83,9 +84,18 @@ class BaseSymbol(Describable):
         siblings = self.parent.children
         siblings.insert(siblings.index(self), node)
 
-    def next_sibling(self):
+    def siblings_while(self, predicate):
+        return itertools.takewhile(predicate, self.next_siblings())
+
+    def next_siblings(self):
         siblings = self.parent.children
-        return siblings[siblings.index(self) + 1]
+        return siblings[siblings.index(self) + 1:]
+
+    def next_sibling(self):
+        next_siblings = self.next_siblings()
+
+        if next_siblings:
+            return next_siblings[0]
 
     def remove(self):
         self.parent.children.remove(self)
