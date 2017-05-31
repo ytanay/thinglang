@@ -1,53 +1,34 @@
 #pragma once
 
-#include <string>
-#include <iostream>
-
 #include "../execution/Program.h"
 #include "../containers/ThingInstance.h"
+#include "../utils/formatting.h"
 
-
+namespace NumberNamespace {
+class NumberInstance;
+typedef NumberInstance this_type;
 class NumberInstance : public ThingInstance {
 public:
+	NumberInstance(int val) : val(val), ThingInstance(this_type::methods) {}
 
-    NumberInstance(int val) : val(val), ThingInstance(NumberInstance::methods) {};
+virtual std::string text() const override {
+    return to_string(val);
+}
+virtual void call_method(unsigned int target) override {
+    internals[target]();
+}
 
-    virtual std::string text() const override {
-        return std::to_string(val);
-    }
-
-    bool boolean() const override {
-        return val != 0;
-    }
-
-    virtual void call_method(unsigned int target) override {
-        internals[target]();
-    }
-
-    static void add() {
-        auto lhs = static_cast<NumberInstance *>(Program::pop().get());
-        auto rhs = static_cast<NumberInstance *>(Program::pop().get());
-        auto ptr = PThingInstance(new NumberInstance(lhs->val + rhs->val));
-        Program::push(ptr);
-    }
-
-    static void sub() {
-        auto lhs = static_cast<NumberInstance *>(Program::pop().get());
-        auto rhs = static_cast<NumberInstance *>(Program::pop().get());
-        auto ptr = PThingInstance(new NumberInstance(lhs->val - rhs->val));
-        Program::push(ptr);
-    }
-
-    static void gt() {
-        auto lhs = static_cast<NumberInstance *>(Program::pop().get());
-        auto rhs = static_cast<NumberInstance *>(Program::pop().get());
-        auto ptr = PThingInstance(new NumberInstance(lhs->val > rhs->val));
-        Program::push(ptr);
-    }
-
-
-    const int val;
-    static const std::vector<InternalMethod> methods;
-
+	static const std::vector<InternalMethod> methods;
+	int val;
+	static void __LexicalAddition__() {
+		auto self = static_cast<this_type*>(Program::pop().get());
+		auto other = static_cast<this_type*>(Program::pop().get());
+		Program::push(PThingInstance(new this_type(self->val + other->val))); return;
+	}
+	static void __LexicalMultiplication__() {
+		auto self = static_cast<this_type*>(Program::pop().get());
+		auto other = static_cast<this_type*>(Program::pop().get());
+		Program::push(PThingInstance(new this_type(self->val * other->val))); return;
+	}
 };
-
+}

@@ -1,3 +1,5 @@
 #include "TextInstance.h"
 
-const std::vector<InternalMethod> TextInstance::methods;
+namespace TextNamespace {
+    const std::vector<InternalMethod> TextInstance::methods = {&TextInstance::__LexicalAddition__, &TextInstance::__LexicalEquality__};
+}

@@ -1,6 +1,5 @@
 #include "NumberInstance.h"
 
-const std::vector<InternalMethod> NumberInstance::methods = {0,
-                                                             &NumberInstance::add,
-                                                             &NumberInstance::sub,
-                                                             &NumberInstance::gt};
+namespace NumberNamespace {
+    const std::vector<InternalMethod> NumberInstance::methods = {&NumberInstance::__LexicalAddition__, &NumberInstance::__LexicalMultiplication__};
+}
