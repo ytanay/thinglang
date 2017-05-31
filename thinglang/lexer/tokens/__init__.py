@@ -28,10 +28,14 @@ class LexicalToken(Describable):
         return self.value
 
 
-class LexicalBinaryOperation(LexicalToken, metaclass=abc.ABCMeta):
+class LexicalBinaryOperation(LexicalToken):
     def __init__(self, operator):
         super(LexicalBinaryOperation, self).__init__(operator)
         self.operator = operator
+
+    @classmethod
+    def transpile(cls):
+        return '__{}__'.format(cls.__name__)
 
 
 class LexicalGroupEnd(LexicalToken):

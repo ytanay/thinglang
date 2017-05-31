@@ -1,11 +1,16 @@
 import abc
 
+from thinglang.compiler import BytecodeSymbols
+from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalToken
 
 
-class LexicalComparison(LexicalToken, metaclass=abc.ABCMeta):  # one of eq, neq, >, <, etc...
-    pass
+class LexicalComparison(LexicalToken):  # one of eq, neq, >, <, etc...
+
+    @classmethod
+    def transpile(cls):
+        return '__{}__'.format(cls.__name__)
 
 
 class LexicalConditional(LexicalToken):  # if conditional
@@ -59,17 +64,25 @@ class LexicalRepeatFor(LexicalToken):
 
 
 class LexicalBoolean(LexicalToken, ValueType):
-    def evaluate(self, _):
+
+    @classmethod
+    def evaluate(cls, _=None):
         raise NotImplementedError('Must implement evaluate')
 
 
+
 class LexicalBooleanTrue(LexicalBoolean):
+    STATIC = True
 
     def transpile(self):
         return 'true'
 
-    def evaluate(self, _):
+    @classmethod
+    def evaluate(cls, _=None):
         return True
+
+    def serialize(self):
+        return LexicalNumericalValue(True).serialize()
 
 
 class LexicalBooleanFalse(LexicalBoolean):
@@ -77,5 +90,9 @@ class LexicalBooleanFalse(LexicalBoolean):
     def transpile(self):
         return 'false'
 
-    def evaluate(self, _):
+    @classmethod
+    def evaluate(cls, _=None):
         return False
+
+    def compile(self, context):
+        context.append(BytecodeSymbols.push_null())

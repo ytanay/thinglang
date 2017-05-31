@@ -71,12 +71,12 @@ class LexicalIdentifier(LexicalToken, ValueType):
     def references(self):
         return self
 
-    def resolve_type(self):
+    def type_id(self):
         return self.type
 
     def transpile(self):
-        if self.is_self():
-            return 'this'
+        #if self.is_self():
+        #    return 'this'
         return self.value
 
     def __hash__(self):

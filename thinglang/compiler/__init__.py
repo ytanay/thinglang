@@ -116,7 +116,7 @@ class CompilationContext(object):
         self.current_method.append(BytecodeSymbols.method_end())
 
     def last(self):
-        return self.current_method[-1], len(self.current_method) - 1        return self.current_method[-1], len(self.current_method) - 1
+        return self.current_method[-1], len(self.current_method) - 1
 
     def update_conditional_jumps(self):
         print(self.conditional_groups[-1])
