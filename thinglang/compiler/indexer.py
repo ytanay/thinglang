@@ -92,7 +92,7 @@ class Indexer(TreeTraversal):
     def process_reference_dependencies(self, node: BaseSymbol):
         for x in collection_utils.emit_recursively(node.references(), ACCESS_TYPES):
             if x.implements(LexicalIdentifier):
-                x.index = self.locals.get(x)
+                x.index, x.type = self.locals.get(x)
 
     @inspects(MethodCall)
     def inspect_method_call(self, node: MethodCall) -> None:
@@ -102,7 +102,7 @@ class Indexer(TreeTraversal):
         """
 
         node.arguments = [
-            arg if arg.STATIC else ResolvedReference(self.locals.get(arg)) for arg in node.arguments
+            arg if arg.STATIC else ResolvedReference(self.locals.get(arg)[0]) for arg in node.arguments
         ]
 
         if node.target[0].is_self():

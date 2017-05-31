@@ -6,7 +6,7 @@ class LinearMemoryAllocationLayout(object):
 
     def add(self, name):
         index = self.next_index
-        self.mapping[name] = self.next_index
+        self.mapping[name] = self.next_index, name.type
         self.next_index += 1
         return index
 
