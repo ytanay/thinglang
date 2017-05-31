@@ -12,11 +12,13 @@ ProgramInfo ProgramReader::process() {
 }
 
 void ProgramReader::read_header() {
-    if (!file.is_open()) {
+    if (!file) {
         throw RuntimeError("Cannot open file");
     }
 
     auto magic = read(MAGIC.size());
+
+    std::cerr << "Got magic: " << magic;
 
     if (magic != MAGIC) {
         throw RuntimeError("Invalid file format");
