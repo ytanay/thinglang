@@ -28,7 +28,8 @@ def preprocess(source):
     return ast
 
 
-def compiler(ast):
+def compiler(source):
+    ast = preprocess(source)
     Collator(ast).run()
     Indexer(ast).run()
 
@@ -37,7 +38,6 @@ def compiler(ast):
 
 def run(source):
     ast = preprocess(source)
-    #Analyzer(ast).run()
 
     with ExecutionEngine(ast) as engine:
         engine.execute()
