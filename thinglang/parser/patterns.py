@@ -4,7 +4,7 @@ from thinglang.lexer.tokens.typing import LexicalCast
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
 from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation, RangeGenerator
 from thinglang.utils.type_descriptors import ValueType
-from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens import LexicalGroupEnd, LexicalBinaryOperation
 from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, \
     LexicalAccess, LexicalAssignment, LexicalIdentifier, LexicalBracketOpen, LexicalBracketClose
@@ -14,7 +14,7 @@ from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgu
 from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile, LexicalIn, LexicalRepeatFor
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
-from thinglang.parser.symbols.base import AssignmentOperation
+from thinglang.parser.symbols.base import AssignmentOperation, InlineString
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition, MemberDefinition
 from thinglang.parser.symbols.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
@@ -27,9 +27,12 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
+    ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), LexicalGroupEnd), MethodDefinition),  # does +
+    ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), ArgumentList), MethodDefinition),  # does + with a, b
     ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),  # setup with a, b
     ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition),  # setup
     ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
+    ((LexicalDeclarationMember, InlineString, LexicalIdentifier), MemberDefinition),
 
     ((ValueType, LexicalCast, LexicalIdentifier), CastOperation),
 
@@ -78,12 +81,13 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
 
     ((LexicalClassInitialization, LexicalIdentifier, ArgumentList), MethodCall),
 
-    ((ArgumentListPartial, LexicalSeparator, POTENTIALLY_RESOLVABLE), ArgumentListPartial), # To deal with Access in argument lists
+    ((ArgumentListPartial, LexicalSeparator, POTENTIALLY_RESOLVABLE), ArgumentListPartial),  # To deal with Access in argument lists
 
 ])
 
 SECOND_PASS_PATTERNS = collections.OrderedDict([
     ((LexicalReturnStatement, POTENTIALLY_RESOLVABLE), ReturnStatement),  # return 2
+    ((LexicalReturnStatement,), ReturnStatement),
     ((LexicalElse,), UnconditionalElse),
     ((LexicalIdentifier, ArgumentList), MethodCall),  # person.walk(...)
 ])
