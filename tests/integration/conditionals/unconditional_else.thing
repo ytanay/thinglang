@@ -1,0 +1,17 @@
+/*
+{
+    "expected_output": ["dog is dog", "dog is not cat"]
+}
+*/
+
+thing Program
+    setup
+        if "dog" eq "dog"
+            Output.write("dog is dog")
+        otherwise
+            Output.write("dog is not dog")
+
+        if "dog" eq "cat"
+            Output.write("dog is cat")
+        otherwise
+            Output.write("dog is not cat")
