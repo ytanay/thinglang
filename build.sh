@@ -1,8 +1,7 @@
 #!/bin/bash
 
-mkdir /app-src/thingc/build
-cd /app-src/thingc/build
+mkdir /app-src/build
+cd /app-src/build
 cmake ..
 make
-cp * /app-src/build-output
-/app-src/build-output/thingc
+/app-src/build/thinglang --build-only
