@@ -1,0 +1,11 @@
+thing text
+    
+    has "std::string" val
+
+    does + with text other
+        return self.val + other.val
+
+    does eq with text other
+        if self.val eq other.val
+            return ""
+        return

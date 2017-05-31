@@ -1,0 +1,9 @@
+thing number
+    
+    has int val
+    
+    does + with number other
+        return self.val + other.val
+
+    does * with number other
+        return self.val * other.val
