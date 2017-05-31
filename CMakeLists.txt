@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(thingc)
+project(thinglang)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -24,4 +24,4 @@ set(SOURCE_FILES
        )
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")
-add_executable(thingc ${SOURCE_FILES})
+add_executable(thinglang ${SOURCE_FILES})
