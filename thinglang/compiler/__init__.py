@@ -74,6 +74,7 @@ class CompilationContext(object):
         self.symbols = []
         self.data = []
         self.current_method = []
+        self.conditional_groups = []
 
     def append(self, symbol):
         if isinstance(symbol, (ResolvableInstruction, bytes)):
@@ -115,4 +116,13 @@ class CompilationContext(object):
         self.current_method.append(BytecodeSymbols.method_end())
 
     def last(self):
-        return self.current_method[-1], len(self.current_method) - 1
+        return self.current_method[-1], len(self.current_method) - 1        return self.current_method[-1], len(self.current_method) - 1
+
+    def update_conditional_jumps(self):
+        print(self.conditional_groups[-1])
+        for symbol, jump in list(self.conditional_groups[-1].items())[:-1]:
+
+            jump.args = self.current_index(),
+
+
+        self.conditional_groups.pop()
