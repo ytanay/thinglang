@@ -1,6 +1,7 @@
 import struct
 
 from thinglang.compiler import CompilationContext, BytecodeSymbols
+from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol
@@ -54,6 +55,7 @@ class AssignmentOperation(BaseSymbol):
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
     STATIC = True
     TYPE = LexicalIdentifier("text")
+    TYPE_IDX = Foundation.TYPE_ORDERING["text"]
 
     def __init__(self, value):
         super().__init__(None)
@@ -63,7 +65,7 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
         return self.value
 
     def serialize(self):
-        return struct.pack('<iI', -1, len(self.value)) + bytes(self.value, 'utf-8')
+        return struct.pack('<iI', self.TYPE_IDX, len(self.value)) + bytes(self.value, 'utf-8')
 
     def references(self):
         return ()
@@ -71,5 +73,5 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def transpile(self):
         return f'"{self.value}"'
 
-    def type(self):
+    def type_id(self):
         return self.TYPE

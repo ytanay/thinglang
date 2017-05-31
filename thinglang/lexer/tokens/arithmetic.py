@@ -1,6 +1,7 @@
 import struct
 
-from thinglang.builtins import TT_NUMBER
+from thinglang.foundation import Foundation
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalToken, LexicalBinaryOperation
 
@@ -8,6 +9,8 @@ from thinglang.lexer.tokens import LexicalToken, LexicalBinaryOperation
 class LexicalNumericalValue(LexicalToken, ValueType):
 
     STATIC = True
+    TYPE = LexicalIdentifier("number")
+    TYPE_IDX = Foundation.TYPE_ORDERING["number"]
 
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)
@@ -20,11 +23,11 @@ class LexicalNumericalValue(LexicalToken, ValueType):
         return self.value
 
     def serialize(self):
-        return struct.pack('<ii', -2, self.value)
+        return struct.pack('<ii', self.TYPE_IDX, self.value)
 
     @staticmethod
-    def resolve_type():
-        return TT_NUMBER
+    def type_id():
+        return LexicalNumericalValue.TYPE
 
 
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction
