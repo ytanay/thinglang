@@ -17,9 +17,7 @@ class ThingInstance {
 public:
     ThingInstance(std::vector<MethodDefinition> methods) : methods(methods) {};
 
-    ThingInstance(std::vector<InternalMethod> internals) : internals(internals) {
-        std::cerr << "Created with " << internals.size() << std::endl;
-    };
+    ThingInstance(std::vector<InternalMethod> internals) : internals(internals) {};
 
     virtual bool boolean() const {
         throw RuntimeError("cannot convert to boolean");
