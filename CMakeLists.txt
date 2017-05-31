@@ -10,7 +10,6 @@ set(SOURCE_FILES
 
         thinglang/runtime/errors/RuntimeError.cpp
 
-        thinglang/runtime/execution/Program.h
         thinglang/runtime/execution/Program.cpp
         thinglang/runtime/execution/Symbol.cpp
 
@@ -22,9 +21,7 @@ set(SOURCE_FILES
         thinglang/runtime/types/TypeInfo.cpp
 
         thinglang/runtime/builtins/BuiltinOutput.cpp
-        thinglang/runtime/builtins/BuiltinOutput.h
-        )
+       )
 
-
-SET(CMAKE_EXE_LINKER_FLAGS "-static")
+set(CMAKE_EXE_LINKER_FLAGS "-static")
 add_executable(thingc ${SOURCE_FILES})
