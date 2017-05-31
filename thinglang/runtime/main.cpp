@@ -14,7 +14,14 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    auto reader = ProgramReader(argv[1]);
+    auto filename = std::string(argv[1]);
+
+    if(filename == "--build-only"){
+        std::cerr << "Build completed, not executing." << std::endl;
+        return 0;
+    }
+
+    auto reader = filename == "-" ? ProgramReader() : ProgramReader(filename);
 
     try {
         auto info = reader.process();
