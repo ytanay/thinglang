@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 from thinglang.compiler import CompilationContext, BytecodeSymbols
 from thinglang.lexer.tokens.logic import LexicalEquality
 from thinglang.parser.symbols import BaseSymbol
@@ -28,11 +30,21 @@ class Conditional(BaseSymbol):
         return 'if({}) {{\n{}\n\t\t}}'.format(self.value.transpile(), self.transpile_children(indent=3))
 
     def compile(self, context: CompilationContext):
+        if not context.conditional_groups or self not in context.conditional_groups[-1]:
+            elements = [self] + list(self.siblings_while(lambda x: isinstance(x, ElseBranchInterface)))
+            context.conditional_groups.append(OrderedDict((x, None) for x in elements))
+
         context.push_down(self.value)
         instruction, idx = context.append(BytecodeSymbols.conditional_jump())
         super(Conditional, self).compile(context)
-        if self.next_sibling().implements(UnconditionalElse):
-            context.append(BytecodeSymbols.jump())
+
+        if list(context.conditional_groups[-1].keys())[-1] is self:
+            context.update_conditional_jumps()
+        else:
+            jump_out = BytecodeSymbols.jump()
+            context.conditional_groups[-1][self] = jump_out
+            context.append(jump_out)
+
         instruction.args = context.current_index(),
 
 
@@ -43,9 +55,8 @@ class ElseBranchInterface(object):
 
 class UnconditionalElse(BaseSymbol, ElseBranchInterface):
     def compile(self, context: CompilationContext):
-        jump, idx = context.last()
         super(UnconditionalElse, self).compile(context)
-        jump.args = context.current_index(),
+        context.update_conditional_jumps()
 
 
 class ConditionalElse(Conditional, ElseBranchInterface):
