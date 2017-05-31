@@ -1,0 +1,13 @@
+/*
+{
+    "expected_output": "true is truthy"
+}
+*/
+
+thing Program
+    setup
+        if true
+            Output.write("true is truthy")
+
+        if false
+            Output.write("false is truthy")
