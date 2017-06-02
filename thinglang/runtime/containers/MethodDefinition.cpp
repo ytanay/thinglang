@@ -109,5 +109,7 @@ void MethodDefinition::execute() {
 
         counter++;
     };
+
+    Program::pop_frame();
 }
 
