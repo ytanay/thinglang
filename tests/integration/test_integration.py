@@ -1,5 +1,3 @@
-import collections
-import io
 import json
 
 import os
@@ -8,28 +6,32 @@ import glob
 import subprocess
 
 import thinglang
-from thinglang import run, utils
+from thinglang import utils
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 SEARCH_PATTERN = os.path.join(BASE_PATH, '**/*.thing')
 
-TestCase = collections.namedtuple('TestCase', ['code', 'metadata', 'name', 'bytecode_target'])
+
+class TestCase(object):
+
+    def __init__(self, path):
+        with open(path, 'r') as f:
+            contents = f.read()
+
+        metadata_start = contents.index('/*') + 2
+        metadata_end = contents.index('*/')
+        metadata = json.loads(contents[metadata_start:metadata_end])
+
+        self.name = metadata.get('test_name') or '.'.join(path.replace('.thing', '').split(os.sep)[-2:])
+        self.code = contents[metadata_end + 2:]
+        self.metadata = metadata
+        self.target_path = path + 'c'
 
 
 def collect_tests():
     for path in glob.glob(SEARCH_PATTERN, recursive=True):
-        with open(path, 'r') as f:
-            contents = f.read()
-            metadata_start = contents.index('/*') + 2
-            metadata_end = contents.index('*/')
-            metadata = json.loads(contents[metadata_start:metadata_end])
-            yield TestCase(
-                contents[metadata_end + 2:],
-                metadata,
-                metadata.get('test_name') or '.'.join(path.replace('.thing', '').split(os.sep)[-2:]),
-                path + 'c'
-            )
+        yield TestCase(path)
 
 
 def split_lines(param):
@@ -37,7 +39,7 @@ def split_lines(param):
 
 
 @pytest.mark.parametrize('test_file', collect_tests(), ids=lambda x: x.name)
-def test_thing_program(test_file):
+def test_thing_program(test_file: TestCase):
     expected_output = test_file.metadata['expected_output']
 
     utils.print_header('Parsed AST')
@@ -50,10 +52,10 @@ def test_thing_program(test_file):
 
     utils.print_header('VM execution')
 
-    with open(test_file.bytecode_target, 'wb') as f:
+    with open(test_file.target_path, 'wb') as f:
         f.write(bytecode)
 
-    vm = subprocess.Popen(["thinglang", test_file.bytecode_target], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    vm = subprocess.Popen(["thinglang", test_file.target_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = (stream.decode('utf-8').strip() for stream in vm.communicate())
     print(stderr)
 
