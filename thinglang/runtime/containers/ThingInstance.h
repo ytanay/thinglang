@@ -16,8 +16,7 @@ typedef void (*InternalMethod)();
 class ThingInstance {
 public:
     ThingInstance(std::vector<MethodDefinition> methods) : methods(methods) {};
-
-    ThingInstance(std::vector<InternalMethod> internals) : internals(internals) {};
+    ThingInstance(){};
 
     virtual bool boolean() const {
         throw RuntimeError("cannot convert to boolean");
@@ -38,7 +37,7 @@ public:
 
 
     virtual void call_internal(unsigned int target) {
-        internals[target]();
+        throw RuntimeError("Cannot call internal method in this class");
     }
 
     virtual void call_method(unsigned int target) {
@@ -48,7 +47,6 @@ public:
 protected:
     std::vector<ThingInstance> fields;
     std::vector<MethodDefinition> methods;
-    std::vector<InternalMethod> internals;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const ThingInstance &instance) {
