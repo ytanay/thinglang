@@ -1,0 +1,12 @@
+/*
+{
+    "expected_output": "Hello again!"
+}
+*/
+
+thing Program
+    setup
+        self.say_hello()
+
+    does say_hello
+        Output.write("Hello again!")

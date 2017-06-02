@@ -1,0 +1,26 @@
+/*
+{
+    "expected_output": [
+        "in main",
+        "1",
+        "in declare_and_set",
+        "3",
+        "in main",
+        "1"
+    ]
+}
+*/
+
+thing Program
+    setup
+        number n = 1
+        Output.write("in main")
+        Output.write(n)
+        self.declare_and_set()
+        Output.write("in main")
+        Output.write(n)
+
+    does declare_and_set
+        number n = 3
+        Output.write("in declare_and_set")
+        Output.write(n)
