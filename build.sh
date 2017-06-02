@@ -10,4 +10,5 @@ cmake ..
 make
 /app-src/build/thinglang --build-only
 
+cd /app-src
 pytest tests/integration
