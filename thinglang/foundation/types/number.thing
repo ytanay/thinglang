@@ -7,3 +7,8 @@ thing number
 
     does * with number other
         return self.val * other.val
+
+    does < with number other
+        if self.val < other.val
+            return self.val - other.val
+        return
