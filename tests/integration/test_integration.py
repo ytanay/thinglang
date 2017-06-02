@@ -40,8 +40,12 @@ def split_lines(param):
 def test_thing_program(test_file):
     expected_output = test_file.metadata['expected_output']
 
+    utils.print_header('Parsed AST')
+    ast = thinglang.compiler(test_file.code)
+    print(ast.tree())
+
     utils.print_header("Bytecode generation")
-    bytecode = thinglang.compiler(test_file.code).compile().finalize()
+    bytecode = ast.compile().finalize()
     print(bytecode)
 
     utils.print_header('VM execution')
