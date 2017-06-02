@@ -1,11 +1,10 @@
-import json
-
 import os
 import pytest
 import glob
 import subprocess
 
 import thinglang
+from tests.infrastructure.test_utils import ProgramTestCase
 from thinglang import utils
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -13,25 +12,9 @@ BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 SEARCH_PATTERN = os.path.join(BASE_PATH, '**/*.thing')
 
 
-class TestCase(object):
-
-    def __init__(self, path):
-        with open(path, 'r') as f:
-            contents = f.read()
-
-        metadata_start = contents.index('/*') + 2
-        metadata_end = contents.index('*/')
-        metadata = json.loads(contents[metadata_start:metadata_end])
-
-        self.name = metadata.get('test_name') or '.'.join(path.replace('.thing', '').split(os.sep)[-2:])
-        self.code = contents[metadata_end + 2:]
-        self.metadata = metadata
-        self.target_path = path + 'c'
-
-
 def collect_tests():
     for path in glob.glob(SEARCH_PATTERN, recursive=True):
-        yield TestCase(path)
+        yield ProgramTestCase(path)
 
 
 def split_lines(param):
@@ -39,7 +22,7 @@ def split_lines(param):
 
 
 @pytest.mark.parametrize('test_file', collect_tests(), ids=lambda x: x.name)
-def test_thing_program(test_file: TestCase):
+def test_thing_program(test_file: ProgramTestCase):
     expected_output = test_file.metadata['expected_output']
 
     utils.print_header('Parsed AST')

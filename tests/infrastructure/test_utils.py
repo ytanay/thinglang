@@ -1,3 +1,6 @@
+import os
+
+import json
 import random
 import string
 
@@ -23,3 +26,19 @@ def random_string():
         return ''.join(random.choices(string.ascii_uppercase + string.digits, k=random.randint(2, 50)))
 
     return [get_string() for _ in range(random.randint(3, 8))]
+
+
+class ProgramTestCase(object):
+
+    def __init__(self, path):
+        with open(path, 'r') as f:
+            contents = f.read()
+
+        metadata_start = contents.index('/*') + 2
+        metadata_end = contents.index('*/')
+        metadata = json.loads(contents[metadata_start:metadata_end])
+
+        self.name = metadata.get('test_name') or '.'.join(path.replace('.thing', '').split(os.sep)[-2:])
+        self.code = contents[metadata_end + 2:]
+        self.metadata = metadata
+        self.target_path = path + 'c'
