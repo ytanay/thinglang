@@ -21,12 +21,6 @@ def parse(lexical_groups):
 
     for idx, node in enumerate(processed_groups):
 
-        if isinstance(node, ThingDefinition):
-            stack = [stack[0]]
-
-        if isinstance(node, MethodDefinition):
-            stack = [stack[0], stack[1]]
-
         parent = stack[-1]
 
         parent.attach(node)
@@ -40,7 +34,7 @@ def parse(lexical_groups):
             stack.append(node)
 
         if next_indent < current_indent:
-            stack.pop()
+            stack = stack[:next_indent - current_indent]
 
     return stack[0]
 
