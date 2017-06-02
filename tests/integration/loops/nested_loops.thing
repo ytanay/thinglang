@@ -1,0 +1,20 @@
+/*
+{
+    "expected_output": [
+        "0", "1", "2", "3", "4",
+        "0", "1", "2", "3", "4",
+        "0", "1", "2", "3", "4"
+    ]
+}
+*/
+
+thing Program
+    setup
+        number i = 0
+        number j = 0
+        repeat while i < 3
+            repeat while j < 5
+                Output.write(j)
+                j = j + 1
+            i = i + 1
+            j = 0

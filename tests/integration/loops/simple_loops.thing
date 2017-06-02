@@ -1,0 +1,12 @@
+/*
+{
+    "expected_output": ["0", "1", "2", "3", "4"]
+}
+*/
+
+thing Program
+    setup
+        number i = 0
+        repeat while i < 5
+            Output.write(i)
+            i = i + 1
