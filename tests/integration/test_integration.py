@@ -10,10 +10,11 @@ import subprocess
 import thinglang
 from thinglang import run, utils
 
-SEARCH_PATTERN = os.path.join(os.path.dirname(os.path.abspath(__file__)),  '**/*.thing')
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
+
+SEARCH_PATTERN = os.path.join(BASE_PATH, '**/*.thing')
 
 TestCase = collections.namedtuple('TestCase', ['code', 'metadata', 'name', 'bytecode_target'])
-EXECUTABLE = r"C:\Users\Yotam\Development\thinglang\cmake-build-debug\thingc.exe"
 
 
 def collect_tests():
@@ -48,7 +49,7 @@ def test_thing_program(test_file):
     with open(test_file.bytecode_target, 'wb') as f:
         f.write(bytecode)
 
-    vm = subprocess.Popen([EXECUTABLE, test_file.bytecode_target], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    vm = subprocess.Popen(["thinglang", test_file.bytecode_target], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = (stream.decode('utf-8').strip() for stream in vm.communicate())
     print(stderr)
 
