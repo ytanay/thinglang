@@ -10,5 +10,7 @@ cmake ..
 make
 /app-src/build/thinglang --build-only
 
+export PATH=$PATH:/app-src/build/
+
 cd /app-src
 pytest tests/integration
