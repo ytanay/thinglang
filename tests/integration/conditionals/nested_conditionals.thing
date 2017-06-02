@@ -1,0 +1,25 @@
+/*
+{
+    "expected_output": ["1 outer conditional", "2 inner conditional"]
+}
+*/
+
+thing Program
+    setup
+        if "dog" eq "dog" # positive outer
+            Output.write("1 outer conditional")
+            if "cat" eq "cat"
+                Output.write("2 inner conditional")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        if "dog" eq "cat" # negative outer
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+

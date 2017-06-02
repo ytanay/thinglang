@@ -1,0 +1,160 @@
+/*
+{
+    "expected_output": [
+        "1 outer conditional", "2 inner conditional", "3 inner conditional", "4 inner conditional",
+        "5 outer conditional", "6 inner conditional", "7 inner conditional", "8 inner conditional",
+        "9 outer conditional", "10 inner conditional", "11 inner conditional", "12 inner conditional"
+    ]
+}
+*/
+
+# Auto generated permutations for various nested conditionals
+
+thing Program
+    setup
+        # Section 1
+
+        if "dog" eq "dog"
+            Output.write("1 outer conditional")
+
+            if "cat" eq "cat"
+                Output.write("2 inner conditional")
+            otherwise if "cat" eq "dog"
+                Output.write("X")
+            otherwise
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+            otherwise if "dog" eq "dog"
+                Output.write("3 inner conditional")
+            otherwise
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+            otherwise
+                Output.write("4 inner conditional")
+
+
+        otherwise if "dog" eq "dog"
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        otherwise if "dog" eq "cat"
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        otherwise
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        # Section 2
+
+        if "dog" eq "cat"
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        otherwise if "dog" eq "dog"
+            Output.write("5 outer conditional")
+
+            if "cat" eq "cat"
+                Output.write("6 inner conditional")
+            otherwise if "cat" eq "dog"
+                Output.write("X")
+            otherwise
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+            otherwise if "dog" eq "dog"
+                Output.write("7 inner conditional")
+            otherwise
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+            otherwise
+                Output.write("8 inner conditional")
+
+        otherwise if "dog" eq "dog"
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        otherwise
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        # Section 3
+
+        if "dog" eq "cat"
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        otherwise if "cat" eq "dog"
+            Output.write("X")
+
+            if "cat" eq "cat"
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+
+        otherwise
+            Output.write("9 outer conditional")
+
+            if "cat" eq "cat"
+                Output.write("10 inner conditional")
+            otherwise if "cat" eq "dog"
+                Output.write("X")
+            otherwise
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+            otherwise if "dog" eq "dog"
+                Output.write("11 inner conditional")
+            otherwise
+                Output.write("X")
+
+            if "cat" eq "dog"
+                Output.write("X")
+            otherwise
+                Output.write("12 inner conditional")
+
+
