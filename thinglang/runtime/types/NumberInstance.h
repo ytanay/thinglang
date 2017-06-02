@@ -9,14 +9,14 @@ class NumberInstance;
 typedef NumberInstance this_type;
 class NumberInstance : public ThingInstance {
 public:
-	NumberInstance(int val) : val(val), ThingInstance(this_type::methods) {}
+	NumberInstance(int val) : val(val), ThingInstance() {}
 
     virtual std::string text() const override {
         return to_string(val);
     }
     
     virtual void call_method(unsigned int target) override {
-        internals[target]();
+        methods[target]();
     }
 
 	static const std::vector<InternalMethod> methods;

@@ -21,7 +21,7 @@ class ThingDefinition(DefinitionPairSymbol):
 
     def transpile(self):
         name = '{}Instance'.format(self.name.transpile().capitalize())
-        constructor = '\t{}({}) : val(val), ThingInstance(this_type::methods) {{}}'.format(
+        constructor = '\t{}({}) : val(val), ThingInstance() {{}}'.format(
             name,
             ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members())
         )

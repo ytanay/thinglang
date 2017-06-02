@@ -9,14 +9,14 @@ class TextInstance;
 typedef TextInstance this_type;
 class TextInstance : public ThingInstance {
 public:
-	TextInstance(std::string val) : val(val), ThingInstance(this_type::methods) {}
+	TextInstance(std::string val) : val(val), ThingInstance() {}
 
     virtual std::string text() const override {
         return to_string(val);
     }
     
     virtual void call_method(unsigned int target) override {
-        internals[target]();
+        methods[target]();
     }
 
 	static const std::vector<InternalMethod> methods;

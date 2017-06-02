@@ -36,6 +36,6 @@ FOUNDATION_VIRTUALS = """
     }}
     
     virtual void call_method(unsigned int target) override {{
-        internals[target]();
+        methods[target]();
     }}
 """

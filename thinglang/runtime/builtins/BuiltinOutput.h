@@ -8,13 +8,18 @@
 class BuiltinOutput : public ThingInstance {
 public:
 
-    BuiltinOutput() : ThingInstance(BuiltinOutput::methods) {};
+    BuiltinOutput() : ThingInstance() {};
 
     static void write() {
         auto str = static_cast<TextNamespace::TextInstance *>(Program::pop().get());
         std::cout << str->text() << std::endl;
     }
 
+    virtual void call_internal(unsigned int target) override {
+        methods[target]();
+    }
+
+private:
     static const std::vector<InternalMethod> methods;
 
 };
