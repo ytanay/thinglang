@@ -31,10 +31,11 @@ enum class InternalTypes {{
 
 
 FOUNDATION_VIRTUALS = """
-virtual std::string text() const override {{
-    return to_string({first_member});
-}}
-virtual void call_method(unsigned int target) override {{
-    internals[target]();
-}}
+    virtual std::string text() const override {{
+        return to_string({first_member});
+    }}
+    
+    virtual void call_method(unsigned int target) override {{
+        internals[target]();
+    }}
 """

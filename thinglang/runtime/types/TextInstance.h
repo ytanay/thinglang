@@ -11,12 +11,13 @@ class TextInstance : public ThingInstance {
 public:
 	TextInstance(std::string val) : val(val), ThingInstance(this_type::methods) {}
 
-virtual std::string text() const override {
-    return to_string(val);
-}
-virtual void call_method(unsigned int target) override {
-    internals[target]();
-}
+    virtual std::string text() const override {
+        return to_string(val);
+    }
+    
+    virtual void call_method(unsigned int target) override {
+        internals[target]();
+    }
 
 	static const std::vector<InternalMethod> methods;
 	std::string val;
