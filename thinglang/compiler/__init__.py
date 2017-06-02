@@ -25,11 +25,11 @@ class BytecodeSymbols(object):
 
     @classmethod
     def set_static(cls, idx, val):
-        return struct.pack('<BII', OPCODES['SET_STATIC'], idx, val)
+        return struct.pack('<BII', OPCODES['SET_STATIC'], idx if isinstance(idx, int) else idx[0], val)
 
     @classmethod
     def set(cls, idx):
-        return struct.pack('<BI', OPCODES['SET'], idx)
+        return struct.pack('<BI', OPCODES['SET'], idx if isinstance(idx, int) else idx[0])
 
     @classmethod
     def call(cls, idx):
