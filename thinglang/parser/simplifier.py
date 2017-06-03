@@ -40,12 +40,9 @@ class Simplifier(TreeTraversal):
             return
 
         for argument in method_call.arguments:
-            if isinstance(argument, (MethodCall, CastOperation)):
+            if isinstance(argument, POTENTIALLY_OBTAINABLE):
                 self.unwrap_method_calls(argument, node, parent_call=method_call)
-            if isinstance(argument, ArithmeticOperation):
-                for x in argument.arguments:
-                    self.unwrap_method_calls(x, node, parent_call=argument)
-
+                
         if parent_call is not None:
             id, declaration, assignment = self.create_transient(method_call, node)
             node.insert_before(declaration)
