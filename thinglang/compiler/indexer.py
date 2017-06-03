@@ -3,7 +3,7 @@ import itertools
 from thinglang.compiler.allocation import LinearMemoryAllocationLayout
 from thinglang.compiler.references import ResolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseSymbol, Transient
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.symbols.functions import MethodCall
@@ -75,11 +75,15 @@ class Indexer(TreeTraversal):
 
         self.context.set_method(node)
         self.locals = LinearMemoryAllocationLayout({
-            argument: idx for idx, argument in enumerate(node.arguments)
+            argument: (idx, argument.type) for idx, argument in enumerate(node.arguments)
         })
 
-    @inspects(AssignmentOperation)
+    @inspects(AssignmentOperation, priority=1)
     def process_assignment_operation(self, node: AssignmentOperation) -> None:
+
+        if node.name.implements(Transient):
+            node.name.type = node.value.type_id()
+
         if node.intent is AssignmentOperation.DECELERATION:
             self.process_declaration(node)
         elif node.intent is AssignmentOperation.REASSIGNMENT:
