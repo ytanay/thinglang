@@ -46,6 +46,6 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
         context.push_down(self.arguments[0])
         context.append(BytecodeSymbols.call(Foundation().type(self.arguments[0].type_id()).index(self.operator.transpile())))
 
-    def resolve_type(self):
-        assert all(x.resolve_type() == self.arguments[0].resolve_type() for x in self.arguments)
-        return self.arguments[0].resolve_type()
+    def type_id(self):
+        assert all(x.type_id() == self.arguments[0].type_id() for x in self.arguments)
+        return self.arguments[0].type_id()
