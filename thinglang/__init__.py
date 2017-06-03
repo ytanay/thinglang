@@ -24,7 +24,6 @@ def preprocess(source):
     lexical_groups = list(lexer(source))
     ast = parse(lexical_groups)
     Simplifier(ast).run()
-
     return ast
 
 

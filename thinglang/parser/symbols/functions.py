@@ -103,7 +103,6 @@ class MethodCall(BaseSymbol, ValueType):
         if self.target[0].is_self():
             context.append(BytecodeSymbols.call_method(self.resolved_target.index))
             if not returns:
-                print('Adding pop {}'.format(self))
                 context.append(BytecodeSymbols.pop())  # pop the return value, if the method does not return
 
         else:

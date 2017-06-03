@@ -120,7 +120,6 @@ class BaseSymbol(Describable):
         return struct.pack(self.SERIALIZATION, *self.serialization())
 
     def compile(self, context: CompilationContext):
-        print('Compiling {}'.format(self))
         if self.SERIALIZATION:
             context.append(self.serialize())
 
