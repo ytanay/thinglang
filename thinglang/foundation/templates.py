@@ -24,7 +24,9 @@ FOUNDATION_SOURCE = HEADER + """
 #include "{name}Instance.h"
 
 namespace {name}Namespace {{
-    const std::vector<InternalMethod> {name}Instance::methods = {{{methods}}};
+    const std::vector<InternalMethod> {name}Instance::methods = {{
+{methods}
+    }};
 }}
 
 """.strip()

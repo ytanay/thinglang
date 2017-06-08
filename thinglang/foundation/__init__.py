@@ -49,7 +49,7 @@ class Foundation(object, metaclass=Singleton):
             with open(os.path.join(TYPES_TARGET, target_name + '.cpp'), 'w') as f:
                 f.write(templates.FOUNDATION_SOURCE.format(
                     name=name.capitalize(),
-                    methods=', '.join('&{}::{}'.format(target_name, method.name.transpile()) for method in methods),
+                    methods=',\n'.join('        &{}::{}'.format(target_name, method.name.transpile()) for method in methods),
                     file_name=target_name + '.cpp'
                 ))
 

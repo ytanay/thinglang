@@ -32,10 +32,20 @@ public:
 		auto other = static_cast<this_type*>(Program::pop().get());
 		Program::push(PThingInstance(new this_type(self->val + other->val))); return;
 	}
+	static void __LexicalSubtraction__() {
+		auto self = static_cast<this_type*>(Program::pop().get());
+		auto other = static_cast<this_type*>(Program::pop().get());
+		Program::push(PThingInstance(new this_type(self->val - other->val))); return;
+	}
 	static void __LexicalMultiplication__() {
 		auto self = static_cast<this_type*>(Program::pop().get());
 		auto other = static_cast<this_type*>(Program::pop().get());
 		Program::push(PThingInstance(new this_type(self->val * other->val))); return;
+	}
+	static void __LexicalDivision__() {
+		auto self = static_cast<this_type*>(Program::pop().get());
+		auto other = static_cast<this_type*>(Program::pop().get());
+		Program::push(PThingInstance(new this_type(self->val / other->val))); return;
 	}
 	static void __LexicalLessThan__() {
 		auto self = static_cast<this_type*>(Program::pop().get());
