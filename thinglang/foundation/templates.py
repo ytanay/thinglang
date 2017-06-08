@@ -1,17 +1,26 @@
-FOUNDATION_HEADER = """
+HEADER = """/**
+    {file_name}
+    Auto-generated code - do not modify.
+    thinglang C++ transpiler, 0.0.0
+**/
+
+"""
+
+
+FOUNDATION_HEADER = HEADER + """
 #pragma once
 
 #include "../execution/Program.h"
 #include "../containers/ThingInstance.h"
 #include "../utils/formatting.h"
 
-namespace {}Namespace {{
-{}
+namespace {name}Namespace {{
+{code}
 }}
 
 """.strip()
 
-FOUNDATION_SOURCE = """
+FOUNDATION_SOURCE = HEADER + """
 #include "{name}Instance.h"
 
 namespace {name}Namespace {{
@@ -21,12 +30,21 @@ namespace {name}Namespace {{
 """.strip()
 
 
-FOUNDATION_ENUM = """
+FOUNDATION_ENUM = HEADER + """
 #pragma once
 
-enum class InternalTypes {{
-{}
+#include <string>
+
+enum class {name} {{
+{values}
 }};
+
+inline std::string describe({name} val){{
+     switch (val){{
+        {cases}
+    }}
+
+}}
 """.strip()
 
 
@@ -39,3 +57,8 @@ FOUNDATION_VIRTUALS = """
         methods[target]();
     }}
 """
+
+ENUM_CASE = """
+    case {enum_class}::{name}:
+        return "{name}";"""
+
