@@ -1,3 +1,9 @@
+/**
+    NumberInstance.cpp
+    Auto-generated code - do not modify.
+    thinglang C++ transpiler, 0.0.0
+**/
+
 #include "NumberInstance.h"
 
 namespace NumberNamespace {

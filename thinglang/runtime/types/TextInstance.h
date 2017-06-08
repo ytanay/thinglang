@@ -1,3 +1,9 @@
+/**
+    TextInstance.h
+    Auto-generated code - do not modify.
+    thinglang C++ transpiler, 0.0.0
+**/
+
 #pragma once
 
 #include "../execution/Program.h"
