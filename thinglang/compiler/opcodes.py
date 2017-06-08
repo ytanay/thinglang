@@ -1,29 +1,26 @@
-import os
+OPCODES = {name: idx for idx, name in enumerate([
+    'INVALID',
+    'NOP',
 
-import re
+    'PUSH',  # pushes a reference into the stack
+    'PUSH_STATIC',  # pushes static data into the stack
+    'PUSH_NULL',
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-ENUM_PARSER = re.compile(r'(.*)\s*?=\s*?(\d+)')
+    'POP',  # pop anything to void
 
+    'SET',  # pop a reference from the stack and assign it
+    'SET_STATIC',  # set a reference to static data
 
-def read_opcodes():
-    with open(os.path.join(BASE_DIR, '..', 'serialization', 'Opcode.h')) as f:
-        for line in f:
-            if 'enum class Opcode' in line:
-                break
+    'CALL',
+    'CALL_METHOD',
+    'CALL_INTERNAL',
+    'RETURN',
 
-        for decl in f:
-            decl = decl.strip()
+    'JUMP',
+    'CONDITIONAL_JUMP',
 
-            if not decl:
-                continue
+    'PRINT',
 
-            if '}' in decl:
-                break
+    'METHOD_END'
+])}
 
-            groups = ENUM_PARSER.search(decl).groups()
-            yield (groups[0].strip(), int(groups[1]))
-
-OPCODES = dict(read_opcodes())
-
-assert set(range(len(OPCODES))) == set(OPCODES.values())
