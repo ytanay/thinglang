@@ -55,7 +55,7 @@ class AssignmentOperation(BaseSymbol):
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
     STATIC = True
     TYPE = LexicalIdentifier("text")
-    TYPE_IDX = Foundation.TYPE_ORDERING["text"]
+    TYPE_IDX = Foundation.INTERNAL_TYPE_ORDERING["text"]
 
     def __init__(self, value):
         super().__init__(None)
