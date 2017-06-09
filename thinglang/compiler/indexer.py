@@ -6,7 +6,7 @@ from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol, Transient
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
-from thinglang.parser.symbols.functions import MethodCall
+from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
 from thinglang.utils import collection_utils
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 from thinglang.utils.union_types import ACCESS_TYPES
@@ -113,7 +113,12 @@ class Indexer(TreeTraversal):
             target = self.context.current_thing
             for x in node.target[1:]:
                 target = target[x]
-            node.resolved_target = ResolvedReference(target.index)
+            node.resolved_target = ResolvedReference(target.index, target.type_id())
+
+    @inspects(ReturnStatement)
+    def inspect_return_statement(self, node: ReturnStatement) -> None:
+        if node.value is not None:
+            node.value = node.value if node.value.STATIC else ResolvedReference(*self.locals.get(node.value), original=node.value)
 
     def process_declaration(self, node):
         if node in self.locals:
