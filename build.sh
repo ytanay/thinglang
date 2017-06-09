@@ -8,7 +8,7 @@ mkdir /app-src/build
 cd /app-src/build
 cmake ..
 make
-/app-src/build/thinglang --build-only
+/app-src/build/thinglang --version
 
 export PATH=$PATH:/app-src/build/
 
