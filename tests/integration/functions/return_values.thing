@@ -1,0 +1,16 @@
+/*
+{
+    "expected_output": ["42", "Goodbye, and thanks for all the fish."]
+}
+*/
+
+thing Program
+    setup
+        Output.write(self.get_the_answer())
+        Output.write(self.get_the_message())
+
+    does get_the_answer returns number
+        return 42
+
+    does get_the_message returns text
+        return "Goodbye, and thanks for all the fish."
