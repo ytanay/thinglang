@@ -11,14 +11,16 @@ void MethodDefinition::execute() {
         Program::frame()[i] = Program::pop();
     }
 
-    for (int counter = 0; counter < symbols.size();) {
+    auto counter_end = symbols.size();
+
+    for (auto counter = 0; counter < counter_end;) {
         auto symbol = symbols[counter];
 
         std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", "
                   << symbol.secondary << " -> [";
         std::for_each(Program::frame().begin(), Program::frame().end(),
                       [](const PThingInstance &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
-        std::cerr << "] -> ";
+        std::cerr << "] -> [";
         std::for_each(Program::static_data.begin(), Program::static_data.end(),
                       [](const PThingInstance &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
         std::cerr << "]" << std::endl;
@@ -82,8 +84,8 @@ void MethodDefinition::execute() {
             }
 
             case Opcode::RETURN: {
-                Program::pop_frame();
-                break;
+                counter = counter_end;
+                continue;
             }
 
             case Opcode::JUMP: {
