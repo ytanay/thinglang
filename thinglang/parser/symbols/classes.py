@@ -97,7 +97,7 @@ class MethodDefinition(BaseSymbol):
             (self.parent.name if self.is_constructor() else self.name).transpile(),
             '',  # Pop directly from stack, otherwise: self.arguments.transpile(definition=True),
             self.arguments.transpile(pops=True),
-            self.transpile_children(2))
+            self.transpile_children(2, self.children + [ReturnStatement([])]))
 
     def serialization(self):
         return self.frame_size, len(self.arguments)

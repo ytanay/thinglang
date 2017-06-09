@@ -8,4 +8,3 @@ thing text
     does eq with text other
         if self.val eq other.val
             return ""
-        return

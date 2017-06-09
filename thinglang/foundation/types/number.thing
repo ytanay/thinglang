@@ -14,7 +14,10 @@ thing number
     does / with number other
         return self.val / other.val
 
+    does eq with number other
+        if self.val eq other.val
+            return 0
+
     does < with number other
         if self.val < other.val
             return self.val - other.val
-        return
