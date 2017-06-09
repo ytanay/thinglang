@@ -1,6 +1,7 @@
 import struct
 
 from thinglang.compiler.opcodes import OPCODES
+from thinglang.compiler.references import ResolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
@@ -99,7 +100,9 @@ class CompilationContext(object):
 
     def push_down(self, value):
         idx = self.current_index()
-        if value.STATIC:
+        if isinstance(value, ResolvedReference):
+            self.append(BytecodeSymbols.push(value.index))
+        elif value.STATIC:
             self.append(BytecodeSymbols.push_static(self.append_static(value.serialize())))
         elif value.implements(LexicalIdentifier):
             assert value.index is not None, 'Unresolved reference {}'.format(value)
