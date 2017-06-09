@@ -2,26 +2,37 @@
 #include <vector>
 #include <fstream>
 
+#include "../include/args.h"
+
 #include "errors/RuntimeError.h"
 #include "execution/Program.h"
 #include "loader/ProgramReader.h"
 
+int main(int argc, char **argv)
+{
+    args::ArgumentParser parser("thinglang's runtime environment");
+    args::HelpFlag help(parser, "help", "Display this help", {'h', "help"});
+    args::Group group(parser, "", args::Group::Validators::Xor);
+    args::Positional<std::string> filename(group, "file", "a file containing thinglang bytecode");
+    args::Flag version(group, "version", "Prints the version and exits", {'v', "version"});
 
-int main(int argc, char **argv) {
-
-    if (argc != 2) {
-        std::cerr << "Usage: thingc filename.thingc" << std::endl;
+    try {
+        parser.ParseCLI(argc, argv);
+    } catch (args::Help) {
+        std::cout << parser;
+        return 0;
+    } catch (args::Error e)  {
+        std::cerr << e.what() << std::endl;
+        std::cerr << parser;
         return 1;
     }
 
-    auto filename = std::string(argv[1]);
-
-    if(filename == "--build-only"){
-        std::cerr << "Build completed, not executing." << std::endl;
+    if(version) {
+        std::cerr << "thinglang runtime, version 0.0.0" << std::endl;
         return 0;
     }
 
-    auto reader = filename == "-" ? ProgramReader() : ProgramReader(filename);
+    auto reader = ProgramReader(filename.Get());
 
     try {
         auto info = reader.process();
@@ -31,6 +42,4 @@ int main(int argc, char **argv) {
         std::cerr << "Error during execution: " << err.what() << std::endl;
         return 1;
     }
-
-    return 0;
 }
