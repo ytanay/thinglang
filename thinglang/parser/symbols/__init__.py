@@ -159,6 +159,9 @@ class Transient(LexicalIdentifier):
 
         Transient.IDX_COUNTER += 1
 
+    def transpile(self):
+        return '__transient__{}__'.format(self.idx)
+
     def __str__(self):
         return 'Transient({})'.format(self.idx)
 
