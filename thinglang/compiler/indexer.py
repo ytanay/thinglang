@@ -106,7 +106,7 @@ class Indexer(TreeTraversal):
         """
 
         node.arguments = [
-            arg if arg.STATIC else ResolvedReference(self.locals.get(arg)[0]) for arg in node.arguments
+            arg if arg.STATIC else ResolvedReference(*self.locals.get(arg)) for arg in node.arguments
         ]
 
         if node.target[0].is_self():
