@@ -35,6 +35,8 @@ class Access(BaseSymbol):
 
         return '->'.join(x.transpile() for x in self.target)
 
+    def type_id(self):
+        return None
 
 class ArgumentListPartial(ListInitializationPartial):
     pass
@@ -107,6 +109,9 @@ class MethodCall(BaseSymbol, ValueType):
 
         else:
             context.append(BytecodeSymbols.call_internal(0, 0))
+
+    def type_id(self):
+        return self.resolved_target.type
 
 
 class ReturnStatement(BaseSymbol):
