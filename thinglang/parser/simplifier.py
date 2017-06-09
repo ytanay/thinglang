@@ -2,7 +2,7 @@ from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import Transient
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.functions import MethodCall, Access, ArgumentList
+from thinglang.parser.symbols.functions import MethodCall, Access, ArgumentList, ReturnStatement
 from thinglang.parser.symbols.logic import IterativeLoop, Loop
 from thinglang.parser.symbols.types import CastOperation
 from thinglang.utils.tree_utils import TreeTraversal, inspects
@@ -30,6 +30,13 @@ class Simplifier(TreeTraversal):
 
         node.insert_before(loop)
         node.remove()
+
+    @inspects(ReturnStatement)
+    def inspect_return_statement(self, node: ReturnStatement) -> None:
+        if node.value and node.value.implements(POTENTIALLY_OBTAINABLE):
+            id, declaration, assignment = self.create_transient(node.value, node)
+            node.insert_before(declaration)
+            node.value = id
 
     @inspects(predicate=lambda x: isinstance(getattr(x, 'value', None), POTENTIALLY_OBTAINABLE))
     def inspect_obtainable_operations(self, node):
