@@ -11,7 +11,7 @@ class LinearMemoryAllocationLayout(object):
         return index
 
     def get(self, name):
-        return self.mapping.get(name)
+        return self.mapping[name]
 
     def __contains__(self, item):
         return self.mapping.__contains__(item)
