@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from thinglang import utils
 from thinglang.compiler.indexer import Indexer, Collator
@@ -30,8 +31,13 @@ def preprocess(source):
 def compiler(source):
     ast = preprocess(source)
     Collator(ast).run()
-    Indexer(ast).run()
 
+    try:
+        Indexer(ast).run()
+    except Exception as e:
+        print('Error during indexing: {}'.format(ast.tree()))
+        traceback.print_exc()
+        raise
     return ast
 
 
