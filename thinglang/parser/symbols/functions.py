@@ -94,13 +94,7 @@ class MethodCall(BaseSymbol, ValueType):
 
     def compile(self, context, returns=False):
         for arg in reversed(self.arguments):
-            if isinstance(arg, ResolvedReference):
-                context.append(BytecodeSymbols.push(arg.index))
-            elif arg.STATIC:
-                id = context.append_static(arg.serialize())
-                context.append(BytecodeSymbols.push_static(id))
-            else:
-                raise Exception('Strange argument type {}'.format(arg))
+            context.push_down(arg)
 
         if self.target[0].is_self():
             context.append(BytecodeSymbols.call_method(self.resolved_target.index))
