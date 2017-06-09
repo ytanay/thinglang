@@ -38,7 +38,7 @@ class AssignmentOperation(BaseSymbol):
 
     def transpile(self):
         if self.intent is self.DECELERATION:
-            return '{} {} = {};'.format(self.name.type.transpile(), self.name.transpile(), self.value.transpile())
+            return 'auto {} = {};'.format(self.name.transpile(), self.value.transpile())
         elif self.intent is self.REASSIGNMENT:
             return '{} = {};'.format(self.name.transpile(), self.value.transpile())
 

@@ -12,6 +12,7 @@ namespace NumberNamespace {
         &NumberInstance::__LexicalSubtraction__,
         &NumberInstance::__LexicalMultiplication__,
         &NumberInstance::__LexicalDivision__,
+        &NumberInstance::__LexicalEquality__,
         &NumberInstance::__LexicalLessThan__
     };
 }

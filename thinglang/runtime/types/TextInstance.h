@@ -30,7 +30,9 @@ public:
 	static void __LexicalAddition__() {
 		auto self = static_cast<this_type*>(Program::pop().get());
 		auto other = static_cast<this_type*>(Program::pop().get());
-		Program::push(PThingInstance(new this_type(self->val + other->val))); return;
+		auto __transient__6__ = self->val + other->val;
+		Program::push(PThingInstance(new this_type(__transient__6__))); return;
+		Program::push(PThingInstance(NULL)); return;
 	}
 	static void __LexicalEquality__() {
 		auto self = static_cast<this_type*>(Program::pop().get());
@@ -38,6 +40,7 @@ public:
 		if(self->val == other->val) {
 			Program::push(PThingInstance(new this_type(""))); return;
 		}
+		Program::push(PThingInstance(NULL)); return;
 		Program::push(PThingInstance(NULL)); return;
 	}
 };
