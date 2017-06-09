@@ -1,0 +1,14 @@
+/*
+{
+    "expected_output": "3628800"
+}
+*/
+
+thing Program
+    setup
+        Output.write(self.factorial(10))
+
+    does factorial with number n returns number
+        if n eq 1
+            return 1
+        return n * self.factorial(n-1)
