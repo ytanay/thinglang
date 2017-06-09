@@ -1,0 +1,18 @@
+/*
+{
+    "expected_output": ["41", "20", "574"]
+}
+*/
+
+thing Program
+    setup
+        number inter = self.get_13() + self.get_7() + self.get_7() * 3
+        Output.write(inter)
+        Output.write(self.get_7() + self.get_13())
+        Output.write(2 * inter * self.get_7())
+
+    does get_7 returns number
+        return 7
+
+    does get_13 returns number
+        return 13

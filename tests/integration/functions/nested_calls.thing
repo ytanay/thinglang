@@ -1,0 +1,28 @@
+/*
+{
+    "expected_output": ["20", "182", "182", "3640"]
+}
+*/
+
+thing Program
+    setup
+        Output.write(self.get_20())
+        number res = self.mul(self.get_13(), self.add(self.get_7(), self.get_7()))
+        Output.write(res)
+        Output.write(self.mul(self.get_13(), self.add(self.get_7(), self.get_7())))
+        Output.write(self.mul(self.add(self.get_7(), self.get_13()), res))
+
+    does add with number a, number b returns number
+        return a + b
+
+    does mul with number a, number b returns number
+        return a * b
+
+    does get_7 returns number
+        return 7
+
+    does get_13 returns number
+        return 13
+
+    does get_20 returns number
+        return self.get_7() + self.get_13()
