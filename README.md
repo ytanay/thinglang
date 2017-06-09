@@ -79,7 +79,7 @@ The output of the parser is an AST of compound nodes.
 ### Static Analysis
 The AST undergoes two important processes: reduction and binding.
 
-**Binding** is the process which inspects decelerations, usage and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference (essentially, indexing every reference against its matching declaration). During this process, the AST is implicitly and any unresolved references and type mismatches trigger an appropriate error.
+**Binding** is the process which inspects decelerations, usage and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference (essentially, indexing every reference against its matching declaration). During this process, the AST is validated and any unresolved references and type mismatches trigger an appropriate error.
 
 
 **Reduction** is the process by which compound nodes containing nested operations (e.g. nested method calls) are simplified into a series of non-compound i instructions. For example:
@@ -115,10 +115,10 @@ Since this project has proved interesting thus far, the next stage is to impleme
 Tasks for a new C++ based thinglang VM:
 - [x] Minimal execution infra in C++ (stack frame containers/thing instance containers, etc...)
 - [x] Basic execution loop
-- [ ] Type resolution and better reference indexing during static analysis
-- [ ] Bytecode generation from thinglang compiler
+- [x] Type resolution and better reference indexing during static analysis
+- [x] Bytecode generation from thinglang compiler
 - [ ] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
-- [ ] Barebones standard library (strings/lists/maps/math) written in thinglang, transpiled to C++
+- [ ] Barebones standard library (strings/numbers/lists/maps/math) written in thinglang, transpiled to C++
 
 
 ### The Archives 
