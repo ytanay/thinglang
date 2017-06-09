@@ -4,13 +4,13 @@ from thinglang.lexer.tokens.typing import LexicalCast
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
 from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation, RangeGenerator
 from thinglang.utils.type_descriptors import ValueType
-from thinglang.lexer.tokens import LexicalGroupEnd, LexicalBinaryOperation
+from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalSeparator, \
     LexicalAccess, LexicalAssignment, LexicalIdentifier, LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
-    LexicalClassInitialization
+    LexicalClassInitialization, LexicalDeclarationReturnType
 from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile, LexicalIn, LexicalRepeatFor
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
@@ -25,14 +25,19 @@ from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significant in parsing patterns
 
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
+
+    ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
+    ((LexicalDeclarationMember, InlineString, LexicalIdentifier), MemberDefinition),
+
+    ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),  # setup with a, b
+    ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition),  # setup
+
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
+    ((LexicalDeclarationMethod, LexicalIdentifier, LexicalDeclarationReturnType, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start return number
+    ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentListDecelerationPartial, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does start with a, b returns number
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
     ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), LexicalGroupEnd), MethodDefinition),  # does +
     ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), ArgumentList), MethodDefinition),  # does + with a, b
-    ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),  # setup with a, b
-    ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition),  # setup
-    ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
-    ((LexicalDeclarationMember, InlineString, LexicalIdentifier), MemberDefinition),
 
     ((ValueType, LexicalCast, LexicalIdentifier), CastOperation),
 

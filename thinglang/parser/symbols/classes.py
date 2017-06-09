@@ -1,10 +1,10 @@
 from thinglang.compiler import OPCODES, BytecodeSymbols
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor
+from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
 from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
 from thinglang.parser.symbols.base import InlineString
-from thinglang.parser.symbols.functions import ArgumentList, ReturnStatement
+from thinglang.parser.symbols.functions import ArgumentList, ReturnStatement, ArgumentListPartial
 
 
 class ThingDefinition(DefinitionPairSymbol):
@@ -60,21 +60,30 @@ class MethodDefinition(BaseSymbol):
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
 
-        if isinstance(slice[0], LexicalDeclarationConstructor):
-            self.name = LexicalIdentifier.constructor()
-            argument_list = slice[1]
-        else:
-            self.name = slice[1]
-            argument_list = slice[2]
-
-        if isinstance(argument_list, ArgumentList):
-            self.arguments = argument_list
-        else:
-            self.arguments = ArgumentList()
-
+        self.arguments = None
         self.return_type = None
         self.frame_size = None
         self.index = None
+
+        if isinstance(slice[0], LexicalDeclarationConstructor):
+            self.name = LexicalIdentifier.constructor()
+            self.arguments = slice[1]
+        else:
+            self.name = slice[1]
+
+            if isinstance(slice[2], ArgumentList):
+                self.arguments = slice[2]
+            elif isinstance(slice[2], ArgumentListPartial):
+                self.arguments = ArgumentList([slice[2]])
+
+            elif isinstance(slice[2], LexicalDeclarationReturnType):
+                self.return_type = slice[3]
+
+            if len(slice) >= 4 and isinstance(slice[3], LexicalDeclarationReturnType):
+                self.return_type = slice[4]
+
+        if not isinstance(self.arguments, ArgumentList):
+            self.arguments = ArgumentList()
 
     def is_constructor(self):
         return self.name == LexicalIdentifier.constructor()
@@ -107,6 +116,9 @@ class MethodDefinition(BaseSymbol):
             context.append(BytecodeSymbols.push_null())
 
         context.method_end()
+
+    def type_id(self):
+        return self.return_type
 
 
 class MemberDefinition(BaseSymbol):
