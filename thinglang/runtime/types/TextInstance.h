@@ -41,7 +41,6 @@ public:
 			Program::push(PThingInstance(new this_type(""))); return;
 		}
 		Program::push(PThingInstance(NULL)); return;
-		Program::push(PThingInstance(NULL)); return;
 	}
 };
 }
