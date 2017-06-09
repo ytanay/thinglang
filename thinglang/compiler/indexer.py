@@ -81,6 +81,9 @@ class Indexer(TreeTraversal):
     @inspects(AssignmentOperation, priority=1)
     def process_assignment_operation(self, node: AssignmentOperation) -> None:
 
+        if node.value.implements(MethodCall):
+            self.inspect_method_call(node.value)
+
         if node.name.implements(Transient):
             node.name.type = node.value.type_id()
 
@@ -88,9 +91,6 @@ class Indexer(TreeTraversal):
             self.process_declaration(node)
         elif node.intent is AssignmentOperation.REASSIGNMENT:
             self.process_assignment(node)
-
-        if node.value.implements(MethodCall):
-            self.inspect_method_call(node.value)
 
     @inspects(object)
     def process_reference_dependencies(self, node: BaseSymbol):
