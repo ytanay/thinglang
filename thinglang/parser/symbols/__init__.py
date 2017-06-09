@@ -109,9 +109,9 @@ class BaseSymbol(Describable):
     def transpile(self):
         return '?{}?'.format(self)
 
-    def transpile_children(self, indent=0):
+    def transpile_children(self, indent=0, children_override=None):
         sep = '\t' * indent
-        return sep + ('\n' + sep).join(x.transpile() for x in self.children)
+        return sep + ('\n' + sep).join(x.transpile() for x in children_override or self.children)
 
     def serialization(self):
         return NotImplementedError('must implement serialization')
