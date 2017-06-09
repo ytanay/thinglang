@@ -10,7 +10,7 @@ from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthes
     LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment, LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
-    LexicalClassInitialization
+    LexicalClassInitialization, LexicalDeclarationReturnType
 from thinglang.lexer.tokens.typing import LexicalCast
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
@@ -49,6 +49,7 @@ KEYWORDS = {
     'does': LexicalDeclarationMethod,
     'has': LexicalDeclarationMember,
     'setup': LexicalDeclarationConstructor,
+    'returns': LexicalDeclarationReturnType,
 
     'create': LexicalClassInitialization,
 

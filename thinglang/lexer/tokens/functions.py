@@ -17,6 +17,10 @@ class LexicalDeclarationConstructor(LexicalToken):
     pass
 
 
+class LexicalDeclarationReturnType(LexicalToken):
+    pass
+
+
 class LexicalClassInitialization(LexicalToken):
     pass
 
