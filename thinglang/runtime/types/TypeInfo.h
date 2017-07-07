@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "../utils/TypeNames.h"
 #include "../containers/MethodDefinition.h"
 #include "../containers/ThingInstance.h"
 

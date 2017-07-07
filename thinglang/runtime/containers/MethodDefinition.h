@@ -3,21 +3,23 @@
 #include <vector>
 
 #include "../execution/Symbol.h"
+#include "../utils/TypeNames.h"
+
 
 class MethodDefinition {
 public:
     MethodDefinition() : frame_size(0), arguments(0) {};
 
-    MethodDefinition(unsigned int frame_size, unsigned int arguments, std::vector<Symbol> symbols) : frame_size(
-            frame_size), arguments(arguments), symbols(symbols) {};
+    MethodDefinition(Size frame_size, Size arguments, SymbolList symbols) :
+            frame_size(frame_size), arguments(arguments), symbols(symbols) {};
 
     void execute();
 
-    unsigned int frame_size;
-    unsigned int arguments;
+    Size frame_size;
+    Size arguments;
 
 private:
-    std::vector<Symbol> symbols;
+    SymbolList symbols;
 
 };
 

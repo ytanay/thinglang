@@ -3,48 +3,43 @@
 #include <vector>
 #include <stack>
 
+#include "../utils/TypeNames.h"
 #include "../containers/ThingInstance.h"
 #include "../types/TypeInfo.h"
 
 
-using PThingInstance = std::shared_ptr<ThingInstance>;
-using Frame = std::vector<PThingInstance>;
-using ProgramInfo = std::pair<std::vector<PThingInstance>, std::vector<TypeInfo>>;
+using ProgramInfo = std::pair<std::vector<Thing>, std::vector<TypeInfo>>;
 
 class Program {
 public:
 
-    static PThingInstance pop() {
+    static Thing pop() {
         auto ti = stack.top();
         stack.pop();
         return ti;
     }
 
-    static PThingInstance top() {
+    static Thing top() {
         return stack.top();
     }
 
-    static void push(PThingInstance instance) {
+    static void push(Thing instance) {
         stack.push(instance);
     }
 
-    static PThingInstance data(unsigned int index) {
+    static Thing data(Index index) {
         return static_data[index];
     }
 
-    static void insert_data(PThingInstance data) {
-        static_data.push_back(data);
-    }
-
-    static PThingInstance instance() {
+    static Thing instance() {
         return current_instance;
     }
 
-    static void instance(PThingInstance new_instance) {
+    static void instance(Thing new_instance) {
         current_instance = new_instance;
     }
 
-    static void create_frame(unsigned int size) {
+    static void create_frame(Size size) {
         frames.push(Frame(size));
     }
 
@@ -65,18 +60,18 @@ public:
         types[1].instantiate();
     }
 
-    static std::vector<PThingInstance> internals;
-    static std::vector<PThingInstance> static_data;
+    static Things internals;
+    static Things static_data;
 
 private:
     Program() {}
 
-    static std::stack<PThingInstance> stack;
+    static ThingStack stack;
 
 
-    static std::stack<Frame> frames;
+    static FrameStack frames;
     static std::vector<TypeInfo> types;
-    static PThingInstance current_instance;
+    static Thing current_instance;
 };
 
 

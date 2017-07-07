@@ -3,7 +3,7 @@
 
 
 void TypeInfo::instantiate() {
-    Program::instance(PThingInstance(new ThingInstance(this->methods)));
+    Program::instance(Thing(new ThingInstance(this->methods)));
     this->methods[0].execute();
 
 }

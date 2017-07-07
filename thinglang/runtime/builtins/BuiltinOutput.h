@@ -20,6 +20,6 @@ public:
     }
 
 private:
-    static const std::vector<InternalMethod> methods;
+    static const InternalMethods methods;
 
 };

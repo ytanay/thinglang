@@ -60,15 +60,15 @@ public:
         return val;
     }
 
-    std::string read(size_t size) {
+    std::string read(Size size) {
         std::string val(size, '\0');
         file->read(&val[0], size);
         index += size;
         return val;
     }
 
-    uint32_t read_size() {
-        return read<uint32_t>();
+    Size read_size() {
+        return read<Size>();
     }
 
     Opcode read_opcode() {
@@ -85,8 +85,8 @@ public:
 
 private:
     std::shared_ptr<std::istream> file;
-    unsigned int index = 0;
-    uint32_t program_size, data_size;
+    Index index = 0;
+    Size program_size, data_size;
 
     static const std::string MAGIC;
 };

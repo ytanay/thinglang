@@ -7,7 +7,7 @@
 #include "NumberInstance.h"
 
 namespace NumberNamespace {
-    const std::vector<InternalMethod> NumberInstance::methods = {
+    const InternalMethods NumberInstance::methods = {
         &NumberInstance::__LexicalAddition__,
         &NumberInstance::__LexicalSubtraction__,
         &NumberInstance::__LexicalMultiplication__,

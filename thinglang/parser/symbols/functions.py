@@ -115,8 +115,8 @@ class ReturnStatement(BaseSymbol):
 
     def transpile(self):
         if self.value:
-            return 'Program::push(PThingInstance(new this_type({}))); return;'.format(self.value.transpile())
-        return 'Program::push(PThingInstance(NULL)); return;'
+            return 'Program::push(Thing(new this_type({}))); return;'.format(self.value.transpile())
+        return 'Program::push(Thing(NULL)); return;'
 
     def compile(self, context):
         context.push_down(self.value)

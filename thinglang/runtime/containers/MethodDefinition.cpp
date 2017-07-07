@@ -7,7 +7,7 @@
 void MethodDefinition::execute() {
     Program::create_frame(frame_size);
 
-    for (unsigned int i = 0; i < arguments; i++) {
+    for (size_t i = 0; i < arguments; i++) {
         Program::frame()[i] = Program::pop();
     }
 
@@ -19,10 +19,10 @@ void MethodDefinition::execute() {
         std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", "
                   << symbol.secondary << " -> [";
         std::for_each(Program::frame().begin(), Program::frame().end(),
-                      [](const PThingInstance &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
+                      [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
         std::cerr << "] -> [";
         std::for_each(Program::static_data.begin(), Program::static_data.end(),
-                      [](const PThingInstance &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
+                      [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
         std::cerr << "]" << std::endl;
 
 

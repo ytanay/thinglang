@@ -9,13 +9,11 @@
 #include "../errors/RuntimeError.h"
 #include "MethodDefinition.h"
 
-class ThingInstance;
 
-typedef void (*InternalMethod)();
 
 class ThingInstance {
 public:
-    ThingInstance(std::vector<MethodDefinition> methods) : methods(methods) {};
+    ThingInstance(Methods methods) : methods(methods) {};
     ThingInstance(){};
 
     virtual bool boolean() const {
@@ -36,17 +34,16 @@ public:
     }
 
 
-    virtual void call_internal(unsigned int target) {
+    virtual void call_internal(Index target) {
         throw RuntimeError("Cannot call internal method in this class");
     }
 
-    virtual void call_method(unsigned int target) {
+    virtual void call_method(Index target) {
         methods[target].execute();
     }
 
 protected:
-    std::vector<ThingInstance> fields;
-    std::vector<MethodDefinition> methods;
+    Methods methods;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const ThingInstance &instance) {

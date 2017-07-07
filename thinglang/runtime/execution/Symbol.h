@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "../utils/TypeNames.h"
 #include "Opcodes.h"
 
 class Symbol {
@@ -9,12 +10,12 @@ class Symbol {
 public:
     Symbol(Opcode opcode) : opcode(opcode) {};
 
-    Symbol(Opcode opcode, unsigned int target) : opcode(opcode), target(target) {};
+    Symbol(Opcode opcode, Index target) : opcode(opcode), target(target) {};
 
-    Symbol(Opcode opcode, unsigned int target, unsigned int secondary) : opcode(opcode), target(target),
+    Symbol(Opcode opcode, Index target, Index secondary) : opcode(opcode), target(target),
                                                                          secondary(secondary) {};
 
     Opcode opcode;
-    unsigned int target = 0;
-    unsigned int secondary = 0;
+    Index target = 0;
+    Index secondary = 0;
 };

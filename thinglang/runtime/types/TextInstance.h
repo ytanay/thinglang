@@ -6,9 +6,10 @@
 
 #pragma once
 
+#include "../utils/TypeNames.h"
 #include "../execution/Program.h"
 #include "../containers/ThingInstance.h"
-#include "../utils/formatting.h"
+#include "../utils/Formatting.h"
 
 namespace TextNamespace {
 class TextInstance;
@@ -21,26 +22,26 @@ public:
         return to_string(val);
     }
     
-    virtual void call_method(unsigned int target) override {
+    virtual void call_method(Index target) override {
         methods[target]();
     }
 
-	static const std::vector<InternalMethod> methods;
+	static const InternalMethods methods;
 	std::string val;
 	static void __LexicalAddition__() {
 		auto self = static_cast<this_type*>(Program::pop().get());
 		auto other = static_cast<this_type*>(Program::pop().get());
 		auto __transient__5__ = self->val + other->val;
-		Program::push(PThingInstance(new this_type(__transient__5__))); return;
-		Program::push(PThingInstance(NULL)); return;
+		Program::push(Thing(new this_type(__transient__5__))); return;
+		Program::push(Thing(NULL)); return;
 	}
 	static void __LexicalEquality__() {
 		auto self = static_cast<this_type*>(Program::pop().get());
 		auto other = static_cast<this_type*>(Program::pop().get());
 		if(self->val == other->val) {
-			Program::push(PThingInstance(new this_type(""))); return;
+			Program::push(Thing(new this_type(""))); return;
 		}
-		Program::push(PThingInstance(NULL)); return;
+		Program::push(Thing(NULL)); return;
 	}
 };
 }

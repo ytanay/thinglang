@@ -10,6 +10,7 @@ HEADER = """/**
 FOUNDATION_HEADER = HEADER + """
 #pragma once
 
+#include "../utils/TypeNames.h"
 #include "../execution/Program.h"
 #include "../containers/ThingInstance.h"
 #include "../utils/formatting.h"
@@ -24,7 +25,7 @@ FOUNDATION_SOURCE = HEADER + """
 #include "{name}Instance.h"
 
 namespace {name}Namespace {{
-    const std::vector<InternalMethod> {name}Instance::methods = {{
+    const InternalMethods {name}Instance::methods = {{
 {methods}
     }};
 }}
@@ -55,7 +56,7 @@ FOUNDATION_VIRTUALS = """
         return to_string({first_member});
     }}
     
-    virtual void call_method(unsigned int target) override {{
+    virtual void call_method(Index target) override {{
         methods[target]();
     }}
 """
