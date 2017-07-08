@@ -1,5 +1,9 @@
 #include "ProgramReader.h"
 #include "../types/InternalTypes.h"
+#include "../errors/RuntimeError.h"
+#include "../types/core/TextType.h"
+#include "../types/core/NumberType.h"
+#include "../execution/Program.h"
 
 const std::string ProgramReader::MAGIC = "THING";
 
@@ -31,10 +35,10 @@ void ProgramReader::read_header() {
               << data_size << std::endl;
 }
 
-std::vector<PThingInstance> ProgramReader::read_data() {
+Things ProgramReader::read_data() {
     std::cerr << "Reading data section..." << std::endl;
 
-    std::vector<PThingInstance> static_data;
+    Things static_data;
 
     while (in_data()) {
         static_data.push_back(read_data_block());
@@ -45,7 +49,7 @@ std::vector<PThingInstance> ProgramReader::read_data() {
 }
 
 
-PThingInstance ProgramReader::read_data_block() {
+Thing ProgramReader::read_data_block() {
     auto type = static_cast<InternalTypes>(read<int32_t>());
 
     switch (type) {
@@ -53,12 +57,16 @@ PThingInstance ProgramReader::read_data_block() {
             auto size = read_size();
             auto data = read(size);
             std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
-            return PThingInstance(new TextNamespace::TextInstance(data));
+            auto instance = Program::type<TextNamespace::TextType>(type)->create();
+            static_cast<TextNamespace::TextInstance*>(instance.get())->val = data;
+            return instance;
         }
         case InternalTypes::NUMBER: {
             auto data = read<int32_t>();
             std::cerr << "\tReading int: " << data << std::endl;
-            return PThingInstance(new NumberNamespace::NumberInstance(data));
+            auto instance = Program::type<NumberNamespace::NumberType>(type)->create();
+            static_cast<NumberNamespace::NumberInstance*>(instance.get())->val = data;
+            return instance;
         }
 
         default:
@@ -67,9 +75,9 @@ PThingInstance ProgramReader::read_data_block() {
     }
 }
 
-std::vector<TypeInfo> ProgramReader::read_code() {
+Types ProgramReader::read_code() {
     std::cerr << "Reading program..." << std::endl;
-    std::vector<TypeInfo> user_types;
+    Types user_types;
 
     while (in_program()) {
         std::cerr << "\t[" << user_types.size() << "] ";
@@ -87,7 +95,7 @@ std::vector<TypeInfo> ProgramReader::read_code() {
 }
 
 
-TypeInfo ProgramReader::read_class() {
+Type ProgramReader::read_class() {
     auto member_count = read_size();
     auto method_count = read_size();
     std::cerr << "Encountered class of " << member_count << " members and " << method_count << " methods"
@@ -98,7 +106,7 @@ TypeInfo ProgramReader::read_class() {
         std::cerr << "\t[" << methods.size() << "] ";
         methods.push_back(read_method());
     }
-    return TypeInfo("Unknown class", "", methods);
+    return new ThingTypeExternal("Unknown class", "", methods);
 
 }
 
@@ -140,7 +148,7 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::RETURN: {
             return Symbol(opcode);
         }
-
+        case Opcode::CALL_INTERNAL:
         case Opcode::CALL:
         case Opcode::SET_STATIC: {
             auto target = read_size();
