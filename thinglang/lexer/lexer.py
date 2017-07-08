@@ -5,7 +5,7 @@ from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
-from thinglang.parser.symbols.base import InlineString
+from thinglang.parser.symbols.base import InlineString, InlineCode
 
 
 def lexer(source):
@@ -60,6 +60,9 @@ def finalize_group(group, termination_reason):
 
     if termination_reason == '"':
         return InlineString(group)
+
+    if termination_reason == '`':
+        return InlineCode(group)
 
     if is_identifier(group):
         return LexicalIdentifier(group)
