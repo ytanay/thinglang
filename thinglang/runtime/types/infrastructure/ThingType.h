@@ -34,7 +34,7 @@ private:
 
 class ThingTypeInternal : public ThingType {
 public:
-    ThingTypeInternal(LocalMethods methods) : methods(methods) {};
+    ThingTypeInternal(InternalMethods methods) : methods(methods) {};
 
     Thing call(Index idx) override  {
         return methods[idx]();
@@ -42,5 +42,5 @@ public:
 
 
 private:
-    LocalMethods methods;
+    InternalMethods methods;
 };
