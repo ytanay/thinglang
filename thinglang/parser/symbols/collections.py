@@ -1,3 +1,5 @@
+import itertools
+
 from thinglang.lexer.tokens import LexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose
 from thinglang.parser.symbols import BaseSymbol
@@ -61,7 +63,8 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
         return [x for x in self.arguments if x.STATIC]
 
     def transpile(self, definition=False, pops=False):
+
         if pops:
-            self_pop = '\t\tauto self = static_cast<this_type*>(Program::pop().get());\n'
-            return self_pop + '\n'.join('\t\tauto {} = static_cast<this_type*>(Program::pop().get());'.format(x.transpile()) for x in self.arguments)
+            self_pop = '\t\tauto self = Program::argument<this_type>();\n'
+            return self_pop + '\n'.join('\t\tauto {} = Program::argument<this_type>();'.format(x.transpile(), idx + 1) for idx, x in enumerate(self.arguments))
         return ', '.join(f'{x.type.transpile() + " " if definition else ""}{x.transpile()}' for x in self.arguments)

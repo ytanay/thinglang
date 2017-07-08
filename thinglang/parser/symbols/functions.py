@@ -116,8 +116,9 @@ class ReturnStatement(BaseSymbol):
 
     def transpile(self):
         if self.value:
-            return 'Program::push(Thing(new this_type({}))); return;'.format(self.value.transpile())
-        return 'Program::push(Thing(NULL)); return;'
+            return 'return Thing(new this_type({}));'.format(self.value.transpile())
+        else:
+            return 'return NULL;'
 
     def compile(self, context):
         context.push_down(self.value)
