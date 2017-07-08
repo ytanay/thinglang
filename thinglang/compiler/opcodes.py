@@ -12,7 +12,6 @@ OPCODES = {name: idx for idx, name in enumerate([
     'SET_STATIC',  # set a reference to static data
 
     'CALL',
-    'CALL_METHOD',
     'CALL_INTERNAL',
     'RETURN',
 
