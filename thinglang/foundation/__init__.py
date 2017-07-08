@@ -76,7 +76,8 @@ class Foundation(object, metaclass=Singleton):
 
     @classmethod
     def format_internal_type(self, type):
-        return type.value.capitalize() + 'Instance'
+        name = type.value.capitalize()
+        return '{}Namespace::{}Instance'.format(name, name)
 
 
 if __name__ == "__main__":
