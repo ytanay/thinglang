@@ -68,6 +68,7 @@ class MethodCall(BaseSymbol, ValueType):
             self.arguments = ArgumentList()
 
         self.resolved_target = None
+        self.internal = False
 
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
@@ -97,13 +98,13 @@ class MethodCall(BaseSymbol, ValueType):
         for arg in reversed(self.arguments):
             context.push_down(arg)
 
-        if self.target[0].is_self():
-            context.append(BytecodeSymbols.call(*self.resolved_target.index))
-            if not captured:
-                context.append(BytecodeSymbols.pop())  # pop the return value, if the method does not return
-
+        if self.internal:
+            context.append(BytecodeSymbols.call_internal(*self.resolved_target.index))
         else:
-            context.append(BytecodeSymbols.call_internal(3, 0))
+            context.append(BytecodeSymbols.call(*self.resolved_target.index))
+
+        if not captured:
+            context.append(BytecodeSymbols.pop())  # pop the return value, if the method does not return
 
     def type_id(self):
         return self.resolved_target.type
