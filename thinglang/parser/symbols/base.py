@@ -75,3 +75,12 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
 
     def type_id(self):
         return self.TYPE
+
+
+class InlineCode(LexicalToken):
+    STATIC = True
+    SCOPING = False
+
+    def __init__(self, value):
+        super(InlineCode, self).__init__(None, value)
+        self.children = []

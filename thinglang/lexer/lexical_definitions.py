@@ -7,10 +7,11 @@ from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquality, Le
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
     LexicalMultiplication
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
-    LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment, LexicalBracketOpen, LexicalBracketClose
+    LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment, LexicalBracketOpen, LexicalBracketClose, \
+    LexicalTick
 from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
-    LexicalClassInitialization, LexicalDeclarationReturnType
+    LexicalClassInitialization, LexicalDeclarationReturnType, LexicalDeclarationStatic
 from thinglang.lexer.tokens.typing import LexicalCast
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
@@ -19,8 +20,9 @@ IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")
 OPERATORS = {
     ' ': None,
 
-    "\"": LexicalQuote,
-    "\t": LexicalIndent,
+    '"': LexicalQuote,
+    '`': LexicalTick,
+    '\t': LexicalIndent,
 
     '.': LexicalAccess,
     ',': LexicalSeparator,

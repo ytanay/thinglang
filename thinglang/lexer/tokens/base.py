@@ -13,6 +13,17 @@ class LexicalQuote(LexicalToken):  # "
         return original
 
 
+class LexicalTick(LexicalToken):  # "
+    EMITTABLE = False
+    ALLOW_EMPTY = True
+
+    @classmethod
+    def next_operator_set(cls, current, original):
+        if current is original:
+            return {'`': LexicalQuote}
+        return original
+
+
 class LexicalParenthesesOpen(LexicalToken):
     pass  # (
 
@@ -75,8 +86,6 @@ class LexicalIdentifier(LexicalToken, ValueType):
         return self.type
 
     def transpile(self):
-        #if self.is_self():
-        #    return 'this'
         return self.value
 
     def upper(self):
