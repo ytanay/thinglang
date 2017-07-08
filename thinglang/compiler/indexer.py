@@ -2,6 +2,7 @@ import itertools
 
 from thinglang.compiler.allocation import LinearMemoryAllocationLayout
 from thinglang.compiler.references import ResolvedReference
+from thinglang.foundation import Foundation
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.symbols import BaseSymbol, Transient
 from thinglang.parser.symbols.base import AssignmentOperation
@@ -107,13 +108,30 @@ class Indexer(TreeTraversal):
             arg if arg.STATIC else ResolvedReference(*self.locals.get(arg)) for arg in node.arguments
         ]
 
+        if node.target[0] in Foundation().types:
+            assert len(node.target.target) == 2
+            type_id = node.target[0]
+
+            node.resolved_target = ResolvedReference((
+                Foundation().INTERNAL_TYPE_ORDERING[type_id],
+                Foundation().type(type_id).index(node.target[1].transpile())),
+                None)  # TODO: fix None
+
+            node.internal = True
+            return
+
         if node.target[0].is_self():
             target = self.context.current_thing
+        elif self.ast.get(node.target[0]):
+            print('{} refers to a user class'.format(node.target))
+            target = self.ast.get(node.target[0])
+        else:
+            raise Exception('Cannot resolve {}'.format(node.target))
 
-            for x in node.target[1:]:
-                print('Target {}, x: {} {}'.format(target, x, target.index))
-                target = target[x]
-            node.resolved_target = ResolvedReference(target.index, target.type_id())
+        for x in node.target[1:]:
+            print('Target {}, x: {} {}'.format(target, x, target.index))
+            target = target[x]
+        node.resolved_target = ResolvedReference(target.index, target.type_id())
 
     @inspects(ReturnStatement)
     def inspect_return_statement(self, node: ReturnStatement) -> None:
