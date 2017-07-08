@@ -20,7 +20,8 @@ class Foundation(object, metaclass=Singleton):
     INTERNAL_TYPE_ORDERING = {
         LexicalIdentifier("none"): 0,
         LexicalIdentifier("text"): 1,
-        LexicalIdentifier("number"): 2
+        LexicalIdentifier("number"): 2,
+        LexicalIdentifier("Output"): 3
     }
 
     def __init__(self):
@@ -72,6 +73,10 @@ class Foundation(object, metaclass=Singleton):
         self.generate_types()
         self.write_type_enum()
         self.write_opcode_enum()
+
+    @classmethod
+    def format_internal_type(self, type):
+        return type.value.capitalize() + 'Instance'
 
 
 if __name__ == "__main__":
