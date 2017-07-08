@@ -44,7 +44,7 @@ class ThingDefinition(DefinitionPairSymbol):
             'class {} : public ThingTypeInternal {{\npublic:\n{}\n{}\n{}\n}};'.format(
                 type_name,
                 '\t{}() : ThingTypeInternal({{{}}}) {{}};'.format(type_name, ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods()])),
-                templates.FOUNDATION_VIRTUALS.format(first_member=self.members()[0].name.transpile()),
+                templates.FOUNDATION_VIRTUALS.format(first_member=self.members()[0].name.transpile()) if len(self.members()) > 0 else '',
                 self.transpile_children(indent=1, children_override=self.methods()))
         ])
 
@@ -75,12 +75,14 @@ class MethodDefinition(BaseSymbol):
         self.return_type = None
         self.frame_size = None
         self.index = None
+        self.static = False
 
         if isinstance(slice[0], LexicalDeclarationConstructor):
             self.name = LexicalIdentifier.constructor()
             self.arguments = slice[1]
         else:
             self.name = slice[1]
+            self.static = slice[0].static_member
 
             if isinstance(slice[2], ArgumentList):
                 self.arguments = slice[2]
@@ -107,7 +109,7 @@ class MethodDefinition(BaseSymbol):
             'Thing' if not self.is_constructor() else '',
             (self.parent.name if self.is_constructor() else self.name).transpile(),
             '',  # Pop directly from stack, otherwise: self.arguments.transpile(definition=True),
-            self.arguments.transpile(pops=True),
+            self.arguments.transpile(pops=True, static=self.static),
             self.transpile_children(2, self.children + [ReturnStatement([])]))
 
     def serialization(self):
