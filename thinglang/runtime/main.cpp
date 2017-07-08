@@ -8,7 +8,8 @@
 #include "execution/Program.h"
 #include "loader/ProgramReader.h"
 
-int main(int argc, char **argv)
+
+int main(const int argc, const char **argv)
 {
     args::ArgumentParser parser("thinglang's runtime environment");
     args::HelpFlag help(parser, "help", "Display this help", {'h', "help"});
