@@ -18,8 +18,6 @@ void ProgramReader::read_header() {
 
     auto magic = read(MAGIC.size());
 
-    std::cerr << "Got magic: " << magic;
-
     if (magic != MAGIC) {
         throw RuntimeError("Invalid file format");
     }
@@ -74,6 +72,7 @@ std::vector<TypeInfo> ProgramReader::read_code() {
     std::vector<TypeInfo> user_types;
 
     while (in_program()) {
+        std::cerr << "\t[" << user_types.size() << "] ";
         user_types.push_back(read_class());
     }
 
@@ -91,11 +90,12 @@ std::vector<TypeInfo> ProgramReader::read_code() {
 TypeInfo ProgramReader::read_class() {
     auto member_count = read_size();
     auto method_count = read_size();
-    std::cerr << "\tEncountered class of " << member_count << " members and " << method_count << " methods"
+    std::cerr << "Encountered class of " << member_count << " members and " << method_count << " methods"
               << std::endl;
     std::vector<MethodDefinition> methods;
 
     for (int i = 0; i < method_count; i++) {
+        std::cerr << "\t[" << methods.size() << "] ";
         methods.push_back(read_method());
     }
     return TypeInfo("Unknown class", "", methods);
@@ -106,13 +106,15 @@ MethodDefinition ProgramReader::read_method() {
     uint32_t frame_size = read_size();
     uint32_t arguments = read_size();
 
-    std::cerr << "\tEncountered method (frame size=" << frame_size << ", args=" << arguments << ")" << std::endl;
+    std::cerr << "Encountered method (frame size=" << frame_size << ", args=" << arguments << ")" << std::endl;
     std::vector<Symbol> symbols;
 
     for (auto opcode = read_opcode(); opcode != Opcode::METHOD_END; opcode = read_opcode()) {
-        std::cerr << "\t\t\tReading symbol [" << symbols.size() << "] " << describe(opcode) << " (" << int(opcode)
-                  << ")" << std::endl;
         auto symbol = read_symbol(opcode);
+
+        std::cerr << "\t\t\tReading symbol [" << symbols.size() << "] " << describe(opcode) << " (" << symbol.target << ", " << symbol.secondary
+                  << ")" << std::endl;
+
         symbols.push_back(symbol);
     }
 
@@ -126,8 +128,7 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::SET:
         case Opcode::PUSH_STATIC:
         case Opcode::PUSH:
-        case Opcode::CALL_METHOD:
-        case Opcode::CALL:
+        //case Opcode::CALL_METHOD:
         case Opcode::JUMP:
         case Opcode::CONDITIONAL_JUMP: {
             return Symbol(opcode, read_size());
@@ -140,8 +141,8 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
             return Symbol(opcode);
         }
 
-        case Opcode::SET_STATIC:
-        case Opcode::CALL_INTERNAL: {
+        case Opcode::CALL:
+        case Opcode::SET_STATIC: {
             auto target = read_size();
             auto value = read_size();
             return Symbol(opcode, target, value);
