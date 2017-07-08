@@ -38,7 +38,7 @@ public:
 
 	static Thing __LexicalAddition__() {
 		auto self = Program::argument<this_type>();
-		auto other = Program::argument<TextInstance>();
+		auto other = Program::argument<TextNamespace::TextInstance>();
 
 		auto __transient__6__ = self->val + other->val;
 		return Thing(new this_type(__transient__6__));
@@ -46,7 +46,7 @@ public:
 	}
 	static Thing __LexicalEquality__() {
 		auto self = Program::argument<this_type>();
-		auto other = Program::argument<TextInstance>();
+		auto other = Program::argument<TextNamespace::TextInstance>();
 
 		if(self->val == other->val) {
 			return Thing(new this_type(""));

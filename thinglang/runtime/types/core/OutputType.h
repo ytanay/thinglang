@@ -37,9 +37,9 @@ public:
     }
 
 	static Thing write() {
-		auto message = Program::argument<TextInstance>();
+		auto message = Program::argument<TextNamespace::TextInstance>();
 
-		std::cerr << message->text() << std::endl;
+		std::cout << message->text() << std::endl;
 		return NULL;
 	}
 };

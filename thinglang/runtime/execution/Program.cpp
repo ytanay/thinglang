@@ -1,14 +1,20 @@
 #include "Program.h"
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
-#include "../builtins/Output.h"
+#include "../types/core/OutputType.h"
 #include <iostream>
 
 ThingStack Program::stack;
 FrameStack Program::frames;
 Things Program::static_data;
 
-Types Program::internals = {NULL, new TextNamespace::TextType(), new NumberNamespace::NumberType(), new OutputNamespace::OutputType()};
+Types Program::internals = {
+        NULL,
+        new TextNamespace::TextType(),
+        new NumberNamespace::NumberType(),
+        new OutputNamespace::OutputType()
+};
+
 Types Program::types = {};
 
 Thing Program::current_instance;
