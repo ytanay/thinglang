@@ -3,4 +3,4 @@ thing Output
     has "std::string" val
 
     static does write with text message
-        `std::cerr << message->text() << std::endl;`
+        `std::cout << message->text() << std::endl;`
