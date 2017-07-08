@@ -2,22 +2,33 @@
 
 #include <vector>
 #include <stack>
+#include <cassert>
+#include <algorithm>
 
 #include "../utils/TypeNames.h"
-#include "../containers/ThingInstance.h"
-#include "../types/TypeInfo.h"
+#include "../types/infrastructure/ThingType.h"
+#include "../errors/RuntimeError.h"
+#include "../types/InternalTypes.h"
 
 
-using ProgramInfo = std::pair<std::vector<Thing>, std::vector<TypeInfo>>;
+using ProgramInfo = std::pair<std::vector<Thing>, Types>;
 
 class Program {
 public:
 
-    static Thing pop() {
-        auto ti = stack.top();
-        stack.pop();
-        return ti;
+    template <typename T>
+    static std::shared_ptr<T> argument(){
+        return std::static_pointer_cast<T>(pop());
+    };
+
+    static ThingType* type(SignedIndex index);
+
+    template <typename T>
+    static T* type(InternalTypes type){
+        return static_cast<T*>(Program::internals[static_cast<int>(type)]);
     }
+
+    static Thing pop();
 
     static Thing top() {
         return stack.top();
@@ -51,27 +62,27 @@ public:
         return frames.top();
     }
 
-    static void load(ProgramInfo &info) {
-        static_data.insert(static_data.end(), info.first.begin(), info.first.end());
-        types.insert(types.end(), info.second.begin(), info.second.end());
-    }
-
     static void start() {
-        types[1].instantiate();
+        types[0]->create();
     }
 
-    static Things internals;
-    static Things static_data;
+    static void load(ProgramInfo &info);
 
+    static void status(Index counter, const Symbol& symbol);
+
+    static Types internals;
+    static Types types;
 private:
     Program() {}
 
     static ThingStack stack;
-
-
     static FrameStack frames;
-    static std::vector<TypeInfo> types;
+    static Things static_data;
+
+
+
     static Thing current_instance;
+
 };
 
 

@@ -18,13 +18,12 @@ enum class Opcode {
     SET = 6,
     SET_STATIC = 7,
     CALL = 8,
-    CALL_METHOD = 9,
-    CALL_INTERNAL = 10,
-    RETURN = 11,
-    JUMP = 12,
-    CONDITIONAL_JUMP = 13,
-    PRINT = 14,
-    METHOD_END = 15
+    CALL_INTERNAL = 9,
+    RETURN = 10,
+    JUMP = 11,
+    CONDITIONAL_JUMP = 12,
+    PRINT = 13,
+    METHOD_END = 14
 };
 
 inline std::string describe(Opcode val){
@@ -56,9 +55,6 @@ inline std::string describe(Opcode val){
 
     case Opcode::CALL:
         return "CALL";
-
-    case Opcode::CALL_METHOD:
-        return "CALL_METHOD";
 
     case Opcode::CALL_INTERNAL:
         return "CALL_INTERNAL";

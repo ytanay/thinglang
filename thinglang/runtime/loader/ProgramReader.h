@@ -7,15 +7,11 @@
 #include <utility>
 #include <memory>
 
-#include "../types/TypeInfo.h"
-#include "../types/NoneType.h"
-#include "../types/TextInstance.h"
-#include "../types/NumberInstance.h"
+#include "../utils/TypeNames.h"
 
 #include "../containers/MethodDefinition.h"
 
-using PThingInstance = std::shared_ptr<ThingInstance>;
-using ProgramInfo = std::pair<std::vector<PThingInstance>, std::vector<TypeInfo>>;
+using ProgramInfo = std::pair<Things, Types>;
 
 class ProgramReader {
 public:
@@ -39,13 +35,13 @@ public:
 
     void read_header();
 
-    std::vector<PThingInstance> read_data();
+    Things read_data();
 
-    PThingInstance read_data_block();
+    Thing read_data_block();
 
-    std::vector<TypeInfo> read_code();
+    Types read_code();
 
-    TypeInfo read_class();
+    Type read_class();
 
     MethodDefinition read_method();
 

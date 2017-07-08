@@ -20,21 +20,32 @@ class ThingDefinition(DefinitionPairSymbol):
         return self.name
 
     def transpile(self):
-        name = '{}Instance'.format(self.name.transpile().capitalize())
-        constructor = '\t{}({}) : val(val), ThingInstance() {{}}'.format(
-            name,
+        name = self.name.transpile().capitalize()
+        type_name, instance_name = '{}Type'.format(name), '{}Instance'.format(name)
+        constructor = '\t{}({}) : val(val) {{}};'.format(
+            instance_name,
             ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members())
         )
 
         return '\n'.join([
-            'class {};'.format(name),
-            'typedef {} this_type;'.format(name),
-            'class {} : public ThingInstance {{\npublic:\n{}\n{}\n{}\n{}\n}};'.format(
-                name,
+            '\nclass {} : public BaseThingInstance {{\npublic:\n{}\n{}\n{}\n\n{}\n}};'.format(
+                instance_name,
+                templates.DEFAULT_CONSTRUCTOR.format(instance_name),
                 constructor,
+                '''
+    virtual std::string text() override {
+        return to_string(val);
+    }
+                ''',
+                self.transpile_children(indent=1, children_override=self.members())
+            ),
+
+            'typedef {} this_type;\n'.format(instance_name),
+            'class {} : public ThingTypeInternal {{\npublic:\n{}\n{}\n{}\n}};'.format(
+                type_name,
+                '\t{}() : ThingTypeInternal({{{}}}) {{}};'.format(type_name, ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods()])),
                 templates.FOUNDATION_VIRTUALS.format(first_member=self.members()[0].name.transpile()),
-                '\tstatic const std::vector<InternalMethod> methods;',
-                self.transpile_children(indent=1))
+                self.transpile_children(indent=1, children_override=self.methods()))
         ])
 
     def members(self):
@@ -47,10 +58,10 @@ class ThingDefinition(DefinitionPairSymbol):
         return len(self.members()), len(self.methods())
 
     def finalize(self):
-        first_method = self.methods()[0]
-        if not first_method.is_constructor:
+        methods = self.methods()
+        if not methods or not methods[0].is_constructor:
             print('Creating default constructor!')
-            index = self.children.index(first_method)
+            index = self.children.index(methods[0]) if methods else 0
             self.children.insert(index, MethodDefinition([LexicalDeclarationConstructor, None]))
 
 
@@ -92,8 +103,8 @@ class MethodDefinition(BaseSymbol):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
-        return 'static {}{}({}) {{\n{}\n{}\n\t}}'.format(
-            self.return_type.transpile() + ' ' if self.return_type else 'void ' if not self.is_constructor() else '',
+        return 'static {} {}({}) {{\n{}\n{}\n\t}}'.format(
+            'Thing' if not self.is_constructor() else '',
             (self.parent.name if self.is_constructor() else self.name).transpile(),
             '',  # Pop directly from stack, otherwise: self.arguments.transpile(definition=True),
             self.arguments.transpile(pops=True),

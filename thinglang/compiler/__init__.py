@@ -33,8 +33,8 @@ class BytecodeSymbols(object):
         return struct.pack('<BI', OPCODES['SET'], idx if isinstance(idx, int) else idx[0])
 
     @classmethod
-    def call(cls, idx):
-        return struct.pack('<BI', OPCODES['CALL'], idx)
+    def call(cls, type_id, idx):
+        return struct.pack('<BII', OPCODES['CALL'], type_id, idx)
 
     @classmethod
     def call_internal(cls, thing, idx):
@@ -43,10 +43,6 @@ class BytecodeSymbols(object):
     @classmethod
     def method_end(cls):
         return struct.pack('<B', OPCODES['METHOD_END'])
-
-    @classmethod
-    def call_method(cls, idx):
-        return struct.pack('<BI', OPCODES['CALL_METHOD'], idx)
 
     @classmethod
     def pop(cls):
@@ -100,13 +96,11 @@ class CompilationContext(object):
 
     def push_down(self, value):
         idx = self.current_index()
-        if isinstance(value, ResolvedReference):
+        if isinstance(value, ResolvedReference) or value.implements(LexicalIdentifier):
+            assert value.index is not None, 'Unresolved reference {}'.format(value)
             self.append(BytecodeSymbols.push(value.index))
         elif value.STATIC:
             self.append(BytecodeSymbols.push_static(self.append_static(value.serialize())))
-        elif value.implements(LexicalIdentifier):
-            assert value.index is not None, 'Unresolved reference {}'.format(value)
-            self.append(BytecodeSymbols.push(value.index))
         else:
             value.compile(self)
         return idx

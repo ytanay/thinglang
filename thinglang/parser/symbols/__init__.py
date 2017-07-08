@@ -142,6 +142,12 @@ class RootSymbol(BaseSymbol):
     def transpile(self):
         return self.transpile_children()
 
+    def reorder(self):
+        entry = [x for x in self.children if x.name == LexicalIdentifier("Program")]
+        assert len(entry) == 1, "Program must have a single entry point - got {}".format(entry)
+        self.children = sorted(self.children, key=lambda child: child.name.value)  # Secondary sort (on key)
+        self.children = sorted(self.children, key=lambda child: child is not entry[0])  # Primary sort (on entry point)
+
 
 class DefinitionPairSymbol(BaseSymbol):
     def __init__(self, slice):

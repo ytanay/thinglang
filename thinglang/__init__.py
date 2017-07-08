@@ -8,6 +8,7 @@ from thinglang.lexer.lexer import lexer
 from thinglang.parser.analyzer import Analyzer
 from thinglang.parser.parser import parse
 from thinglang.parser.simplifier import Simplifier
+from thinglang.parser.symbols import RootSymbol
 
 BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'include')
 
@@ -17,7 +18,7 @@ def collect_includes():
     return '\n' + '\n'.join(open(f).read() for f in files)
 
 
-def preprocess(source):
+def preprocess(source) -> RootSymbol:
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -28,8 +29,12 @@ def preprocess(source):
     return ast
 
 
-def compiler(source):
+def compiler(source: str, executable: bool=True):
     ast = preprocess(source)
+
+    if executable:
+        ast.reorder()
+
     Collator(ast).run()
 
     try:

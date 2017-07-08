@@ -1,5 +1,5 @@
 #include <iostream>
-#include <algorithm>
+
 #include "MethodDefinition.h"
 #include "../execution/Program.h"
 
@@ -13,28 +13,38 @@ void MethodDefinition::execute() {
 
     auto counter_end = symbols.size();
 
-    for (auto counter = 0; counter < counter_end;) {
+
+    for (Index counter = 0; counter < counter_end;) {
         auto symbol = symbols[counter];
 
-        std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", "
-                  << symbol.secondary << " -> [";
-        std::for_each(Program::frame().begin(), Program::frame().end(),
-                      [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
-        std::cerr << "] -> [";
-        std::for_each(Program::static_data.begin(), Program::static_data.end(),
-                      [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
-        std::cerr << "]" << std::endl;
-
+        Program::status(counter, symbol);
 
         switch (symbol.opcode) {
 
             case Opcode::NOP:
                 break;
 
+
+            case Opcode::CALL: {
+                Program::types[symbol.target]->call(symbol.secondary);
+                break;
+            }
+
+            case Opcode::CALL_INTERNAL: {
+                auto ret_val = Program::internals[symbol.target]->call(symbol.secondary);
+                Program::push(ret_val);
+                break;
+            }
+
             case Opcode::PUSH: {
                 Program::push(Program::frame()[symbol.target]);
                 break;
             };
+
+            case Opcode::PUSH_STATIC: {
+                Program::push(Program::data(symbol.target));
+                break;
+            }
 
             case Opcode::PUSH_NULL: {
                 Program::push(NULL);
@@ -53,33 +63,6 @@ void MethodDefinition::execute() {
 
             case Opcode::SET: {
                 Program::frame()[symbol.target] = Program::pop();
-                break;
-            }
-
-            case Opcode::PUSH_STATIC: {
-                Program::push(Program::data(symbol.target));
-                break;
-            }
-
-            case Opcode::CALL: {
-                auto instance = Program::top();
-                instance->call_method(symbol.target);
-
-                break;
-            }
-
-            case Opcode::CALL_METHOD: {
-                auto instance = Program::instance();
-                instance->call_method(symbol.target);
-                break;
-            }
-
-            case Opcode::PRINT:
-                std::cout << Program::pop()->text() << std::endl;
-                break;
-
-            case Opcode::CALL_INTERNAL: {
-                Program::internals[symbol.target]->call_internal(symbol.secondary);
                 break;
             }
 

@@ -10,7 +10,7 @@ class LexicalNumericalValue(LexicalToken, ValueType):
 
     STATIC = True
     TYPE = LexicalIdentifier("number")
-    TYPE_IDX = Foundation.INTERNAL_TYPE_ORDERING["number"]
+    TYPE_IDX = Foundation.INTERNAL_TYPE_ORDERING[LexicalIdentifier("number")]
 
     def __init__(self, value):
         super(LexicalNumericalValue, self).__init__(value)

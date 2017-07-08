@@ -41,10 +41,13 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
     def transpile(self):
         return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
 
-    def compile(self, context: CompilationContext, returns=True):
+    def compile(self, context: CompilationContext, captured=False):
         context.push_down(self.arguments[1])
         context.push_down(self.arguments[0])
-        context.append(BytecodeSymbols.call(Foundation().type(self.arguments[0].type_id()).index(self.operator.transpile())))
+        type_id = self.arguments[0].type_id()
+        context.append(BytecodeSymbols.call_internal(Foundation().INTERNAL_TYPE_ORDERING[type_id], Foundation().type(type_id).index(self.operator.transpile())))
+        if self.parent is not None and not captured:
+            context.append(BytecodeSymbols.pop())  # TODO: Dead branch?
 
     def type_id(self):
         assert all(x.type_id() == self.arguments[0].type_id() for x in self.arguments)

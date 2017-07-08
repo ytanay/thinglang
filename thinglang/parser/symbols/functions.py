@@ -92,17 +92,18 @@ class MethodCall(BaseSymbol, ValueType):
     def statics(self):
         yield from self.arguments.statics()
 
-    def compile(self, context, returns=False):
+    def compile(self, context, captured=False):
+
         for arg in reversed(self.arguments):
             context.push_down(arg)
 
         if self.target[0].is_self():
-            context.append(BytecodeSymbols.call_method(self.resolved_target.index))
-            if not returns:
+            context.append(BytecodeSymbols.call(*self.resolved_target.index))
+            if not captured:
                 context.append(BytecodeSymbols.pop())  # pop the return value, if the method does not return
 
         else:
-            context.append(BytecodeSymbols.call_internal(0, 0))
+            context.append(BytecodeSymbols.call_internal(3, 0))
 
     def type_id(self):
         return self.resolved_target.type
@@ -115,8 +116,9 @@ class ReturnStatement(BaseSymbol):
 
     def transpile(self):
         if self.value:
-            return 'Program::push(Thing(new this_type({}))); return;'.format(self.value.transpile())
-        return 'Program::push(Thing(NULL)); return;'
+            return 'return Thing(new this_type({}));'.format(self.value.transpile())
+        else:
+            return 'return NULL;'
 
     def compile(self, context):
         context.push_down(self.value)
