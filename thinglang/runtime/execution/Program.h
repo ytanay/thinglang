@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <stack>
+#include <cassert>
+#include <algorithm>
 
 #include "../utils/TypeNames.h"
 #include "../containers/ThingInstance.h"
@@ -13,11 +15,9 @@ using ProgramInfo = std::pair<std::vector<Thing>, std::vector<TypeInfo>>;
 class Program {
 public:
 
-    static Thing pop() {
-        auto ti = stack.top();
-        stack.pop();
-        return ti;
-    }
+    static TypeInfo type(SignedIndex index);
+
+    static Thing pop();
 
     static Thing top() {
         return stack.top();
@@ -51,27 +51,27 @@ public:
         return frames.top();
     }
 
-    static void load(ProgramInfo &info) {
-        static_data.insert(static_data.end(), info.first.begin(), info.first.end());
-        types.insert(types.end(), info.second.begin(), info.second.end());
-    }
-
     static void start() {
         types[1].instantiate();
     }
 
-    static Things internals;
-    static Things static_data;
+    static void load(ProgramInfo &info);
+
+    static void status(Index counter, const Symbol& symbol);
+
 
 private:
     Program() {}
 
     static ThingStack stack;
-
-
     static FrameStack frames;
-    static std::vector<TypeInfo> types;
+    static Things static_data;
+
+    static Types internals;
+    static Types types;
+
     static Thing current_instance;
+
 };
 
 
