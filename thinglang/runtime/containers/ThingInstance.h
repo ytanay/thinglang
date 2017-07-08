@@ -13,37 +13,15 @@
 
 class ThingInstance {
 public:
-    ThingInstance(Methods methods) : methods(methods) {};
     ThingInstance(){};
 
-    virtual bool boolean() const {
-        throw RuntimeError("cannot convert to boolean");
-    }
-
+    virtual void call(Index target) = 0;
 
     virtual std::string text() const {
-        throw RuntimeError("str operator not implemented");
-    }
-
-    ThingInstance operator+(const ThingInstance &other) {
-        throw RuntimeError("+ operator not supported for this class");
-    }
-
-    virtual ThingInstance &copy() const {
-        throw RuntimeError("copy not supported for this class");
+        throw RuntimeError("conversion to text not implemented");
     }
 
 
-    virtual void call_internal(Index target) {
-        throw RuntimeError("Cannot call internal method in this class");
-    }
-
-    virtual void call_method(Index target) {
-        methods[target].execute();
-    }
-
-protected:
-    Methods methods;
 };
 
 inline std::ostream &operator<<(std::ostream &os, const ThingInstance &instance) {
