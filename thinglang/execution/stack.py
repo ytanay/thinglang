@@ -44,7 +44,6 @@ class Frame(object):
         self.return_value = value
 
     def __setitem__(self, key, value):
-        assert isinstance(key, self.expected_key_type)
         if key in self.data:
             self.data[key] = (self.data[key][0], value)
         else:
