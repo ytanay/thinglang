@@ -1,5 +1,6 @@
 import itertools
 
+from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose
 from thinglang.parser.symbols import BaseSymbol
@@ -62,9 +63,20 @@ class ListInitialization(BaseSymbol, ReplaceableArguments):
     def statics(self):
         return [x for x in self.arguments if x.STATIC]
 
-    def transpile(self, definition=False, pops=False):
+    def transpile(self, definition=False, pops=False, static=False):
 
-        if pops:
-            self_pop = '\t\tauto self = Program::argument<this_type>();\n'
-            return self_pop + '\n'.join('\t\tauto {} = Program::argument<this_type>();'.format(x.transpile(), idx + 1) for idx, x in enumerate(self.arguments))
-        return ', '.join(f'{x.type.transpile() + " " if definition else ""}{x.transpile()}' for x in self.arguments)
+        if not pops:
+            return ', '.join(f'{x.type.transpile() + " " if definition else ""}{x.transpile()}' for x in self.arguments)
+
+        lines = []
+
+        if not static:
+            lines.append('\t\tauto self = Program::argument<this_type>();')
+
+        for arg in self.arguments:
+            if arg.type in Foundation.INTERNAL_TYPE_ORDERING:
+                lines.append('\t\tauto {} = Program::argument<{}>();'.format(arg.transpile(), Foundation.format_internal_type(arg.type)))
+            else:
+                lines.append('\t\tauto {} = Program::pop();'.format(arg.transpile()))
+
+        return '\n'.join(lines) + '\n'
