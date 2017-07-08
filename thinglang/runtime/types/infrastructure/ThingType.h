@@ -1,23 +1,44 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
-#include "ArgumentList.h"
+#include "../../containers/MethodDefinition.h"
 
-class ThingInstance {};
 
-template <typename THING_TYPE>
-class ThingType {
+class ThingType{
 public:
-    ThingType(LocalMethods methods) : methods(methods) {};
+    virtual Thing call(Index idx) = 0;
+    virtual Thing create() {
+        return NULL;
+    };
+};
 
-    Thing call(Index idx, ArgumentList& args){
-        return methods[idx](args);
+class ThingTypeExternal : public ThingType {
+public:
+    ThingTypeExternal(std::string name, std::string b, Methods methods) : methods(methods) {};
+
+    Thing call(Index idx) override  {
+        methods[idx].execute();
+        return NULL;
     }
 
-    std::shared_ptr<THING_TYPE> create(){
-        return std::shared_ptr<THING_TYPE>(new THING_TYPE());
-    }
+    virtual Thing create() override {
+        methods[0].execute();
+        return NULL;
+    };
 
+
+private:
+    Methods methods;
+};
+
+
+class ThingTypeInternal : public ThingType {
+public:
+    ThingTypeInternal(LocalMethods methods) : methods(methods) {};
+
+    Thing call(Index idx) override  {
+        return methods[idx]();
+    }
 
 
 private:
