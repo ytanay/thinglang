@@ -1,0 +1,14 @@
+/*
+{
+    "expected_output": ["Hello from Empty", "Hello from Empty"]
+}
+*/
+
+thing Empty
+    setup
+        Output.write("Hello from Empty")
+
+thing Program
+    setup
+        Empty e = create Empty()
+        create Empty()
