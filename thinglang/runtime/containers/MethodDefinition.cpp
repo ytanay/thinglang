@@ -13,6 +13,7 @@ void MethodDefinition::execute() {
 
     auto counter_end = symbols.size();
 
+
     for (Index counter = 0; counter < counter_end;) {
         auto symbol = symbols[counter];
 
@@ -23,18 +24,15 @@ void MethodDefinition::execute() {
             case Opcode::NOP:
                 break;
 
+
             case Opcode::CALL: {
-                Program::frame()[symbol.target]->call(symbol.secondary);
+                Program::types[symbol.target]->call(symbol.secondary);
                 break;
             }
 
-            case Opcode::CALL_SELF: {
-                Program::instance()->call(symbol.target);
-                break;
-            }
-
-            case Opcode::CALL_STATIC: {
-                //Program::type(symbol.target)->call(symbol.secondary);
+            case Opcode::CALL_INTERNAL: {
+                auto ret_val = Program::internals[symbol.target]->call(symbol.secondary);
+                Program::push(ret_val);
                 break;
             }
 
@@ -42,6 +40,11 @@ void MethodDefinition::execute() {
                 Program::push(Program::frame()[symbol.target]);
                 break;
             };
+
+            case Opcode::PUSH_STATIC: {
+                Program::push(Program::data(symbol.target));
+                break;
+            }
 
             case Opcode::PUSH_NULL: {
                 Program::push(NULL);
@@ -62,17 +65,6 @@ void MethodDefinition::execute() {
                 Program::frame()[symbol.target] = Program::pop();
                 break;
             }
-
-            case Opcode::PUSH_STATIC: {
-                Program::push(Program::data(symbol.target));
-                break;
-            }
-
-
-
-            case Opcode::PRINT:
-                std::cout << Program::pop()->text() << std::endl;
-                break;
 
             case Opcode::RETURN: {
                 counter = counter_end;
