@@ -2,6 +2,7 @@
 
 #include "MethodDefinition.h"
 #include "../execution/Program.h"
+#include "../types/infrastructure/ThingInstance.h"
 
 
 void MethodDefinition::execute() {
@@ -26,6 +27,10 @@ void MethodDefinition::execute() {
 
 
             case Opcode::CALL: {
+                if(symbol.secondary == 0){
+                    Program::push(Thing(new ThingInstance));
+                }
+
                 Program::types[symbol.target]->call(symbol.secondary);
                 break;
             }
