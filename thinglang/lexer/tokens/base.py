@@ -79,6 +79,9 @@ class LexicalIdentifier(LexicalToken, ValueType):
         #    return 'this'
         return self.value
 
+    def upper(self):
+        return self.value.upper()
+
     def __hash__(self):
         return hash(self.value)
 

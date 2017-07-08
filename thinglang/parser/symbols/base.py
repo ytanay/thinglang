@@ -44,7 +44,7 @@ class AssignmentOperation(BaseSymbol):
 
     def compile(self, context: CompilationContext):
         if self.value.implements((MethodCall, ArithmeticOperation)):
-            self.value.compile(context, returns=True)
+            self.value.compile(context, captured=True)
             context.append(BytecodeSymbols.set(self.target))
         elif self.value.implements(LexicalIdentifier):
             context.append(BytecodeSymbols.copy(self.target, self.value))
@@ -55,7 +55,7 @@ class AssignmentOperation(BaseSymbol):
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
     STATIC = True
     TYPE = LexicalIdentifier("text")
-    TYPE_IDX = Foundation.INTERNAL_TYPE_ORDERING["text"]
+    TYPE_IDX = Foundation.INTERNAL_TYPE_ORDERING[LexicalIdentifier("text")]
 
     def __init__(self, value):
         super().__init__(None)

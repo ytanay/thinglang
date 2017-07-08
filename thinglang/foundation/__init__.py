@@ -18,9 +18,9 @@ EXECUTION_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'execution')
 class Foundation(object, metaclass=Singleton):
 
     INTERNAL_TYPE_ORDERING = {
-        "none": 0,
-        "text": -1,
-        "number": -2
+        LexicalIdentifier("none"): 0,
+        LexicalIdentifier("text"): 1,
+        LexicalIdentifier("number"): 2
     }
 
     def __init__(self):
