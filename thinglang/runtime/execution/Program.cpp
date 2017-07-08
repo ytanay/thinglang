@@ -1,24 +1,21 @@
 #include "Program.h"
-#include "../types/NoneType.h"
-#include "../builtins/BuiltinOutput.h"
+#include "../types/core/TextType.h"
+#include "../types/core/NumberType.h"
+#include "../builtins/Output.h"
+#include <iostream>
 
 ThingStack Program::stack;
 FrameStack Program::frames;
 Things Program::static_data;
 
-Types Program::internals = {};
+Types Program::internals = {NULL, new TextNamespace::TextType(), new NumberNamespace::NumberType(), new OutputNamespace::OutputType()};
 Types Program::types = {};
 
 Thing Program::current_instance;
 
 
-TypeInfo Program::type(SignedIndex index) {
-    assert(index != 0);
-    if(index > 0){
-        return types[index];
-    } else {
-        return internals[-index];
-    }
+ThingType* Program::type(SignedIndex index) {
+    return types[index];
 }
 
 Thing Program::pop() {
@@ -45,4 +42,5 @@ void Program::status(Index counter, const Symbol& symbol) {
     std::for_each(Program::static_data.begin(), Program::static_data.end(),
                   [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
     std::cerr << "]" << std::endl;
+
 }

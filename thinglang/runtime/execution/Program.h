@@ -6,16 +6,27 @@
 #include <algorithm>
 
 #include "../utils/TypeNames.h"
-#include "../containers/ThingInstance.h"
-#include "../types/TypeInfo.h"
+#include "../types/infrastructure/ThingType.h"
+#include "../errors/RuntimeError.h"
+#include "../types/InternalTypes.h"
 
 
-using ProgramInfo = std::pair<std::vector<Thing>, std::vector<TypeInfo>>;
+using ProgramInfo = std::pair<std::vector<Thing>, Types>;
 
 class Program {
 public:
 
-    static TypeInfo type(SignedIndex index);
+    template <typename T>
+    static std::shared_ptr<T> argument(){
+        return std::static_pointer_cast<T>(pop());
+    };
+
+    static ThingType* type(SignedIndex index);
+
+    template <typename T>
+    static T* type(InternalTypes type){
+        return static_cast<T*>(Program::internals[static_cast<int>(type)]);
+    }
 
     static Thing pop();
 
@@ -52,14 +63,15 @@ public:
     }
 
     static void start() {
-        types[1].instantiate();
+        types[0]->create();
     }
 
     static void load(ProgramInfo &info);
 
     static void status(Index counter, const Symbol& symbol);
 
-
+    static Types internals;
+    static Types types;
 private:
     Program() {}
 
@@ -67,8 +79,7 @@ private:
     static FrameStack frames;
     static Things static_data;
 
-    static Types internals;
-    static Types types;
+
 
     static Thing current_instance;
 
