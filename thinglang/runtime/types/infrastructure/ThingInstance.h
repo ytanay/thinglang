@@ -6,6 +6,9 @@
  * All thing instances derive from this empty structure
  */
 class BaseThingInstance {
+protected:
+    BaseThingInstance() {};
+
 public:
     virtual std::string text() {
         return "?";
