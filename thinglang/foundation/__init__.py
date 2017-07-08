@@ -11,6 +11,7 @@ from thinglang.utils.singleton import Singleton
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 SEARCH_PATTERN = os.path.join(CURRENT_PATH,  '**/*.thing')
 TYPES_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'types')
+CORE_TYPES_TARGET = os.path.join(TYPES_TARGET, 'core')
 EXECUTION_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'execution')
 
 
@@ -36,22 +37,15 @@ class Foundation(object, metaclass=Singleton):
                 contents = f.read()
 
             name = os.path.basename(path).replace('.thing', '')
-            target_name = '{}Instance'.format(name.capitalize())
-            ast = thinglang.compiler(contents)
+            target_name = '{}Type'.format(name.capitalize())
+            ast = thinglang.compiler(contents, executable=False)
             methods = ast.children[0].methods()
 
-            with open(os.path.join(TYPES_TARGET, target_name + '.h'), 'w') as f:
+            with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:
                 f.write(templates.FOUNDATION_HEADER.format(
                     name=name.capitalize(),
                     code=ast.transpile(),
                     file_name=target_name + '.h'))
-
-            with open(os.path.join(TYPES_TARGET, target_name + '.cpp'), 'w') as f:
-                f.write(templates.FOUNDATION_SOURCE.format(
-                    name=name.capitalize(),
-                    methods=',\n'.join('        &{}::{}'.format(target_name, method.name.transpile()) for method in methods),
-                    file_name=target_name + '.cpp'
-                ))
 
             self.types[LexicalIdentifier(name.replace('_instance', ''))] = [x.name.transpile() for x in methods]
 

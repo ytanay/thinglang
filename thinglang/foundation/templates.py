@@ -10,10 +10,11 @@ HEADER = """/**
 FOUNDATION_HEADER = HEADER + """
 #pragma once
 
-#include "../utils/TypeNames.h"
-#include "../execution/Program.h"
-#include "../containers/ThingInstance.h"
-#include "../utils/formatting.h"
+#include "../../utils/TypeNames.h"
+#include "../../utils/Formatting.h"
+#include "../infrastructure/ThingType.h"
+#include "../infrastructure/ThingInstance.h"
+#include "../../execution/Program.h"
 
 namespace {name}Namespace {{
 {code}
@@ -22,12 +23,10 @@ namespace {name}Namespace {{
 """.strip()
 
 FOUNDATION_SOURCE = HEADER + """
-#include "{name}Instance.h"
+#include "{name}Type.h"
 
 namespace {name}Namespace {{
-    const InternalMethods {name}Instance::methods = {{
 {methods}
-    }};
 }}
 
 """.strip()
@@ -52,12 +51,8 @@ inline std::string describe({name} val){{
 
 
 FOUNDATION_VIRTUALS = """
-    virtual std::string text() const override {{
-        return to_string({first_member});
-    }}
-    
-    virtual void call_method(Index target) override {{
-        methods[target]();
+    Thing create(){{
+        return Thing(new this_type());
     }}
 """
 
@@ -65,3 +60,5 @@ ENUM_CASE = """
     case {enum_class}::{name}:
         return "{name}";"""
 
+
+DEFAULT_CONSTRUCTOR = '\t{}() {{}};'
