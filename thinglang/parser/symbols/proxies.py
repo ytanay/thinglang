@@ -16,5 +16,12 @@ class RangeGenerator(BaseSymbol, ValueType):
 
     @classmethod
     def construct(cls, slice):
-        print(slice)
         return MethodCall.create_constructing_call(LexicalIdentifier('Range'), ArgumentList([slice[0], slice[-1]]))
+
+
+class TaggedLexicalDeclaration(BaseSymbol, ValueType):
+
+    @classmethod
+    def construct(cls, slice):
+        slice[1].static_member = True
+        return slice[1]

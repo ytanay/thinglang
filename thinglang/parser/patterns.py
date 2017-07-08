@@ -2,7 +2,7 @@ import collections
 
 from thinglang.lexer.tokens.typing import LexicalCast
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
-from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation, RangeGenerator
+from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation, RangeGenerator, TaggedLexicalDeclaration
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
@@ -10,7 +10,7 @@ from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthes
     LexicalAccess, LexicalAssignment, LexicalIdentifier, LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
-    LexicalClassInitialization, LexicalDeclarationReturnType
+    LexicalClassInitialization, LexicalDeclarationReturnType, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile, LexicalIn, LexicalRepeatFor
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
@@ -32,6 +32,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
     ((LexicalDeclarationConstructor, ArgumentList), MethodDefinition),  # setup with a, b
     ((LexicalDeclarationConstructor, LexicalGroupEnd), MethodDefinition),  # setup
 
+    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedLexicalDeclaration),
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start
     ((LexicalDeclarationMethod, LexicalIdentifier, LexicalDeclarationReturnType, LexicalIdentifier, LexicalGroupEnd), MethodDefinition),  # does start return number
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentListDecelerationPartial, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does start with a, b returns number

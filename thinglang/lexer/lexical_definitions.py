@@ -47,6 +47,7 @@ OPERATORS = {
 KEYWORDS = {
     'thing': LexicalDeclarationThing,
     'does': LexicalDeclarationMethod,
+    'static': LexicalDeclarationStatic,
     'has': LexicalDeclarationMember,
     'setup': LexicalDeclarationConstructor,
     'returns': LexicalDeclarationReturnType,

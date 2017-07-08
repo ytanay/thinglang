@@ -10,6 +10,11 @@ class LexicalArgumentListIndicator(LexicalToken):
 
 
 class LexicalDeclarationMethod(LexicalToken):
+    def __init__(self, raw):
+        super().__init__(raw)
+        self.static_member = False
+
+class LexicalDeclarationStatic(LexicalToken):
     pass
 
 
