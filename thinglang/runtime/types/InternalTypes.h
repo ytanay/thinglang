@@ -10,8 +10,8 @@
 
 enum class InternalTypes {
     NONE = 0,
-    TEXT = -1,
-    NUMBER = -2
+    TEXT = 1,
+    NUMBER = 2
 };
 
 inline std::string describe(InternalTypes val){

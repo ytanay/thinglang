@@ -7,36 +7,45 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "../../utils/Formatting.h"
 #include "../infrastructure/ThingType.h"
-#include "../infrastructure/ArgumentList.h"
+#include "../infrastructure/ThingInstance.h"
+#include "../../execution/Program.h"
 
 namespace TextNamespace {
 
-class TextInstance : public ThingInstance {
+class TextInstance : public BaseThingInstance {
 public:
 	TextInstance() {};
 	TextInstance(std::string val) : val(val) {};
+
+    virtual std::string text() override {
+        return to_string(val);
+    }
+                
 
 	std::string val;
 };
 typedef TextInstance this_type;
 
-class TextType : public ThingType<TextInstance> {
+class TextType : public ThingTypeInternal {
 public:
-	TextType() : ThingType({&__LexicalAddition__, &__LexicalEquality__}) {};
+	TextType() : ThingTypeInternal({&__LexicalAddition__, &__LexicalEquality__}) {};
 
+    Thing create(){
+        return Thing(new this_type());
+    }
 
-
-	static Thing __LexicalAddition__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
-		auto __transient__5__ = self->val + other->val;
-		return Thing(new this_type(__transient__5__));
+	static Thing __LexicalAddition__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
+		auto __transient__6__ = self->val + other->val;
+		return Thing(new this_type(__transient__6__));
 		return NULL;
 	}
-	static Thing __LexicalEquality__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
+	static Thing __LexicalEquality__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
 		if(self->val == other->val) {
 			return Thing(new this_type(""));
 		}

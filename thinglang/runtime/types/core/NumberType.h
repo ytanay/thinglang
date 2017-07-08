@@ -7,68 +7,77 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "../../utils/Formatting.h"
 #include "../infrastructure/ThingType.h"
-#include "../infrastructure/ArgumentList.h"
+#include "../infrastructure/ThingInstance.h"
+#include "../../execution/Program.h"
 
 namespace NumberNamespace {
 
-class NumberInstance : public ThingInstance {
+class NumberInstance : public BaseThingInstance {
 public:
 	NumberInstance() {};
 	NumberInstance(int val) : val(val) {};
+
+    virtual std::string text() override {
+        return to_string(val);
+    }
+                
 
 	int val;
 };
 typedef NumberInstance this_type;
 
-class NumberType : public ThingType<NumberInstance> {
+class NumberType : public ThingTypeInternal {
 public:
-	NumberType() : ThingType({&__LexicalAddition__, &__LexicalSubtraction__, &__LexicalMultiplication__, &__LexicalDivision__, &__LexicalEquality__, &__LexicalLessThan__}) {};
+	NumberType() : ThingTypeInternal({&__LexicalAddition__, &__LexicalSubtraction__, &__LexicalMultiplication__, &__LexicalDivision__, &__LexicalEquality__, &__LexicalLessThan__}) {};
 
+    Thing create(){
+        return Thing(new this_type());
+    }
 
-
-	static Thing __LexicalAddition__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
-		auto __transient__0__ = self->val + other->val;
-		return Thing(new this_type(__transient__0__));
-		return NULL;
-	}
-	static Thing __LexicalSubtraction__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
-		auto __transient__1__ = self->val - other->val;
+	static Thing __LexicalAddition__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
+		auto __transient__1__ = self->val + other->val;
 		return Thing(new this_type(__transient__1__));
 		return NULL;
 	}
-	static Thing __LexicalMultiplication__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
-		auto __transient__2__ = self->val * other->val;
+	static Thing __LexicalSubtraction__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
+		auto __transient__2__ = self->val - other->val;
 		return Thing(new this_type(__transient__2__));
 		return NULL;
 	}
-	static Thing __LexicalDivision__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
-		auto __transient__3__ = self->val / other->val;
+	static Thing __LexicalMultiplication__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
+		auto __transient__3__ = self->val * other->val;
 		return Thing(new this_type(__transient__3__));
 		return NULL;
 	}
-	static Thing __LexicalEquality__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
+	static Thing __LexicalDivision__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
+		auto __transient__4__ = self->val / other->val;
+		return Thing(new this_type(__transient__4__));
+		return NULL;
+	}
+	static Thing __LexicalEquality__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
 		if(self->val == other->val) {
 			return Thing(new this_type(0));
 		}
 		return NULL;
 	}
-	static Thing __LexicalLessThan__(ArgumentList& args) {
-		auto self = args.get<0, this_type>();
-		auto other = args.get<1, this_type>();
+	static Thing __LexicalLessThan__() {
+		auto self = Program::argument<this_type>();
+		auto other = Program::argument<this_type>();
 		if(self->val < other->val) {
-			auto __transient__4__ = self->val - other->val;
-			return Thing(new this_type(__transient__4__));
+			auto __transient__5__ = self->val - other->val;
+			return Thing(new this_type(__transient__5__));
 		}
 		return NULL;
 	}
