@@ -58,10 +58,10 @@ class ThingDefinition(DefinitionPairSymbol):
         return len(self.members()), len(self.methods())
 
     def finalize(self):
-        first_method = self.methods()[0]
-        if not first_method.is_constructor:
+        methods = self.methods()
+        if not methods or not methods[0].is_constructor:
             print('Creating default constructor!')
-            index = self.children.index(first_method)
+            index = self.children.index(methods[0]) if methods else 0
             self.children.insert(index, MethodDefinition([LexicalDeclarationConstructor, None]))
 
 
