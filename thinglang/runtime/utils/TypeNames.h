@@ -7,11 +7,13 @@
 class ThingInstance;
 class Symbol;
 class MethodDefinition;
+class TypeInfo;
 
 typedef void (*InternalMethod)();
 
-using Index = size_t;
-using Size = size_t;
+using Index = uint32_t;
+using Size = Index;
+using SignedIndex = int32_t;
 
 using SymbolList = std::vector<Symbol>;
 
@@ -25,3 +27,5 @@ using FrameStack = std::stack<Frame>;
 
 using Methods = std::vector<MethodDefinition>;
 using InternalMethods = std::vector<InternalMethod>;
+
+using Types = std::vector<TypeInfo>;
