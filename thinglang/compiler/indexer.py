@@ -15,7 +15,6 @@ from thinglang.utils.union_types import ACCESS_TYPES
 class IndexerContext(object):
     def __init__(self):
         self.instance_members, self.locals, self.current_method, self.current_thing = None, None, None, None
-        self.method_index = 0
         self.things = []
 
     def over(self, thing_definition):
@@ -31,26 +30,25 @@ class IndexerContext(object):
 
     def set_method(self, node):
         self.current_method = node
-        node.index = self.method_index
-        self.method_index += 1
 
 
 class Collator(TreeTraversal):
 
     def __init__(self, ast):
         super(Collator, self).__init__(ast)
-        self.thing_index = itertools.count(0)
-        self.method_index = None
+        self.thing_counter = itertools.count(0)
+        self.method_counter = None
+        self.current_thing_index = None
 
     @inspects(ThingDefinition)
     def set_thing_context(self, node: ThingDefinition) -> None:
-        node.index = next(self.thing_index)
+        self.current_thing_index = node.index = next(self.thing_counter)
         node.finalize()
-        self.method_index = itertools.count(0)
+        self.method_counter = itertools.count(0)
 
     @inspects(MethodDefinition)
     def set_method_context(self, node: MethodDefinition) -> None:
-        node.index = next(self.method_index)
+        node.index = self.current_thing_index, next(self.method_counter)
 
 
 class Indexer(TreeTraversal):
@@ -102,7 +100,7 @@ class Indexer(TreeTraversal):
     def inspect_method_call(self, node: MethodCall) -> None:
         """
         The reference indexing for method calls involves 2 separate processes - resolving the method target,
-        and resolving each and every argument
+        and resolving each argument in turn
         """
 
         node.arguments = [
@@ -111,7 +109,9 @@ class Indexer(TreeTraversal):
 
         if node.target[0].is_self():
             target = self.context.current_thing
+
             for x in node.target[1:]:
+                print('Target {}, x: {} {}'.format(target, x, target.index))
                 target = target[x]
             node.resolved_target = ResolvedReference(target.index, target.type_id())
 
