@@ -96,6 +96,8 @@ Types ProgramReader::read_code() {
 
 
 Type ProgramReader::read_class() {
+    assert(read_opcode() == Opcode::THING_DEFINITION);
+
     auto member_count = read_size();
     auto method_count = read_size();
     std::cerr << "Encountered class of " << member_count << " members and " << method_count << " methods"
@@ -111,6 +113,8 @@ Type ProgramReader::read_class() {
 }
 
 MethodDefinition ProgramReader::read_method() {
+    assert(read_opcode() == Opcode::METHOD_DEFINITION);
+
     uint32_t frame_size = read_size();
     uint32_t arguments = read_size();
 

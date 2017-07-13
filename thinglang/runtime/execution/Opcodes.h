@@ -24,7 +24,9 @@ enum class Opcode {
     INSTANTIATE_SET = 12,
     JUMP = 13,
     JUMP_CONDITIONAL = 14,
-    METHOD_END = 15
+    THING_DEFINITION = 15,
+    METHOD_DEFINITION = 16,
+    METHOD_END = 17
 };
 
 inline std::string describe(Opcode val){
@@ -74,6 +76,12 @@ inline std::string describe(Opcode val){
 
     case Opcode::JUMP_CONDITIONAL:
         return "JUMP_CONDITIONAL";
+
+    case Opcode::THING_DEFINITION:
+        return "THING_DEFINITION";
+
+    case Opcode::METHOD_DEFINITION:
+        return "METHOD_DEFINITION";
 
     case Opcode::METHOD_END:
         return "METHOD_END";
