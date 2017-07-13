@@ -14,15 +14,16 @@ class CompilationContext(object):
         self.conditional_groups = []
 
     def append(self, symbol):
-        if isinstance(symbol, (Opcode, bytes)):
+        if isinstance(symbol, Opcode):
             self.current_method.append(symbol)
         elif symbol:
             self.current_method.extend(symbol)
+
         return symbol, self.current_index()
 
     def finalize(self):
-        code = bytes().join(x.resolve() if isinstance(x, Opcode) else x for x in self.symbols + self.current_method)
         data = bytes().join(x for x in self.data)
+        code = bytes().join(x.resolve() for x in self.symbols + self.current_method)
         header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
 
         return header + data + code
@@ -56,9 +57,7 @@ class CompilationContext(object):
         return self.current_method[-1], len(self.current_method) - 1
 
     def update_conditional_jumps(self):
-        print(self.conditional_groups[-1])
-        for symbol, jump in list(self.conditionafl_groups[-1].items())[:-1]:
-
-            jump.args = self.current_index(),
+        for symbol, jump in list(self.conditional_groups[-1].items())[:-1]:
+            jump.update(self.current_index())
 
         self.conditional_groups.pop()
