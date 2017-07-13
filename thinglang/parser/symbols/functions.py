@@ -1,8 +1,7 @@
-from thinglang.compiler import BytecodeSymbols
-from thinglang.compiler.indexer import ResolvedReference
+from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
-from thinglang.parser.symbols import BaseSymbol, DefinitionPairSymbol
+from thinglang.parser.symbols import BaseSymbol
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType
 
@@ -30,13 +29,11 @@ class Access(BaseSymbol):
         return cls([LexicalIdentifier(x) if not isinstance(x, LexicalIdentifier) else x for x in target])
 
     def transpile(self):
-        #if self.target[0].is_self():
-        #    return self.target[0].transpile() + '->' + '->'.join(x.transpile() for x in self.target[1:])
-
         return '->'.join(x.transpile() for x in self.target)
 
     def type_id(self):
         return None
+
 
 class ArgumentListPartial(ListInitializationPartial):
     pass
@@ -99,12 +96,12 @@ class MethodCall(BaseSymbol, ValueType):
             context.push_down(arg)
 
         if self.internal:
-            context.append(BytecodeSymbols.call_internal(*self.resolved_target.index))
+            context.append(OpcodeCallInternal(*self.resolved_target.index))
         else:
-            context.append(BytecodeSymbols.call(*self.resolved_target.index))
+            context.append(OpcodeCall(*self.resolved_target.index))
 
         if not captured:
-            context.append(BytecodeSymbols.pop())  # pop the return value, if the method does not return
+            context.append(OpcodePop())  # pop the return value, if the return value is not captured
 
     def type_id(self):
         return self.resolved_target.type
@@ -123,4 +120,4 @@ class ReturnStatement(BaseSymbol):
 
     def compile(self, context):
         context.push_down(self.value)
-        context.append(BytecodeSymbols.returns())
+        context.append(OpcodeReturn())

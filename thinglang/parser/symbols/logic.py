@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
-from thinglang.compiler import CompilationContext, BytecodeSymbols
-from thinglang.lexer.tokens.logic import LexicalEquality
+from thinglang.compiler import CompilationContext
+from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.parser.symbols import BaseSymbol
 
 
@@ -35,17 +35,17 @@ class Conditional(BaseSymbol):
             context.conditional_groups.append(OrderedDict((x, None) for x in elements))
 
         context.push_down(self.value)
-        instruction, idx = context.append(BytecodeSymbols.conditional_jump())
+        instruction, idx = context.append(OpcodeJumpConditional())
         super(Conditional, self).compile(context)
 
         if list(context.conditional_groups[-1].keys())[-1] is self:
             context.update_conditional_jumps()
         else:
-            jump_out = BytecodeSymbols.jump()
+            jump_out = OpcodeJump()
             context.conditional_groups[-1][self] = jump_out
             context.append(jump_out)
 
-        instruction.args = context.current_index(),
+        instruction.update(context.current_index())
 
 
 class ElseBranchInterface(object):
@@ -91,14 +91,10 @@ class Loop(BaseSymbol):
 
     def compile(self, context: CompilationContext):
         idx = context.push_down(self.condition)
-        print('IDX is {}'.format(idx))
-        jump, _ = context.append(BytecodeSymbols.conditional_jump())
-
+        jump, _ = context.append(OpcodeJumpConditional())
         super(Loop, self).compile(context)
-
-        context.append(BytecodeSymbols.jump(idx))
-
-        jump.args = context.current_index(),
+        context.append(OpcodeJump(idx))
+        jump.update(context.current_index())
 
 
 class IterativeLoop(BaseSymbol):

@@ -1,4 +1,4 @@
-from thinglang.compiler import OPCODES, BytecodeSymbols
+from thinglang.compiler.opcodes import OpcodePushNull
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
@@ -126,7 +126,7 @@ class MethodDefinition(BaseSymbol):
         context.method_start()
         super(MethodDefinition, self).compile(context)
         if not self.is_constructor() and not self.children[-1].implements(ReturnStatement):
-            context.append(BytecodeSymbols.push_null())
+            context.append(OpcodePushNull())
 
         context.method_end()
 

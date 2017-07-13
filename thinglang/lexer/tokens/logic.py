@@ -1,6 +1,4 @@
-import abc
-
-from thinglang.compiler import BytecodeSymbols
+from thinglang.compiler.opcodes import OpcodePushNull
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalToken
@@ -95,4 +93,4 @@ class LexicalBooleanFalse(LexicalBoolean):
         return False
 
     def compile(self, context):
-        context.append(BytecodeSymbols.push_null())
+        context.append(OpcodePushNull())

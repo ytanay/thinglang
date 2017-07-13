@@ -1,5 +1,5 @@
-from thinglang import foundation
-from thinglang.compiler import CompilationContext, BytecodeSymbols
+from thinglang.compiler import CompilationContext
+from thinglang.compiler.opcodes import OpcodeCallInternal
 from thinglang.foundation import Foundation
 from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
@@ -41,11 +41,11 @@ class ArithmeticOperation(BaseSymbol, ValueType, ReplaceableArguments):
     def transpile(self):
         return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
 
-    def compile(self, context: CompilationContext, captured=False):
+    def compile(self, context: CompilationContext, captured=False): # TODO: duplicate of actual call
         context.push_down(self.arguments[1])
         context.push_down(self.arguments[0])
         type_id = self.arguments[0].type_id()
-        context.append(BytecodeSymbols.call_internal(Foundation().INTERNAL_TYPE_ORDERING[type_id], Foundation().type(type_id).index(self.operator.transpile())))
+        context.append(OpcodeCallInternal(Foundation().INTERNAL_TYPE_ORDERING[type_id], Foundation().type(type_id).index(self.operator.transpile())))
         if self.parent is not None and not captured:
             context.append(BytecodeSymbols.pop())  # TODO: Dead branch?
 
