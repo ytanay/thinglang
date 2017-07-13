@@ -1,4 +1,4 @@
-from thinglang.compiler.opcodes import OpcodePushNull
+from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeMethodDefinition
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
@@ -8,7 +8,6 @@ from thinglang.parser.symbols.functions import ArgumentList, ReturnStatement, Ar
 
 
 class ThingDefinition(DefinitionPairSymbol):
-    SERIALIZATION = '<II'
 
     def __contains__(self, item):
         return any(child.name == item for child in self.children)
@@ -54,8 +53,8 @@ class ThingDefinition(DefinitionPairSymbol):
     def methods(self):
         return [x for x in self.children if x.implements(MethodDefinition)]
 
-    def serialization(self):
-        return len(self.members()), len(self.methods())
+    def serialize(self):
+        return OpcodeThingDefinition(len(self.members()), len(self.methods()))
 
     def finalize(self):
         methods = self.methods()
@@ -66,7 +65,6 @@ class ThingDefinition(DefinitionPairSymbol):
 
 
 class MethodDefinition(BaseSymbol):
-    SERIALIZATION = '<II'
 
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
@@ -112,8 +110,8 @@ class MethodDefinition(BaseSymbol):
             self.arguments.transpile(pops=True, static=self.static),
             self.transpile_children(2, self.children + [ReturnStatement([])]))
 
-    def serialization(self):
-        return self.frame_size, len(self.arguments)
+    def serialize(self):
+        return OpcodeMethodDefinition(self.frame_size, len(self.arguments))
 
     def set_type(self, type):
         if not self.return_type:

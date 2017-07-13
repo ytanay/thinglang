@@ -4,7 +4,7 @@ import itertools
 
 from thinglang.utils.describable import camelcase_to_underscore
 
-IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
+FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
 
 
 class OpcodeRegistration(type):
@@ -157,6 +157,22 @@ class OpcodeJumpConditional(Opcode):
     If it evaluates to true, jumps to an absolute instruction in the current method
     """
     ARGS = IDX,
+
+
+class OpcodeThingDefinition(Opcode):
+    """
+    Signifies a thing definition boundary.
+    Used as a sentinel during bytecode parsing
+    """
+    ARGS = MEMBERS, METHODS
+
+
+class OpcodeMethodDefinition(Opcode):
+    """
+    Signifies a method definition boundary.
+    Used as a sentinel during bytecode parsing
+    """
+    ARGS = FRAME_SIZE, ARGUMENTS
 
 
 class OpcodeMethodEnd(Opcode):

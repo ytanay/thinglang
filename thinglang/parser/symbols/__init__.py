@@ -113,15 +113,13 @@ class BaseSymbol(Describable):
         sep = '\t' * indent
         return sep + ('\n' + sep).join(x.transpile() for x in children_override or self.children)
 
-    def serialization(self):
-        return NotImplementedError('must implement serialization')
-
     def serialize(self):
-        return struct.pack(self.SERIALIZATION, *self.serialization())
+        return None
 
     def compile(self, context: CompilationContext):
-        if self.SERIALIZATION:
-            context.append(self.serialize())
+        serialization = self.serialize()
+        if serialization:
+            context.append(serialization)
 
         for child in self.children:
             child.compile(context)
