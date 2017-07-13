@@ -3,7 +3,7 @@ import glob
 import os
 
 import thinglang
-from thinglang.compiler import OPCODES
+from thinglang.compiler import Opcode
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.singleton import Singleton
@@ -58,7 +58,7 @@ class Foundation(object, metaclass=Singleton):
     @classmethod
     def write_opcode_enum(cls):
         with open(os.path.join(EXECUTION_TARGET, 'Opcodes.h'), 'w') as f:
-            f.write(cls.generate_enum('Opcode', OPCODES))
+            f.write(cls.generate_enum('Opcode', Opcode.all()))
 
     @classmethod
     def generate_enum(cls, cls_name, values):
