@@ -138,13 +138,12 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         case Opcode::PUSH:
         //case Opcode::CALL_METHOD:
         case Opcode::JUMP:
-        case Opcode::CONDITIONAL_JUMP: {
+        case Opcode::JUMP_CONDITIONAL: {
             return Symbol(opcode, read_size());
         }
 
         case Opcode::POP:
         case Opcode::PUSH_NULL:
-        case Opcode::PRINT:
         case Opcode::RETURN: {
             return Symbol(opcode);
         }

@@ -1,3 +1,6 @@
+import re
+
+
 class Describable(object):
 
     def __str__(self):
@@ -15,3 +18,8 @@ class Describable(object):
     @classmethod
     def construct(cls, slice):
         return cls(slice)
+
+
+def camelcase_to_underscore(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()

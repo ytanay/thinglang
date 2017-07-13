@@ -10,7 +10,7 @@
 
 enum class Opcode {
     INVALID = 0,
-    NOP = 1,
+    PASS = 1,
     PUSH = 2,
     PUSH_STATIC = 3,
     PUSH_NULL = 4,
@@ -20,10 +20,11 @@ enum class Opcode {
     CALL = 8,
     CALL_INTERNAL = 9,
     RETURN = 10,
-    JUMP = 11,
-    CONDITIONAL_JUMP = 12,
-    PRINT = 13,
-    METHOD_END = 14
+    INSTANTIATE = 11,
+    INSTANTIATE_SET = 12,
+    JUMP = 13,
+    JUMP_CONDITIONAL = 14,
+    METHOD_END = 15
 };
 
 inline std::string describe(Opcode val){
@@ -32,8 +33,8 @@ inline std::string describe(Opcode val){
     case Opcode::INVALID:
         return "INVALID";
 
-    case Opcode::NOP:
-        return "NOP";
+    case Opcode::PASS:
+        return "PASS";
 
     case Opcode::PUSH:
         return "PUSH";
@@ -62,14 +63,17 @@ inline std::string describe(Opcode val){
     case Opcode::RETURN:
         return "RETURN";
 
+    case Opcode::INSTANTIATE:
+        return "INSTANTIATE";
+
+    case Opcode::INSTANTIATE_SET:
+        return "INSTANTIATE_SET";
+
     case Opcode::JUMP:
         return "JUMP";
 
-    case Opcode::CONDITIONAL_JUMP:
-        return "CONDITIONAL_JUMP";
-
-    case Opcode::PRINT:
-        return "PRINT";
+    case Opcode::JUMP_CONDITIONAL:
+        return "JUMP_CONDITIONAL";
 
     case Opcode::METHOD_END:
         return "METHOD_END";

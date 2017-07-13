@@ -22,7 +22,7 @@ void MethodDefinition::execute() {
 
         switch (symbol.opcode) {
 
-            case Opcode::NOP:
+            case Opcode::PASS:
                 break;
 
 
@@ -81,7 +81,7 @@ void MethodDefinition::execute() {
                 continue;
             }
 
-            case Opcode::CONDITIONAL_JUMP: {
+            case Opcode::JUMP_CONDITIONAL: {
                 auto value = Program::pop();
                 if (!value) {
                     counter = symbol.target;
