@@ -4,9 +4,11 @@
     thinglang C++ transpiler, 0.0.0
 **/
 
+
 #pragma once
 
 #include <string>
+#include "../errors/RuntimeError.h"
 
 enum class InternalTypes {
     NONE = 0,
@@ -15,20 +17,23 @@ enum class InternalTypes {
     OUTPUT = 3
 };
 
-inline std::string describe(InternalTypes val){
-     switch (val){
+
+inline auto describe(InternalTypes val){
+    switch (val){
         
-    case InternalTypes::NONE:
-        return "NONE";
+        case InternalTypes::NONE:
+            return "NONE";
 
-    case InternalTypes::TEXT:
-        return "TEXT";
+        case InternalTypes::TEXT:
+            return "TEXT";
 
-    case InternalTypes::NUMBER:
-        return "NUMBER";
+        case InternalTypes::NUMBER:
+            return "NUMBER";
 
-    case InternalTypes::OUTPUT:
-        return "OUTPUT";
+        case InternalTypes::OUTPUT:
+            return "OUTPUT";
+        
+        default:
+            throw RuntimeError("Unrecognized InternalTypes in describe");
     }
-
 }

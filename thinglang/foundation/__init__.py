@@ -53,7 +53,7 @@ class Foundation(object, metaclass=Singleton):
     @classmethod
     def write_type_enum(cls):
         with open(os.path.join(TYPES_TARGET, 'InternalTypes.h'), 'w') as f:
-            f.write(cls.generate_enum('InternalTypes', Foundation.INTERNAL_TYPE_ORDERING))
+            f.write(cls.generate_enum('InternalTypes', list(Foundation.INTERNAL_TYPE_ORDERING.items())))
 
     @classmethod
     def write_opcode_enum(cls):
@@ -62,12 +62,27 @@ class Foundation(object, metaclass=Singleton):
 
     @classmethod
     def generate_enum(cls, cls_name, values):
-        return templates.FOUNDATION_ENUM.format(
+        code = templates.FOUNDATION_ENUM.format(
             name=cls_name,
-            values=',\n'.join('    {} = {}'.format(name.upper(), idx) for name, idx in values.items()),
-            cases='\n'.join(templates.ENUM_CASE.format(enum_class=cls_name, name=name.upper()) for name in values),
+            values=',\n'.join('    {} = {}'.format(option[0].upper(), option[1]) for option in values),
             file_name=cls_name + '.h'
+        ) + templates.FOUNDATION_SWITCH.format(
+            name=cls_name,
+            func_name="describe",
+            cases='\n'.join(templates.ENUM_CASE.format(enum_class=cls_name, name=option[0].upper(), value='"{}"'.format(option[0].upper())) for option in values),
         )
+
+        if not hasattr(values[0], '_fields'):
+            return code
+
+        for arg in getattr(values[0], '_fields')[2:]:
+            code += templates.FOUNDATION_SWITCH.format(
+                name=cls_name,
+                func_name=arg,
+                cases='\n'.join(templates.ENUM_CASE.format(enum_class=cls_name, name=option[0].upper(), value=getattr(option, arg)) for option in values),
+            )
+
+        return code
 
     def generate_code(self):
         self.generate_types()

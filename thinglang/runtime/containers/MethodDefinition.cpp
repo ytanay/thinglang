@@ -92,7 +92,7 @@ void MethodDefinition::execute() {
 
             default:
                 throw RuntimeError(
-                        "Cannot handle symbol " + describe(symbol.opcode) + " (" + std::to_string((int) symbol.opcode) +
+                        std::string("Cannot handle symbol ") + describe(symbol.opcode) + " (" + std::to_string((int) symbol.opcode) +
                         ")");
         }
 

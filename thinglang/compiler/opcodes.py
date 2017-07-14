@@ -2,9 +2,13 @@ import struct
 
 import itertools
 
+import collections
+
 from thinglang.utils.describable import camelcase_to_underscore
 
 FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
+
+OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode', 'arg_count'])
 
 
 class OpcodeRegistration(type):
@@ -38,9 +42,9 @@ class Opcode(object, metaclass=OpcodeRegistration):
 
     @classmethod
     def all(cls):
-        return {
-            opcode.name(): opcode.OPCODE for opcode in cls.__subclasses__()
-        }
+        return [
+            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in cls.__subclasses__()
+        ]
 
     @classmethod
     def name(cls):

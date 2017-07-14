@@ -134,32 +134,20 @@ MethodDefinition ProgramReader::read_method() {
 }
 
 Symbol ProgramReader::read_symbol(Opcode opcode) {
-    switch (opcode) {
-
-
-        case Opcode::SET:
-        case Opcode::PUSH_STATIC:
-        case Opcode::PUSH:
-        //case Opcode::CALL_METHOD:
-        case Opcode::JUMP:
-        case Opcode::JUMP_CONDITIONAL: {
-            return Symbol(opcode, read_size());
-        }
-
-        case Opcode::POP:
-        case Opcode::PUSH_NULL:
-        case Opcode::RETURN: {
+    switch (arg_count(opcode)) {
+        case 0:
             return Symbol(opcode);
-        }
-        case Opcode::CALL_INTERNAL:
-        case Opcode::CALL:
-        case Opcode::SET_STATIC: {
+
+        case 1:
+            return Symbol(opcode, read_size());
+
+        case 2: {
             auto target = read_size();
             auto value = read_size();
             return Symbol(opcode, target, value);
         }
 
         default:
-            throw RuntimeError(std::string("Unknown opcode " + std::to_string((int) opcode)).c_str());
+            throw RuntimeError(std::string("Unparsable symbol ") + describe(opcode));
     }
 }
