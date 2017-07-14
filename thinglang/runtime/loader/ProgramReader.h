@@ -9,7 +9,7 @@
 
 #include "../utils/TypeNames.h"
 
-#include "../containers/MethodDefinition.h"
+#include "../containers/Method.h"
 
 using ProgramInfo = std::pair<Things, Types>;
 
@@ -43,7 +43,7 @@ public:
 
     Type read_class();
 
-    MethodDefinition read_method();
+    Method read_method();
 
     Symbol read_symbol(Opcode opcode);
 

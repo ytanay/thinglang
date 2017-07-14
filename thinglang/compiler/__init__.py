@@ -1,6 +1,6 @@
 import struct
 
-from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePush
+from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePush, OpcodeMethodDefinition
 from thinglang.compiler.references import ResolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
@@ -46,9 +46,11 @@ class CompilationContext(object):
             value.compile(self)
         return idx
 
-    def method_start(self):
+    def method_start(self, *args):
         self.symbols += self.current_method
-        self.current_method = []
+        self.current_method = [
+            OpcodeMethodDefinition(*args)
+        ]
 
     def method_end(self):
         self.current_method.append(OpcodeMethodEnd())

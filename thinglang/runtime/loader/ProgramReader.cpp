@@ -102,7 +102,7 @@ Type ProgramReader::read_class() {
     auto method_count = read_size();
     std::cerr << "Encountered class of " << member_count << " members and " << method_count << " methods"
               << std::endl;
-    std::vector<MethodDefinition> methods;
+    std::vector<Method> methods;
 
     for (int i = 0; i < method_count; i++) {
         std::cerr << "\t[" << methods.size() << "] ";
@@ -112,7 +112,7 @@ Type ProgramReader::read_class() {
 
 }
 
-MethodDefinition ProgramReader::read_method() {
+Method ProgramReader::read_method() {
     assert(read_opcode() == Opcode::METHOD_DEFINITION);
 
     uint32_t frame_size = read_size();
@@ -130,7 +130,7 @@ MethodDefinition ProgramReader::read_method() {
         symbols.push_back(symbol);
     }
 
-    return MethodDefinition(frame_size, arguments, symbols);
+    return Method(frame_size, arguments, symbols);
 }
 
 Symbol ProgramReader::read_symbol(Opcode opcode) {

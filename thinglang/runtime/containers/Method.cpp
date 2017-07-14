@@ -1,11 +1,11 @@
 #include <iostream>
 
-#include "MethodDefinition.h"
+#include "Method.h"
 #include "../execution/Program.h"
 #include "../types/infrastructure/ThingInstance.h"
 
 
-void MethodDefinition::execute() {
+void Method::execute() {
     Program::create_frame(frame_size);
 
     for (size_t i = 0; i < arguments; i++) {
@@ -27,10 +27,6 @@ void MethodDefinition::execute() {
 
 
             case Opcode::CALL: {
-                if(symbol.secondary == 0){
-                    Program::push(Thing(new ThingInstance));
-                }
-
                 Program::types[symbol.target]->call(symbol.secondary);
                 break;
             }
@@ -40,6 +36,12 @@ void MethodDefinition::execute() {
                 Program::push(ret_val);
                 break;
             }
+
+            case Opcode::INSTANTIATE: {
+                Program::push(Thing(new ThingInstance));
+                break;
+            }
+
 
             case Opcode::PUSH: {
                 Program::push(Program::frame()[symbol.target]);

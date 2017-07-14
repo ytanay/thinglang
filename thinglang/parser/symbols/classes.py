@@ -1,4 +1,4 @@
-from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeMethodDefinition
+from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeMethodDefinition, OpcodeInstantiate
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
@@ -110,19 +110,20 @@ class MethodDefinition(BaseSymbol):
             self.arguments.transpile(pops=True, static=self.static),
             self.transpile_children(2, self.children + [ReturnStatement([])]))
 
-    def serialize(self):
-        return OpcodeMethodDefinition(self.frame_size, len(self.arguments))
-
     def set_type(self, type):
         if not self.return_type:
             self.return_type = type
         elif type is not self.return_type:
-          return # TODO: reenable
-          raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
+            raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
 
     def compile(self, context):
-        context.method_start()
+        context.method_start(self.frame_size, len(self.arguments))
+
+        if self.is_constructor():
+            context.append(OpcodeInstantiate(self.parent.index))
+
         super(MethodDefinition, self).compile(context)
+
         if not self.is_constructor() and not self.children[-1].implements(ReturnStatement):
             context.append(OpcodePushNull())
 

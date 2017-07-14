@@ -7,7 +7,7 @@
 
 class BaseThingInstance;
 class Symbol;
-class MethodDefinition;
+class Method;
 class ThingType;
 class Program;
 
@@ -26,7 +26,7 @@ using FrameStack = std::stack<Frame>;
 
 typedef Thing (*InternalMethod)();
 
-using Methods = std::vector<MethodDefinition>;
+using Methods = std::vector<Method>;
 using InternalMethods = std::vector<InternalMethod>;
 
 using Type = ThingType*;

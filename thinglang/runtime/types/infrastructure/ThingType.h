@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
-#include "../../containers/MethodDefinition.h"
+#include "../../containers/Method.h"
 
 
 class ThingType{
