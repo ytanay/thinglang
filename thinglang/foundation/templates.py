@@ -36,18 +36,13 @@ FOUNDATION_ENUM = HEADER + """
 #pragma once
 
 #include <string>
+#include "../errors/RuntimeError.h"
 
 enum class {name} {{
 {values}
 }};
 
-inline std::string describe({name} val){{
-     switch (val){{
-        {cases}
-    }}
-
-}}
-""".strip()
+"""
 
 
 FOUNDATION_VIRTUALS = """
@@ -56,9 +51,21 @@ FOUNDATION_VIRTUALS = """
     }}
 """
 
+
+FOUNDATION_SWITCH = """
+inline auto {func_name}({name} val){{
+    switch (val){{
+        {cases}
+        
+        default:
+            throw RuntimeError("Unrecognized {name} in {func_name}");
+    }}
+}}
+"""
+
 ENUM_CASE = """
-    case {enum_class}::{name}:
-        return "{name}";"""
+        case {enum_class}::{name}:
+            return {value};"""
 
 
 DEFAULT_CONSTRUCTOR = '\t{}() {{}};'
