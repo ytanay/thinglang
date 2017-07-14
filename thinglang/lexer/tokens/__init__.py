@@ -27,6 +27,12 @@ class LexicalToken(Describable):
     def transpile(self):
         return self.value
 
+    def __eq__(self, other):
+        return type(self) == type(other) and \
+               self.raw == other.raw and \
+               self.value == other.value and \
+               self.context == other.context
+
 
 class LexicalBinaryOperation(LexicalToken):
     def __init__(self, operator):

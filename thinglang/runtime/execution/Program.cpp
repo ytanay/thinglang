@@ -2,7 +2,7 @@
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
 #include "../types/core/OutputType.h"
-#include <iostream>
+
 
 ThingStack Program::stack;
 FrameStack Program::frames;

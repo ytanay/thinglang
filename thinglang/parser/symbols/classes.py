@@ -1,4 +1,4 @@
-from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeMethodDefinition, OpcodeInstantiate
+from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeInstantiate
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType

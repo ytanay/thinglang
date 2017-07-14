@@ -1,5 +1,6 @@
 import re
 
+from thinglang.utils import collection_utils
 from thinglang.utils.token_context import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
@@ -8,11 +9,13 @@ from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier,
 from thinglang.parser.symbols.base import InlineString, InlineCode
 
 
+@collection_utils.drain
 def lexer(source):
     for idx, line in enumerate(source.strip().split('\n')):
-        yield list(contextualize_lexical_output(analyze_line(line), line, idx))
+        yield contextualize_lexical_output(analyze_line(line), line, idx)
 
 
+@collection_utils.drain
 def analyze_line(line):
     group = ""
     operator_working_set = OPERATORS
@@ -71,6 +74,7 @@ def finalize_group(group, termination_reason):
         raise RuntimeError('Lexer: cannot finalize group {}'.format(group))
 
 
+@collection_utils.drain
 def contextualize_lexical_output(lexical_group, line, idx):
     for entity in lexical_group:
         if entity is not None:

@@ -23,7 +23,7 @@ def preprocess(source) -> RootSymbol:
         raise ValueError('Source cannot be empty')
 
     source = source.strip().replace(' ' * 4, '\t')
-    lexical_groups = list(lexer(source))
+    lexical_groups = lexer(source)
     ast = parse(lexical_groups)
     Simplifier(ast).run()
     return ast
