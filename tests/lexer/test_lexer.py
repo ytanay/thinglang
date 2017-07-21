@@ -1,7 +1,7 @@
 from thinglang.lexer.lexer import analyze_line
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalIndent
-from thinglang.parser.symbols.base import InlineString
+from thinglang.parser.nodes.base import InlineString
 
 
 def test_empty_string():

@@ -6,7 +6,7 @@ from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
-from thinglang.parser.symbols.base import InlineString, InlineCode
+from thinglang.parser.nodes.base import InlineString, InlineCode
 
 
 @collection_utils.drain

@@ -3,8 +3,8 @@ import itertools
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose
-from thinglang.parser.symbols import BaseNode
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
+from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.utils.type_descriptors import ReplaceableArguments
 
 

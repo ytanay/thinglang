@@ -1,7 +1,7 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
-from thinglang.parser.symbols.functions import Access, MethodCall
-from thinglang.parser.symbols.types import ArrayInitialization, CastOperation
+from thinglang.parser.nodes.arithmetic import ArithmeticOperation
+from thinglang.parser.nodes.functions import Access, MethodCall
+from thinglang.parser.nodes.types import ArrayInitialization, CastOperation
 from thinglang.utils.type_descriptors import ValueType
 
 ACCESS_TYPES = Access, LexicalIdentifier

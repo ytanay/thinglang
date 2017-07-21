@@ -1,7 +1,7 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseNode
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
-from thinglang.parser.symbols.functions import ArgumentListPartial, MethodCall, Access, ArgumentList
+from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.arithmetic import ArithmeticOperation
+from thinglang.parser.nodes.functions import ArgumentListPartial, MethodCall, Access, ArgumentList
 from thinglang.utils.type_descriptors import ValueType
 
 

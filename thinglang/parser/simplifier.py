@@ -1,10 +1,10 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import Transient
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
-from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.functions import MethodCall, Access, ArgumentList, ReturnStatement
-from thinglang.parser.symbols.logic import IterativeLoop, Loop
-from thinglang.parser.symbols.types import CastOperation
+from thinglang.parser.nodes import Transient
+from thinglang.parser.nodes.arithmetic import ArithmeticOperation
+from thinglang.parser.nodes.base import AssignmentOperation
+from thinglang.parser.nodes.functions import MethodCall, Access, ArgumentList, ReturnStatement
+from thinglang.parser.nodes.logic import IterativeLoop, Loop
+from thinglang.parser.nodes.types import CastOperation
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
 

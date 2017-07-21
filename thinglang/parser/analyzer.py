@@ -5,10 +5,10 @@ from thinglang.execution.resolver import Resolver
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.errors import ParseErrors, UnresolvedReference, DuplicateDeclaration, ReturnInConstructorError, \
     EmptyMethodBody, EmptyThingDefinition, IndeterminateType, ArgumentCountMismatch
-from thinglang.parser.symbols import Transient
-from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.classes import MethodDefinition, ThingDefinition
-from thinglang.parser.symbols.functions import ReturnStatement, MethodCall, Access
+from thinglang.parser.nodes import Transient
+from thinglang.parser.nodes.base import AssignmentOperation
+from thinglang.parser.nodes.classes import MethodDefinition, ThingDefinition
+from thinglang.parser.nodes.functions import ReturnStatement, MethodCall, Access
 from thinglang.utils import collection_utils
 from thinglang.utils.collection_utils import emit_recursively
 from thinglang.utils.tree_utils import inspects, TreeTraversal

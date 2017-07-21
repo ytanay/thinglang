@@ -5,7 +5,7 @@ from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
 from thinglang.lexer.tokens.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
-from thinglang.parser.symbols import BaseNode
+from thinglang.parser.nodes import BaseNode
 from thinglang.utils.type_descriptors import ValueType, ReplaceableArguments
 
 

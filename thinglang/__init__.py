@@ -8,7 +8,7 @@ from thinglang.lexer.lexer import lexer
 from thinglang.parser.analyzer import Analyzer
 from thinglang.parser.parser import parse
 from thinglang.parser.simplifier import Simplifier
-from thinglang.parser.symbols import RootNode
+from thinglang.parser.nodes import RootNode
 
 BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'include')
 

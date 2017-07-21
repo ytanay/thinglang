@@ -8,10 +8,10 @@ from thinglang.execution.classes import ThingInstance
 from thinglang.execution.resolver import Resolver
 from thinglang.execution.stack import StackFrameTerminator, Stack, StackScopeTerminator, Frame
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseNode
-from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
-from thinglang.parser.symbols.logic import Conditional, ElseBranchInterface, Loop
+from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.base import AssignmentOperation
+from thinglang.parser.nodes.functions import MethodCall, ReturnStatement
+from thinglang.parser.nodes.logic import Conditional, ElseBranchInterface, Loop
 from thinglang.utils import collection_utils
 
 ExecutionOutput = collections.namedtuple('ExecutionOutput', ['output'])

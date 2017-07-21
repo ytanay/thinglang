@@ -1,6 +1,6 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseNode
-from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
+from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType, ReplaceableArguments
 
 

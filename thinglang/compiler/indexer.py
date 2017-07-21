@@ -4,10 +4,10 @@ from thinglang.compiler.allocation import LinearMemoryAllocationLayout
 from thinglang.compiler.references import ResolvedReference
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseNode, Transient
-from thinglang.parser.symbols.base import AssignmentOperation
-from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
-from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
+from thinglang.parser.nodes import BaseNode, Transient
+from thinglang.parser.nodes.base import AssignmentOperation
+from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition
+from thinglang.parser.nodes.functions import MethodCall, ReturnStatement
 from thinglang.utils import collection_utils
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 from thinglang.utils.union_types import ACCESS_TYPES

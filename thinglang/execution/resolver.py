@@ -1,6 +1,6 @@
 from thinglang.parser.errors import UnresolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols.functions import Access
+from thinglang.parser.nodes.functions import Access
 
 
 class Resolver(object):

@@ -1,8 +1,8 @@
 import collections
 
 from thinglang.lexer.tokens.typing import LexicalCast
-from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
-from thinglang.parser.symbols.proxies import ConstrainedArithmeticOperation, RangeGenerator, TaggedLexicalDeclaration
+from thinglang.parser.nodes.collections import ListInitializationPartial, ListInitialization
+from thinglang.parser.nodes.proxies import ConstrainedArithmeticOperation, RangeGenerator, TaggedLexicalDeclaration
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
@@ -13,13 +13,13 @@ from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgu
     LexicalClassInitialization, LexicalDeclarationReturnType, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalComparison, LexicalConditional, LexicalElse, LexicalNegation, \
     LexicalEquality, LexicalInequality, LexicalRepeatWhile, LexicalIn, LexicalRepeatFor
-from thinglang.parser.symbols.arithmetic import ArithmeticOperation
-from thinglang.parser.symbols.base import AssignmentOperation, InlineString
-from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition, MemberDefinition
-from thinglang.parser.symbols.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
+from thinglang.parser.nodes.arithmetic import ArithmeticOperation
+from thinglang.parser.nodes.base import AssignmentOperation, InlineString
+from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition, MemberDefinition
+from thinglang.parser.nodes.functions import Access, ArgumentListPartial, ArgumentList, MethodCall, ReturnStatement, \
     ArgumentListDecelerationPartial
-from thinglang.parser.symbols.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
-from thinglang.parser.symbols.logic import Conditional, UnconditionalElse, ConditionalElse, Loop, IterativeLoop
+from thinglang.parser.nodes.types import ArrayInitializationPartial, ArrayInitialization, CastOperation
+from thinglang.parser.nodes.logic import Conditional, UnconditionalElse, ConditionalElse, Loop, IterativeLoop
 from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 
 FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significant in parsing patterns

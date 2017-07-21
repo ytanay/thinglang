@@ -4,8 +4,8 @@ import pprint
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalIndent
 from thinglang.parser.patterns import REPLACEMENT_PASSES
-from thinglang.parser.symbols import RootNode
-from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
+from thinglang.parser.nodes import RootNode
+from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition
 
 
 def parse(lexical_groups):
