@@ -9,7 +9,7 @@ from thinglang.utils import tree_utils
 from thinglang.utils.describable import Describable
 
 
-class BaseSymbol(Describable):
+class BaseNode(Describable):
     SCOPING = False
     ADVANCE = True
     EXECUTABLE = True
@@ -128,13 +128,13 @@ class BaseSymbol(Describable):
             raise Exception('Cannot compile {}!'.format(self))
 
 
-class RootSymbol(BaseSymbol):
+class RootNode(BaseNode):
     def __init__(self):
-        super(RootSymbol, self).__init__(None)
+        super(RootNode, self).__init__(None)
 
     def compile(self, context=None):
         context = context or CompilationContext()
-        super(RootSymbol, self).compile(context)
+        super(RootNode, self).compile(context)
         return context
 
     def transpile(self):
@@ -147,9 +147,9 @@ class RootSymbol(BaseSymbol):
         self.children = sorted(self.children, key=lambda child: child is not entry[0])  # Primary sort (on entry point)
 
 
-class DefinitionPairSymbol(BaseSymbol):
+class DefinitionPairNode(BaseNode):
     def __init__(self, slice):
-        super(DefinitionPairSymbol, self).__init__(slice)
+        super(DefinitionPairNode, self).__init__(slice)
         self.name = slice[1]
 
 

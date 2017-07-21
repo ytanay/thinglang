@@ -2,10 +2,10 @@ from collections import OrderedDict
 
 from thinglang.compiler import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseNode
 
 
-class Conditional(BaseSymbol):
+class Conditional(BaseNode):
 
     ADVANCE = False
     SCOPING = True
@@ -53,7 +53,7 @@ class ElseBranchInterface(object):
     pass
 
 
-class UnconditionalElse(BaseSymbol, ElseBranchInterface):
+class UnconditionalElse(BaseNode, ElseBranchInterface):
     def compile(self, context: CompilationContext):
         super(UnconditionalElse, self).compile(context)
         context.update_conditional_jumps()
@@ -72,7 +72,7 @@ class ConditionalElse(Conditional, ElseBranchInterface):
         return self.conditional.references()
 
 
-class Loop(BaseSymbol):
+class Loop(BaseNode):
     ADVANCE = False
     SCOPING = True
 
@@ -97,7 +97,7 @@ class Loop(BaseSymbol):
         jump.update(context.current_index())
 
 
-class IterativeLoop(BaseSymbol):
+class IterativeLoop(BaseNode):
 
     EXECUTABLE = False
 

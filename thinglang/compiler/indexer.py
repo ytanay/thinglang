@@ -4,7 +4,7 @@ from thinglang.compiler.allocation import LinearMemoryAllocationLayout
 from thinglang.compiler.references import ResolvedReference
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseSymbol, Transient
+from thinglang.parser.symbols import BaseNode, Transient
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.classes import ThingDefinition, MethodDefinition
 from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
@@ -92,7 +92,7 @@ class Indexer(TreeTraversal):
             self.process_assignment(node)
 
     @inspects(object)
-    def process_reference_dependencies(self, node: BaseSymbol):
+    def process_reference_dependencies(self, node: BaseNode):
         for x in collection_utils.emit_recursively(node.references(), ACCESS_TYPES):
             if x.implements(LexicalIdentifier):
                 x.index, x.type = self.locals.get(x)

@@ -1,12 +1,12 @@
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseNode
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType
 
 
-class Access(BaseSymbol):
+class Access(BaseNode):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
         self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
@@ -48,7 +48,7 @@ class ArgumentList(ListInitialization):
     pass
 
 
-class MethodCall(BaseSymbol, ValueType):
+class MethodCall(BaseNode, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
         self.value = self
@@ -107,7 +107,7 @@ class MethodCall(BaseSymbol, ValueType):
         return self.resolved_target.type
 
 
-class ReturnStatement(BaseSymbol):
+class ReturnStatement(BaseNode):
     def __init__(self, slice):
         super().__init__(slice)
         self.value = slice[1] if len(slice) == 2 else None

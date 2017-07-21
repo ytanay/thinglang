@@ -14,7 +14,8 @@ SEARCH_PATTERN = os.path.join(BASE_PATH, '**/*.thing')
 
 def collect_tests():
     for path in glob.glob(SEARCH_PATTERN, recursive=True):
-        yield ProgramTestCase(path)
+        #if 'simple_thing' in path:
+            yield ProgramTestCase(path)
 
 
 def split_lines(param):

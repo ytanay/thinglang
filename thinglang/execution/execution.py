@@ -8,7 +8,7 @@ from thinglang.execution.classes import ThingInstance
 from thinglang.execution.resolver import Resolver
 from thinglang.execution.stack import StackFrameTerminator, Stack, StackScopeTerminator, Frame
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseNode
 from thinglang.parser.symbols.base import AssignmentOperation
 from thinglang.parser.symbols.functions import MethodCall, ReturnStatement
 from thinglang.parser.symbols.logic import Conditional, ElseBranchInterface, Loop
@@ -147,7 +147,7 @@ class ExecutionEngine(object):
 
     def get_target(self):
         target = self.targets.popleft()
-        print(f'Target: {target.context if isinstance(target, BaseSymbol) else target} ({target})')
+        print(f'Target: {target.context if isinstance(target, BaseNode) else target} ({target})')
         self.log_stack()
         self.current_target = target
         return target

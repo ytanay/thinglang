@@ -1,5 +1,5 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseNode
 from thinglang.parser.symbols.collections import ListInitializationPartial, ListInitialization
 from thinglang.utils.type_descriptors import ValueType, ReplaceableArguments
 
@@ -13,7 +13,7 @@ class ArrayInitialization(ListInitialization, ValueType):
         return '[{}]'.format(super(ArrayInitialization, self).transpile(definition=definition))
 
 
-class CastOperation(BaseSymbol, ValueType, ReplaceableArguments):
+class CastOperation(BaseNode, ValueType, ReplaceableArguments):
 
     CASTERS = {
         LexicalIdentifier("number"): lambda x: int(x)

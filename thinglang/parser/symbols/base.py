@@ -5,13 +5,13 @@ from thinglang.compiler.opcodes import OpcodeSetStatic, OpcodeSet
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseNode
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.parser.symbols.functions import MethodCall
 from thinglang.utils.type_descriptors import ValueType
 
 
-class AssignmentOperation(BaseSymbol):
+class AssignmentOperation(BaseNode):
     DECELERATION = object()
     REASSIGNMENT = object()
     INDETERMINATE = object()

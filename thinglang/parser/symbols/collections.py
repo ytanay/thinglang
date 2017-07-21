@@ -3,12 +3,12 @@ import itertools
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose
-from thinglang.parser.symbols import BaseSymbol
+from thinglang.parser.symbols import BaseNode
 from thinglang.parser.symbols.arithmetic import ArithmeticOperation
 from thinglang.utils.type_descriptors import ReplaceableArguments
 
 
-class ListInitializationPartial(BaseSymbol):
+class ListInitializationPartial(BaseNode):
     STRICTLY_TYPED = False
 
     def __init__(self, slice):
@@ -33,7 +33,7 @@ class ListInitializationPartial(BaseSymbol):
         return self.value[item]
 
 
-class ListInitialization(BaseSymbol, ReplaceableArguments):
+class ListInitialization(BaseNode, ReplaceableArguments):
 
     def __init__(self, slice=None):
         super(ListInitialization, self).__init__(slice)

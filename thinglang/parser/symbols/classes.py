@@ -2,12 +2,12 @@ from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, Op
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
-from thinglang.parser.symbols import DefinitionPairSymbol, BaseSymbol
+from thinglang.parser.symbols import DefinitionPairNode, BaseNode
 from thinglang.parser.symbols.base import InlineString
 from thinglang.parser.symbols.functions import ArgumentList, ReturnStatement, ArgumentListPartial
 
 
-class ThingDefinition(DefinitionPairSymbol):
+class ThingDefinition(DefinitionPairNode):
 
     def __contains__(self, item):
         return any(child.name == item for child in self.children)
@@ -64,7 +64,7 @@ class ThingDefinition(DefinitionPairSymbol):
             self.children.insert(index, MethodDefinition([LexicalDeclarationConstructor, None]))
 
 
-class MethodDefinition(BaseSymbol):
+class MethodDefinition(BaseNode):
 
     def __init__(self, slice):
         super(MethodDefinition, self).__init__(slice)
@@ -133,7 +133,7 @@ class MethodDefinition(BaseSymbol):
         return self.return_type
 
 
-class MemberDefinition(BaseSymbol):
+class MemberDefinition(BaseNode):
     def __init__(self, slice):
         super(MemberDefinition, self).__init__(slice)
 
