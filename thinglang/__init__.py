@@ -9,6 +9,7 @@ from thinglang.parser.analyzer import Analyzer
 from thinglang.parser.parser import parse
 from thinglang.parser.simplifier import Simplifier
 from thinglang.parser.nodes import RootNode
+from thinglang.parser.symbols import SymbolMap
 
 BASE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'include')
 
@@ -35,6 +36,12 @@ def compiler(source: str, executable: bool=True):
     if executable:
         ast.reorder()
 
+    #assert len(ast.children) == 1
+
+    symbols = SymbolMap(ast.children[0])
+
+    utils.print_header('Symbols', symbols, pretty=True)
+
     Collator(ast).run()
 
     try:
@@ -43,7 +50,7 @@ def compiler(source: str, executable: bool=True):
         print('Error during indexing: {}'.format(ast.tree()))
         traceback.print_exc()
         raise
-    return ast
+    return ast, symbols
 
 
 def run(source):

@@ -1,0 +1,12 @@
+[
+    {
+        "kind": "member",
+        "name": "val",
+        "type": "std::string"
+    },
+    {
+        "kind": "method",
+        "name": "write",
+        "type": null
+    }
+]

@@ -40,8 +40,8 @@ public:
 		auto self = Program::argument<this_type>();
 		auto other = Program::argument<TextNamespace::TextInstance>();
 
-		auto __transient__6__ = self->val + other->val;
-		return Thing(new this_type(__transient__6__));
+		auto __transient__5__ = self->val + other->val;
+		return Thing(new this_type(__transient__5__));
 		return NULL;
 	}
 	static Thing __LexicalEquality__() {

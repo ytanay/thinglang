@@ -26,8 +26,8 @@ def split_lines(param):
 def test_thing_program(test_file: ProgramTestCase):
     expected_output = test_file.metadata['expected_output']
 
+    ast, symbols = thinglang.compiler(test_file.code)
     utils.print_header('Parsed AST')
-    ast = thinglang.compiler(test_file.code)
     print(ast.tree())
 
     utils.print_header("Bytecode generation")

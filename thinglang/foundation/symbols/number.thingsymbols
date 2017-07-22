@@ -1,0 +1,37 @@
+[
+    {
+        "kind": "member",
+        "name": "val",
+        "type": "int"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalAddition__",
+        "type": "number"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalSubtraction__",
+        "type": "number"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalMultiplication__",
+        "type": "number"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalDivision__",
+        "type": "number"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalEquality__",
+        "type": "number"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalLessThan__",
+        "type": "number"
+    }
+]

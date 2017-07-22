@@ -2,22 +2,22 @@ thing number
     
     has int val
     
-    does + with number other
+    does + with number other returns number
         return self.val + other.val
 
-    does - with number other
+    does - with number other returns number
         return self.val - other.val
 
-    does * with number other
+    does * with number other returns number
         return self.val * other.val
 
-    does / with number other
+    does / with number other returns number
         return self.val / other.val
 
-    does eq with number other
+    does eq with number other returns number
         if self.val eq other.val
             return 0
 
-    does < with number other
+    does < with number other returns number
         if self.val < other.val
             return self.val - other.val

@@ -1,0 +1,17 @@
+[
+    {
+        "kind": "member",
+        "name": "val",
+        "type": "std::string"
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalAddition__",
+        "type": null
+    },
+    {
+        "kind": "method",
+        "name": "__LexicalEquality__",
+        "type": null
+    }
+]
