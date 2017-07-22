@@ -30,8 +30,10 @@ class LexicalToken(Describable):
     def __eq__(self, other):
         return type(self) == type(other) and \
                self.raw == other.raw and \
-               self.value == other.value and \
-               self.context == other.context
+               self.value == other.value
+
+    def __hash__(self):
+        return hash((self.raw, self.value))
 
 
 class LexicalBinaryOperation(LexicalToken):

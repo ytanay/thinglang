@@ -1,3 +1,4 @@
+from thinglang.compiler import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeInstantiate
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -53,8 +54,9 @@ class ThingDefinition(DefinitionPairNode):
     def methods(self):
         return [x for x in self.children if x.implements(MethodDefinition)]
 
-    def serialize(self):
-        return OpcodeThingDefinition(len(self.members()), len(self.methods()))
+    def compile(self, context: CompilationContext):
+        context.append(OpcodeThingDefinition(len(self.members()), len(self.methods())))
+        super().compile(context)
 
     def finalize(self):
         methods = self.methods()
@@ -132,6 +134,13 @@ class MethodDefinition(BaseNode):
     def type_id(self):
         return self.return_type
 
+    def serialize(self):
+        return {
+            "name": self.name,
+            "kind": "method",
+            "type": self.return_type
+        }
+
 
 class MemberDefinition(BaseNode):
     def __init__(self, slice):
@@ -147,3 +156,10 @@ class MemberDefinition(BaseNode):
 
     def transpile(self):
         return '{} {};'.format(self.type.transpile(), self.name.transpile())
+
+    def serialize(self):
+        return {
+            "name": self.name,
+            "kind": "member",
+            "type": self.type
+        }

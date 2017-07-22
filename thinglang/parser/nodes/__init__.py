@@ -113,13 +113,7 @@ class BaseNode(Describable):
         sep = '\t' * indent
         return sep + ('\n' + sep).join(x.transpile() for x in children_override or self.children)
 
-    def serialize(self):
-        return None
-
     def compile(self, context: CompilationContext):
-        serialization = self.serialize()
-        if serialization:
-            context.append(serialization)
 
         for child in self.children:
             child.compile(context)

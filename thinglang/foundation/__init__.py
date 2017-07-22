@@ -1,18 +1,29 @@
 import glob
+import json
 
 import os
+from json import JSONEncoder
 
 import thinglang
 from thinglang.compiler import Opcode
 from thinglang.foundation import templates
+from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.singleton import Singleton
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-SEARCH_PATTERN = os.path.join(CURRENT_PATH,  '**/*.thing')
+SEARCH_PATTERN = os.path.join(CURRENT_PATH,  'source/**/*.thing')
+SYMBOLS_TARGET = os.path.join(CURRENT_PATH, 'symbols')
 TYPES_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'types')
 CORE_TYPES_TARGET = os.path.join(TYPES_TARGET, 'core')
 EXECUTION_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'execution')
+
+
+class JSONSerializer(JSONEncoder):
+    def default(self, o):
+        if isinstance(o, LexicalToken):
+            return o.transpile()
+        return super().default(o)
 
 
 class Foundation(object, metaclass=Singleton):
@@ -39,7 +50,7 @@ class Foundation(object, metaclass=Singleton):
 
             name = os.path.basename(path).replace('.thing', '')
             target_name = '{}Type'.format(name.capitalize())
-            ast = thinglang.compiler(contents, executable=False)
+            ast, symbols = thinglang.compiler(contents, executable=False)
             methods = ast.children[0].methods()
 
             with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:
@@ -47,6 +58,9 @@ class Foundation(object, metaclass=Singleton):
                     name=name.capitalize(),
                     code=ast.transpile(),
                     file_name=target_name + '.h'))
+
+            with open(os.path.join(SYMBOLS_TARGET, name + '.thingsymbols'), 'w') as f:
+                json.dump(symbols.serialize(), f, cls=JSONSerializer, indent=4, sort_keys=True)
 
             self.types[LexicalIdentifier(name.replace('_instance', ''))] = [x.name.transpile() for x in methods]
 
