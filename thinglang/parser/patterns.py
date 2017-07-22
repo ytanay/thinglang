@@ -39,6 +39,7 @@ FIRST_PASS_PATTERNS = collections.OrderedDict([  # Ordering is highly significan
     ((LexicalDeclarationMethod, LexicalIdentifier, ArgumentList), MethodDefinition),  # does start with a, b
     ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), LexicalGroupEnd), MethodDefinition),  # does +
     ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), ArgumentList), MethodDefinition),  # does + with a, b
+    ((LexicalDeclarationMethod, tuple(ArithmeticOperation.OPERATIONS.keys()), ArgumentListDecelerationPartial, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does + with a, b returns number
 
     ((ValueType, LexicalCast, LexicalIdentifier), CastOperation),
 
