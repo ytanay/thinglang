@@ -125,6 +125,9 @@ class Indexer(TreeTraversal):
         elif self.ast.get(node.target[0]):
             print('{} refers to a user class'.format(node.target))
             target = self.ast.get(node.target[0])
+        elif node.target[0] in self.locals:
+            idx, type = self.locals.get(node.target[0])
+            target = self.ast.get(type)
         else:
             raise Exception('Cannot resolve {}'.format(node.target))
 
