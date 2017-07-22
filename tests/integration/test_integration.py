@@ -26,18 +26,12 @@ def split_lines(param):
 def test_thing_program(test_file: ProgramTestCase):
     expected_output = test_file.metadata['expected_output']
 
-    ast, symbols = thinglang.compiler(test_file.code)
-    utils.print_header('Parsed AST')
-    print(ast.tree())
-
-    utils.print_header("Bytecode generation")
-    bytecode = ast.compile().finalize()
-    print(bytecode)
+    bytecode = thinglang.compile(test_file.code)
 
     utils.print_header('VM execution')
 
     with open(test_file.target_path, 'wb') as f:
-        f.write(bytecode)
+        f.write(bytecode.bytes())
 
     vm = subprocess.Popen(["thinglang", test_file.target_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = (stream.decode('utf-8').strip() for stream in vm.communicate())
@@ -46,14 +40,10 @@ def test_thing_program(test_file: ProgramTestCase):
     utils.print_header('VM output')
     print(stdout)
 
-    local = thinglang.run(test_file.code).output
-
     if not isinstance(expected_output, str):
         stdout = split_lines(stdout)
-        local = split_lines(local)
 
     assert vm.returncode == 0, 'VM process crashed'
-    assert local == expected_output, 'Execution engine output did not match expected output'
     assert stdout == expected_output, 'VM output did not match expected output'
 
 
