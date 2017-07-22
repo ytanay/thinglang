@@ -77,6 +77,9 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def type_id(self):
         return self.TYPE
 
+    def describe(self):
+        return '"{}"'.format(self.value)
+
 
 class InlineCode(LexicalToken):
     STATIC = True
@@ -85,3 +88,6 @@ class InlineCode(LexicalToken):
     def __init__(self, value):
         super(InlineCode, self).__init__(None, value)
         self.children = []
+
+    def tree(self, depth):
+        return self.value
