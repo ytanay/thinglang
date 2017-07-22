@@ -3,7 +3,6 @@ import traceback
 
 from thinglang import utils
 from thinglang.compiler.indexer import Indexer, Collator
-from thinglang.execution.execution import ExecutionEngine
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.analyzer import Analyzer
 from thinglang.parser.parser import parse
@@ -51,11 +50,3 @@ def compiler(source: str, executable: bool=True):
         traceback.print_exc()
         raise
     return ast, symbols
-
-
-def run(source):
-    ast = preprocess(source)
-
-    with ExecutionEngine(ast) as engine:
-        engine.execute()
-        return engine.results()

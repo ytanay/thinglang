@@ -1,7 +1,7 @@
 import types
 
-from thinglang.execution.builtins import BUILTINS, INTERNAL_MEMBER
-from thinglang.execution.resolver import Resolver
+
+
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.errors import ParseErrors, UnresolvedReference, DuplicateDeclaration, ReturnInConstructorError, \
     EmptyMethodBody, EmptyThingDefinition, IndeterminateType, ArgumentCountMismatch

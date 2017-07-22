@@ -1,6 +1,6 @@
 import types
 
-from thinglang.execution.stack import Frame
+from thinglang.utils.stack import Frame
 
 
 def predicated(func):
