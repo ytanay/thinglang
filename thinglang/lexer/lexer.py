@@ -1,16 +1,17 @@
 import re
+from typing import List
 
 from thinglang.utils import collection_utils
 from thinglang.utils.token_context import TokenContext
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
-from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens import LexicalGroupEnd, LexicalToken
 from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote
 from thinglang.parser.nodes.base import InlineString, InlineCode
 
 
 @collection_utils.drain
-def lexer(source):
+def lexer(source) -> List[List[LexicalToken]]:
     for idx, line in enumerate(source.strip().split('\n')):
         yield contextualize_lexical_output(analyze_line(line), line, idx)
 

@@ -40,32 +40,28 @@ public:
 		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 
-		auto __transient__0__ = self->val + other->val;
-		return Thing(new this_type(__transient__0__));
+		return Thing(new this_type(self->val + other->val));
 		return NULL;
 	}
 	static Thing __LexicalSubtraction__() {
 		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 
-		auto __transient__1__ = self->val - other->val;
-		return Thing(new this_type(__transient__1__));
+		return Thing(new this_type(self->val - other->val));
 		return NULL;
 	}
 	static Thing __LexicalMultiplication__() {
 		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 
-		auto __transient__2__ = self->val * other->val;
-		return Thing(new this_type(__transient__2__));
+		return Thing(new this_type(self->val * other->val));
 		return NULL;
 	}
 	static Thing __LexicalDivision__() {
 		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 
-		auto __transient__3__ = self->val / other->val;
-		return Thing(new this_type(__transient__3__));
+		return Thing(new this_type(self->val / other->val));
 		return NULL;
 	}
 	static Thing __LexicalEquality__() {
@@ -82,8 +78,7 @@ public:
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 
 		if(self->val < other->val) {
-			auto __transient__4__ = self->val - other->val;
-			return Thing(new this_type(__transient__4__));
+			return Thing(new this_type(self->val - other->val));
 		}
 		return NULL;
 	}

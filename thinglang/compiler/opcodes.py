@@ -33,7 +33,6 @@ class Opcode(object, metaclass=OpcodeRegistration):
 
     def resolve(self):
         assert len(self.args) == len(self.ARGS), 'Mismatched argument count. Expected {}, got {}'.format(len(self.ARGS), len(self.args))
-        print(self.OPCODE, self.args)
         return struct.pack(self.format_string(), self.OPCODE, *self.args)
 
     @classmethod
