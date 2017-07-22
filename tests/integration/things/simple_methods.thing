@@ -1,0 +1,17 @@
+/*
+{
+    "expected_output": ["in constructor", "in say_hello"]
+}
+*/
+
+thing Empty
+    setup
+        Output.write("in constructor")
+
+    does say_hello
+        Output.write("in say_hello")
+
+thing Program
+    setup
+        Empty e = create Empty()
+        e.say_hello()
