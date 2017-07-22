@@ -11,8 +11,20 @@ from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
 
 class Simplifier(TreeTraversal):
 
+    @inspects(Access)
+    def unwrap_reference_chains(self, node: Access):
+
+        if len(node) == 2:
+            return
+
+        transient_id, transient_declaration, transient_assignment = self.create_transient(node.partial(0), node)
+        node.insert_before(transient_declaration)
+        for target in node.target[2:]:
+            node.insert_before(self.create_assignment(transient_id, Access([transient_id, target]), node))
+        node.remove()
+
     @inspects(IterativeLoop)
-    def unwrap_iterative_loops(self, node):
+    def unwrap_iterative_loops(self, node: IterativeLoop):
         generator_id, generator_declaration, generator_assignment = self.create_transient(node.generator, node, LexicalIdentifier('Range'))
         initial_assignment = AssignmentOperation.create(node.name, MethodCall.create([generator_id, 'next']), LexicalIdentifier('number')).set_context(node.parent)
         iterative_assignment = AssignmentOperation.create(node.name, MethodCall.create([generator_id, 'next']))
@@ -67,3 +79,6 @@ class Simplifier(TreeTraversal):
         local_id = Transient().set_context(parent.context)
         return local_id, AssignmentOperation([type, local_id, None, value]).contextify(parent.parent), AssignmentOperation([local_id, None, value]).contextify(parent.parent)
 
+    @staticmethod
+    def create_assignment(local_id, value, parent):
+        return AssignmentOperation([local_id, None, value]).contextify(parent.parent)

@@ -8,7 +8,7 @@ from thinglang.parser.nodes import RootNode
 from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition
 
 
-def parse(lexical_groups):
+def parse(lexical_groups) -> RootNode:
     """
     The parser takes a list<list<lexical-token>>, where each inner list (list<lexical-token>) is referred to as a lexical group (why? because).
     Each lexical group is parsed independently, through a process that reduces the group iteratively until no further reductions can be made.

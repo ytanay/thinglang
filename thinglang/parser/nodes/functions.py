@@ -24,6 +24,11 @@ class Access(BaseNode):
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target
 
+    def __len__(self):
+        size = len(self.target)
+        assert size >= 2
+        return size
+
     @classmethod
     def create(cls, target):
         return cls([LexicalIdentifier(x) if not isinstance(x, LexicalIdentifier) else x for x in target])
@@ -33,6 +38,9 @@ class Access(BaseNode):
 
     def type_id(self):
         return None
+
+    def partial(self, idx):
+        return Access(*self.target[idx:idx+2])
 
 
 class ArgumentListPartial(ListInitializationPartial):
