@@ -82,5 +82,4 @@ class ListInitialization(BaseNode, ReplaceableArguments):
         if not static:
             lines.append('\t\tauto self = Program::argument<this_type>();')
 
-
         return '\n'.join(lines) + '\n'

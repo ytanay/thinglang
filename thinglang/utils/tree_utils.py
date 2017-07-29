@@ -18,8 +18,8 @@ def inspects(*args, predicate=None, priority=0):
 
 class TreeTraversal(object):
 
-    def __init__(self, ast, symbols=None):
-        self.ast, self.symbols = ast, symbols
+    def __init__(self, ast):
+        self.ast = ast
         self.results = []
         self.scoping = Frame(expected_key_type=object)
         self.inspections = sorted((getattr(self, member) for member in dir(self) if
@@ -56,6 +56,3 @@ class TreeTraversal(object):
     @inspects(MethodDefinition)
     def update_method_context(self, node: MethodDefinition):
         self.current_method = node
-
-    def resolve(self, ref):
-        return self.symbols.resolve(ref, self.current_method.locals)
