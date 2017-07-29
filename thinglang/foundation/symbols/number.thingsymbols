@@ -1,37 +1,81 @@
-[
-    {
-        "kind": "member",
-        "name": "val",
-        "type": "int"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalAddition__",
-        "type": "number"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalSubtraction__",
-        "type": "number"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalMultiplication__",
-        "type": "number"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalDivision__",
-        "type": "number"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalEquality__",
-        "type": "number"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalLessThan__",
-        "type": "number"
-    }
-]
+{
+    "index": 2,
+    "name": "number",
+    "symbols": [
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__LexicalAddition__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "__LexicalSubtraction__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "__LexicalMultiplication__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 3,
+            "kind": "method",
+            "name": "__LexicalDivision__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 4,
+            "kind": "method",
+            "name": "__LexicalEquality__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 5,
+            "kind": "method",
+            "name": "__LexicalLessThan__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "val",
+            "static": false,
+            "type": "int"
+        }
+    ]
+}

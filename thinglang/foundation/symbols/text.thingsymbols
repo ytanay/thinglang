@@ -1,17 +1,37 @@
-[
-    {
-        "kind": "member",
-        "name": "val",
-        "type": "std::string"
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalAddition__",
-        "type": null
-    },
-    {
-        "kind": "method",
-        "name": "__LexicalEquality__",
-        "type": null
-    }
-]
+{
+    "index": 1,
+    "name": "text",
+    "symbols": [
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__LexicalAddition__",
+            "static": false,
+            "type": null
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "__LexicalEquality__",
+            "static": false,
+            "type": null
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "val",
+            "static": false,
+            "type": "std::string"
+        }
+    ]
+}

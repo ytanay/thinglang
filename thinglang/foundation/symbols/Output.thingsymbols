@@ -1,12 +1,26 @@
-[
-    {
-        "kind": "member",
-        "name": "val",
-        "type": "std::string"
-    },
-    {
-        "kind": "method",
-        "name": "write",
-        "type": null
-    }
-]
+{
+    "index": 3,
+    "name": "Output",
+    "symbols": [
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "write",
+            "static": true,
+            "type": null
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "val",
+            "static": false,
+            "type": "std::string"
+        }
+    ]
+}
