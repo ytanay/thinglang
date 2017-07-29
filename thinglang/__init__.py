@@ -30,7 +30,6 @@ def compile(source: str) -> CompilationContext:
     """
     Compile a thinglang program
     :param source: source code of main module
-    :param executable: should an executable be generated?
     :return: thinglang bytecode
     """
 

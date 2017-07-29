@@ -40,7 +40,7 @@ class IndexerContext(object):
         super(IndexerContext, self).__init__()
 
         self.current_method: MethodDefinition = method
-        self.locals = OrderedDict({LexicalIdentifier.self(): LocalMember(thing, 0)})
+        self.locals = OrderedDict({LexicalIdentifier.self(): LocalMember(thing.name, 0)})
 
     def flush(self):
         self.current_method.update_locals(self.locals)
