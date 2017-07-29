@@ -34,20 +34,12 @@ public:
         return stack.top();
     }
 
-    static void push(Thing instance) {
+    static void push(const Thing& instance) {
         stack.push(instance);
     }
 
     static Thing data(Index index) {
         return static_data[index];
-    }
-
-    static Thing instance() {
-        return current_instance;
-    }
-
-    static void instance(Thing new_instance) {
-        current_instance = new_instance;
     }
 
     static void create_frame(Size size) {
@@ -78,10 +70,6 @@ private:
     static ThingStack stack;
     static FrameStack frames;
     static Things static_data;
-
-
-
-    static Thing current_instance;
 
 };
 
