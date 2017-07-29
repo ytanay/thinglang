@@ -41,6 +41,8 @@ class IndexerContext(object):
 
         self.current_method: MethodDefinition = method
         self.locals = OrderedDict({LexicalIdentifier.self(): LocalMember(thing.name, 0)})
+        for arg in method.arguments:
+            self.locals[arg] = LocalMember(arg.type, len(self.locals))
 
     def flush(self):
         self.current_method.update_locals(self.locals)
