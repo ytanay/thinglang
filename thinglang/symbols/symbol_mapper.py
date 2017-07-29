@@ -1,7 +1,8 @@
 import pprint
 
-from thinglang.compiler.references import Reference
+from thinglang.compiler.references import ElementReference, LocalReference, StaticReference
 from thinglang.foundation import serializer
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.classes import ThingDefinition
 from thinglang.parser.nodes.functions import Access
 from thinglang.symbols.symbol_map import SymbolMap
@@ -21,11 +22,36 @@ class SymbolMapper(object):
             thing.name: SymbolMap.from_thing(thing, index) for index, thing in enumerate(ast.children)
         })
 
-    def resolve(self, target: Access):
+    def resolve(self, target, locals):
+        if target.implements(LexicalIdentifier):
+            return LocalReference(locals[target])
+        if target.implements(Access):
+            return self.resolve_access(target, locals)
+        if target.STATIC:
+            return StaticReference(target)
+
+        raise Exception("Unknown reference type {}".format(target))
+
+    def resolve_access(self, target: Access, locals):
         assert len(target) == 2
-        container = self.maps[target[0]]
-        element = container[target[1]]
-        return Reference(container, element)
+
+        first, second = target[0], target[1]
+        if first in self.maps:
+            container = self.maps[first]
+        elif first.STATIC:
+            container = self.maps[first.type]
+        elif first in locals:
+            container = self.maps[locals[first].type]
+        else:
+            raise Exception('Cannot resolve first level access ')
+
+        element = container[second]
+        if element.static:
+            instance = None
+        else:
+            instance = self.resolve(first, locals)
+
+        return ElementReference(container, element, instance)
 
     def __getitem__(self, item) -> SymbolMap:
         return self.maps[item]
