@@ -1,16 +1,19 @@
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn
+from thinglang.compiler.references import Reference
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.nodes.collections import ListInitializationPartial, ListInitialization
+from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import ValueType
 
 
-class Access(BaseNode):
+class Access(BaseNode, ValueType):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
         self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
         self.type = None
+        self.arguments = []
 
     def evaluate(self, resolver):
         return resolver.resolve(self)
@@ -72,7 +75,7 @@ class MethodCall(BaseNode, ValueType):
         if not self.arguments:
             self.arguments = ArgumentList()
 
-        self.resolved_target = None
+        self.resolved_target: Reference = None
         self.internal = False
 
     def describe(self):
@@ -103,16 +106,17 @@ class MethodCall(BaseNode, ValueType):
         for arg in reversed(self.arguments):
             context.push_down(arg)
 
-        if self.internal:
-            context.append(OpcodeCallInternal(*self.resolved_target.index))
-        else:
-            context.append(OpcodeCall(*self.resolved_target.index))
+        Instruction = OpcodeCallInternal if self.resolved_target.convention is Symbol.INTERNAL else OpcodeCall
+        context.append(Instruction(self.resolved_target.thing_index, self.resolved_target.element_index))
 
         if not captured:
             context.append(OpcodePop())  # pop the return value, if the return value is not captured
 
     def type_id(self):
         return self.resolved_target.type
+
+    def resolve(self, resolved_target):
+        self.resolved_target = resolved_target
 
 
 class ReturnStatement(BaseNode):
