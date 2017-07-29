@@ -7,12 +7,12 @@ from thinglang.compiler.resolver import Resolver
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.nodes import RootNode
 from thinglang.parser.parser import parse
-from thinglang.parser.simplifier import Simplifier
+from thinglang.parser.simplifier import Simplifier, SecondarySimplifier
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.symbols.symbol_map import SymbolMap
 
 
-def preprocess(source: str, executable: bool=True) -> Tuple[RootNode, SymbolMapper]:
+def preprocess(source: str) -> Tuple[RootNode, SymbolMapper]:
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -22,15 +22,12 @@ def preprocess(source: str, executable: bool=True) -> Tuple[RootNode, SymbolMapp
 
     utils.print_header("Original AST", ast.tree())
 
-    #if executable:
-    #    ast.reorder()
-
     symbols = SymbolMapper(ast)
 
     return ast, symbols
 
 
-def compile(source: str, executable: bool=True) -> CompilationContext:
+def compile(source: str) -> CompilationContext:
     """
     Compile a thinglang program
     :param source: source code of main module
@@ -38,11 +35,12 @@ def compile(source: str, executable: bool=True) -> CompilationContext:
     :return: thinglang bytecode
     """
 
-    ast, symbols = preprocess(source, executable)
+    ast, symbols = preprocess(source)
 
     Simplifier(ast).run()
     Indexer(ast).run()
-    Resolver(ast, symbols).run()
+
+    utils.print_header("Final AST", ast.tree())
 
     context = CompilationContext(symbols)
 
