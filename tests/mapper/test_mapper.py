@@ -1,6 +1,6 @@
 import thinglang
-from thinglang.compiler.symbol import Symbol
 from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.symbols.symbol import Symbol
 
 source = """
 
