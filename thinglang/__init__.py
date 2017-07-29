@@ -3,7 +3,6 @@ from typing import Tuple
 from thinglang import utils
 from thinglang.compiler import CompilationContext
 from thinglang.compiler.indexer import Indexer
-from thinglang.compiler.resolver import Resolver
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.nodes import RootNode
 from thinglang.parser.parser import parse
