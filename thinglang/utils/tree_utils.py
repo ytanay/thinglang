@@ -3,21 +3,6 @@ import types
 from thinglang.utils.stack import Frame
 
 
-def predicated(func):
-    def wrapped(self, cls=object, predicate=lambda x: True, **kwargs):
-        if isinstance(cls, types.FunctionType):
-            return func(self, cls, **kwargs)
-
-        assert cls is not object or not predicate(None), 'Must provide CLS or predicate'
-
-        def predicate_func(node):
-            return isinstance(node, cls) and predicate(node)
-
-        return func(self, predicate_func, **kwargs)
-
-    return wrapped
-
-
 def inspects(*args, predicate=None, priority=0):
     if predicate is None:
         def predicate(node):

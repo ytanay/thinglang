@@ -1,11 +1,9 @@
-import inspect
 import itertools
 
-import struct
 
 from thinglang.compiler import CompilationContext
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.utils import tree_utils
+from thinglang.utils import collection_utils
 from thinglang.utils.describable import Describable
 
 
@@ -40,7 +38,7 @@ class BaseNode(Describable):
         self.children.append(child)
         child.parent = self
 
-    @tree_utils.predicated
+    @collection_utils.predicated
     def find(self, predicate, single=False):
         results = []
 
@@ -56,7 +54,7 @@ class BaseNode(Describable):
 
         return results
 
-    @tree_utils.predicated
+    @collection_utils.predicated
     def upwards(self, predicate):
         context = self
         while context:

@@ -1,6 +1,7 @@
 import collections
 
 import functools
+import types
 
 
 def flatten_list(l):
@@ -49,3 +50,24 @@ def drain(func):
         return list(func(*args, **kwargs))
 
     return inner
+
+
+def subclasses(cls):
+    for subclass in cls.__subclasses__():
+        yield from subclasses(subclass)
+        yield subclass
+
+
+def predicated(func):
+    def wrapped(self, cls=object, predicate=lambda x: True, **kwargs):
+        if isinstance(cls, types.FunctionType):
+            return func(self, cls, **kwargs)
+
+        assert cls is not object or not predicate(None), 'Must provide CLS or predicate'
+
+        def predicate_func(node):
+            return isinstance(node, cls) and predicate(node)
+
+        return func(self, predicate_func, **kwargs)
+
+    return wrapped
