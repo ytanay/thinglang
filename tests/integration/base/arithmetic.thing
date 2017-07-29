@@ -7,10 +7,13 @@
 thing Program
     setup
         number a = 10
-        number b = 3 * 5
-        number c = a + b
-        number d = a + 10 * 3
         Output.write(a)
+
+        number b = 3 * 5
         Output.write(b)
+
+        number c = a + b
         Output.write(c)
+
+        number d = a + 10 * 3
         Output.write(d)
