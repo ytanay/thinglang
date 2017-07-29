@@ -73,8 +73,8 @@ class MethodCall(BaseNode, ValueType):
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
-    def replace(self, original, replacement):
-        self.arguments.replace(original, replacement)
+    def replace_argument(self, idx, replacement):
+        self.arguments[idx] = replacement
 
     def references(self):
         return self.target, self.arguments
@@ -94,14 +94,18 @@ class MethodCall(BaseNode, ValueType):
         yield from self.arguments.statics()
 
     def compile(self, context, captured=False):
-        target = context.resolve(self.target)
+        if self.target[0].implements(MethodCall):
+            inner_target = self.target[0].compile(context, True)
+            target = context.resolve(Access([inner_target.type, self.target[1]]))
+        else:
+            target = context.resolve(self.target)
+
+            if not target.static:
+                context.push_ref(context.resolve(self.target[0]))
 
         for arg in self.arguments:
             context.push_ref(arg)
 
-        if not target.static:
-            print('Pushing self ref {}'.format(target.instance))
-            context.push_ref(target.instance)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction(target))
@@ -109,6 +113,7 @@ class MethodCall(BaseNode, ValueType):
         if not captured:
             context.append(OpcodePop())  # pop the return value, if the return value is not captured
 
+        return target
 
 class ReturnStatement(BaseNode):
     def __init__(self, slice):
