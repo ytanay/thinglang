@@ -14,6 +14,10 @@ public:
         return "?";
     }
 
+    virtual Thing operator[](const Index index) const {
+        return nullptr;
+    }
+
 };
 
 /**
@@ -21,6 +25,11 @@ public:
  */
 class ThingInstance : public BaseThingInstance {
     Things members;
+
+public:
+    Thing operator[](const Index index) const override {
+        return members[index];
+    }
 };
 
 
