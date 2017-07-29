@@ -9,6 +9,7 @@ from thinglang.compiler import Opcode
 from thinglang.foundation import templates
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.symbols.symbol import Symbol
 from thinglang.utils.singleton import Singleton
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -49,8 +50,9 @@ class Foundation(object, metaclass=Singleton):
                 contents = f.read()
 
             name = os.path.basename(path).replace('.thing', '')
+            name_id = LexicalIdentifier(name)
             target_name = '{}Type'.format(name.capitalize())
-            ast, symbols = thinglang.compiler(contents, executable=False)
+            ast, map = thinglang.preprocess(contents, False)
             methods = ast.children[0].methods()
 
             with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:
@@ -59,8 +61,15 @@ class Foundation(object, metaclass=Singleton):
                     code=ast.transpile(),
                     file_name=target_name + '.h'))
 
+            symbol_map = map[name_id]
+            symbol_map.override_index(Foundation.INTERNAL_TYPE_ORDERING[name_id])
+
+            for symbol in symbol_map:
+                symbol.convention = Symbol.INTERNAL
+
             with open(os.path.join(SYMBOLS_TARGET, name + '.thingsymbols'), 'w') as f:
-                json.dump(symbols.serialize(), f, cls=JSONSerializer, indent=4, sort_keys=True)
+
+                json.dump(symbol_map.serialize(), f, cls=JSONSerializer, indent=4, sort_keys=True)
 
             self.types[LexicalIdentifier(name.replace('_instance', ''))] = [x.name.transpile() for x in methods]
 
