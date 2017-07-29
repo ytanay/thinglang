@@ -11,39 +11,59 @@
 #include "../errors/RuntimeError.h"
 
 enum class Opcode {
-    INVALID = 0,
-    PASS = 1,
-    PUSH_LOCAL = 2,
-    PUSH_STATIC = 3,
-    PUSH_NULL = 4,
-    POP = 5,
-    POP_LOCAL = 6,
-    SET_LOCAL = 7,
-    SET_MEMBER = 8,
-    RESOLVE = 9,
-    CALL = 10,
-    CALL_INTERNAL = 11,
-    RETURN = 12,
-    INSTANTIATE = 13,
-    JUMP = 14,
-    JUMP_CONDITIONAL = 15,
-    THING_DEFINITION = 16,
-    METHOD_DEFINITION = 17,
-    METHOD_END = 18
+    CALL = 12,
+    CALL_INTERNAL = 13,
+    ELEMENT_REFERENCED = 0,
+    PUSH_LOCAL = 4,
+    POP_LOCAL = 8,
+    SET_LOCAL = 9,
+    LOCAL_REFERENCED = 1,
+    INVALID = 2,
+    PASS = 3,
+    PUSH_STATIC = 5,
+    PUSH_NULL = 6,
+    POP = 7,
+    SET_MEMBER = 10,
+    RESOLVE = 11,
+    RETURN = 14,
+    INSTANTIATE = 15,
+    JUMP = 16,
+    JUMP_CONDITIONAL = 17,
+    THING_DEFINITION = 18,
+    METHOD_DEFINITION = 19,
+    METHOD_END = 20
 };
 
 
 inline auto describe(Opcode val){
     switch (val){
         
+        case Opcode::CALL:
+            return "CALL";
+
+        case Opcode::CALL_INTERNAL:
+            return "CALL_INTERNAL";
+
+        case Opcode::ELEMENT_REFERENCED:
+            return "ELEMENT_REFERENCED";
+
+        case Opcode::PUSH_LOCAL:
+            return "PUSH_LOCAL";
+
+        case Opcode::POP_LOCAL:
+            return "POP_LOCAL";
+
+        case Opcode::SET_LOCAL:
+            return "SET_LOCAL";
+
+        case Opcode::LOCAL_REFERENCED:
+            return "LOCAL_REFERENCED";
+
         case Opcode::INVALID:
             return "INVALID";
 
         case Opcode::PASS:
             return "PASS";
-
-        case Opcode::PUSH_LOCAL:
-            return "PUSH_LOCAL";
 
         case Opcode::PUSH_STATIC:
             return "PUSH_STATIC";
@@ -54,23 +74,11 @@ inline auto describe(Opcode val){
         case Opcode::POP:
             return "POP";
 
-        case Opcode::POP_LOCAL:
-            return "POP_LOCAL";
-
-        case Opcode::SET_LOCAL:
-            return "SET_LOCAL";
-
         case Opcode::SET_MEMBER:
             return "SET_MEMBER";
 
         case Opcode::RESOLVE:
             return "RESOLVE";
-
-        case Opcode::CALL:
-            return "CALL";
-
-        case Opcode::CALL_INTERNAL:
-            return "CALL_INTERNAL";
 
         case Opcode::RETURN:
             return "RETURN";
@@ -101,14 +109,32 @@ inline auto describe(Opcode val){
 inline auto arg_count(Opcode val){
     switch (val){
         
+        case Opcode::CALL:
+            return 2;
+
+        case Opcode::CALL_INTERNAL:
+            return 2;
+
+        case Opcode::ELEMENT_REFERENCED:
+            return 0;
+
+        case Opcode::PUSH_LOCAL:
+            return 1;
+
+        case Opcode::POP_LOCAL:
+            return 1;
+
+        case Opcode::SET_LOCAL:
+            return 2;
+
+        case Opcode::LOCAL_REFERENCED:
+            return 0;
+
         case Opcode::INVALID:
             return 0;
 
         case Opcode::PASS:
             return 0;
-
-        case Opcode::PUSH_LOCAL:
-            return 1;
 
         case Opcode::PUSH_STATIC:
             return 1;
@@ -119,23 +145,11 @@ inline auto arg_count(Opcode val){
         case Opcode::POP:
             return 0;
 
-        case Opcode::POP_LOCAL:
-            return 1;
-
-        case Opcode::SET_LOCAL:
-            return 2;
-
         case Opcode::SET_MEMBER:
             return 2;
 
         case Opcode::RESOLVE:
             return 1;
-
-        case Opcode::CALL:
-            return 2;
-
-        case Opcode::CALL_INTERNAL:
-            return 2;
 
         case Opcode::RETURN:
             return 0;
