@@ -1,9 +1,15 @@
-class ResolvedReference(object):
+class Reference(object):
+    def __init__(self, thing, element):
+        self.thing, self.element = thing, element
 
-    def __init__(self, index, type, original=None):
-        self.index = index
-        self.type = type
-        self.original = original
+    @property
+    def thing_index(self):
+        return self.thing.index
 
-    def transpile(self):
-        return self.original.transpile()
+    @property
+    def element_index(self):
+        return self.element.index
+
+    @property
+    def convention(self):
+        return self.element.convention
