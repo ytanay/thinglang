@@ -1,8 +1,7 @@
 import struct
 
 from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePushLocal, OpcodeMethodDefinition
-from thinglang.compiler.references import Reference
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
 
 
 class CompilationContext(object):
@@ -10,22 +9,24 @@ class CompilationContext(object):
     def __init__(self, symbols):
         self.symbols = symbols
 
+        self.current_locals = None
+
         self.instructions = []
         self.data = []
-        self.current_method = []
+        self.instruction_block = []
         self.conditional_groups = []
 
     def append(self, symbol):
         if isinstance(symbol, Opcode):
-            self.current_method.append(symbol)
+            self.instruction_block.append(symbol)
         elif symbol:
-            self.current_method.extend(symbol)
+            self.instruction_block.extend(symbol)
 
         return symbol, self.current_index()
 
     def bytes(self):
         data = bytes().join(x for x in self.data)
-        code = bytes().join(x.resolve() for x in self.instructions + self.current_method)
+        code = bytes().join(x.resolve() for x in self.instructions + self.instruction_block)
         header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
 
         return header + data + code
@@ -35,33 +36,57 @@ class CompilationContext(object):
         return len(self.data) - 1
 
     def current_index(self):
-        return len(self.current_method) - 1
+        return len(self.instruction_block) - 1
 
-    def push_down(self, value):
+    def push_ref(self, ref):
+        """
+        Push down an arbitrary reference
+        ref can be one of:
+            - Static (constant) value: numbers, strings, etc...
+            - Local variable
+            - Reference chain starting at local variable
+            - Reference chain starting at thing definition
+            - Reference chain starting at constant value
+            - Method call
+        """
         idx = self.current_index()
-        if isinstance(value, Reference) or value.implements(LexicalIdentifier):
-            assert value.index is not None, 'Unresolved reference {}'.format(value)
-            self.append(OpcodePushLocal(value.index))
-        elif value.STATIC:
-            self.append(OpcodePushStatic(self.append_static(value.serialize())))
+
+        from thinglang.parser.nodes.functions import MethodCall  #TODO: Can we do anything about this?
+        if isinstance(ref, MethodCall):
+            ref.compile(self, True)
+            return idx
+
+        if not isinstance(ref, Reference):
+            ref = self.resolve(ref)
+
+        if isinstance(ref, StaticReference):
+            self.append(OpcodePushStatic(self.append_static(ref.value.serialize())))
+        elif isinstance(ref, LocalReference):
+            self.append(OpcodePushLocal(ref))
         else:
-            value.compile(self)
+            raise Exception('Cannot push down {}'.format(ref))
+
         return idx
 
-    def method_start(self, *args):
-        self.instructions += self.current_method
-        self.current_method = [
+    def method_start(self, method_locals, *args):
+        self.instructions += self.instruction_block
+        self.current_locals = method_locals
+
+        self.instruction_block = [
             OpcodeMethodDefinition(*args)
         ]
 
     def method_end(self):
-        self.current_method.append(OpcodeMethodEnd())
+        self.instruction_block.append(OpcodeMethodEnd())
 
     def last(self):
-        return self.current_method[-1], len(self.current_method) - 1
+        return self.instruction_block[-1], len(self.instruction_block) - 1
 
     def update_conditional_jumps(self):
         for symbol, jump in list(self.conditional_groups[-1].items())[:-1]:
             jump.update(self.current_index())
 
         self.conditional_groups.pop()
+
+    def resolve(self, ref):
+        return self.symbols.resolve(ref, self.current_locals)
