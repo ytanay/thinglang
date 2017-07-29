@@ -2,10 +2,9 @@ from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes import Transient
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import AssignmentOperation
-from thinglang.parser.nodes.functions import MethodCall, Access, ReturnStatement
-from thinglang.parser.nodes.logic import IterativeLoop, Loop
+from thinglang.parser.nodes.functions import MethodCall, Access
 from thinglang.utils.tree_utils import TreeTraversal, inspects
-from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
+
 
 
 class Simplifier(TreeTraversal):
@@ -32,10 +31,18 @@ class Simplifier(TreeTraversal):
             node.insert_before(self.create_assignment(transient_id, Access([transient_id, target]), node))
         node.remove()
 
-    @inspects(AssignmentOperation, priority=1)
+    @inspects(AssignmentOperation)
     def simplify_assignment_operation(self, node: AssignmentOperation):
         if node.value.implements(ArithmeticOperation):
             node.value = self.convert_arithmetic_operations(node.value)
+
+    @inspects(MethodCall)
+    def simply_method_call(self, node: MethodCall):
+        for idx, arg in enumerate(node.arguments):
+            if arg.implements(ArithmeticOperation):
+                node.replace_argument(idx, self.convert_arithmetic_operations(arg))
+            elif arg.implements(MethodCall):
+                self.simply_method_call(arg)
 
     def convert_arithmetic_operations(self, node: ArithmeticOperation):
         lhs, rhs = node.arguments
