@@ -1,14 +1,16 @@
 import struct
 
-from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePush, OpcodeMethodDefinition
-from thinglang.compiler.references import ResolvedReference
+from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePushLocal, OpcodeMethodDefinition
+from thinglang.compiler.references import Reference
 from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
 class CompilationContext(object):
 
-    def __init__(self):
-        self.symbols = []
+    def __init__(self, symbols):
+        self.symbols = symbols
+
+        self.instructions = []
         self.data = []
         self.current_method = []
         self.conditional_groups = []
@@ -21,9 +23,9 @@ class CompilationContext(object):
 
         return symbol, self.current_index()
 
-    def finalize(self):
+    def bytes(self):
         data = bytes().join(x for x in self.data)
-        code = bytes().join(x.resolve() for x in self.symbols + self.current_method)
+        code = bytes().join(x.resolve() for x in self.instructions + self.current_method)
         header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
 
         return header + data + code
@@ -37,9 +39,9 @@ class CompilationContext(object):
 
     def push_down(self, value):
         idx = self.current_index()
-        if isinstance(value, ResolvedReference) or value.implements(LexicalIdentifier):
+        if isinstance(value, Reference) or value.implements(LexicalIdentifier):
             assert value.index is not None, 'Unresolved reference {}'.format(value)
-            self.append(OpcodePush(value.index))
+            self.append(OpcodePushLocal(value.index))
         elif value.STATIC:
             self.append(OpcodePushStatic(self.append_static(value.serialize())))
         else:
@@ -47,7 +49,7 @@ class CompilationContext(object):
         return idx
 
     def method_start(self, *args):
-        self.symbols += self.current_method
+        self.instructions += self.current_method
         self.current_method = [
             OpcodeMethodDefinition(*args)
         ]
