@@ -1,14 +1,18 @@
+from typing import Tuple
+
 from thinglang import utils
 from thinglang.compiler import CompilationContext
-from thinglang.compiler.indexer import Indexer, Collator
+from thinglang.compiler.indexer import Indexer
+from thinglang.compiler.resolver import Resolver
 from thinglang.lexer.lexer import lexer
 from thinglang.parser.nodes import RootNode
 from thinglang.parser.parser import parse
 from thinglang.parser.simplifier import Simplifier
-from thinglang.parser.symbols import SymbolMap
+from thinglang.symbols.symbol_mapper import SymbolMapper
+from thinglang.symbols.symbol_map import SymbolMap
 
 
-def parser(source: str) -> RootNode:
+def preprocess(source: str, executable: bool=True) -> Tuple[RootNode, SymbolMapper]:
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -18,7 +22,12 @@ def parser(source: str) -> RootNode:
 
     utils.print_header("Original AST", ast.tree())
 
-    return ast
+    #if executable:
+    #    ast.reorder()
+
+    symbols = SymbolMapper(ast)
+
+    return ast, symbols
 
 
 def compile(source: str, executable: bool=True) -> CompilationContext:
@@ -29,17 +38,12 @@ def compile(source: str, executable: bool=True) -> CompilationContext:
     :return: thinglang bytecode
     """
 
-    ast = parser(source)
-
-    if executable:
-        ast.reorder()
+    ast, symbols = preprocess(source, executable)
 
     Simplifier(ast).run()
-    Collator(ast).run()
     Indexer(ast).run()
+    Resolver(ast, symbols).run()
 
-    symbols = SymbolMap(ast.children[0])
+    context = CompilationContext(symbols)
 
-    utils.print_header('Symbols', symbols, pretty=True)
-
-    return ast.compile()
+    return ast.compile(context)
