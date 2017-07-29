@@ -6,7 +6,7 @@ import collections
 
 from thinglang.utils.describable import camelcase_to_underscore
 
-FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
+MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
 
 OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode', 'arg_count'])
 
@@ -16,6 +16,7 @@ class OpcodeRegistration(type):
 
     def __new__(mcs, name, bases, dct):
         mcs = super(OpcodeRegistration, mcs).__new__(mcs, name, bases, dct)
+        assert name.startswith('Opcode')
         mcs.OPCODE = next(OpcodeRegistration.COUNT)
         return mcs
 
@@ -33,6 +34,7 @@ class Opcode(object, metaclass=OpcodeRegistration):
 
     def resolve(self):
         assert len(self.args) == len(self.ARGS), 'Mismatched argument count. Expected {}, got {}'.format(len(self.ARGS), len(self.args))
+        assert all(isinstance(x, int) for x in self.args), 'Incorrent argument types: {}'.format(self.args)
         return struct.pack(self.format_string(), self.OPCODE, *self.args)
 
     @classmethod
@@ -64,7 +66,7 @@ class OpcodePass(Opcode):
     pass
 
 
-class OpcodePush(Opcode):
+class OpcodePushLocal(Opcode):
     """
     Push a reference to an object from the stack frame into the program stack
     """
@@ -92,24 +94,32 @@ class OpcodePop(Opcode):
     pass
 
 
-class OpcodeSet(Opcode):
+class OpcodePopLocal(Opcode):
     """
     Pops a reference from the program stack into the stack frame
     """
     ARGS = TARGET,
 
-    def __init__(self, target):  # TODO: fix this mess
-        super().__init__(target if isinstance(target, int) else target[0])
 
-
-class OpcodeSetStatic(Opcode):
+class OpcodeSetLocal(Opcode):
     """
     Sets a reference from the static segment into the stack frame
     """
     ARGS = TARGET, ID
 
-    def __init__(self, target, id):  # TODO: fix this mess
-        super().__init__(target if isinstance(target, int) else target[0], id)
+
+class OpcodeSetMember(Opcode):
+    """
+    Sets a reference from the static segment into a member
+    """
+    ARGS = TARGET, ID
+
+
+class OpcodeResolve(Opcode):
+    """
+    Pops a reference from the program stack, resolves a member in it, and pushes the result back into the stack
+    """
+    ARGS = ID,
 
 
 class OpcodeCall(Opcode):
@@ -138,13 +148,6 @@ class OpcodeInstantiate(Opcode):
     Create a reference container to a new thing instance and pushes it to the program stack
     """
     ARGS = TYPE_ID,
-
-
-class OpcodeInstantiateSet(Opcode):
-    """
-    Create a reference container to a new thing instance and sets it into the stack frame
-    """
-    ARGS = TARGET, TYPE_ID
 
 
 class OpcodeJump(Opcode):

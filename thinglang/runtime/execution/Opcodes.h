@@ -13,22 +13,23 @@
 enum class Opcode {
     INVALID = 0,
     PASS = 1,
-    PUSH = 2,
+    PUSH_LOCAL = 2,
     PUSH_STATIC = 3,
     PUSH_NULL = 4,
     POP = 5,
-    SET = 6,
-    SET_STATIC = 7,
-    CALL = 8,
-    CALL_INTERNAL = 9,
-    RETURN = 10,
-    INSTANTIATE = 11,
-    INSTANTIATE_SET = 12,
-    JUMP = 13,
-    JUMP_CONDITIONAL = 14,
-    THING_DEFINITION = 15,
-    METHOD_DEFINITION = 16,
-    METHOD_END = 17
+    POP_LOCAL = 6,
+    SET_LOCAL = 7,
+    SET_MEMBER = 8,
+    RESOLVE = 9,
+    CALL = 10,
+    CALL_INTERNAL = 11,
+    RETURN = 12,
+    INSTANTIATE = 13,
+    JUMP = 14,
+    JUMP_CONDITIONAL = 15,
+    THING_DEFINITION = 16,
+    METHOD_DEFINITION = 17,
+    METHOD_END = 18
 };
 
 
@@ -41,8 +42,8 @@ inline auto describe(Opcode val){
         case Opcode::PASS:
             return "PASS";
 
-        case Opcode::PUSH:
-            return "PUSH";
+        case Opcode::PUSH_LOCAL:
+            return "PUSH_LOCAL";
 
         case Opcode::PUSH_STATIC:
             return "PUSH_STATIC";
@@ -53,11 +54,17 @@ inline auto describe(Opcode val){
         case Opcode::POP:
             return "POP";
 
-        case Opcode::SET:
-            return "SET";
+        case Opcode::POP_LOCAL:
+            return "POP_LOCAL";
 
-        case Opcode::SET_STATIC:
-            return "SET_STATIC";
+        case Opcode::SET_LOCAL:
+            return "SET_LOCAL";
+
+        case Opcode::SET_MEMBER:
+            return "SET_MEMBER";
+
+        case Opcode::RESOLVE:
+            return "RESOLVE";
 
         case Opcode::CALL:
             return "CALL";
@@ -70,9 +77,6 @@ inline auto describe(Opcode val){
 
         case Opcode::INSTANTIATE:
             return "INSTANTIATE";
-
-        case Opcode::INSTANTIATE_SET:
-            return "INSTANTIATE_SET";
 
         case Opcode::JUMP:
             return "JUMP";
@@ -103,7 +107,7 @@ inline auto arg_count(Opcode val){
         case Opcode::PASS:
             return 0;
 
-        case Opcode::PUSH:
+        case Opcode::PUSH_LOCAL:
             return 1;
 
         case Opcode::PUSH_STATIC:
@@ -115,11 +119,17 @@ inline auto arg_count(Opcode val){
         case Opcode::POP:
             return 0;
 
-        case Opcode::SET:
+        case Opcode::POP_LOCAL:
             return 1;
 
-        case Opcode::SET_STATIC:
+        case Opcode::SET_LOCAL:
             return 2;
+
+        case Opcode::SET_MEMBER:
+            return 2;
+
+        case Opcode::RESOLVE:
+            return 1;
 
         case Opcode::CALL:
             return 2;
@@ -132,9 +142,6 @@ inline auto arg_count(Opcode val){
 
         case Opcode::INSTANTIATE:
             return 1;
-
-        case Opcode::INSTANTIATE_SET:
-            return 2;
 
         case Opcode::JUMP:
             return 1;

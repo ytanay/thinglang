@@ -25,7 +25,6 @@ void Method::execute() {
             case Opcode::PASS:
                 break;
 
-
             case Opcode::CALL: {
                 Program::types[symbol.target]->call(symbol.secondary);
                 break;
@@ -38,12 +37,12 @@ void Method::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                Program::push(Thing(new ThingInstance));
+                Program::frame()[0] = Thing(new ThingInstance);
                 break;
             }
 
 
-            case Opcode::PUSH: {
+            case Opcode::PUSH_LOCAL: {
                 Program::push(Program::frame()[symbol.target]);
                 break;
             };
@@ -54,7 +53,7 @@ void Method::execute() {
             }
 
             case Opcode::PUSH_NULL: {
-                Program::push(NULL);
+                Program::push(nullptr);
                 break;
             }
 
@@ -63,14 +62,18 @@ void Method::execute() {
                 break;
             }
 
-            case Opcode::SET_STATIC: {
+            case Opcode::POP_LOCAL: {
+                Program::frame()[symbol.target] = Program::pop();
+                break;
+            }
+
+            case Opcode::SET_LOCAL: {
                 Program::frame()[symbol.target] = Program::data(symbol.secondary);
                 break;
             }
 
-            case Opcode::SET: {
-                Program::frame()[symbol.target] = Program::pop();
-                break;
+            case Opcode::RESOLVE: {
+                Program::push(Program::pop()->operator[](symbol.target));
             }
 
             case Opcode::RETURN: {
@@ -96,6 +99,7 @@ void Method::execute() {
                 throw RuntimeError(
                         std::string("Cannot handle symbol ") + describe(symbol.opcode) + " (" + std::to_string((int) symbol.opcode) +
                         ")");
+
         }
 
 
