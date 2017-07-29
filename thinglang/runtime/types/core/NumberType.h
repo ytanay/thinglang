@@ -37,36 +37,36 @@ public:
     }
 
 	static Thing __LexicalAddition__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
+		auto self = Program::argument<this_type>();
 
 		return Thing(new this_type(self->val + other->val));
 		return NULL;
 	}
 	static Thing __LexicalSubtraction__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
+		auto self = Program::argument<this_type>();
 
 		return Thing(new this_type(self->val - other->val));
 		return NULL;
 	}
 	static Thing __LexicalMultiplication__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
+		auto self = Program::argument<this_type>();
 
 		return Thing(new this_type(self->val * other->val));
 		return NULL;
 	}
 	static Thing __LexicalDivision__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
+		auto self = Program::argument<this_type>();
 
 		return Thing(new this_type(self->val / other->val));
 		return NULL;
 	}
 	static Thing __LexicalEquality__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
+		auto self = Program::argument<this_type>();
 
 		if(self->val == other->val) {
 			return Thing(new this_type(0));
@@ -74,8 +74,8 @@ public:
 		return NULL;
 	}
 	static Thing __LexicalLessThan__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
+		auto self = Program::argument<this_type>();
 
 		if(self->val < other->val) {
 			return Thing(new this_type(self->val - other->val));

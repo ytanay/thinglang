@@ -54,6 +54,9 @@ class ListInitialization(BaseNode, ReplaceableArguments):
     def __getitem__(self, item):
         return self.arguments[item]
 
+    def __setitem__(self, key, value):
+        self.arguments[key] = value
+
     def evaluate(self, resolver):
         return [value.evaluate(resolver) for value in self.arguments]
 
@@ -70,13 +73,14 @@ class ListInitialization(BaseNode, ReplaceableArguments):
 
         lines = []
 
-        if not static:
-            lines.append('\t\tauto self = Program::argument<this_type>();')
-
-        for arg in self.arguments:
+        for arg in reversed(self.arguments):
             if arg.type in Foundation.INTERNAL_TYPE_ORDERING:
                 lines.append('\t\tauto {} = Program::argument<{}>();'.format(arg.transpile(), Foundation.format_internal_type(arg.type)))
             else:
                 lines.append('\t\tauto {} = Program::pop();'.format(arg.transpile()))
+
+        if not static:
+            lines.append('\t\tauto self = Program::argument<this_type>();')
+
 
         return '\n'.join(lines) + '\n'

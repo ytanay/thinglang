@@ -37,15 +37,15 @@ public:
     }
 
 	static Thing __LexicalAddition__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<TextNamespace::TextInstance>();
+		auto self = Program::argument<this_type>();
 
 		return Thing(new this_type(self->val + other->val));
 		return NULL;
 	}
 	static Thing __LexicalEquality__() {
-		auto self = Program::argument<this_type>();
 		auto other = Program::argument<TextNamespace::TextInstance>();
+		auto self = Program::argument<this_type>();
 
 		if(self->val == other->val) {
 			return Thing(new this_type(""));
