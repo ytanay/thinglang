@@ -1,5 +1,6 @@
 import types
 
+from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition
 from thinglang.utils.stack import Frame
 
 
@@ -17,12 +18,14 @@ def inspects(*args, predicate=None, priority=0):
 
 class TreeTraversal(object):
 
-    def __init__(self, ast):
-        self.ast = ast
+    def __init__(self, ast, symbols=None):
+        self.ast, self.symbols = ast, symbols
         self.results = []
         self.scoping = Frame(expected_key_type=object)
         self.inspections = sorted((getattr(self, member) for member in dir(self) if
                             hasattr(getattr(self, member), 'predicate')), key=lambda x: x.priority)
+
+        self.current_thing, self.current_method = None, None
 
     def run(self):
         self.traverse(self.ast)
@@ -45,3 +48,14 @@ class TreeTraversal(object):
                 result = inspection(node)
                 if isinstance(result, types.GeneratorType):
                     self.results.extend(result)
+
+    @inspects(ThingDefinition)
+    def update_thing_context(self, node: ThingDefinition):
+        self.current_thing = node
+
+    @inspects(MethodDefinition)
+    def update_method_context(self, node: MethodDefinition):
+        self.current_method = node
+
+    def resolve(self, ref):
+        return self.symbols.resolve(ref, self.current_method.locals)
