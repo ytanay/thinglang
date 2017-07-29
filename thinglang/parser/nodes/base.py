@@ -1,7 +1,7 @@
 import struct
 
 from thinglang.compiler import CompilationContext
-from thinglang.compiler.opcodes import OpcodeSetStatic, OpcodeSet
+from thinglang.compiler.opcodes import OpcodeSetLocal, OpcodePopLocal
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -46,11 +46,11 @@ class AssignmentOperation(BaseNode):
     def compile(self, context: CompilationContext):
         if self.value.implements((MethodCall, ArithmeticOperation)):
             self.value.compile(context, captured=True)
-            context.append(OpcodeSet(self.target))
+            context.append(OpcodePopLocal(self.target))
         elif self.value.implements(LexicalIdentifier):
             raise Exception('What?')  # TODO: look into this
         elif self.value.STATIC:
-            context.append(OpcodeSetStatic(self.target, context.append_static(self.value.serialize())))
+            context.append(OpcodeSetLocal(self.target, context.append_static(self.value.serialize())))
 
 
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"

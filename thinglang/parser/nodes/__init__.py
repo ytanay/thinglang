@@ -13,7 +13,6 @@ class BaseNode(Describable):
     SCOPING = False
     ADVANCE = True
     EXECUTABLE = True
-    SERIALIZATION = None
     STATIC = False
 
     def __init__(self, slice):
@@ -52,7 +51,7 @@ class BaseNode(Describable):
             results.append(self)
 
         if single:
-            #assert len(results) == 1
+            assert len(results) == 1
             return results[0] if results else None
 
         return results
@@ -118,7 +117,7 @@ class BaseNode(Describable):
         for child in self.children:
             child.compile(context)
 
-        if not self.SERIALIZATION and not self.children:
+        if not self.children:
             raise Exception('Cannot compile {}!'.format(self))
 
 
@@ -126,8 +125,7 @@ class RootNode(BaseNode):
     def __init__(self):
         super(RootNode, self).__init__(None)
 
-    def compile(self, context=None):
-        context = context or CompilationContext()
+    def compile(self, context):
         super(RootNode, self).compile(context)
         return context
 
