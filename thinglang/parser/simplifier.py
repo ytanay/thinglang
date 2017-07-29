@@ -1,10 +1,8 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes import Transient
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import AssignmentOperation
-from thinglang.parser.nodes.functions import MethodCall, Access, ArgumentList, ReturnStatement
+from thinglang.parser.nodes.functions import MethodCall, Access, ReturnStatement
 from thinglang.parser.nodes.logic import IterativeLoop, Loop
-from thinglang.parser.nodes.types import CastOperation
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 from thinglang.utils.union_types import POTENTIALLY_OBTAINABLE
 
@@ -13,6 +11,16 @@ class Simplifier(TreeTraversal):
 
     @inspects(Access)
     def unwrap_reference_chains(self, node: Access):
+        """
+        Converts compound reference chains into a series of mutating assignments.
+
+        For example, the expression
+            t0 = a.b.c.d
+        Will be converted into
+            t0 = a.b
+            t0 = t0.c
+            t0 = t0.d
+        """
 
         if len(node) == 2:
             return
