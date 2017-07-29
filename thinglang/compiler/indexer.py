@@ -1,12 +1,13 @@
 import collections
+from collections import OrderedDict
 
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.base import AssignmentOperation
-from thinglang.parser.nodes.classes import  MethodDefinition
+from thinglang.parser.nodes.classes import MethodDefinition
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 
-LocalMember = collections.namedtuple('LocalMember', ['name', 'type'])
+LocalMember = collections.namedtuple('LocalMember', ['type', 'index'])
 
 
 class Indexer(TreeTraversal):
@@ -25,7 +26,7 @@ class Indexer(TreeTraversal):
         if self.context:
             self.context.flush()
 
-        self.context = IndexerContext(node)
+        self.context = IndexerContext(node, self.current_thing)
 
     @inspects(AssignmentOperation)
     def index_local_variable(self, node: AssignmentOperation):
@@ -35,15 +36,15 @@ class Indexer(TreeTraversal):
 
 class IndexerContext(object):
 
-    def __init__(self, method=None):
+    def __init__(self, method, thing):
         super(IndexerContext, self).__init__()
 
         self.current_method: MethodDefinition = method
-        self.locals = [LexicalIdentifier.self()]
+        self.locals = OrderedDict({LexicalIdentifier.self(): LocalMember(thing, 0)})
 
     def flush(self):
         self.current_method.update_locals(self.locals)
 
     def append(self, node: AssignmentOperation):
-        self.locals.append(LocalMember(node.name, node.name.type))
+        self.locals[node.name] = LocalMember(node.name.type, len(self.locals))
 
