@@ -4,6 +4,7 @@ import itertools
 
 import collections
 
+from thinglang.utils import collection_utils
 from thinglang.utils.describable import camelcase_to_underscore
 
 MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
@@ -34,7 +35,7 @@ class Opcode(object, metaclass=OpcodeRegistration):
 
     def resolve(self):
         assert len(self.args) == len(self.ARGS), 'Mismatched argument count. Expected {}, got {}'.format(len(self.ARGS), len(self.args))
-        assert all(isinstance(x, int) for x in self.args), 'Incorrent argument types: {}'.format(self.args)
+        assert all(isinstance(x, int) for x in self.args), 'Incorrect argument types: {}'.format(self.args)
         return struct.pack(self.format_string(), self.OPCODE, *self.args)
 
     @classmethod
@@ -44,12 +45,24 @@ class Opcode(object, metaclass=OpcodeRegistration):
     @classmethod
     def all(cls):
         return [
-            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in cls.__subclasses__()
+            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in collection_utils.subclasses(cls)
         ]
 
     @classmethod
     def name(cls):
         return camelcase_to_underscore(cls.__name__.replace('Opcode', ''))
+
+
+class OpcodeElementReferenced(Opcode):
+
+    def __init__(self, element_ref):
+        super().__init__(element_ref.thing_index, element_ref.element_index)
+
+
+class OpcodeLocalReferenced(Opcode):
+
+    def __init__(self, local_ref, *args):
+        super().__init__(local_ref.local_index, *args)
 
 
 class OpcodeInvalid(Opcode):
@@ -66,7 +79,7 @@ class OpcodePass(Opcode):
     pass
 
 
-class OpcodePushLocal(Opcode):
+class OpcodePushLocal(OpcodeLocalReferenced):
     """
     Push a reference to an object from the stack frame into the program stack
     """
@@ -94,14 +107,14 @@ class OpcodePop(Opcode):
     pass
 
 
-class OpcodePopLocal(Opcode):
+class OpcodePopLocal(OpcodeLocalReferenced):
     """
     Pops a reference from the program stack into the stack frame
     """
     ARGS = TARGET,
 
 
-class OpcodeSetLocal(Opcode):
+class OpcodeSetLocal(OpcodeLocalReferenced):
     """
     Sets a reference from the static segment into the stack frame
     """
@@ -122,14 +135,14 @@ class OpcodeResolve(Opcode):
     ARGS = ID,
 
 
-class OpcodeCall(Opcode):
+class OpcodeCall(OpcodeElementReferenced):
     """
     Calls a user defined method
     """
     ARGS = TYPE_ID, METHOD_ID
 
 
-class OpcodeCallInternal(Opcode):
+class OpcodeCallInternal(OpcodeElementReferenced):
     """
     Calls a native (compiled) method
     """
