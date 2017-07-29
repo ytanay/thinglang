@@ -1,4 +1,4 @@
-from thinglang.compiler import CompilationContext
+from thinglang import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeInstantiate
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -6,6 +6,7 @@ from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, Lexi
 from thinglang.parser.nodes import DefinitionPairNode, BaseNode
 from thinglang.parser.nodes.base import InlineString
 from thinglang.parser.nodes.functions import ArgumentList, ReturnStatement, ArgumentListPartial
+from thinglang.symbols.symbol import Symbol
 
 
 class ThingDefinition(DefinitionPairNode):
@@ -54,6 +55,9 @@ class ThingDefinition(DefinitionPairNode):
     def methods(self):
         return [x for x in self.children if x.implements(MethodDefinition)]
 
+    def member_index(self, member):
+        return [x.name for x in self.members()].index(member)
+
     def compile(self, context: CompilationContext):
         context.append(OpcodeThingDefinition(len(self.members()), len(self.methods())))
         super().compile(context)
@@ -73,9 +77,9 @@ class MethodDefinition(BaseNode):
 
         self.arguments = None
         self.return_type = None
-        self.frame_size = None
         self.index = None
         self.static = False
+        self.locals = None
 
         if isinstance(slice[0], LexicalDeclarationConstructor):
             self.name = LexicalIdentifier.constructor()
@@ -119,10 +123,10 @@ class MethodDefinition(BaseNode):
             raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
 
     def compile(self, context):
-        context.method_start(self.frame_size, len(self.arguments))
+        context.method_start(self.frame_size + 1, len(self.arguments))
 
         if self.is_constructor():
-            context.append(OpcodeInstantiate(self.parent.index))
+            context.append(OpcodeInstantiate(context.symbols.index(self.parent)))
 
         super(MethodDefinition, self).compile(context)
 
@@ -134,12 +138,15 @@ class MethodDefinition(BaseNode):
     def type_id(self):
         return self.return_type
 
-    def serialize(self):
-        return {
-            "name": self.name,
-            "kind": "method",
-            "type": self.return_type
-        }
+    def symbol(self):
+        return Symbol.method(self.name, self.return_type, self.static, self.arguments)
+
+    @property
+    def frame_size(self):
+        return len(self.locals)
+
+    def update_locals(self, locals):
+        self.locals = locals
 
 
 class MemberDefinition(BaseNode):
@@ -157,9 +164,8 @@ class MemberDefinition(BaseNode):
     def transpile(self):
         return '{} {};'.format(self.type.transpile(), self.name.transpile())
 
-    def serialize(self):
-        return {
-            "name": self.name,
-            "kind": "member",
-            "type": self.type
-        }
+    def symbol(self):
+        return Symbol.member(self.name, self.type)
+
+    def compile(self, context: CompilationContext):
+        return
