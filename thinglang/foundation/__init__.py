@@ -52,7 +52,7 @@ class Foundation(object, metaclass=Singleton):
             name = os.path.basename(path).replace('.thing', '')
             name_id = LexicalIdentifier(name)
             target_name = '{}Type'.format(name.capitalize())
-            ast, map = thinglang.preprocess(contents, False)
+            ast, map = thinglang.preprocess(contents)
             methods = ast.children[0].methods()
 
             with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:

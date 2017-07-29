@@ -6,7 +6,6 @@ from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.functions import MethodCall
 from thinglang.utils.type_descriptors import ValueType
 
@@ -18,7 +17,7 @@ class AssignmentOperation(BaseNode):
 
     def __init__(self, slice):
         super(AssignmentOperation, self).__init__(slice)
-        self.target = None
+
         if len(slice) == 4:
             _1, self.name, _2, self.value = slice
             self.name.type = slice[0]
@@ -44,13 +43,14 @@ class AssignmentOperation(BaseNode):
             return '{} = {};'.format(self.name.transpile(), self.value.transpile())
 
     def compile(self, context: CompilationContext):
-        if self.value.implements((MethodCall, ArithmeticOperation)):
-            self.value.compile(context, captured=True)
-            context.append(OpcodePopLocal(self.target))
-        elif self.value.implements(LexicalIdentifier):
-            raise Exception('What?')  # TODO: look into this
-        elif self.value.STATIC:
-            context.append(OpcodeSetLocal(self.target, context.append_static(self.value.serialize())))
+        target = context.resolve(self.name)
+        if self.value.STATIC:
+            context.append(OpcodeSetLocal(target, context.append_static(self.value.serialize())))
+        elif self.value.implements(MethodCall):
+            self.value.compile(context, True)
+            context.append(OpcodePopLocal(target))
+        else:
+            raise Exception('Unknown value type {}'.format(self.value))
 
 
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
@@ -74,7 +74,8 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def transpile(self):
         return f'"{self.value}"'
 
-    def type_id(self):
+    @property
+    def type(self):
         return self.TYPE
 
     def describe(self):

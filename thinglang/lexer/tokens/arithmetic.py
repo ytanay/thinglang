@@ -25,9 +25,9 @@ class LexicalNumericalValue(LexicalToken, ValueType):
     def serialize(self):
         return struct.pack('<ii', self.TYPE_IDX, self.value)
 
-    @staticmethod
-    def type_id():
-        return LexicalNumericalValue.TYPE
+    @property
+    def type(self):
+        return self.TYPE
 
 
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction

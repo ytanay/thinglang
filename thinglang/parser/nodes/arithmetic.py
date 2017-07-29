@@ -42,8 +42,8 @@ class ArithmeticOperation(BaseNode, ValueType, ReplaceableArguments):
         return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
 
     def compile(self, context: CompilationContext, captured=False): # TODO: duplicate of actual call
-        context.push_down(self.arguments[1])
-        context.push_down(self.arguments[0])
+        context.push_ref(self.arguments[1])
+        context.push_ref(self.arguments[0])
         type_id = self.arguments[0].type_id()
         context.append(OpcodeCallInternal(Foundation().INTERNAL_TYPE_ORDERING[type_id], Foundation().type(type_id).index(self.operator.transpile())))
         if self.parent is not None and not captured:

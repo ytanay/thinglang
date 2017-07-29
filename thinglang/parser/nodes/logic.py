@@ -34,7 +34,7 @@ class Conditional(BaseNode):
             elements = [self] + list(self.siblings_while(lambda x: isinstance(x, ElseBranchInterface)))
             context.conditional_groups.append(OrderedDict((x, None) for x in elements))
 
-        context.push_down(self.value)
+        context.push_ref(self.value)
         instruction, idx = context.append(OpcodeJumpConditional())
         super(Conditional, self).compile(context)
 
@@ -90,7 +90,7 @@ class Loop(BaseNode):
         return str(self.condition)
 
     def compile(self, context: CompilationContext):
-        idx = context.push_down(self.condition)
+        idx = context.push_ref(self.condition)
         jump, _ = context.append(OpcodeJumpConditional())
         super(Loop, self).compile(context)
         context.append(OpcodeJump(idx))
