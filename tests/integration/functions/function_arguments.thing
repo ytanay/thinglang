@@ -1,6 +1,6 @@
 /*
 {
-    "expected_output": ["Message: what!", "20"]
+    "expected_output": ["Message: what!", "20", "1", "2", "3"]
 }
 */
 
@@ -8,9 +8,15 @@ thing Program
     setup
         self.say_hello("what!")
         self.add_with_3(13, 4)
+        self.validate_order(1, 2, 3)
 
     does say_hello with text msg
         Output.write("Message: " + msg)
 
     does add_with_3 with number a, number b
         Output.write(a + b + 3)
+
+    does validate_order with number a, number b, number c
+        Output.write(a)
+        Output.write(b)
+        Output.write(c)
