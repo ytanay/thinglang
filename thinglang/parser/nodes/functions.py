@@ -1,5 +1,5 @@
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn
-from thinglang.compiler.references import Reference
+from thinglang.compiler.references import ElementReference
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.nodes import BaseNode
@@ -32,10 +32,6 @@ class Access(BaseNode, ValueType):
         assert size >= 2
         return size
 
-    @classmethod
-    def create(cls, target):
-        return cls([LexicalIdentifier(x) if not isinstance(x, LexicalIdentifier) else x for x in target])
-
     def transpile(self):
         return '->'.join(x.transpile() for x in self.target)
 
@@ -62,7 +58,6 @@ class ArgumentList(ListInitialization):
 class MethodCall(BaseNode, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
-        self.value = self
 
         if isinstance(slice[0], LexicalClassInitialization):
             self.target = Access([slice[1], LexicalIdentifier.constructor().set_context(slice[0])])
@@ -74,9 +69,6 @@ class MethodCall(BaseNode, ValueType):
 
         if not self.arguments:
             self.arguments = ArgumentList()
-
-        self.resolved_target: Reference = None
-        self.internal = False
 
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
@@ -93,7 +85,7 @@ class MethodCall(BaseNode, ValueType):
 
     @classmethod
     def create(cls, target, arguments=None):
-        return cls([Access.create(target), arguments])
+        return cls([Access(target), arguments])
 
     def transpile(self, orphan=True):
         return f'{self.target.transpile()}({self.arguments.transpile()}){";" if orphan else ""}'
@@ -102,21 +94,20 @@ class MethodCall(BaseNode, ValueType):
         yield from self.arguments.statics()
 
     def compile(self, context, captured=False):
+        target = context.resolve(self.target)
 
-        for arg in reversed(self.arguments):
-            context.push_down(arg)
+        for arg in self.arguments:
+            context.push_ref(arg)
 
-        Instruction = OpcodeCallInternal if self.resolved_target.convention is Symbol.INTERNAL else OpcodeCall
-        context.append(Instruction(self.resolved_target.thing_index, self.resolved_target.element_index))
+        if not target.static:
+            print('Pushing self ref {}'.format(target.instance))
+            context.push_ref(target.instance)
+
+        instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
+        context.append(instruction(target))
 
         if not captured:
             context.append(OpcodePop())  # pop the return value, if the return value is not captured
-
-    def type_id(self):
-        return self.resolved_target.type
-
-    def resolve(self, resolved_target):
-        self.resolved_target = resolved_target
 
 
 class ReturnStatement(BaseNode):
@@ -131,5 +122,5 @@ class ReturnStatement(BaseNode):
             return 'return NULL;'
 
     def compile(self, context):
-        context.push_down(self.value)
+        context.push_ref(self.value)
         context.append(OpcodeReturn())
