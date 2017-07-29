@@ -1,4 +1,4 @@
-from thinglang import CompilationContext
+from thinglang.compiler import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeInstantiate
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -123,7 +123,7 @@ class MethodDefinition(BaseNode):
             raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
 
     def compile(self, context):
-        context.method_start(self.frame_size + 1, len(self.arguments))
+        context.method_start(self.locals, self.frame_size + 1, len(self.arguments))
 
         if self.is_constructor():
             context.append(OpcodeInstantiate(context.symbols.index(self.parent)))
