@@ -43,15 +43,11 @@ class SymbolMapper(object):
         elif first in locals:
             container = self.maps[locals[first].type]
         else:
-            raise Exception('Cannot resolve first level access ')
+            raise Exception('Cannot resolve first level access {}'.format(first))
 
         element = container[second]
-        if element.static:
-            instance = None
-        else:
-            instance = self.resolve(first, locals)
 
-        return ElementReference(container, element, instance)
+        return ElementReference(container, element)
 
     def __getitem__(self, item) -> SymbolMap:
         return self.maps[item]

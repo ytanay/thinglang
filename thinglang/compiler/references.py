@@ -10,9 +10,9 @@ class Reference(object):
 
 
 class ElementReference(Reference):
-    def __init__(self, thing, element, instance):
+    def __init__(self, thing, element):
         super(ElementReference, self).__init__(element.type)
-        self.thing, self.element, self.instance = thing, element, instance
+        self.thing, self.element = thing, element
 
     @property
     def thing_index(self):
