@@ -11,7 +11,7 @@ from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.symbols.symbol_map import SymbolMap
 
 
-def preprocess(source: str) -> Tuple[RootNode, SymbolMapper]:
+def preprocess(source: str) -> RootNode:
     if not source:
         raise ValueError('Source cannot be empty')
 
@@ -21,9 +21,7 @@ def preprocess(source: str) -> Tuple[RootNode, SymbolMapper]:
 
     utils.print_header("Original AST", ast.tree())
 
-    symbols = SymbolMapper(ast)
-
-    return ast, symbols
+    return ast
 
 
 def compile(source: str) -> CompilationContext:
@@ -33,7 +31,9 @@ def compile(source: str) -> CompilationContext:
     :return: thinglang bytecode
     """
 
-    ast, symbols = preprocess(source)
+    ast = preprocess(source)
+
+    symbols = SymbolMapper(ast)
 
     Simplifier(ast).run()
     Indexer(ast).run()

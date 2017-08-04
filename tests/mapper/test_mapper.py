@@ -1,4 +1,5 @@
 import thinglang
+from thinglang import SymbolMapper
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.symbols.symbol import Symbol
 
@@ -38,12 +39,14 @@ thing Person
 
 
 def test_mapper_existence():
-    ast, symbols = thinglang.preprocess(source)
+    ast = thinglang.preprocess(source)
+    symbols = SymbolMapper(ast)
     assert all(LexicalIdentifier(x) in symbols for x in ("Location", "Person"))
 
 
 def test_member_symbol_description():
-    ast, symbols = thinglang.preprocess(source)
+    ast = thinglang.preprocess(source)
+    symbols = SymbolMapper(ast)
     person = symbols[LexicalIdentifier('Person')]
 
     assert all(LexicalIdentifier(x) in person for x in ("name", "age", "location", "walk_to", "say_hello", "shout"))
