@@ -7,6 +7,16 @@ import string
 INDENT = '\n' + ' ' * 8
 
 
+def validate_types(elements, types: list, descend_cls, descend_key=lambda x: x) -> None:
+    assert len(elements) == len(types)
+
+    for elem, expected_type in zip(elements, types):
+        if isinstance(elem, descend_cls) and isinstance(expected_type, list):
+            validate_types(descend_key(elem), expected_type, descend_cls, descend_key)
+        else:
+            assert isinstance(elem, expected_type)
+
+
 def generate_simple_output_program(source):
     return """thing Program
     setup{source}
