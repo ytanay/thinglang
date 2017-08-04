@@ -18,6 +18,8 @@ class TokenVector(object):
         while self.perform_replacements():
             pass
 
+        self.process_indentation()
+
         if len(self.tokens) != 1:
             raise ValueError('Could not reduce vector: {}'.format(self.tokens))
 
@@ -65,6 +67,38 @@ class TokenVector(object):
     @staticmethod
     def finalize_slice(token_slice):
         return [token.parse() if isinstance(token, TokenVector) else token for token in token_slice]
+
+    def process_indentation(self):
+        """
+        Converts a list of LEXICAL_INDENTATION tokens at the beginning of a parsed group into indentation value stored on the first real token.
+        :param group:
+        :return:
+        """
+
+
+        if not self.tokens:
+            return
+
+        if isinstance(self.tokens[-1], LexicalGroupEnd):
+            self.tokens[-1:] = []
+
+
+        if not isinstance(self.tokens[0], LexicalIndent):
+            return
+
+        iterable = iter(self.tokens)
+        size = 0
+
+        try:
+            while isinstance(next(iterable), LexicalIndent):
+                size += 1
+        except StopIteration:
+            pass
+
+        self.tokens[0:size] = []
+
+        if self.tokens:
+            self.tokens[0].indent = size
 
     def append(self, token):
         self.tokens.append(token)
