@@ -4,14 +4,23 @@ import json
 import random
 import string
 
+from thinglang import parser
+from thinglang.lexer import lexer
+
 INDENT = '\n' + ' ' * 8
 
 
-def validate_types(elements, types: list, descend_cls, descend_key=lambda x: x) -> None:
+def parse_local(code):
+    tokens = lexer.lexer_single(code)
+    vector = parser.collect_vectors(tokens)
+    return vector.parse()
+
+
+def validate_types(elements, types: list, descend_cls=None, descend_key=lambda x: x) -> None:
     assert len(elements) == len(types)
 
     for elem, expected_type in zip(elements, types):
-        if isinstance(elem, descend_cls) and isinstance(expected_type, list):
+        if descend_cls and isinstance(elem, descend_cls) and isinstance(expected_type, list):
             validate_types(descend_key(elem), expected_type, descend_cls, descend_key)
         else:
             assert isinstance(elem, expected_type)

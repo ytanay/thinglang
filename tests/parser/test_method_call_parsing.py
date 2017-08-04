@@ -1,17 +1,9 @@
-from tests.infrastructure.test_utils import validate_types
-from thinglang import parser
-from thinglang.lexer import lexer
+from tests.infrastructure.test_utils import validate_types, parse_local
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import InlineString
 from thinglang.parser.nodes.functions import Access, MethodCall
-
-
-def parse_local(code):
-    tokens = lexer.lexer_single(code)
-    vector = parser.collect_vectors(tokens)
-    return vector.parse()
 
 
 def validate_method_call(node, target, argument_types):
