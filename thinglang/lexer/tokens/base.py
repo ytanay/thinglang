@@ -25,10 +25,12 @@ class LexicalTick(LexicalToken):  # "
 
 
 class LexicalParenthesesOpen(LexicalToken):
+    VECTOR_START = True
     pass  # (
 
 
 class LexicalParenthesesClose(LexicalToken):
+    VECTOR_END = True
     pass  # )
 
 
