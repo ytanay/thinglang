@@ -1,11 +1,17 @@
 import collections
 
+from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation, \
     LexicalNumericalValue
-from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator
+from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator, LexicalIndent, \
+    LexicalParenthesesOpen, LexicalParenthesesClose
+from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
+    LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import InlineString
+from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
 from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList
+from thinglang.utils import collection_utils
 from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 
 
@@ -137,8 +143,21 @@ class ParenthesesVector(TokenVector):
 VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector
 
 PATTERNS = collections.OrderedDict([
+    ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
+    ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
+
+    ((LexicalDeclarationMethod, LexicalIdentifier, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, LexicalIdentifier, TypeVector), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, LexicalIdentifier, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, LexicalIdentifier), MethodDefinition),  # does say_hello
+
+    ((LexicalDeclarationConstructor,), MethodDefinition),
+
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
+
     ((Access, ParenthesesVector), MethodCall),
+
+
     ((VALUE_TYPES, SecondOrderLexicalBinaryOperation, VALUE_TYPES), ArithmeticOperation),  # 4 * 2
     ((VALUE_TYPES, FirstOrderLexicalBinaryOperation, VALUE_TYPES), ArithmeticOperation),  # 4 + 2
 ])
