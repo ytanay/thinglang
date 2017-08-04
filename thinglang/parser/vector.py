@@ -140,6 +140,10 @@ class ParenthesesVector(TokenVector):
 
         return [group.parse() for group in groups]
 
+VECTOR_CREATION_TOKENS = {
+    LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector),
+    LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector)
+}
 VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector
 
 PATTERNS = collections.OrderedDict([
