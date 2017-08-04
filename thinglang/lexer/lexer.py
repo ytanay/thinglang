@@ -11,9 +11,14 @@ from thinglang.parser.nodes.base import InlineString, InlineCode
 
 
 @collection_utils.drain
-def lexer(source) -> List[List[LexicalToken]]:
+def lexer(source: str) -> List[List[LexicalToken]]:
     for idx, line in enumerate(source.strip().split('\n')):
         yield contextualize_lexical_output(analyze_line(line), line, idx)
+
+
+def lexer_single(source: str) -> List[LexicalToken]:
+    source = source.strip()
+    return list(contextualize_lexical_output(analyze_line(source), source, 1))
 
 
 @collection_utils.drain
