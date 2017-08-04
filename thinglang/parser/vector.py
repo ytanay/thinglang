@@ -110,7 +110,7 @@ class TokenVector(object):
         self.tokens.append(token)
 
     def __str__(self):
-        return '<TV>{}'.format(self.tokens)
+        return '<{}>{}'.format(type(self).__name__, self.tokens)
 
     def __repr__(self):
         return str(self)
@@ -120,6 +120,9 @@ class TokenVector(object):
 
     def __getitem__(self, item):
         return self.tokens[item]
+
+    def empty(self):
+        return all(isinstance(x, (LexicalIndent, LexicalGroupEnd)) for x in self.tokens)
 
 
 class ParenthesesVector(TokenVector):
@@ -140,10 +143,37 @@ class ParenthesesVector(TokenVector):
 
         return [group.parse() for group in groups]
 
+
+class TypeVector(TokenVector):
+
+    def parse(self):
+        output = []
+
+        if not all(isinstance(x, (LexicalIdentifier, LexicalSeparator)) for x in self.tokens):
+            raise ValueError('Only types, names and separators are allowed in a type vector')
+
+        if len(self.tokens) < 2:
+            raise ValueError('Not enough items in a type vector')
+
+        for components in collection_utils.chunks(self.tokens, 3):
+            if len(components) < 2 or not isinstance(components[0], LexicalIdentifier) or not isinstance(components[1], LexicalIdentifier):
+                raise ValueError('Invalid syntax in type vector element - must be 2 consecutive names')
+
+            if len(components) > 2 and not isinstance(components[2], LexicalSeparator):
+                raise ValueError('Expected separator, got {}'.format(components[1]))
+
+            components[1].type = components[0]
+            output.append(components[1])
+
+        return output
+
+
 VECTOR_CREATION_TOKENS = {
     LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector),
     LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector)
 }
+
+
 VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector
 
 PATTERNS = collections.OrderedDict([
