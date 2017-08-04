@@ -14,6 +14,7 @@ class LexicalDeclarationMethod(LexicalToken):
         super().__init__(raw)
         self.static_member = False
 
+
 class LexicalDeclarationStatic(LexicalToken):
     pass
 
