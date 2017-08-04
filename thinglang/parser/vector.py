@@ -82,6 +82,24 @@ class TokenVector(object):
         return self.tokens[item]
 
 
+class ParenthesesVector(TokenVector):
+
+    def parse(self):
+        if not self.tokens:
+            return
+
+        if not any(isinstance(token, LexicalSeparator) for token in self.tokens):
+            return super().parse()
+
+        groups = [TokenVector()]
+        for token in self.tokens:
+            if isinstance(token, LexicalSeparator):
+                groups.append(TokenVector())
+            else:
+                groups[-1].append(token)
+
+        return [group.parse() for group in groups]
+
 VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector
 
 PATTERNS = collections.OrderedDict([
