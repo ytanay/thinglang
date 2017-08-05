@@ -11,33 +11,40 @@
 #include "../errors/RuntimeError.h"
 
 enum class Opcode {
-    CALL = 12,
-    CALL_INTERNAL = 13,
+    PUSH_MEMBER = 5,
+    SET_MEMBER = 11,
+    CALL = 13,
+    CALL_INTERNAL = 14,
     ELEMENT_REFERENCED = 0,
     PUSH_LOCAL = 4,
-    POP_LOCAL = 8,
-    SET_LOCAL = 9,
+    POP_LOCAL = 9,
+    SET_LOCAL_STATIC = 10,
     LOCAL_REFERENCED = 1,
     INVALID = 2,
     PASS = 3,
-    PUSH_STATIC = 5,
-    PUSH_NULL = 6,
-    POP = 7,
-    SET_MEMBER = 10,
-    RESOLVE = 11,
-    RETURN = 14,
-    INSTANTIATE = 15,
-    JUMP = 16,
-    JUMP_CONDITIONAL = 17,
-    THING_DEFINITION = 18,
-    METHOD_DEFINITION = 19,
-    METHOD_END = 20
+    PUSH_STATIC = 6,
+    PUSH_NULL = 7,
+    POP = 8,
+    RESOLVE = 12,
+    RETURN = 15,
+    INSTANTIATE = 16,
+    JUMP = 17,
+    JUMP_CONDITIONAL = 18,
+    THING_DEFINITION = 19,
+    METHOD_DEFINITION = 20,
+    METHOD_END = 21
 };
 
 
 inline auto describe(Opcode val){
     switch (val){
         
+        case Opcode::PUSH_MEMBER:
+            return "PUSH_MEMBER";
+
+        case Opcode::SET_MEMBER:
+            return "SET_MEMBER";
+
         case Opcode::CALL:
             return "CALL";
 
@@ -53,8 +60,8 @@ inline auto describe(Opcode val){
         case Opcode::POP_LOCAL:
             return "POP_LOCAL";
 
-        case Opcode::SET_LOCAL:
-            return "SET_LOCAL";
+        case Opcode::SET_LOCAL_STATIC:
+            return "SET_LOCAL_STATIC";
 
         case Opcode::LOCAL_REFERENCED:
             return "LOCAL_REFERENCED";
@@ -73,9 +80,6 @@ inline auto describe(Opcode val){
 
         case Opcode::POP:
             return "POP";
-
-        case Opcode::SET_MEMBER:
-            return "SET_MEMBER";
 
         case Opcode::RESOLVE:
             return "RESOLVE";
@@ -109,6 +113,12 @@ inline auto describe(Opcode val){
 inline auto arg_count(Opcode val){
     switch (val){
         
+        case Opcode::PUSH_MEMBER:
+            return 2;
+
+        case Opcode::SET_MEMBER:
+            return 2;
+
         case Opcode::CALL:
             return 2;
 
@@ -124,7 +134,7 @@ inline auto arg_count(Opcode val){
         case Opcode::POP_LOCAL:
             return 1;
 
-        case Opcode::SET_LOCAL:
+        case Opcode::SET_LOCAL_STATIC:
             return 2;
 
         case Opcode::LOCAL_REFERENCED:
@@ -144,9 +154,6 @@ inline auto arg_count(Opcode val){
 
         case Opcode::POP:
             return 0;
-
-        case Opcode::SET_MEMBER:
-            return 2;
 
         case Opcode::RESOLVE:
             return 1;

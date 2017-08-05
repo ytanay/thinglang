@@ -1,7 +1,7 @@
 import struct
 
-from thinglang.compiler import CompilationContext
-from thinglang.compiler.opcodes import OpcodeSetLocal, OpcodePopLocal
+from thinglang.compiler import CompilationContext, LocalReference
+from thinglang.compiler.opcodes import OpcodeSetLocalStatic, OpcodePopLocal, OpcodeSetMember, OpcodePushStatic
 from thinglang.foundation import Foundation
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -44,8 +44,14 @@ class AssignmentOperation(BaseNode):
 
     def compile(self, context: CompilationContext):
         target = context.resolve(self.name)
+        set_cls = OpcodeSetLocalStatic if isinstance(target, LocalReference) else OpcodeSetMember
         if self.value.STATIC:
-            context.append(OpcodeSetLocal(target, context.append_static(self.value.serialize())))
+            data_id = context.append_static(self.value.serialize())
+            if isinstance(target, LocalReference):
+                context.append(OpcodeSetLocalStatic(target, data_id))
+            else:
+                context.append(OpcodePushStatic(data_id))  # TODO: maybe add another argument?
+                context.append(OpcodeSetMember(target))
         elif self.value.implements(MethodCall):
             self.value.compile(context, True)
             context.append(OpcodePopLocal(target))
