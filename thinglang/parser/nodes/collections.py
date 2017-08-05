@@ -36,14 +36,14 @@ class ListInitializationPartial(BaseNode):
 class ListInitialization(BaseNode, ReplaceableArguments):
 
     def __init__(self, slice=None):
-        super(ListInitialization, self).__init__(slice)
+        super(ListInitialization, self).__init__(slice if isinstance(slice, list) else [slice])
 
-        if not slice or len(slice) == 2 and isinstance(slice[0], LexicalParenthesesOpen) and isinstance(slice[1], LexicalParenthesesClose):
+        if not slice:
             self.arguments = []
-        elif isinstance(slice[0], ListInitializationPartial):
-            self.arguments = slice[0].value
-        else:
+        elif isinstance(slice, list):
             self.arguments = slice
+        else:
+            self.arguments = [slice]
 
     def __iter__(self):
         return iter(self.arguments)
