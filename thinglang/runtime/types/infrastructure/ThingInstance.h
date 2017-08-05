@@ -14,6 +14,10 @@ public:
         return "?";
     }
 
+    virtual bool boolean() {
+        return true;
+    }
+
     virtual Thing operator[](const Index index) const {
         return nullptr;
     }

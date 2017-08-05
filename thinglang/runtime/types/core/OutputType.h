@@ -22,6 +22,9 @@ public:
     virtual std::string text() override {
         return to_string(val);
     }
+    virtual bool boolean() override {
+        return to_boolean(val);
+    }
                 
 
 	std::string val;

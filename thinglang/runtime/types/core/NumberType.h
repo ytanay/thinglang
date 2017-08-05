@@ -22,6 +22,9 @@ public:
     virtual std::string text() override {
         return to_string(val);
     }
+    virtual bool boolean() override {
+        return to_boolean(val);
+    }
                 
 
 	int val;
@@ -69,6 +72,9 @@ public:
 		auto self = Program::argument<this_type>();
 
 		if(self->val == other->val) {
+			return Thing(new this_type(1));
+		}
+		else {
 			return Thing(new this_type(0));
 		}
 		return NULL;
