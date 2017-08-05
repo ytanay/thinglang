@@ -100,7 +100,7 @@ class MethodCall(BaseNode, ValueType):
         else:
             target = context.resolve(self.target)
 
-            if not target.static:
+            if not target.static and not self.constructing_call:
                 context.push_ref(context.resolve(self.target[0]))
 
         for arg in self.arguments:
