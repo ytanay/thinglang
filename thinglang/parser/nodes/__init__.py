@@ -19,7 +19,7 @@ class BaseNode(Describable):
         self.value = None
         self.raw_slice = slice
         self.parent = None
-        if slice:
+        if slice and any(x is not None for x in slice): # TODO: fix this mess
             self.context = [x for x in slice if x is not None][0].context
         else:
             self.context = None
@@ -111,7 +111,6 @@ class BaseNode(Describable):
         return sep + ('\n' + sep).join(x.transpile() for x in children_override or self.children)
 
     def compile(self, context: CompilationContext):
-
         for child in self.children:
             child.compile(context)
 
