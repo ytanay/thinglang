@@ -44,25 +44,27 @@ def parse(lexical_groups) -> RootNode:
 
 def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
     stack = [TokenVector()]
-    closing_token = None
+    closing_tokens = []
 
     for token in tokens:
 
         if type(token) in VECTOR_CREATION_TOKENS:
             closing_token, vector_cls = VECTOR_CREATION_TOKENS[type(token)]
             stack.append(vector_cls())
-        elif closing_token and isinstance(token, closing_token):
+            closing_tokens.append(closing_token)
+        elif closing_tokens and isinstance(token, closing_tokens[-1]):
             if len(stack) <= 1:
                 raise ValueError('No group to close')
             last = stack.pop()
             stack[-1].append(last)
-            if isinstance(closing_token, tuple):
+            if isinstance(closing_tokens[-1], tuple):
                 stack[-1].append(token)
-            closing_token = None
+            closing_tokens.pop()
         elif not isinstance(token, LexicalGroupEnd):  # TODO: remove group end token
             stack[-1].append(token)
 
     if len(stack) != 1:
         raise ValueError('Not all token vectors were closed - currently at depth {}'.format(len(stack)))
+
 
     return stack[0]
