@@ -11,7 +11,7 @@ make
 /app-src/build/thinglang --version
 
 export PATH=$PATH:/app-src/build/
-export PYTHONPATH=/app-src
+export PYTHONPATH=/app-src/thinglang
 
 cd /app-src
 pytest tests/integration
