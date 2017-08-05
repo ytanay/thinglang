@@ -38,7 +38,9 @@ void Method::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                Program::frame()[0] = Thing(new ThingInstance);
+                auto new_thing = Thing(new ThingInstance);
+                Program::frame()[0] = new_thing;
+                Program::push(new_thing);
                 break;
             }
 
