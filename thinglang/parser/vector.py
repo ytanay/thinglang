@@ -4,11 +4,11 @@ from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation, \
     LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator, LexicalIndent, \
-    LexicalParenthesesOpen, LexicalParenthesesClose
+    LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
 from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import InlineString
+from thinglang.parser.nodes.base import InlineString, AssignmentOperation
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
 from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList
 from thinglang.utils import collection_utils
@@ -174,7 +174,7 @@ VECTOR_CREATION_TOKENS = {
 }
 
 
-VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector
+VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector, MethodCall, ArithmeticOperation
 
 PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
@@ -194,4 +194,9 @@ PATTERNS = collections.OrderedDict([
 
     ((VALUE_TYPES, SecondOrderLexicalBinaryOperation, VALUE_TYPES), ArithmeticOperation),  # 4 * 2
     ((VALUE_TYPES, FirstOrderLexicalBinaryOperation, VALUE_TYPES), ArithmeticOperation),  # 4 + 2
+
+
+    ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, VALUE_TYPES), AssignmentOperation),  # number n = 1
+    ((LexicalIdentifier, LexicalAssignment, VALUE_TYPES), AssignmentOperation),  # n = 2,
+    ((Access, LexicalAssignment, VALUE_TYPES), AssignmentOperation),  # n = 2,
 ])
