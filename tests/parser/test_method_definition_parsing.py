@@ -7,7 +7,7 @@ from thinglang.parser.nodes.classes import MethodDefinition
 
 def validate_method_definition(node, name, expected_arguments=(), return_type=None):
     assert node.implements(MethodDefinition)
-    assert node.name == LexicalIdentifier(name)
+    assert node.name == name if isinstance(name, LexicalIdentifier) else LexicalIdentifier(name)
     assert node.return_type == return_type
     for actual_argument, expected_argument in zip(node.arguments, expected_arguments):
         assert actual_argument.value == expected_argument[0]
@@ -17,6 +17,16 @@ def validate_method_definition(node, name, expected_arguments=(), return_type=No
 def test_simple_method_definition():
     method = parse_local("does say_hello")
     validate_method_definition(method, 'say_hello')
+
+
+def test_simple_constructor_definition():
+    method = parse_local("setup")
+    validate_method_definition(method, LexicalIdentifier.constructor())
+
+
+def test_constructor_arguments():
+    method = parse_local("setup with text name, number age")
+    validate_method_definition(method, LexicalIdentifier.constructor(), [('name', 'text'), ('age', 'number')])
 
 
 def test_method_definition_return_type():

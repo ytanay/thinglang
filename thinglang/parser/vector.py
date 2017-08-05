@@ -7,13 +7,14 @@ from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, Lexica
     LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
 from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
-    LexicalReturnStatement, LexicalClassInitialization
+    LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import InlineString, AssignmentOperation
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
 from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList, ReturnStatement
 from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse, Loop
+from thinglang.parser.nodes.proxies import TaggedLexicalDeclaration
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
@@ -184,12 +185,13 @@ PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
 
+    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedLexicalDeclaration),
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID), MethodDefinition),  # does say_hello
-
-    ((LexicalDeclarationConstructor,), MethodDefinition),
+    ((LexicalDeclarationConstructor, TypeVector), MethodDefinition),  # setup with text name
+    ((LexicalDeclarationConstructor,), MethodDefinition),  # setup
 
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
 
