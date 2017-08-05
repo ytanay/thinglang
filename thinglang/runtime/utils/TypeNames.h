@@ -4,6 +4,7 @@
 #include <vector>
 #include <stack>
 #include <memory>
+#include <tuple>
 
 class BaseThingInstance;
 class Symbol;
@@ -32,3 +33,4 @@ using InternalMethods = std::vector<InternalMethod>;
 using Type = ThingType*;
 using Types = std::vector<Type>;
 
+using ProgramInfo = std::tuple<Index, Things, Types>;

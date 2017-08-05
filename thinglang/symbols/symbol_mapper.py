@@ -49,16 +49,17 @@ class SymbolMapper(object):
 
         return ElementReference(container, element)
 
+    def index(self, thing: ThingDefinition):
+        return self[thing.name].index
+
+    def entry(self):
+        return self[LexicalIdentifier('Program')].index
+
     def __getitem__(self, item) -> SymbolMap:
         return self.maps[item]
 
     def __contains__(self, item) -> bool:
         return item in self.maps
 
-    def index(self, thing: ThingDefinition):
-        return self[thing.name].index
-
     def __str__(self):
         return f'Mapper({pprint.pformat(self.maps)})'
-
-

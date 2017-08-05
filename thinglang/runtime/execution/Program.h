@@ -11,8 +11,6 @@
 #include "../types/InternalTypes.h"
 
 
-using ProgramInfo = std::pair<std::vector<Thing>, Types>;
-
 class Program {
 public:
 
@@ -55,7 +53,7 @@ public:
     }
 
     static void start() {
-        types[0]->create();
+        types[entry]->create();
     }
 
     static void load(ProgramInfo &info);
@@ -70,6 +68,7 @@ private:
     static ThingStack stack;
     static FrameStack frames;
     static Things static_data;
+    static Index entry;
 
 };
 

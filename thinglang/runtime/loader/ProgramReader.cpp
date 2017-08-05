@@ -12,7 +12,7 @@ ProgramInfo ProgramReader::process() {
 
     auto data = read_data();
     auto code = read_code();
-    return ProgramInfo(data, code);
+    return ProgramInfo(entry, data, code);
 }
 
 void ProgramReader::read_header() {
@@ -29,10 +29,11 @@ void ProgramReader::read_header() {
     auto version = read<uint16_t>();
     program_size = read<uint32_t>();
     data_size = read<uint32_t>();
+    entry = read<uint32_t>();
     index = 0; // reset the index, since the program_size in the header does not include the header itself
 
     std::cerr << "thinglang bytecode version: " << version << ", total size: " << program_size << ", data size: "
-              << data_size << std::endl;
+              << data_size << ", entry point: " << entry << std::endl;
 }
 
 Things ProgramReader::read_data() {

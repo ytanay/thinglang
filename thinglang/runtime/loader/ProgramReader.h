@@ -11,15 +11,15 @@
 
 #include "../containers/Method.h"
 
-using ProgramInfo = std::pair<Things, Types>;
+
 
 class ProgramReader {
 public:
-    ProgramReader(const std::string &filename)  {
+    explicit ProgramReader(const std::string &filename) {
         auto f = new std::ifstream(filename, std::ios::in | std::ios::binary);
         if(!f->is_open()) {
             std::cerr << "Could not open file " << filename << std::endl;
-            f = NULL;
+            f = nullptr;
         }
 
         file = std::shared_ptr<std::ifstream>(f);
@@ -81,8 +81,8 @@ public:
 
 private:
     std::shared_ptr<std::istream> file;
-    Index index = 0;
-    Size program_size, data_size;
+    Index index = 0, entry = 0;
+    Size program_size = 0, data_size = 0;
 
     static const std::string MAGIC;
 };

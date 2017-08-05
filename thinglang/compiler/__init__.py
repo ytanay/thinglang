@@ -6,10 +6,11 @@ from thinglang.compiler.references import ElementReference, LocalReference, Stat
 
 class CompilationContext(object):
 
-    def __init__(self, symbols):
+    def __init__(self, symbols, entry=None):
         self.symbols = symbols
 
         self.current_locals = None
+        self.entry = entry or 0
 
         self.instructions = []
         self.data = []
@@ -27,7 +28,7 @@ class CompilationContext(object):
     def bytes(self):
         data = bytes().join(x for x in self.data)
         code = bytes().join(x.resolve() for x in self.instructions + self.instruction_block)
-        header = bytes('THING', 'utf-8') + struct.pack('<HII', 1, len(data) + len(code), len(data))
+        header = bytes('THING', 'utf-8') + struct.pack('<HIII', 1, len(data) + len(code), len(data), self.entry)
 
         return header + data + code
 

@@ -7,6 +7,7 @@
 ThingStack Program::stack;
 FrameStack Program::frames;
 Things Program::static_data;
+Index Program::entry = 0;
 
 Types Program::internals = {
         nullptr,
@@ -33,8 +34,12 @@ Thing Program::pop() {
 }
 
 void Program::load(ProgramInfo &info) {
-    static_data.insert(static_data.end(), info.first.begin(), info.first.end());
-    types.insert(types.end(), info.second.begin(), info.second.end());
+    entry = std::get<0>(info);
+    auto loaded_data = std::get<1>(info);
+    auto loaded_types = std::get<2>(info);
+    static_data.insert(static_data.end(), loaded_data.begin(), loaded_data.end());
+    types.insert(types.end(), loaded_types.begin(), loaded_types.end());
+
 }
 
 

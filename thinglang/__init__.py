@@ -24,10 +24,11 @@ def preprocess(source: str) -> Tuple[RootNode, SymbolMapper]:
     return ast, SymbolMapper(ast)
 
 
-def compile(source: str) -> CompilationContext:
+def compile(source: str, executable: bool=True) -> CompilationContext:
     """
     Compile a thinglang program
     :param source: source code of main module
+    :param executable: should an executable file be made?
     :return: thinglang bytecode
     """
 
@@ -38,6 +39,6 @@ def compile(source: str) -> CompilationContext:
 
     utils.print_header("Final AST", ast.tree())
 
-    context = CompilationContext(symbols)
+    context = CompilationContext(symbols, entry=symbols.entry() if executable else None)
 
     return ast.compile(context)
