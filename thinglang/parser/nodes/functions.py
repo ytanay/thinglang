@@ -61,7 +61,7 @@ class MethodCall(BaseNode, ValueType):
 
         if isinstance(slice[0], LexicalClassInitialization):
             self.target = Access([slice[1], LexicalIdentifier.constructor().set_context(slice[0])])
-            self.arguments = slice[2]
+            self.arguments = ArgumentList(slice[2])
             self.constructing_call = True
         else:
             self.target, self.arguments = slice[0], ArgumentList(slice[1])

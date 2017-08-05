@@ -7,7 +7,7 @@ from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, Lexica
     LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
 from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
-    LexicalReturnStatement
+    LexicalReturnStatement, LexicalClassInitialization
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import InlineString, AssignmentOperation
@@ -194,7 +194,7 @@ PATTERNS = collections.OrderedDict([
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
 
     ((Access, ParenthesesVector), MethodCall),
-
+    ((LexicalClassInitialization, LexicalIdentifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
 
     ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
     ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
