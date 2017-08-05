@@ -62,15 +62,21 @@ class LexicalRepeatFor(LexicalToken):
 
 
 class LexicalBoolean(LexicalToken, ValueType):
+    STATIC = True
 
     @classmethod
     def evaluate(cls, _=None):
         raise NotImplementedError('Must implement evaluate')
 
+    @property
+    def type(self):
+        return LexicalNumericalValue.type
+
+    def serialize(self):
+        return LexicalNumericalValue(self.evaluate()).serialize()
 
 
 class LexicalBooleanTrue(LexicalBoolean):
-    STATIC = True
 
     def transpile(self):
         return 'true'
@@ -78,9 +84,6 @@ class LexicalBooleanTrue(LexicalBoolean):
     @classmethod
     def evaluate(cls, _=None):
         return True
-
-    def serialize(self):
-        return LexicalNumericalValue(True).serialize()
 
 
 class LexicalBooleanFalse(LexicalBoolean):
@@ -92,5 +95,3 @@ class LexicalBooleanFalse(LexicalBoolean):
     def evaluate(cls, _=None):
         return False
 
-    def compile(self, context):
-        context.append(OpcodePushNull())
