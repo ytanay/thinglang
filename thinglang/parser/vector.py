@@ -196,11 +196,16 @@ PATTERNS = collections.OrderedDict([
     ((Access, ParenthesesVector), MethodCall),
 
 
-    ((VALUE_TYPES, SecondOrderLexicalBinaryOperation, VALUE_TYPES), ArithmeticOperation),  # 4 * 2
-    ((VALUE_TYPES, FirstOrderLexicalBinaryOperation, VALUE_TYPES), ArithmeticOperation),  # 4 + 2
+    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
+    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
+    ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # 4 == 2
 
 
-    ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, VALUE_TYPES), AssignmentOperation),  # number n = 1
-    ((LexicalIdentifier, LexicalAssignment, VALUE_TYPES), AssignmentOperation),  # n = 2,
-    ((Access, LexicalAssignment, VALUE_TYPES), AssignmentOperation),  # n = 2,
+    ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
+    ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
+    ((Access, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
+
+    ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
+    ((LexicalReturnStatement,), ReturnStatement),
+
 ])
