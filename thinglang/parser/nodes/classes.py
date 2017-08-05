@@ -83,20 +83,19 @@ class MethodDefinition(BaseNode):
 
         if isinstance(slice[0], LexicalDeclarationConstructor):
             self.name = LexicalIdentifier.constructor()
-            self.arguments = slice[1]
+            if len(slice) > 1:
+                self.arguments = slice[1]
         else:
             self.name = slice[1]
             self.static = slice[0].static_member
 
-            if isinstance(slice[2], ArgumentList):
-                self.arguments = slice[2]
-            elif isinstance(slice[2], ArgumentListPartial):
-                self.arguments = ArgumentList([slice[2]])
+            if len(slice) > 2:
+                if isinstance(slice[2], LexicalDeclarationReturnType):
+                    self.return_type = slice[3]
+                else:
+                    self.arguments = ArgumentList(slice[2])
 
-            elif isinstance(slice[2], LexicalDeclarationReturnType):
-                self.return_type = slice[3]
-
-            if len(slice) >= 4 and isinstance(slice[3], LexicalDeclarationReturnType):
+            if len(slice) > 4:
                 self.return_type = slice[4]
 
         if not isinstance(self.arguments, ArgumentList):
