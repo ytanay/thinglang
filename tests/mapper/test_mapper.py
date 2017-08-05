@@ -39,14 +39,12 @@ thing Person
 
 
 def test_mapper_existence():
-    ast = thinglang.preprocess(source)
-    symbols = SymbolMapper(ast)
+    ast, symbols = thinglang.preprocess(source)
     assert all(LexicalIdentifier(x) in symbols for x in ("Location", "Person"))
 
 
 def test_member_symbol_description():
-    ast = thinglang.preprocess(source)
-    symbols = SymbolMapper(ast)
+    ast, symbols = thinglang.preprocess(source)
     person = symbols[LexicalIdentifier('Person')]
 
     assert all(LexicalIdentifier(x) in person for x in ("name", "age", "location", "walk_to", "say_hello", "shout"))
