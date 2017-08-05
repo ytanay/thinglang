@@ -37,6 +37,9 @@ class ThingDefinition(DefinitionPairNode):
     virtual std::string text() override {
         return to_string(val);
     }
+    virtual bool boolean() override {
+        return to_boolean(val);
+    }
                 ''',
                 self.transpile_children(indent=1, children_override=self.members())
             ),
