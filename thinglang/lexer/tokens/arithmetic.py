@@ -16,7 +16,7 @@ class LexicalNumericalValue(LexicalToken, ValueType):
         super(LexicalNumericalValue, self).__init__(value)
         self.value = int(value)
 
-    def evaluate(self, _):
+    def evaluate(self, _=None):
         return self.value
 
     def describe(self):
