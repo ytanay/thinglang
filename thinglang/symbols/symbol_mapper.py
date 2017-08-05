@@ -36,10 +36,10 @@ class SymbolMapper(object):
         assert len(target) == 2
 
         first, second = target[0], target[1]
-        if first in self.maps:
-            container = self.maps[first]
-        elif first.STATIC:
+        if first.STATIC:
             container = self.maps[first.type]
+        elif first in self.maps:
+            container = self.maps[first]
         elif first in locals:
             container = self.maps[locals[first].type]
         else:
