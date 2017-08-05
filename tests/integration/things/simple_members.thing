@@ -1,0 +1,22 @@
+/*
+{
+    "expected_output": ["A container", "42"]
+}
+*/
+
+thing Container
+    has text name
+    has number value
+
+    setup
+        self.name = "A container"
+        self.value = 42
+
+    does describe
+        Output.write(self.name)
+        Output.write(self.value)
+
+thing Program
+    setup
+        Container c = create Container()
+        c.describe()
