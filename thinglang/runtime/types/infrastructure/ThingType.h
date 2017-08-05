@@ -6,15 +6,18 @@
 
 class ThingType{
 public:
+    ThingType(Size members) : members(members) {};
     virtual Thing call(Index idx) = 0;
     virtual Thing create() {
         return NULL;
     };
+
+    Size members = 0;
 };
 
 class ThingTypeExternal : public ThingType {
 public:
-    ThingTypeExternal(std::string name, std::string b, Methods methods) : methods(methods) {};
+    ThingTypeExternal(std::string name, Size members, Methods methods) : ThingType(members), methods(methods) {};
 
     Thing call(Index idx) override  {
         methods[idx].execute();
@@ -28,13 +31,14 @@ public:
 
 
 private:
+
     Methods methods;
 };
 
 
 class ThingTypeInternal : public ThingType {
 public:
-    ThingTypeInternal(InternalMethods methods) : methods(methods) {};
+    ThingTypeInternal(InternalMethods methods) : ThingType(0), methods(methods) {};
 
     Thing call(Index idx) override  {
         return methods[idx]();

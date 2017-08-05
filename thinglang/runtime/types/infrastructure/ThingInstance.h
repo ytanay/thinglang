@@ -18,8 +18,12 @@ public:
         return true;
     }
 
-    virtual Thing operator[](const Index index) const {
-        return nullptr;
+    virtual Thing get(const Index index) {
+        throw RuntimeError("Cannot get on base thing instance");
+    }
+
+    virtual void set(const Index index, const Thing& thing) {
+        throw RuntimeError("Cannot set on base thing instance");
     }
 
 };
@@ -31,8 +35,17 @@ class ThingInstance : public BaseThingInstance {
     Things members;
 
 public:
-    Thing operator[](const Index index) const override {
+
+    ThingInstance(Size members) : members(members), BaseThingInstance() {};
+
+
+    virtual Thing get(const Index index) override {
         return members[index];
+    }
+
+    virtual void set(const Index index, const Thing& thing) override {
+        std::cerr << "Setting " << index << ": " << thing->text() << std::endl;
+        members[index] = thing;
     }
 };
 

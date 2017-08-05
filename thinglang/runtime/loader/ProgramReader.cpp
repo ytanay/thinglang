@@ -109,7 +109,7 @@ Type ProgramReader::read_class() {
         std::cerr << "\t[" << methods.size() << "] ";
         methods.push_back(read_method());
     }
-    return new ThingTypeExternal("Unknown class", "", methods);
+    return new ThingTypeExternal("Unknown class", member_count, methods);
 
 }
 
