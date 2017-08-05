@@ -39,5 +39,11 @@ def test_simple_nested_method_calls():
 
 def test_nested_method_calls():
     method = parse_local('person.walk(8 * (1 + 3), Location.random(2 * (4 + 9)))')
-
     validate_method_call(method, ['person', 'walk'], [ArithmeticOperation, [ArithmeticOperation]])
+
+
+def test_constructing_call():
+    method = parse_local('create Empty(1)')
+    assert method.target == Access([LexicalIdentifier('Empty'), LexicalIdentifier.constructor()])
+    validate_types(method.arguments, [LexicalNumericalValue], MethodCall, lambda x: x.arguments)
+    assert method.constructing_call
