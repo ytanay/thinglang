@@ -1,6 +1,7 @@
 import struct
 
-from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePushLocal, OpcodeMethodDefinition
+from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePushLocal, \
+    OpcodeMethodDefinition, OpcodePushMember
 from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
 
 
@@ -64,6 +65,8 @@ class CompilationContext(object):
             self.append(OpcodePushStatic(self.append_static(ref.value.serialize())))
         elif isinstance(ref, LocalReference):
             self.append(OpcodePushLocal(ref))
+        elif isinstance(ref, ElementReference):
+            self.append(OpcodePushMember(ref))
         else:
             raise Exception('Cannot push down {}'.format(ref))
 

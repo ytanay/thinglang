@@ -86,6 +86,13 @@ class OpcodePushLocal(OpcodeLocalReferenced):
     ARGS = ID,
 
 
+class OpcodePushMember(OpcodeElementReferenced):
+    """
+    Push a reference to an object member from the stack frame into the program stack
+    """
+    ARGS = ID, ID
+
+
 class OpcodePushStatic(Opcode):
     """
     Push a reference to an object from the static segment into the program stack
@@ -114,16 +121,16 @@ class OpcodePopLocal(OpcodeLocalReferenced):
     ARGS = TARGET,
 
 
-class OpcodeSetLocal(OpcodeLocalReferenced):
+class OpcodeSetLocalStatic(OpcodeLocalReferenced):
     """
     Sets a reference from the static segment into the stack frame
     """
     ARGS = TARGET, ID
 
 
-class OpcodeSetMember(Opcode):
+class OpcodeSetMember(OpcodeElementReferenced):
     """
-    Sets a reference from the static segment into a member
+    Sets a reference frm the stack into a member
     """
     ARGS = TARGET, ID
 
