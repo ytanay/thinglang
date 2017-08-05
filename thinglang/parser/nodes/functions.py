@@ -64,7 +64,7 @@ class MethodCall(BaseNode, ValueType):
             self.arguments = slice[2]
             self.constructing_call = True
         else:
-            self.target, self.arguments = slice
+            self.target, self.arguments = slice[0], ArgumentList(slice[1])
             self.constructing_call = False
 
         if not self.arguments:
@@ -106,7 +106,6 @@ class MethodCall(BaseNode, ValueType):
         for arg in self.arguments:
             context.push_ref(arg)
 
-
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction(target))
 
@@ -114,6 +113,7 @@ class MethodCall(BaseNode, ValueType):
             context.append(OpcodePop())  # pop the return value, if the return value is not captured
 
         return target
+
 
 class ReturnStatement(BaseNode):
     def __init__(self, slice):
