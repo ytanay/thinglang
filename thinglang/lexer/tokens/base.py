@@ -30,6 +30,7 @@ class LexicalParenthesesOpen(LexicalToken):
 
 
 class LexicalParenthesesClose(LexicalToken):
+    MUST_CLOSE = True
     pass  # )
 
 

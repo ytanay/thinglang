@@ -53,18 +53,18 @@ def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
             stack.append(vector_cls())
             closing_tokens.append(closing_token)
         elif closing_tokens and isinstance(token, closing_tokens[-1]):
-            if len(stack) <= 1:
-                raise ValueError('No group to close')
             last = stack.pop()
             stack[-1].append(last)
             if isinstance(closing_tokens[-1], tuple):
                 stack[-1].append(token)
             closing_tokens.pop()
+        elif token.MUST_CLOSE:
+            raise ValueError('Unexpected group end token')
+
         elif not isinstance(token, LexicalGroupEnd):  # TODO: remove group end token
             stack[-1].append(token)
 
     if len(stack) != 1:
         raise ValueError('Not all token vectors were closed - currently at depth {}'.format(len(stack)))
-
 
     return stack[0]

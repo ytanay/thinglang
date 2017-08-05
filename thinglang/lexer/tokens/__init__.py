@@ -7,6 +7,7 @@ class LexicalToken(Describable):
     EMITTABLE = True
     STATIC = False
     ALLOW_EMPTY = False
+    MUST_CLOSE = False
 
     def __init__(self, raw, value=None):
         self.raw = raw
