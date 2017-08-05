@@ -208,4 +208,7 @@ PATTERNS = collections.OrderedDict([
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
     ((LexicalReturnStatement,), ReturnStatement),
 
+    ((LexicalConditional, ValueType), Conditional),  # if x
+    ((LexicalElse, Conditional), ConditionalElse),
+    ((LexicalElse,), UnconditionalElse),
 ])
