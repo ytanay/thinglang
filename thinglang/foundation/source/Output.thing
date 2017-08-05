@@ -1,6 +1,6 @@
 thing Output
 
-    has "std::string" val
+    has `std::string` val
 
     static does write with text message
         `std::cout << message->text() << std::endl;`

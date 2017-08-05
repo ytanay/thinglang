@@ -16,6 +16,8 @@ thing number
 
     does eq with number other returns number
         if self.val eq other.val
+            return 1
+        otherwise
             return 0
 
     does < with number other returns number
