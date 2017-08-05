@@ -38,7 +38,8 @@ void Method::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                auto new_thing = Thing(new ThingInstance);
+                std::cerr << "Creating " << Program::types[symbol.target]->members << " slots" << std::endl;
+                auto new_thing = Thing(new ThingInstance(Program::types[symbol.target]->members));
                 Program::frame()[0] = new_thing;
                 Program::push(new_thing);
                 break;
@@ -52,6 +53,11 @@ void Method::execute() {
 
             case Opcode::PUSH_STATIC: {
                 Program::push(Program::data(symbol.target));
+                break;
+            }
+
+            case Opcode::PUSH_MEMBER: {
+                Program::push(Program::frame()[symbol.target]->get(symbol.secondary));
                 break;
             }
 
@@ -70,13 +76,19 @@ void Method::execute() {
                 break;
             }
 
-            case Opcode::SET_LOCAL: {
+            case Opcode::SET_LOCAL_STATIC: {
                 Program::frame()[symbol.target] = Program::data(symbol.secondary);
                 break;
             }
 
+            case Opcode::SET_MEMBER: {
+                Program::frame()[symbol.target]->set(symbol.secondary, Program::pop());
+                break;
+            }
+
             case Opcode::RESOLVE: {
-                Program::push(Program::pop()->operator[](symbol.target));
+                Program::push(Program::pop()->get(symbol.target));
+                break;
             }
 
             case Opcode::RETURN: {
