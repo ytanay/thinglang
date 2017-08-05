@@ -129,7 +129,7 @@ class TokenVector(object):
         return all(isinstance(x, (LexicalIndent, LexicalGroupEnd)) for x in self.tokens)
 
 
-class ParenthesesVector(TokenVector):
+class ParenthesesVector(TokenVector, ValueType):
 
     def parse(self):
         if not self.tokens:
