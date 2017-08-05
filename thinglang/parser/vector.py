@@ -6,12 +6,16 @@ from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation,
 from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator, LexicalIndent, \
     LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
 from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
-    LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator
+    LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
+    LexicalReturnStatement
+from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import InlineString, AssignmentOperation
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
-from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList
+from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList, ReturnStatement
+from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse
 from thinglang.utils import collection_utils
+from thinglang.utils.type_descriptors import ValueType
 from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 
 
@@ -174,16 +178,16 @@ VECTOR_CREATION_TOKENS = {
 }
 
 
-VALUE_TYPES = LexicalIdentifier, LexicalNumericalValue, InlineString, ParenthesesVector, MethodCall, ArithmeticOperation
+METHOD_ID = (LexicalIdentifier,) + tuple(ArithmeticOperation.OPERATIONS.keys())
 
 PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
 
-    ((LexicalDeclarationMethod, LexicalIdentifier, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, LexicalIdentifier, TypeVector), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, LexicalIdentifier, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, LexicalIdentifier), MethodDefinition),  # does say_hello
+    ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, METHOD_ID, TypeVector), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, METHOD_ID), MethodDefinition),  # does say_hello
 
     ((LexicalDeclarationConstructor,), MethodDefinition),
 
