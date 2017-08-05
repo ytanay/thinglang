@@ -24,48 +24,9 @@ class BaseNode(Describable):
         else:
             self.context = None
 
-    def contextify(self, parent):
-        self.parent = parent
-        return self
-
-    def populate(self, children):
-        for child in children:
-            child.parent = self
-        self.children = children
-        return self
-
     def attach(self, child):
         self.children.append(child)
         child.parent = self
-
-    @collection_utils.predicated
-    def find(self, predicate, single=False):
-        results = []
-
-        for child in self.children:
-            results.extend(child.find(predicate))
-
-        if predicate(self):
-            results.append(self)
-
-        if single:
-            assert len(results) == 1
-            return results[0] if results else None
-
-        return results
-
-    @collection_utils.predicated
-    def upwards(self, predicate):
-        context = self
-        while context:
-            if predicate(context):
-                return context
-            context = context.parent
-
-    def get(self, name):
-        for child in self.children:
-            if child.name == name:
-                return child
 
     def tree(self, depth=1):
         separator = ('\n' if self.children else '') + ('\t' * depth)
@@ -88,20 +49,8 @@ class BaseNode(Describable):
         siblings = self.parent.children
         return siblings[siblings.index(self) + 1:]
 
-    def next_sibling(self):
-        next_siblings = self.next_siblings()
-
-        if next_siblings:
-            return next_siblings[0]
-
     def remove(self):
         self.parent.children.remove(self)
-
-    def references(self):
-        return ()
-
-    def statics(self):
-        return ()
 
     def transpile(self):
         return '?{}?'.format(self)
@@ -128,12 +77,6 @@ class RootNode(BaseNode):
 
     def transpile(self):
         return self.transpile_children()
-
-    def reorder(self):
-        entry = [x for x in self.children if x.name == LexicalIdentifier("Program")]
-        assert len(entry) == 1, "Program must have a single entry point - got {}".format(entry)
-        self.children = sorted(self.children, key=lambda child: child.name.value)  # Secondary sort (on key)
-        self.children = sorted(self.children, key=lambda child: child is not entry[0])  # Primary sort (on entry point)
 
 
 class DefinitionPairNode(BaseNode):

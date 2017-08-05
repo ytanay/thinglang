@@ -1,15 +1,12 @@
-from thinglang.compiler import CompilationContext
-from thinglang.compiler.opcodes import OpcodeCallInternal
-from thinglang.foundation import Foundation
 from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
 from thinglang.lexer.tokens.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
 from thinglang.parser.nodes import BaseNode
-from thinglang.utils.type_descriptors import ValueType, ReplaceableArguments
+from thinglang.utils.type_descriptors import ValueType
 
 
-class ArithmeticOperation(BaseNode, ValueType, ReplaceableArguments):
+class ArithmeticOperation(BaseNode, ValueType):
     OPERATIONS = {
         LexicalAddition: lambda lhs, rhs: lhs + rhs,
         LexicalMultiplication: lambda lhs, rhs: lhs * rhs,

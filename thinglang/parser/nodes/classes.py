@@ -11,12 +11,6 @@ from thinglang.symbols.symbol import Symbol
 
 class ThingDefinition(DefinitionPairNode):
 
-    def __contains__(self, item):
-        return any(child.name == item for child in self.children)
-
-    def __getitem__(self, item):
-        return [child for child in self.children if child.name == item][0]
-
     def describe(self):
         return self.name
 
@@ -58,19 +52,9 @@ class ThingDefinition(DefinitionPairNode):
     def methods(self):
         return [x for x in self.children if x.implements(MethodDefinition)]
 
-    def member_index(self, member):
-        return [x.name for x in self.members()].index(member)
-
     def compile(self, context: CompilationContext):
         context.append(OpcodeThingDefinition(len(self.members()), len(self.methods())))
         super().compile(context)
-
-    def finalize(self):
-        methods = self.methods()
-        if not methods or not methods[0].is_constructor:
-            print('Creating default constructor!')
-            index = self.children.index(methods[0]) if methods else 0
-            self.children.insert(index, MethodDefinition([LexicalDeclarationConstructor, None]))
 
 
 class MethodDefinition(BaseNode):
@@ -118,12 +102,6 @@ class MethodDefinition(BaseNode):
             self.arguments.transpile(pops=True, static=self.static),
             self.transpile_children(2, self.children + [ReturnStatement([])]))
 
-    def set_type(self, type):
-        if not self.return_type:
-            self.return_type = type
-        elif type is not self.return_type:
-            raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
-
     def compile(self, context):
         context.method_start(self.locals, self.frame_size, self.argument_count)
 
@@ -136,9 +114,6 @@ class MethodDefinition(BaseNode):
             context.append(OpcodePushNull())
 
         context.method_end()
-
-    def type_id(self):
-        return self.return_type
 
     def symbol(self):
         return Symbol.method(self.name, self.return_type, self.static, self.arguments)
@@ -161,8 +136,6 @@ class MemberDefinition(BaseNode):
 
         _, self.type, self.name = slice
 
-        if self.type.implements(InlineString):
-            self.type = LexicalIdentifier(self.type.value)
 
     def describe(self):
         return 'has {} {}'.format(self.type, self.name)

@@ -1,7 +1,6 @@
 import types
 
 from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition
-from thinglang.utils.stack import Frame
 
 
 def inspects(*args, predicate=None, priority=0):
@@ -21,7 +20,6 @@ class TreeTraversal(object):
     def __init__(self, ast):
         self.ast = ast
         self.results = []
-        self.scoping = Frame(expected_key_type=object)
         self.inspections = sorted((getattr(self, member) for member in dir(self) if
                             hasattr(getattr(self, member), 'predicate')), key=lambda x: x.priority)
 
@@ -30,24 +28,16 @@ class TreeTraversal(object):
     def run(self):
         self.traverse(self.ast)
 
-    def traverse(self, node, parent=None):
-        self.inspect(node, parent)
-
-        if node.SCOPING:
-            self.scoping.enter()
+    def traverse(self, node):
+        self.inspect(node)
 
         for child in node.children:
-            self.traverse(child, node)
+            self.traverse(child)
 
-        if node.SCOPING:
-            self.scoping.exit()
-
-    def inspect(self, node, parent):
+    def inspect(self, node):
         for inspection in self.inspections:
             if inspection.predicate(node):
-                result = inspection(node)
-                if isinstance(result, types.GeneratorType):
-                    self.results.extend(result)
+                inspection(node)
 
     @inspects(ThingDefinition)
     def update_thing_context(self, node: ThingDefinition):
