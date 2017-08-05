@@ -3,7 +3,7 @@ from thinglang.parser.nodes import Transient
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import AssignmentOperation
 from thinglang.parser.nodes.functions import MethodCall, Access, ReturnStatement
-from thinglang.parser.nodes.logic import Conditional
+from thinglang.parser.nodes.logic import Conditional, Loop
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 
@@ -32,7 +32,7 @@ class Simplifier(TreeTraversal):
             node.insert_before(self.create_assignment(transient_id, Access([transient_id, target]), node))
         node.remove()
 
-    @inspects((AssignmentOperation, ReturnStatement, Conditional))
+    @inspects((AssignmentOperation, ReturnStatement, Conditional, Loop))
     def simplify_assignment_operation(self, node: AssignmentOperation):
         if node.value.implements(ArithmeticOperation):
             node.value = self.convert_arithmetic_operations(node.value)

@@ -78,19 +78,19 @@ class Loop(BaseNode):
 
     def __init__(self, slice):
         super(Loop, self).__init__(slice)
-        _, self.condition = slice
+        _, self.value = slice
 
     def evaluate(self, resolver):
-        return self.condition.evaluate(resolver)
+        return self.value.evaluate(resolver)
 
     def references(self):
-        return self.condition.references()
+        return self.value.references()
 
     def describe(self):
-        return str(self.condition)
+        return str(self.value)
 
     def compile(self, context: CompilationContext):
-        idx = context.push_ref(self.condition)
+        idx = context.push_ref(self.value)
         jump, _ = context.append(OpcodeJumpConditional())
         super(Loop, self).compile(context)
         context.append(OpcodeJump(idx))

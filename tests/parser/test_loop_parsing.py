@@ -10,7 +10,7 @@ def validate_loop(node, condition):
     assert node.implements(Loop)
 
     if isinstance(condition, list):
-        validate_types(node.condition.arguments, condition, (ArithmeticOperation, MethodCall), lambda x: x.arguments)
+        validate_types(node.value.arguments, condition, (ArithmeticOperation, MethodCall), lambda x: x.arguments)
     else:
         assert isinstance(node.value, condition)
 
