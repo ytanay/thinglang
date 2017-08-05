@@ -10,7 +10,7 @@ void Method::execute() {
 
 
     for (size_t i = 0; i < arguments; i++) {
-        Program::frame()[arguments - i] = Program::pop();
+        Program::frame()[arguments - i - 1] = Program::pop();
     }
 
     auto counter_end = symbols.size();

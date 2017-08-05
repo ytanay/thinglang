@@ -122,7 +122,7 @@ class MethodDefinition(BaseNode):
             raise Exception('Multiple return types {}, {}'.format(type, self.return_type))
 
     def compile(self, context):
-        context.method_start(self.locals, self.frame_size + 1, len(self.arguments))
+        context.method_start(self.locals, self.frame_size, self.argument_count)
 
         if self.is_constructor():
             context.append(OpcodeInstantiate(context.symbols.index(self.parent)))
@@ -143,6 +143,10 @@ class MethodDefinition(BaseNode):
     @property
     def frame_size(self):
         return len(self.locals)
+
+    @property
+    def argument_count(self):
+        return len(self.arguments) + (0 if self.is_constructor() else 1)
 
     def update_locals(self, locals):
         self.locals = locals
