@@ -89,10 +89,12 @@ void Method::execute() {
 
             case Opcode::JUMP_CONDITIONAL: {
                 auto value = Program::pop();
-                if (!value) {
+
+                if (!value || !value->boolean()) {
                     counter = symbol.target;
                     continue;
                 }
+
                 break;
             }
 
