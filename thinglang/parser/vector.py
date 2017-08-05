@@ -8,12 +8,12 @@ from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, Lexica
 from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
     LexicalReturnStatement
-from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse
+from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import InlineString, AssignmentOperation
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
 from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList, ReturnStatement
-from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse
+from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse, Loop
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
@@ -211,4 +211,6 @@ PATTERNS = collections.OrderedDict([
     ((LexicalConditional, ValueType), Conditional),  # if x
     ((LexicalElse, Conditional), ConditionalElse),
     ((LexicalElse,), UnconditionalElse),
+
+    ((LexicalRepeatWhile, ValueType), Loop),  # repeat while
 ])
