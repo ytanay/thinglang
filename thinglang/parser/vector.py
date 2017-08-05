@@ -10,7 +10,7 @@ from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDec
     LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import InlineString, AssignmentOperation
+from thinglang.parser.nodes.base import InlineString, AssignmentOperation, InlineCode
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
 from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList, ReturnStatement
 from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse, Loop
@@ -183,7 +183,7 @@ METHOD_ID = (LexicalIdentifier,) + tuple(ArithmeticOperation.OPERATIONS.keys())
 
 PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
-    ((LexicalDeclarationMember, LexicalIdentifier, LexicalIdentifier), MemberDefinition),
+    ((LexicalDeclarationMember, (InlineCode, LexicalIdentifier), LexicalIdentifier), MemberDefinition),
 
     ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedLexicalDeclaration),
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a

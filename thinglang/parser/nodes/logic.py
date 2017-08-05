@@ -58,6 +58,10 @@ class UnconditionalElse(BaseNode, ElseBranchInterface):
         super(UnconditionalElse, self).compile(context)
         context.update_conditional_jumps()
 
+    def transpile(self):
+        return 'else {{\n{}\n\t\t}}'.format(self.transpile_children(indent=3))
+
+
 
 class ConditionalElse(Conditional, ElseBranchInterface):
 
