@@ -16,6 +16,6 @@ inline bool to_boolean(T val){
     return val != 0;
 }
 
-inline bool to_boolean(std::string val){
+inline bool to_boolean(const std::string &val){
     return val.length() > 0;
 }

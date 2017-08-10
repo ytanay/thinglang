@@ -14,7 +14,7 @@ class Indexer(TreeTraversal):
 
     def __init__(self, ast):
         super(Indexer, self).__init__(ast)
-        self.context: IndexerContext = None
+        self.context = None
 
     def run(self):
         super().run()

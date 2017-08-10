@@ -1,9 +1,7 @@
 #include "ProgramReader.h"
 #include "../types/InternalTypes.h"
-#include "../errors/RuntimeError.h"
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
-#include "../execution/Program.h"
 
 const std::string ProgramReader::MAGIC = "THING";
 
@@ -87,7 +85,7 @@ Types ProgramReader::read_code() {
 
     if (index != program_size) {
         throw RuntimeError(
-                std::string("Index mismatch " + std::to_string(index) + ", " + std::to_string(program_size)).c_str());
+                std::string("Index mismatch " + std::to_string(index) + ", " + std::to_string(program_size)));
     } else {
         std::cerr << "Program processed successfully" << std::endl << std::endl;
     }
@@ -140,12 +138,12 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
             return Symbol(opcode);
 
         case 1:
-            return Symbol(opcode, read_size());
+            return {opcode, read_size()};
 
         case 2: {
             auto target = read_size();
             auto value = read_size();
-            return Symbol(opcode, target, value);
+            return {opcode, target, value};
         }
 
         default:

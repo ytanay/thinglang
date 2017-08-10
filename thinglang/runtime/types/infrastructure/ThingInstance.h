@@ -1,30 +1,23 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "../../errors/RuntimeError.h"
 
 /**
  * All thing instances derive from this empty structure
  */
 class BaseThingInstance {
 protected:
-    BaseThingInstance() {};
+    BaseThingInstance() = default;;
 
 public:
-    virtual std::string text() {
-        return "?";
-    }
+    virtual std::string text();
 
-    virtual bool boolean() {
-        return true;
-    }
+    virtual bool boolean();
 
-    virtual Thing get(const Index index) {
-        throw RuntimeError("Cannot get on base thing instance");
-    }
+    virtual Thing get(Index index);
 
-    virtual void set(const Index index, const Thing& thing) {
-        throw RuntimeError("Cannot set on base thing instance");
-    }
+    virtual void set(Index index, const Thing& thing);
 
 };
 
@@ -36,17 +29,12 @@ class ThingInstance : public BaseThingInstance {
 
 public:
 
-    ThingInstance(Size members) : members(members), BaseThingInstance() {};
+    explicit ThingInstance(Size members) : members(members) {};
 
 
-    virtual Thing get(const Index index) override {
-        return members[index];
-    }
+    Thing get(Index index) override;
 
-    virtual void set(const Index index, const Thing& thing) override {
-        std::cerr << "Setting " << index << ": " << thing->text() << std::endl;
-        members[index] = thing;
-    }
+    void set(Index index, const Thing& thing) override;
 };
 
 

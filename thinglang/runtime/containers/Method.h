@@ -15,8 +15,8 @@ public:
 
     void execute();
 
-    Size frame_size;
-    Size arguments;
+    Size frame_size = 0;
+    Size arguments = 0;
 
 private:
     SymbolList symbols;

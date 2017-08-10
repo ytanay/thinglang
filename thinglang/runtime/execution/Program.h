@@ -19,18 +19,12 @@ public:
         return std::static_pointer_cast<T>(pop());
     };
 
-    static ThingType* type(SignedIndex index);
-
     template <typename T>
     static T* type(InternalTypes type){
         return static_cast<T*>(Program::internals[static_cast<int>(type)]);
     }
 
     static Thing pop();
-
-    static Thing top() {
-        return stack.top();
-    }
 
     static void push(const Thing& instance) {
         stack.push(instance);
@@ -63,7 +57,7 @@ public:
     static Types internals;
     static Types types;
 private:
-    Program() {}
+    Program() = default;
 
     static ThingStack stack;
     static FrameStack frames;

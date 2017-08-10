@@ -6,14 +6,13 @@
 
 #include <string>
 #include <exception>
+#include <utility>
 
 class RuntimeError : public std::exception {
 public:
-    RuntimeError(const std::string &message) : message(message), std::exception() {};
+    explicit RuntimeError(std::string message) : message(std::move(message)) {};
 
-    virtual const char *what() const noexcept override {
-        return message.c_str();
-    }
+    const char *what() const noexcept override;
 
 
 private:

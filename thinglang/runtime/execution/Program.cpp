@@ -19,11 +19,6 @@ Types Program::internals = {
 Types Program::types = {};
 
 
-
-ThingType* Program::type(SignedIndex index) {
-    return types[index];
-}
-
 Thing Program::pop() {
     if(stack.empty())  // TODO: remove check
         throw RuntimeError("Empty program stack");

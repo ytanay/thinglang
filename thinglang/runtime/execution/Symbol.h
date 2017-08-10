@@ -8,7 +8,7 @@
 class Symbol {
 
 public:
-    Symbol(Opcode opcode) : opcode(opcode) {};
+    explicit Symbol(Opcode opcode) : opcode(opcode) {};
 
     Symbol(Opcode opcode, Index target) : opcode(opcode), target(target) {};
 

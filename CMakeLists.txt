@@ -11,6 +11,23 @@ set(SOURCE_FILES
 
         thinglang/runtime/execution/Program.cpp
 
+
+        thinglang/runtime/errors/RuntimeError.cpp
+
+        thinglang/runtime/execution/Opcodes.h
+        thinglang/runtime/execution/Symbol.cpp
+
+        thinglang/runtime/types/core/NumberType.h
+        thinglang/runtime/types/core/TextType.h
+        thinglang/runtime/types/core/OutputType.h
+
+        thinglang/runtime/types/infrastructure/ThingInstance.cpp
+        thinglang/runtime/types/infrastructure/ThingType.cpp
+
+        thinglang/runtime/types/InternalTypes.h
+
+        thinglang/runtime/utils/Formatting.h
+        thinglang/runtime/utils/TypeNames.h
         )
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")

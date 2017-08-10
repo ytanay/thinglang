@@ -1,33 +1,28 @@
 #pragma once
 
+#include <utility>
+
 #include "../../utils/TypeNames.h"
 #include "../../containers/Method.h"
 
 
 class ThingType{
 public:
-    ThingType(Size members) : members(members) {};
+    explicit ThingType(Size members) : members(members) {};
     virtual Thing call(Index idx) = 0;
-    virtual Thing create() {
-        return NULL;
-    };
+    virtual Thing create();;
 
     Size members = 0;
 };
 
 class ThingTypeExternal : public ThingType {
 public:
-    ThingTypeExternal(std::string name, Size members, Methods methods) : ThingType(members), methods(methods) {};
+    ThingTypeExternal(const std::string &name, Size members, Methods methods) : ThingType(members), methods(
+            std::move(methods)) {};
 
-    Thing call(Index idx) override  {
-        methods[idx].execute();
-        return NULL;
-    }
+    Thing call(Index idx) override;
 
-    virtual Thing create() override {
-        methods[0].execute();
-        return NULL;
-    };
+    Thing create() override;;
 
 
 private:
@@ -38,7 +33,7 @@ private:
 
 class ThingTypeInternal : public ThingType {
 public:
-    ThingTypeInternal(InternalMethods methods) : ThingType(0), methods(methods) {};
+    explicit ThingTypeInternal(InternalMethods methods) : ThingType(0), methods(std::move(methods)) {};
 
     Thing call(Index idx) override  {
         return methods[idx]();
