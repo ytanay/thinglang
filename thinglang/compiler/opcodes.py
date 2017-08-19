@@ -7,7 +7,7 @@ import collections
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import camelcase_to_underscore
 
-MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
+STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
 
 OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode', 'arg_count'])
 
@@ -52,17 +52,35 @@ class Opcode(object, metaclass=OpcodeRegistration):
     def name(cls):
         return camelcase_to_underscore(cls.__name__.replace('Opcode', ''))
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.args == other.args
+
+    def __str__(self):
+        return '{}({})'.format(type(self).__name__, self.args)
+
+    def __repr__(self):
+        return str(self)
 
 class OpcodeElementReferenced(Opcode):
 
-    def __init__(self, element_ref):
-        super().__init__(element_ref.thing_index, element_ref.element_index)
+    @classmethod
+    def type_reference(cls, element_ref):
+        return cls(element_ref.thing_index, element_ref.element_index)
+
+    @classmethod
+    def local_reference(cls, element_ref):
+        return cls(element_ref.local_index, element_ref.element_index)
 
 
 class OpcodeLocalReferenced(Opcode):
 
-    def __init__(self, local_ref, *args):
-        super().__init__(local_ref.local_index, *args)
+    @classmethod
+    def from_reference(cls, local_ref, *args):
+        return cls(local_ref.local_index, *args)
+
+    @classmethod
+    def from_references(cls, destination_ref, source_ref):
+        return cls(destination_ref.local_index, source_ref.local_index)
 
 
 class OpcodeInvalid(Opcode):
@@ -79,26 +97,7 @@ class OpcodePass(Opcode):
     pass
 
 
-class OpcodePushLocal(OpcodeLocalReferenced):
-    """
-    Push a reference to an object from the stack frame into the program stack
-    """
-    ARGS = ID,
-
-
-class OpcodePushMember(OpcodeElementReferenced):
-    """
-    Push a reference to an object member from the stack frame into the program stack
-    """
-    ARGS = ID, ID
-
-
-class OpcodePushStatic(Opcode):
-    """
-    Push a reference to an object from the static segment into the program stack
-    """
-    ARGS = ID,
-
+# Stack push operations
 
 class OpcodePushNull(Opcode):
     """
@@ -106,6 +105,29 @@ class OpcodePushNull(Opcode):
     """
     pass
 
+
+class OpcodePushLocal(OpcodeLocalReferenced):
+    """
+    Push a reference to a local object from the stack frame into the program stack
+    """
+    ARGS = LOCAL_ID,
+
+
+class OpcodePushMember(OpcodeElementReferenced):
+    """
+    Push a reference to a member from a local object on the stack frame into the program stack
+    """
+    ARGS = LOCAL_ID, MEMBER_ID
+
+
+class OpcodePushStatic(Opcode):
+    """
+    Push a reference to an object from the static segment into the program stack
+    """
+    ARGS = STATIC_ID,
+
+
+# Stack pop operations
 
 class OpcodePop(Opcode):
     """
@@ -116,31 +138,51 @@ class OpcodePop(Opcode):
 
 class OpcodePopLocal(OpcodeLocalReferenced):
     """
-    Pops a reference from the program stack into the stack frame
+    Pops a reference from the program stack into a local object
     """
-    ARGS = TARGET,
+    ARGS = LOCAL_ID,
 
 
-class OpcodeSetLocalStatic(OpcodeLocalReferenced):
+class OpcodePopMember(OpcodeElementReferenced):
+    """
+    Sets a reference frm the stack into a member of a local object
+    """
+    ARGS = LOCAL_ID, MEMBER_ID
+
+
+class OpcodePopDereferenced(OpcodeElementReferenced):
+    """
+    Sets a reference from the stack into a dereferenced member on the stack
+    """
+    ARGS = MEMBER_ID,
+
+
+# Assignment operations
+
+class OpcodeAssignStatic(OpcodeLocalReferenced):
     """
     Sets a reference from the static segment into the stack frame
     """
-    ARGS = TARGET, ID
+    ARGS = LOCAL_ID, STATIC_ID
 
 
-class OpcodeSetMember(OpcodeElementReferenced):
+class OpcodeAssignLocal(OpcodeLocalReferenced):
     """
-    Sets a reference frm the stack into a member
+    Overrides a local object with a reference to another local object
     """
-    ARGS = TARGET, ID
+    ARGS = LOCAL_ID, LOCAL_ID
 
 
-class OpcodeResolve(Opcode):
+# Dereference operations
+
+class OpcodeDereference(Opcode):
     """
     Pops a reference from the program stack, resolves a member in it, and pushes the result back into the stack
     """
-    ARGS = ID,
+    ARGS = MEMBER_ID,
 
+
+# Method Calls
 
 class OpcodeCall(OpcodeElementReferenced):
     """

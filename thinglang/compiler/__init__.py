@@ -1,8 +1,9 @@
 import struct
 
 from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePushLocal, \
-    OpcodeMethodDefinition, OpcodePushMember
+    OpcodeMethodDefinition, OpcodePushMember, OpcodePopLocal, OpcodePopMember
 from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
+from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
 class CompilationContext(object):
@@ -64,13 +65,15 @@ class CompilationContext(object):
         if isinstance(ref, StaticReference):
             self.append(OpcodePushStatic(self.append_static(ref.value.serialize())))
         elif isinstance(ref, LocalReference):
-            self.append(OpcodePushLocal(ref))
+            self.append(OpcodePushLocal.from_reference(ref))
         elif isinstance(ref, ElementReference):
-            self.append(OpcodePushMember(ref))
+            self.append(OpcodePushMember.type_reference(ref))
         else:
             raise Exception('Cannot push down {}'.format(ref))
 
         return idx
+
+
 
     def method_start(self, method_locals, *args):
         self.instructions += self.instruction_block
