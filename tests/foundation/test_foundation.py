@@ -1,5 +1,5 @@
-from thinglang.foundation import Foundation
+from thinglang.foundation import code_generator
 
 
 def test_foundation_code_generation():
-    Foundation()
+    code_generator.generate_code()
