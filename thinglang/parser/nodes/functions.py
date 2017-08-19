@@ -21,6 +21,9 @@ class Access(BaseNode, ValueType):
     def describe(self):
         return '{}:{}'.format('.'.join(str(x) for x in self.target), self.type)
 
+    def split(self):
+        return self.target[:2], self.target[2:]
+
     def __getitem__(self, item):
         return self.target[item]
 
@@ -107,7 +110,7 @@ class MethodCall(BaseNode, ValueType):
             context.push_ref(arg)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
-        context.append(instruction(target))
+        context.append(instruction.type_reference(target))
 
         if not captured:
             context.append(OpcodePop())  # pop the return value, if the return value is not captured

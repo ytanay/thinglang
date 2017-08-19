@@ -1,4 +1,4 @@
-from thinglang.foundation import Foundation
+from thinglang.foundation import definitions, templates
 from thinglang.lexer.tokens import LexicalBinaryOperation
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
@@ -70,8 +70,8 @@ class ListInitialization(BaseNode):
         lines = []
 
         for arg in reversed(self.arguments):
-            if arg.type in Foundation.INTERNAL_TYPE_ORDERING:
-                lines.append('\t\tauto {} = Program::argument<{}>();'.format(arg.transpile(), Foundation.format_internal_type(arg.type)))
+            if arg.type in definitions.INTERNAL_TYPE_ORDERING:
+                lines.append('\t\tauto {} = Program::argument<{}>();'.format(arg.transpile(), templates.format_internal_type(arg.type)))
             else:
                 lines.append('\t\tauto {} = Program::pop();'.format(arg.transpile()))
 
