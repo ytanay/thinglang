@@ -10,17 +10,21 @@ from thinglang.symbols.symbol_map import SymbolMap
 
 class SymbolMapper(object):
 
-    FOUNDATION = {symbol_map.name: symbol_map for symbol_map in serializer.read_foundation_symbols() }
+    FOUNDATION = {symbol_map.name: symbol_map for symbol_map in serializer.read_foundation_symbols()}
 
-    def __init__(self, ast, include_foundation=True):
+    def __init__(self, ast=None, include_foundation=True, override=None):
         self.maps = {}
 
         if include_foundation:
             self.maps.update(SymbolMapper.FOUNDATION)
 
-        self.maps.update({
-            thing.name: SymbolMap.from_thing(thing, index) for index, thing in enumerate(ast.children)
-        })
+        if override:
+            self.maps.update({symbol_map.name: symbol_map for symbol_map in override})
+
+        if ast:
+            self.maps.update({
+                thing.name: SymbolMap.from_thing(thing, index) for index, thing in enumerate(ast.children)
+            })
 
     def resolve(self, target, locals):
         if target.implements(LexicalIdentifier):
@@ -35,19 +39,20 @@ class SymbolMapper(object):
     def resolve_access(self, target: Access, locals):
         assert len(target) == 2
 
-        first, second = target[0], target[1]
+        first, second, local = target[0], target[1], None
         if first.STATIC:
             container = self.maps[first.type]
         elif first in self.maps:
             container = self.maps[first]
         elif first in locals:
-            container = self.maps[locals[first].type]
+            local = locals[first]
+            container = self.maps[local.type]
         else:
             raise Exception('Cannot resolve first level access {}'.format(first))
 
         element = container[second]
 
-        return ElementReference(container, element)
+        return ElementReference(container, element, local)
 
     def index(self, thing: ThingDefinition):
         return self[thing.name].index
