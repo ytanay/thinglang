@@ -1,12 +1,13 @@
 import struct
 
 from thinglang.compiler import CompilationContext, LocalReference
-from thinglang.compiler.opcodes import OpcodeSetLocalStatic, OpcodePopLocal, OpcodeSetMember, OpcodePushStatic
-from thinglang.foundation import Foundation
+from thinglang.compiler.opcodes import OpcodePopLocal, OpcodePushStatic, OpcodeAssignStatic, OpcodePopMember, \
+    OpcodeAssignLocal, OpcodePushLocal, OpcodePushMember
+from thinglang.foundation import definitions
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.functions import MethodCall
+from thinglang.parser.nodes.functions import MethodCall, Access
 from thinglang.utils.type_descriptors import ValueType
 
 
@@ -43,26 +44,38 @@ class AssignmentOperation(BaseNode):
             return '{} = {};'.format(self.name.transpile(), self.value.transpile())
 
     def compile(self, context: CompilationContext):
-        target = context.resolve(self.name)
-        set_cls = OpcodeSetLocalStatic if isinstance(target, LocalReference) else OpcodeSetMember
-        if self.value.STATIC:
-            data_id = context.append_static(self.value.serialize())
-            if isinstance(target, LocalReference):
-                context.append(OpcodeSetLocalStatic(target, data_id))
-            else:
-                context.append(OpcodePushStatic(data_id))  # TODO: maybe add another argument?
-                context.append(OpcodeSetMember(target))
-        elif self.value.implements(MethodCall):
+
+        is_local = self.name.implements(LexicalIdentifier)
+
+        if is_local:
+            target = context.resolve(self.name)
+
+            if self.value.STATIC:
+                ref = context.append_static(self.value.serialize())
+                return context.append(OpcodeAssignStatic.from_reference(target, ref))
+            elif self.value.implements(LexicalIdentifier):
+                ref = context.resolve(self.value)
+                return context.append(OpcodeAssignLocal.from_references(target, ref))
+
+        if self.value.implements(MethodCall):
             self.value.compile(context, True)
-            context.append(OpcodePopLocal(target))
         else:
-            raise Exception('Unknown value type {}'.format(self.value))
+            self.value.compile(context)
+        target = self.name
+        if target.implements(LexicalIdentifier):
+            target = context.resolve(target)
+            context.append(OpcodePopLocal.from_reference(target))
+        elif target.implements(Access):
+            context.append(OpcodePopMember.local_reference(context.resolve(target)))
+
+        else:
+            raise Exception('Cannot pull up {}'.format(target))
 
 
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
     STATIC = True
     TYPE = LexicalIdentifier("text")
-    TYPE_IDX = Foundation.INTERNAL_TYPE_ORDERING[LexicalIdentifier("text")]
+    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[LexicalIdentifier("text")]
 
     def __init__(self, value):
         super().__init__(None)
@@ -86,6 +99,12 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
 
     def describe(self):
         return '"{}"'.format(self.value)
+
+    def compile(self, context: CompilationContext):
+        ref = context.append_static(self.serialize())
+        context.append(OpcodePushStatic(ref))
+
+
 
 
 class InlineCode(LexicalToken):
