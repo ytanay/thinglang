@@ -17,3 +17,5 @@ def read_symbols(path):
         symbols = json.load(f)
 
     return SymbolMap.from_serialized(symbols)
+
+
