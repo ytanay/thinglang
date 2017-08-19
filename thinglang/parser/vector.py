@@ -1,8 +1,7 @@
 import collections
 
 from thinglang.lexer.tokens import LexicalGroupEnd
-from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation, \
-    LexicalNumericalValue
+from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator, LexicalIndent, \
     LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
 from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
@@ -10,14 +9,13 @@ from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDec
     LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import InlineString, AssignmentOperation, InlineCode
+from thinglang.parser.nodes.base import  AssignmentOperation, InlineCode
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
-from thinglang.parser.nodes.functions import Access, MethodCall, ArgumentList, ReturnStatement
+from thinglang.parser.nodes.functions import Access, MethodCall, ReturnStatement
 from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse, Loop
 from thinglang.parser.nodes.proxies import TaggedLexicalDeclaration
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType
-from thinglang.utils.union_types import POTENTIALLY_RESOLVABLE
 
 
 class TokenVector(object):
@@ -194,6 +192,7 @@ PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationConstructor,), MethodDefinition),  # setup
 
     ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
+    ((Access, LexicalAccess, LexicalIdentifier), Access),
 
     ((Access, ParenthesesVector), MethodCall),
     ((LexicalClassInitialization, LexicalIdentifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
