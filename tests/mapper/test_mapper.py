@@ -38,13 +38,17 @@ thing Person
 """
 
 
+def get_symbols(code):
+    return SymbolMapper(thinglang.preprocess(code))
+
+
 def test_mapper_existence():
-    ast, symbols = thinglang.preprocess(source)
+    symbols = get_symbols(source)
     assert all(LexicalIdentifier(x) in symbols for x in ("Location", "Person"))
 
 
 def test_member_symbol_description():
-    ast, symbols = thinglang.preprocess(source)
+    symbols = get_symbols(source)
     person = symbols[LexicalIdentifier('Person')]
 
     assert all(LexicalIdentifier(x) in person for x in ("name", "age", "location", "walk_to", "say_hello", "shout"))
@@ -68,7 +72,7 @@ def test_member_symbol_description():
 
 
 def test_method_symbol_description():
-    ast, symbols = thinglang.preprocess(source)
+    symbols = get_symbols(source)
     person, location = symbols[LexicalIdentifier('Person')], symbols[LexicalIdentifier('Location')]
 
     walk_to = person[LexicalIdentifier("walk_to")]
