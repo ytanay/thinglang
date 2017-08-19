@@ -10,9 +10,9 @@ class Reference(object):
 
 
 class ElementReference(Reference):
-    def __init__(self, thing, element):
+    def __init__(self, thing, element, local=None):
         super(ElementReference, self).__init__(element.type)
-        self.thing, self.element = thing, element
+        self.thing, self.element, self.local = thing, element, local
 
     @property
     def thing_index(self):
@@ -23,12 +23,18 @@ class ElementReference(Reference):
         return self.element.index
 
     @property
+    def local_index(self):
+        return self.local.index
+
+
+    @property
     def convention(self):
         return self.element.convention
 
     @property
     def static(self):
         return self.element.static
+
 
 
 class LocalReference(Reference):
