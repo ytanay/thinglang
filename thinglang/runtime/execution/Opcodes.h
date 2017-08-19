@@ -11,28 +11,30 @@
 #include "../errors/RuntimeError.h"
 
 enum class Opcode {
-    PUSH_MEMBER = 5,
-    SET_MEMBER = 11,
-    CALL = 13,
-    CALL_INTERNAL = 14,
+    PUSH_MEMBER = 6,
+    POP_MEMBER = 10,
+    POP_DEREFERENCED = 11,
+    CALL = 15,
+    CALL_INTERNAL = 16,
     ELEMENT_REFERENCED = 0,
-    PUSH_LOCAL = 4,
+    PUSH_LOCAL = 5,
     POP_LOCAL = 9,
-    SET_LOCAL_STATIC = 10,
+    ASSIGN_STATIC = 12,
+    ASSIGN_LOCAL = 13,
     LOCAL_REFERENCED = 1,
     INVALID = 2,
     PASS = 3,
-    PUSH_STATIC = 6,
-    PUSH_NULL = 7,
+    PUSH_NULL = 4,
+    PUSH_STATIC = 7,
     POP = 8,
-    RESOLVE = 12,
-    RETURN = 15,
-    INSTANTIATE = 16,
-    JUMP = 17,
-    JUMP_CONDITIONAL = 18,
-    THING_DEFINITION = 19,
-    METHOD_DEFINITION = 20,
-    METHOD_END = 21
+    DEREFERENCE = 14,
+    RETURN = 17,
+    INSTANTIATE = 18,
+    JUMP = 19,
+    JUMP_CONDITIONAL = 20,
+    THING_DEFINITION = 21,
+    METHOD_DEFINITION = 22,
+    METHOD_END = 23
 };
 
 
@@ -42,8 +44,11 @@ inline auto describe(Opcode val){
         case Opcode::PUSH_MEMBER:
             return "PUSH_MEMBER";
 
-        case Opcode::SET_MEMBER:
-            return "SET_MEMBER";
+        case Opcode::POP_MEMBER:
+            return "POP_MEMBER";
+
+        case Opcode::POP_DEREFERENCED:
+            return "POP_DEREFERENCED";
 
         case Opcode::CALL:
             return "CALL";
@@ -60,8 +65,11 @@ inline auto describe(Opcode val){
         case Opcode::POP_LOCAL:
             return "POP_LOCAL";
 
-        case Opcode::SET_LOCAL_STATIC:
-            return "SET_LOCAL_STATIC";
+        case Opcode::ASSIGN_STATIC:
+            return "ASSIGN_STATIC";
+
+        case Opcode::ASSIGN_LOCAL:
+            return "ASSIGN_LOCAL";
 
         case Opcode::LOCAL_REFERENCED:
             return "LOCAL_REFERENCED";
@@ -72,17 +80,17 @@ inline auto describe(Opcode val){
         case Opcode::PASS:
             return "PASS";
 
-        case Opcode::PUSH_STATIC:
-            return "PUSH_STATIC";
-
         case Opcode::PUSH_NULL:
             return "PUSH_NULL";
+
+        case Opcode::PUSH_STATIC:
+            return "PUSH_STATIC";
 
         case Opcode::POP:
             return "POP";
 
-        case Opcode::RESOLVE:
-            return "RESOLVE";
+        case Opcode::DEREFERENCE:
+            return "DEREFERENCE";
 
         case Opcode::RETURN:
             return "RETURN";
@@ -116,8 +124,11 @@ inline auto arg_count(Opcode val){
         case Opcode::PUSH_MEMBER:
             return 2;
 
-        case Opcode::SET_MEMBER:
+        case Opcode::POP_MEMBER:
             return 2;
+
+        case Opcode::POP_DEREFERENCED:
+            return 1;
 
         case Opcode::CALL:
             return 2;
@@ -134,7 +145,10 @@ inline auto arg_count(Opcode val){
         case Opcode::POP_LOCAL:
             return 1;
 
-        case Opcode::SET_LOCAL_STATIC:
+        case Opcode::ASSIGN_STATIC:
+            return 2;
+
+        case Opcode::ASSIGN_LOCAL:
             return 2;
 
         case Opcode::LOCAL_REFERENCED:
@@ -146,16 +160,16 @@ inline auto arg_count(Opcode val){
         case Opcode::PASS:
             return 0;
 
-        case Opcode::PUSH_STATIC:
-            return 1;
-
         case Opcode::PUSH_NULL:
             return 0;
+
+        case Opcode::PUSH_STATIC:
+            return 1;
 
         case Opcode::POP:
             return 0;
 
-        case Opcode::RESOLVE:
+        case Opcode::DEREFERENCE:
             return 1;
 
         case Opcode::RETURN:

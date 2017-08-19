@@ -76,17 +76,17 @@ void Method::execute() {
                 break;
             }
 
-            case Opcode::SET_LOCAL_STATIC: {
+            case Opcode::ASSIGN_STATIC: {
                 Program::frame()[symbol.target] = Program::data(symbol.secondary);
                 break;
             }
 
-            case Opcode::SET_MEMBER: {
+            case Opcode::POP_MEMBER: {
                 Program::frame()[symbol.target]->set(symbol.secondary, Program::pop());
                 break;
             }
 
-            case Opcode::RESOLVE: {
+            case Opcode::DEREFERENCE: {
                 Program::push(Program::pop()->get(symbol.target));
                 break;
             }
