@@ -69,3 +69,8 @@ ENUM_CASE = """
 
 
 DEFAULT_CONSTRUCTOR = '\t{}() {{}};'
+
+
+def format_internal_type(type):
+    name = type.value.capitalize()
+    return '{}Namespace::{}Instance'.format(name, name)
