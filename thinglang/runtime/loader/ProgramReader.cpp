@@ -7,6 +7,8 @@ const std::string ProgramReader::EXPECTED_MAGIC = "THING\x0C";
 
 
 ProgramInfo ProgramReader::process() {
+
+    prepare_stream();
     read_header();
 
     auto data = read_data();
@@ -15,9 +17,6 @@ ProgramInfo ProgramReader::process() {
 }
 
 void ProgramReader::read_header() {
-    if (!file) {
-        throw RuntimeError("Cannot open file");
-    }
 
     auto magic = read_string(EXPECTED_MAGIC.size());
 
@@ -59,17 +58,17 @@ Thing ProgramReader::read_data_block() {
     switch (type) {
         case InternalTypes::TEXT: {
             auto size = read_size();
-            auto data = read(size);
+            auto data = read_string(size);
             std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
             auto instance = Program::type<TextNamespace::TextType>(type)->create();
-            static_cast<TextNamespace::TextInstance*>(instance.get())->val = data;
+            dynamic_cast<TextNamespace::TextInstance*>(instance.get())->val = data;
             return instance;
         }
         case InternalTypes::NUMBER: {
             auto data = read<int32_t>();
             std::cerr << "\tReading int: " << data << std::endl;
             auto instance = Program::type<NumberNamespace::NumberType>(type)->create();
-            static_cast<NumberNamespace::NumberInstance*>(instance.get())->val = data;
+            dynamic_cast<NumberNamespace::NumberInstance*>(instance.get())->val = data;
             return instance;
         }
 
@@ -154,4 +153,16 @@ Symbol ProgramReader::read_symbol(Opcode opcode) {
         default:
             throw RuntimeError(std::string("Unparsable symbol ") + describe(opcode));
     }
+}
+
+void ProgramReader::prepare_stream() {
+
+    assert(!file.is_open());
+
+    file.open(filename, std::ios::in | std::ios::binary);
+
+    if(!file.is_open()) {
+        throw RuntimeError("Cannot open file");
+    }
+
 }
