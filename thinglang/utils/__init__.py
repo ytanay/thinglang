@@ -1,1 +1,1 @@
-from thinglang.utils.logging_utils import print_header, log
+from thinglang.utils.logging_utils import print_header

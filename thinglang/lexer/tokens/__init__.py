@@ -22,9 +22,6 @@ class LexicalToken(Describable):
         self.context = context
         return self
 
-    def references(self):
-        return ()
-
     def transpile(self):
         return self.value
 

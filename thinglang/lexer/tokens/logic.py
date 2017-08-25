@@ -66,7 +66,7 @@ class LexicalBoolean(LexicalToken, ValueType):
 
     @classmethod
     def evaluate(cls, _=None):
-        raise NotImplementedError('Must implement evaluate')
+        pass
 
     @property
     def type(self):
@@ -78,18 +78,12 @@ class LexicalBoolean(LexicalToken, ValueType):
 
 class LexicalBooleanTrue(LexicalBoolean):
 
-    def transpile(self):
-        return 'true'
-
     @classmethod
     def evaluate(cls, _=None):
         return True
 
 
 class LexicalBooleanFalse(LexicalBoolean):
-
-    def transpile(self):
-        return 'false'
 
     @classmethod
     def evaluate(cls, _=None):

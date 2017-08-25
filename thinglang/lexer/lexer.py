@@ -61,7 +61,7 @@ def analyze_line(line):
 
 
 def finalize_group(group, termination_reason, entity_class):
-    print(termination_reason)
+
     if group in KEYWORDS:
         return KEYWORDS[group](group) if KEYWORDS[group].EMITTABLE else None
 

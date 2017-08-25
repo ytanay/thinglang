@@ -84,13 +84,11 @@ class TokenVector(object):
         :return:
         """
 
-
         if not self.tokens:
             return
 
         if isinstance(self.tokens[-1], LexicalGroupEnd):
             self.tokens[-1:] = []
-
 
         if not isinstance(self.tokens[0], LexicalIndent):
             return
@@ -98,11 +96,8 @@ class TokenVector(object):
         iterable = iter(self.tokens)
         size = 0
 
-        try:
-            while isinstance(next(iterable), LexicalIndent):
-                size += 1
-        except StopIteration:
-            pass
+        while isinstance(next(iterable), LexicalIndent):
+            size += 1
 
         self.tokens[0:size] = []
 
@@ -111,12 +106,6 @@ class TokenVector(object):
 
     def append(self, token):
         self.tokens.append(token)
-
-    def __str__(self):
-        return '<{}>{}'.format(type(self).__name__, self.tokens)
-
-    def __repr__(self):
-        return str(self)
 
     def __len__(self):
         return len(self.tokens)

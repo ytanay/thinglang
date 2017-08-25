@@ -1,7 +1,5 @@
 from thinglang.foundation import definitions, templates
-from thinglang.lexer.tokens import LexicalBinaryOperation
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 
 
 class ListInitialization(BaseNode):
@@ -22,26 +20,13 @@ class ListInitialization(BaseNode):
     def __len__(self):
         return len(self.arguments)
 
-    def __getitem__(self, item):
-        return self.arguments[item]
-
     def __setitem__(self, key, value):
         self.arguments[key] = value
-
-    def evaluate(self, resolver):
-        return [value.evaluate(resolver) for value in self.arguments]
 
     def describe(self):
         return self.arguments
 
-    def statics(self):
-        return [x for x in self.arguments if x.STATIC]
-
-    def transpile(self, definition=False, pops=False, static=False):
-
-        if not pops:
-            return ', '.join(f'{x.type.transpile() + " " if definition else ""}{x.transpile()}' for x in self.arguments)
-
+    def transpile(self, pops=False, static=False):
         lines = []
 
         for arg in reversed(self.arguments):

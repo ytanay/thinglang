@@ -20,14 +20,8 @@ class Access(BaseNode, ValueType):
         self.type = None
         self.arguments = []
 
-    def evaluate(self, resolver):
-        return resolver.resolve(self)
-
     def describe(self):
         return '{}:{}'.format('.'.join(str(x) for x in self.target), self.type)
-
-    def split(self):
-        return self.target[:2], self.target[2:]
 
     def __getitem__(self, item):
         return self.target[item]
@@ -42,12 +36,6 @@ class Access(BaseNode, ValueType):
 
     def transpile(self):
         return '->'.join(x.transpile() for x in self.target)
-
-    def type_id(self):
-        return None
-
-    def partial(self, idx):
-        return Access(*self.target[idx:idx+2])
 
     def compile(self, context: CompilationContext):
         context.push_ref(self)
@@ -78,22 +66,9 @@ class MethodCall(BaseNode, ValueType):
     def replace_argument(self, idx, replacement):
         self.arguments[idx] = replacement
 
-    def references(self):
-        return self.target, self.arguments
-
-    @classmethod
-    def create_constructing_call(cls, target, arguments=None):
-        return cls([LexicalClassInitialization(None), target, arguments if arguments is not None else ArgumentList()])
-
     @classmethod
     def create(cls, target, arguments=None):
         return cls([Access(target), arguments])
-
-    def transpile(self, orphan=True):
-        return f'{self.target.transpile()}({self.arguments.transpile()}){";" if orphan else ""}'
-
-    def statics(self):
-        yield from self.arguments.statics()
 
     def compile(self, context, captured=False):
         if self.target[0].implements(MethodCall):

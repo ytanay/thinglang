@@ -20,11 +20,7 @@ class CompilationContext(object):
         self.conditional_groups = []
 
     def append(self, symbol):
-        if isinstance(symbol, Opcode):
-            self.instruction_block.append(symbol)
-        elif symbol:
-            self.instruction_block.extend(symbol)
-
+        self.instruction_block.append(symbol)
         return symbol, self.current_index()
 
     def bytes(self):
@@ -83,9 +79,6 @@ class CompilationContext(object):
 
     def method_end(self):
         self.instruction_block.append(OpcodeMethodEnd())
-
-    def last(self):
-        return self.instruction_block[-1], len(self.instruction_block) - 1
 
     def update_conditional_jumps(self):
         for symbol, jump in list(self.conditional_groups[-1].items())[:-1]:

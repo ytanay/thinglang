@@ -30,7 +30,4 @@ class IndeterminateType(ThinglangException):
 
 
 class ArgumentCountMismatch(ThinglangException):
-    def __init__(self, expected, actual):
-        super(ArgumentCountMismatch, self).__init__(expected, actual)
-        self.expected = expected
-        self.actual = actual
+    pass

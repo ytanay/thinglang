@@ -38,22 +38,12 @@ class BaseNode(Describable):
     def describe(self):
         return self.value if self.value is not None else ''
 
-    def insert_before(self, node):
-        siblings = self.parent.children
-        siblings.insert(siblings.index(self), node)
-
     def siblings_while(self, predicate):
         return itertools.takewhile(predicate, self.next_siblings())
 
     def next_siblings(self):
         siblings = self.parent.children
         return siblings[siblings.index(self) + 1:]
-
-    def remove(self):
-        self.parent.children.remove(self)
-
-    def transpile(self):
-        return '?{}?'.format(self)
 
     def transpile_children(self, indent=0, children_override=None):
         sep = '\t' * indent
@@ -84,20 +74,4 @@ class DefinitionPairNode(BaseNode):
         super(DefinitionPairNode, self).__init__(slice)
         self.name = slice[1]
 
-
-class Transient(LexicalIdentifier):
-
-    IDX_COUNTER = 0
-
-    def __init__(self):
-        self.idx = Transient.IDX_COUNTER
-        super().__init__(self.idx)
-
-        Transient.IDX_COUNTER += 1
-
-    def transpile(self):
-        return '__transient__{}__'.format(self.idx)
-
-    def __str__(self):
-        return 'Transient({})'.format(self.idx)
 

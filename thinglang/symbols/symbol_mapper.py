@@ -65,6 +65,3 @@ class SymbolMapper(object):
 
     def __contains__(self, item) -> bool:
         return item in self.maps
-
-    def __str__(self):
-        return f'Mapper({pprint.pformat(self.maps)})'

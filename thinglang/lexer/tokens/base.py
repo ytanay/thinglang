@@ -63,29 +63,13 @@ class LexicalAssignment(LexicalToken):
 
 
 class LexicalIdentifier(LexicalToken, ValueType):
-    TYPE_INDICATOR = object()
-
     def __init__(self, value, type=None):
         super(LexicalIdentifier, self).__init__(value, value)
         self.type = type
         self.index = None
 
     def __str__(self):
-        if self.type is self.TYPE_INDICATOR:
-            return '<{}>'.format(self.value)
-        return '{{{}:{}}}'.format(self.value, self.type or '<?>')
-
-    def evaluate(self, resolver):
-        return resolver.resolve(self)
-
-    def is_self(self):
-        return self == self.self()
-
-    def references(self):
-        return self
-
-    def type_id(self):
-        return self.type
+        return '<{}>'.format(self.value)
 
     def transpile(self):
         return self.value

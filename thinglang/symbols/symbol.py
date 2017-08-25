@@ -52,12 +52,6 @@ class Symbol(object):
             convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
         )
 
-    def __str__(self):
-        return f'Symbol({self.serialize()})'
-
-    def __repr__(self):
-        return str(self)
-
     @classmethod
     def method(cls, name, return_type, static, arguments):
         return cls(name, cls.METHOD, return_type, static, [x.type for x in arguments])

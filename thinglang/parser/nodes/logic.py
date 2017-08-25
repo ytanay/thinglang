@@ -20,12 +20,6 @@ class Conditional(BaseNode):
     def describe(self):
         return 'if {}'.format(self.value)
 
-    def evaluate(self, resolver):
-        return self.value.evaluate(resolver)
-
-    def references(self):
-        return self.value,
-
     def transpile(self):
         return 'if({}) {{\n{}\n\t\t}}'.format(self.value.transpile(), self.transpile_children(indent=3))
 
@@ -62,7 +56,6 @@ class UnconditionalElse(BaseNode, ElseBranchInterface):
         return 'else {{\n{}\n\t\t}}'.format(self.transpile_children(indent=3))
 
 
-
 class ConditionalElse(Conditional, ElseBranchInterface):
 
     def __init__(self, slice):
@@ -71,9 +64,6 @@ class ConditionalElse(Conditional, ElseBranchInterface):
 
     def describe(self):
         return 'otherwise if {}'.format(self.value)
-
-    def references(self):
-        return self.conditional.references()
 
 
 class Loop(BaseNode):
@@ -84,12 +74,6 @@ class Loop(BaseNode):
         super(Loop, self).__init__(slice)
         _, self.value = slice
 
-    def evaluate(self, resolver):
-        return self.value.evaluate(resolver)
-
-    def references(self):
-        return self.value.references()
-
     def describe(self):
         return str(self.value)
 
@@ -99,15 +83,3 @@ class Loop(BaseNode):
         super(Loop, self).compile(context)
         context.append(OpcodeJump(idx))
         jump.update(context.current_index())
-
-
-class IterativeLoop(BaseNode):
-
-    EXECUTABLE = False
-
-    def __init__(self, slice):
-        super().__init__(slice)
-        self.name, self.generator = slice[1], slice[3]
-
-    def describe(self):
-        return 'for {self.name} in {self.generator}'

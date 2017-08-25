@@ -30,19 +30,6 @@ class AssignmentOperation(BaseNode):
     def describe(self):
         return '{} = {}'.format(self.name, self.value)
 
-    def references(self):
-        return (self.name, self.value.references()) if self.intent is self.REASSIGNMENT else self.value.references()
-
-    @classmethod
-    def create(cls, name, value, type=None):
-        return cls(([type] if type is not None else []) + [name, None, value])
-
-    def transpile(self):
-        if self.intent is self.DECELERATION:
-            return 'auto {} = {};'.format(self.name.transpile(), self.value.transpile())
-        elif self.intent is self.REASSIGNMENT:
-            return '{} = {};'.format(self.name.transpile(), self.value.transpile())
-
     def compile(self, context: CompilationContext):
 
         is_local = self.name.implements(LexicalIdentifier)
@@ -82,14 +69,8 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
         super().__init__(None)
         self.value = value
 
-    def evaluate(self, _):
-        return self.value
-
     def serialize(self):
         return struct.pack('<iI', self.TYPE_IDX, len(self.value)) + bytes(self.value, 'utf-8')
-
-    def references(self):
-        return ()
 
     def transpile(self):
         return f'"{self.value}"'
@@ -104,8 +85,6 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def compile(self, context: CompilationContext):
         ref = context.append_static(self.serialize())
         context.append(OpcodePushStatic(ref))
-
-
 
 
 class InlineCode(LexicalToken):
