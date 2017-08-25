@@ -45,7 +45,6 @@ void Method::execute() {
                 break;
             }
 
-
             case Opcode::PUSH_LOCAL: {
                 Program::push(Program::frame()[symbol.target]);
                 break;
@@ -83,6 +82,13 @@ void Method::execute() {
 
             case Opcode::POP_MEMBER: {
                 Program::frame()[symbol.target]->set(symbol.secondary, Program::pop());
+                break;
+            }
+
+            case Opcode::POP_DEREFERENCED: {
+                auto container = Program::pop();
+                auto value = Program::pop();
+                container->set(symbol.target, value);
                 break;
             }
 
