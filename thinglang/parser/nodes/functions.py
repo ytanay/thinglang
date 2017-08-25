@@ -1,5 +1,6 @@
 from thinglang import CompilationContext
-from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn
+from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn, OpcodeDereference, \
+    OpcodePopDereferenced
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.nodes import BaseNode
@@ -23,6 +24,25 @@ class Access(BaseNode, ValueType):
     def describe(self):
         return '{}:{}'.format('.'.join(str(x) for x in self.target), self.type)
 
+    def transpile(self):
+            return '->'.join(x.transpile() for x in self.target)
+
+    def compile(self, context: CompilationContext, pop_last=False):
+        ref = context.push_ref(context.resolve(self.root))
+
+        for ext, last in self.extensions:
+            ref = context.symbols.dereference(ref.element, ext)
+            cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
+            context.append(cls(ref.element_index))
+
+    @property
+    def root(self):
+        return Access(self.target[:2])
+
+    @property
+    def extensions(self):
+        return [(x, x is self.target[-1]) for x in self.target[2:]]
+
     def __getitem__(self, item):
         return self.target[item]
 
@@ -33,13 +53,6 @@ class Access(BaseNode, ValueType):
         size = len(self.target)
         assert size >= 2
         return size
-
-    def transpile(self):
-        return '->'.join(x.transpile() for x in self.target)
-
-    def compile(self, context: CompilationContext):
-        ref = context.resolve(self)
-        context.push_ref(ref)
 
 
 class ArgumentList(ListInitialization):
