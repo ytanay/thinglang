@@ -5,6 +5,7 @@ from thinglang.foundation import serializer
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.classes import ThingDefinition
 from thinglang.parser.nodes.functions import Access
+from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
 
 
@@ -29,10 +30,10 @@ class SymbolMapper(object):
     def resolve(self, target, locals):
         if target.implements(LexicalIdentifier):
             return LocalReference(locals[target])
-        if target.implements(Access):
-            return self.resolve_access(target, locals)
-        if target.STATIC:
+        elif target.STATIC:
             return StaticReference(target)
+        elif target.implements(Access):
+            return self.resolve_access(target, locals)
 
         raise Exception("Unknown reference type {}".format(target))
 
@@ -59,6 +60,10 @@ class SymbolMapper(object):
 
     def entry(self):
         return self[LexicalIdentifier('Program')].index
+
+    def dereference(self, parent: Symbol, child: LexicalIdentifier):
+        symbol = self.maps[parent.type][child]
+        return ElementReference(self.maps[symbol.type], symbol)
 
     def __getitem__(self, item) -> SymbolMap:
         return self.maps[item]

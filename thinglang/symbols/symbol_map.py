@@ -18,15 +18,6 @@ class SymbolMap(object):
     def override_index(self, new_index):
         self.index = new_index
 
-    def __getitem__(self, item: LexicalIdentifier) -> Symbol:
-        return self.lookup[item]
-
-    def __contains__(self, item: LexicalIdentifier) -> bool:
-        return item in self.lookup
-
-    def __iter__(self):
-        return iter(self.lookup.values())
-
     def serialize(self):
         return {
             "name": self.name,
@@ -48,3 +39,15 @@ class SymbolMap(object):
         methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods())]
 
         return cls(members, methods, thing.name, index)
+
+    def __getitem__(self, item: LexicalIdentifier) -> Symbol:
+        return self.lookup[item]
+
+    def __contains__(self, item: LexicalIdentifier) -> bool:
+        return item in self.lookup
+
+    def __iter__(self):
+        return iter(self.lookup.values())
+
+    def __str__(self):
+        return 'SymbolMap({})'.format(self.name)
