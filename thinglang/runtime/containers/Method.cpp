@@ -6,6 +6,7 @@
 
 
 void Method::execute() {
+    std::cerr << "Entered method (stack frame size: " << frame_size << ")" << std::endl;
     Program::create_frame(frame_size);
 
 
@@ -38,7 +39,6 @@ void Method::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                std::cerr << "Creating " << Program::types[symbol.target]->members << " slots" << std::endl;
                 auto new_thing = Thing(new ThingInstance(Program::types[symbol.target]->members));
                 Program::frame()[0] = new_thing;
                 Program::push(new_thing);
@@ -124,5 +124,6 @@ void Method::execute() {
     };
 
     Program::pop_frame();
+    std::cerr << "Exiting method" << std::endl;
 }
 

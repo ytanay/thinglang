@@ -15,7 +15,7 @@ public:
     Symbol(Opcode opcode, Index target, Index secondary) : opcode(opcode), target(target),
                                                                          secondary(secondary) {};
 
-    Opcode opcode;
+    Opcode opcode = Opcode::INVALID;
     Index target = 0;
     Index secondary = 0;
 };

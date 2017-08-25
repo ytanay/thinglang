@@ -1,5 +1,6 @@
 #pragma once
 
+#include <utility>
 #include <vector>
 
 #include "../execution/Symbol.h"
@@ -8,10 +9,8 @@
 
 class Method {
 public:
-    Method() : frame_size(0), arguments(0) {};
-
     Method(Size frame_size, Size arguments, SymbolList symbols) :
-            frame_size(frame_size), arguments(arguments), symbols(symbols) {};
+            frame_size(frame_size), arguments(arguments), symbols(std::move(symbols)) {};
 
     void execute();
 
