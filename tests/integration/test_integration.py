@@ -14,7 +14,7 @@ SEARCH_PATTERN = os.path.join(BASE_PATH, '**/*.thing')
 
 def collect_tests():
     for path in glob.glob(SEARCH_PATTERN, recursive=True):
-        #if 'members' in path:
+       #if 'external' in path:
             yield ProgramTestCase(path)
 
 
@@ -47,5 +47,6 @@ def test_thing_program(test_file: ProgramTestCase):
     assert stdout == expected_output, 'VM output did not match expected output'
 
 
-
-
+def test_entry_validation():
+    with pytest.raises(ValueError):
+        thinglang.preprocess('')

@@ -34,8 +34,12 @@ class Opcode(object, metaclass=OpcodeRegistration):
         self.args = args
 
     def resolve(self):
-        assert len(self.args) == len(self.ARGS), 'Mismatched argument count. Expected {}, got {}'.format(len(self.ARGS), len(self.args))
-        assert all(isinstance(x, int) for x in self.args), 'Incorrect argument types: {}'.format(self.args)
+        if len(self.args) != len(self.ARGS):
+            raise ValueError('Mismatched argument count. Expected {}, got {}'.format(len(self.ARGS), len(self.args)))
+
+        if not all(isinstance(x, int) for x in self.args):
+            raise TypeError('Incorrect argument types: {}'.format(self.args))
+
         return struct.pack(self.format_string(), self.OPCODE, *self.args)
 
     @classmethod
@@ -57,9 +61,6 @@ class Opcode(object, metaclass=OpcodeRegistration):
 
     def __str__(self):
         return '{}({})'.format(type(self).__name__, self.args)
-
-    def __repr__(self):
-        return str(self)
 
 
 class OpcodeElementReferenced(Opcode):
