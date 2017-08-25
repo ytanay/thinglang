@@ -1,6 +1,6 @@
 /*
 {
-    "expected_output": ["created InnerContainer", "10", "20"]
+    "expected_output": ["created InnerContainer", "1", "2", "10", "20", "100", "200", "100", "200"]
 }
 */
 
@@ -16,8 +16,8 @@ thing Container
 
     setup
         self.inner = create InnerContainer()
-        self.inner.val1 = 10
-        self.inner.val2 = 20
+        self.inner.val1 = 1
+        self.inner.val2 = 2
 
     does print
         Output.write(self.inner.val1)
@@ -33,3 +33,13 @@ thing Program
         Container c = create Container()
 
         c.print()
+
+        c.set(10, 20)
+        c.print()
+
+        c.inner.val1 = 100
+        c.inner.val2 = 200
+        c.print()
+
+        Output.write(c.inner.val1)
+        Output.write(c.inner.val2)
