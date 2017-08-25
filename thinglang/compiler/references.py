@@ -39,7 +39,6 @@ class ElementReference(Reference):
         return self.element.static
 
 
-
 class LocalReference(Reference):
     def __init__(self, local):
         super(LocalReference, self).__init__(local.type)

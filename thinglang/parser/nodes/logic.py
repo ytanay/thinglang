@@ -29,7 +29,8 @@ class Conditional(BaseNode):
             context.conditional_groups.append(OrderedDict((x, None) for x in elements))
 
         self.value.compile(context)
-        instruction, idx = context.append(OpcodeJumpConditional())
+        opcode = OpcodeJumpConditional()
+        context.append(opcode)
         super(Conditional, self).compile(context)
 
         if list(context.conditional_groups[-1].keys())[-1] is self:
@@ -39,7 +40,7 @@ class Conditional(BaseNode):
             context.conditional_groups[-1][self] = jump_out
             context.append(jump_out)
 
-        instruction.update(context.current_index())
+        opcode.update(context.current_index())
 
 
 class ElseBranchInterface(object):
@@ -80,7 +81,8 @@ class Loop(BaseNode):
     def compile(self, context: CompilationContext):
         idx = context.current_index()
         self.value.compile(context)
-        jump, _ = context.append(OpcodeJumpConditional())
+        opcode = OpcodeJumpConditional()
+        context.append(opcode)
         super(Loop, self).compile(context)
         context.append(OpcodeJump(idx))
-        jump.update(context.current_index())
+        opcode.update(context.current_index())
