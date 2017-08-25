@@ -1,6 +1,6 @@
 /*
 {
-    "expected_output": ["A container", "42"]
+    "expected_output": ["A container", "Still a container", "42", "43"]
 }
 */
 
@@ -16,6 +16,11 @@ thing Container
 thing Program
     setup
         Container c = create Container()
+
         Output.write(c.name)
+        c.name = "Still a container"
+        Output.write(c.name)
+
+        Output.write(c.value)
         c.value = 43
         Output.write(c.value)
