@@ -5,7 +5,7 @@
 #include "ThingInstance.h"
 
 std::string BaseThingInstance::text() {
-    return "?";
+    return "instance";
 }
 
 bool BaseThingInstance::boolean() {

@@ -8,7 +8,7 @@ from thinglang.compiler.references import ElementReference, LocalReference, Stat
 class CompilationContext(object):
 
     def __init__(self, symbols, entry=None):
-        
+
         self.symbols = symbols
 
         self.current_locals = None
@@ -48,7 +48,7 @@ class CompilationContext(object):
 
         return self.symbols.resolve(item, self.current_locals)
 
-    def push_ref(self, ref: Reference) -> None:
+    def push_ref(self, ref: Reference) -> Reference:
         """
         Push down a reference object into the program stack
         """
@@ -61,6 +61,8 @@ class CompilationContext(object):
             self.append(OpcodePushMember.from_reference(ref))
         else:
             raise Exception('Cannot push down {}'.format(ref))
+
+        return ref
 
     def method_start(self, method_locals, *args) -> None:
         """
