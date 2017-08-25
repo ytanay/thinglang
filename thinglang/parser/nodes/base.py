@@ -2,7 +2,7 @@ import struct
 
 from thinglang.compiler import CompilationContext, LocalReference
 from thinglang.compiler.opcodes import OpcodePopLocal, OpcodePushStatic, OpcodeAssignStatic, OpcodePopMember, \
-    OpcodeAssignLocal, OpcodePushLocal, OpcodePushMember
+    OpcodeAssignLocal, OpcodePushLocal, OpcodePushMember, OpcodePopDereferenced
 from thinglang.foundation import definitions
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -54,7 +54,10 @@ class AssignmentOperation(BaseNode):
             target = context.resolve(target)
             context.append(OpcodePopLocal.from_reference(target))
         elif target.implements(Access):
-            context.append(OpcodePopMember.local_reference(context.resolve(target)))
+            if target.extensions:
+                target.compile(context, pop_last=True)
+            else:
+                context.append(OpcodePopMember.local_reference(context.resolve(target)))
 
         else:
             raise Exception('Cannot pull up {}'.format(target))
