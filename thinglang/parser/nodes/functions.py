@@ -1,5 +1,5 @@
+from thinglang import CompilationContext
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn
-from thinglang.compiler.references import ElementReference
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.nodes import BaseNode
@@ -11,7 +11,12 @@ from thinglang.utils.type_descriptors import ValueType
 class Access(BaseNode, ValueType):
     def __init__(self, slice):
         super(Access, self).__init__(slice)
-        self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
+
+        if isinstance(slice[0], Access):
+            self.target = slice[0].target + [x for x in slice[1:] if not isinstance(x, LexicalAccess)]
+        else:
+            self.target = [x for x in slice if not isinstance(x, LexicalAccess)]
+
         self.type = None
         self.arguments = []
 
@@ -43,6 +48,9 @@ class Access(BaseNode, ValueType):
 
     def partial(self, idx):
         return Access(*self.target[idx:idx+2])
+
+    def compile(self, context: CompilationContext):
+        context.push_ref(self)
 
 
 class ArgumentListPartial(ListInitializationPartial):
