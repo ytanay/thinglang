@@ -68,14 +68,17 @@ class LexicalIdentifier(LexicalToken, ValueType):
         self.type = type
         self.index = None
 
-    def __str__(self):
-        return '<{}>'.format(self.value)
+    def compile(self, context):
+        context.push_ref(context.resolve(self))
 
     def transpile(self):
         return self.value
 
     def upper(self):
         return self.value.upper()
+
+    def __str__(self):
+        return '<{}>'.format(self.value)
 
     def __hash__(self):
         return hash(self.value)

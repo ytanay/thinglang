@@ -61,31 +61,18 @@ class LexicalRepeatFor(LexicalToken):
     pass
 
 
-class LexicalBoolean(LexicalToken, ValueType):
-    STATIC = True
-
-    @classmethod
-    def evaluate(cls, _=None):
-        pass
-
-    @property
-    def type(self):
-        return LexicalNumericalValue.type
-
-    def serialize(self):
-        return LexicalNumericalValue(self.evaluate()).serialize()
+class LexicalBoolean(LexicalNumericalValue):
+    pass
 
 
 class LexicalBooleanTrue(LexicalBoolean):
 
-    @classmethod
-    def evaluate(cls, _=None):
-        return True
+    def __init__(self, value):
+        super(LexicalBooleanTrue, self).__init__(True)
 
 
 class LexicalBooleanFalse(LexicalBoolean):
 
-    @classmethod
-    def evaluate(cls, _=None):
-        return False
+    def __init__(self, value):
+        super(LexicalBooleanFalse, self).__init__(False)
 

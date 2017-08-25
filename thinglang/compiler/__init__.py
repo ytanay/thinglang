@@ -40,23 +40,7 @@ class CompilationContext(object):
     def push_ref(self, ref):
         """
         Push down an arbitrary reference
-        ref can be one of:
-            - Static (constant) value: numbers, strings, etc...
-            - Local variable
-            - Reference chain starting at local variable
-            - Reference chain starting at thing definition
-            - Reference chain starting at constant value
-            - Method call
         """
-        idx = self.current_index()
-
-        from thinglang.parser.nodes.functions import MethodCall  #TODO: Can we do anything about this?
-        if isinstance(ref, MethodCall):
-            ref.compile(self, True)
-            return idx
-
-        if not isinstance(ref, Reference):
-            ref = self.resolve(ref)
 
         if isinstance(ref, StaticReference):
             self.append(OpcodePushStatic(self.append_static(ref.value.serialize())))
@@ -66,8 +50,6 @@ class CompilationContext(object):
             self.append(OpcodePushMember.from_reference(ref))
         else:
             raise Exception('Cannot push down {}'.format(ref))
-
-        return idx
 
     def method_start(self, method_locals, *args):
         self.instructions += self.instruction_block

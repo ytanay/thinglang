@@ -38,7 +38,8 @@ class Access(BaseNode, ValueType):
         return '->'.join(x.transpile() for x in self.target)
 
     def compile(self, context: CompilationContext):
-        context.push_ref(self)
+        ref = context.resolve(self)
+        context.push_ref(ref)
 
 
 class ArgumentList(ListInitialization):
@@ -78,15 +79,15 @@ class MethodCall(BaseNode, ValueType):
             target = context.resolve(self.target)
 
             if not target.static and not self.constructing_call:
-                context.push_ref(context.resolve(self.target[0]))
+                self.target[0].compile(context)
 
         for arg in self.arguments:
-            context.push_ref(arg)
+            arg.compile(context)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target))
 
-        if not captured:
+        if self.parent:
             context.append(OpcodePop())  # pop the return value, if the return value is not captured
 
         return target
@@ -104,5 +105,5 @@ class ReturnStatement(BaseNode):
             return 'return NULL;'
 
     def compile(self, context):
-        context.push_ref(self.value)
+        self.value.compile(context)
         context.append(OpcodeReturn())
