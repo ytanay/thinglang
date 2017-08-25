@@ -3,7 +3,8 @@
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
 
-const std::string ProgramReader::MAGIC = "THING";
+const std::string ProgramReader::EXPECTED_MAGIC = "THING\x0C";
+
 
 ProgramInfo ProgramReader::process() {
     read_header();
@@ -18,13 +19,17 @@ void ProgramReader::read_header() {
         throw RuntimeError("Cannot open file");
     }
 
-    auto magic = read(MAGIC.size());
+    auto magic = read_string(EXPECTED_MAGIC.size());
 
-    if (magic != MAGIC) {
+    if (magic != EXPECTED_MAGIC) {
         throw RuntimeError("Invalid file format");
     }
 
     auto version = read<uint16_t>();
+
+    if (version != EXPECTED_VERSION){
+        throw RuntimeError("Invalid bytecode version (" + to_string(version) + ")");
+    }
     program_size = read<uint32_t>();
     data_size = read<uint32_t>();
     entry = read<uint32_t>();

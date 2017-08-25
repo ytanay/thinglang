@@ -30,7 +30,7 @@ class CompilationContext(object):
     def bytes(self):
         data = bytes().join(x for x in self.data)
         code = bytes().join(x.resolve() for x in self.instructions + self.instruction_block)
-        header = bytes('THING', 'utf-8') + struct.pack('<HIII', 1, len(data) + len(code), len(data), self.entry)
+        header = bytes('THING\x0C', 'utf-8') + struct.pack('<HIII', 1, len(data) + len(code), len(data), self.entry)
 
         return header + data + code
 

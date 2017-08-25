@@ -84,5 +84,6 @@ private:
     Index index = 0, entry = 0;
     Size program_size = 0, data_size = 0;
 
-    static const std::string MAGIC;
+    static const std::string EXPECTED_MAGIC;
+    static const uint16_t EXPECTED_VERSION = 1;
 };
