@@ -3,7 +3,7 @@ from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.collections import ListInitializationPartial, ListInitialization
+from thinglang.parser.nodes.collections import ListInitialization
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import ValueType
 
@@ -51,15 +51,6 @@ class Access(BaseNode, ValueType):
 
     def compile(self, context: CompilationContext):
         context.push_ref(self)
-
-
-class ArgumentListPartial(ListInitializationPartial):
-    pass
-
-
-class ArgumentListDecelerationPartial(ArgumentListPartial):
-    STRICTLY_TYPED = True
-    pass
 
 
 class ArgumentList(ListInitialization):

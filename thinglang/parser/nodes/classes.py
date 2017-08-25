@@ -4,8 +4,7 @@ from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
 from thinglang.parser.nodes import DefinitionPairNode, BaseNode
-from thinglang.parser.nodes.base import InlineString
-from thinglang.parser.nodes.functions import ArgumentList, ReturnStatement, ArgumentListPartial
+from thinglang.parser.nodes.functions import ArgumentList, ReturnStatement
 from thinglang.symbols.symbol import Symbol
 
 
