@@ -13,14 +13,14 @@ class LexicalQuote(LexicalToken):  # "
         return original
 
 
-class LexicalTick(LexicalToken):  # "
+class LexicalTick(LexicalToken):  # `
     EMITTABLE = False
     ALLOW_EMPTY = True
 
     @classmethod
     def next_operator_set(cls, current, original):
         if current is original:
-            return {'`': LexicalQuote}
+            return {'`': LexicalTick}
         return original
 
 
