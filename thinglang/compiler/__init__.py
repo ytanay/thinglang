@@ -67,13 +67,11 @@ class CompilationContext(object):
         elif isinstance(ref, LocalReference):
             self.append(OpcodePushLocal.from_reference(ref))
         elif isinstance(ref, ElementReference):
-            self.append(OpcodePushMember.type_reference(ref))
+            self.append(OpcodePushMember.from_reference(ref))
         else:
             raise Exception('Cannot push down {}'.format(ref))
 
         return idx
-
-
 
     def method_start(self, method_locals, *args):
         self.instructions += self.instruction_block

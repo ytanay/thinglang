@@ -61,6 +61,7 @@ class AssignmentOperation(BaseNode):
             self.value.compile(context, True)
         else:
             self.value.compile(context)
+
         target = self.name
         if target.implements(LexicalIdentifier):
             target = context.resolve(target)

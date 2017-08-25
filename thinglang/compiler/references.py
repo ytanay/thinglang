@@ -26,6 +26,9 @@ class ElementReference(Reference):
     def local_index(self):
         return self.local.index
 
+    @property
+    def is_local(self):
+        return self.local is not None
 
     @property
     def convention(self):

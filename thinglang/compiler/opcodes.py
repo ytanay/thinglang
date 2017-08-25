@@ -61,7 +61,12 @@ class Opcode(object, metaclass=OpcodeRegistration):
     def __repr__(self):
         return str(self)
 
+
 class OpcodeElementReferenced(Opcode):
+
+    @classmethod
+    def from_reference(cls, ref):
+        return cls.local_reference(ref) if ref.is_local else cls.type_reference(ref)
 
     @classmethod
     def type_reference(cls, element_ref):
