@@ -1,0 +1,35 @@
+/*
+{
+    "expected_output": ["created InnerContainer", "10", "20"]
+}
+*/
+
+thing InnerContainer
+    has number val1
+    has number val2
+
+    setup
+        Output.write("created InnerContainer")
+
+thing Container
+    has InnerContainer inner
+
+    setup
+        self.inner = create InnerContainer()
+        self.inner.val1 = 10
+        self.inner.val2 = 20
+
+    does print
+        Output.write(self.inner.val1)
+        Output.write(self.inner.val2)
+
+    does set with number a, number b
+        self.inner.val1 = a
+        self.inner.val2 = b
+
+
+thing Program
+    setup
+        Container c = create Container()
+
+        c.print()
