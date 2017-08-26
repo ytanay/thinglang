@@ -1,5 +1,3 @@
-import types
-
 from thinglang.parser.nodes.classes import ThingDefinition, MethodDefinition
 
 
@@ -12,16 +10,16 @@ def inspects(*args, predicate=None, priority=0):
         func.predicate = predicate
         func.priority = priority
         return func
+
     return decorator
 
 
 class TreeTraversal(object):
-
     def __init__(self, ast):
         self.ast = ast
         self.results = []
         self.inspections = sorted((getattr(self, member) for member in dir(self) if
-                            hasattr(getattr(self, member), 'predicate')), key=lambda x: x.priority)
+                                   hasattr(getattr(self, member), 'predicate')), key=lambda x: x.priority)
 
         self.current_thing, self.current_method = None, None
 

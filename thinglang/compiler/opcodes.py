@@ -3,6 +3,7 @@ import struct
 import itertools
 
 import collections
+from typing import List
 
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import camelcase_to_underscore
@@ -13,6 +14,9 @@ OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode
 
 
 class OpcodeRegistration(type):
+    """
+    This metaclass gives every opcode an actual numeric code, for use in the bytecode.
+    """
     COUNT = itertools.count(-1)
 
     def __new__(mcs, name, bases, dct):
@@ -23,6 +27,13 @@ class OpcodeRegistration(type):
 
 
 class Opcode(object, metaclass=OpcodeRegistration):
+    """
+    Describes an instruction in the thinglang assembly language.
+
+    An instance of this class contains an opcode and its operands (i.e. arguments). The operands are not necessarily
+    known when the class is instantiated, but must be resolved before the opcode is serialized into bytecode.
+    """
+
     ARGS = ()
     OPCODE = -1
 
@@ -30,10 +41,16 @@ class Opcode(object, metaclass=OpcodeRegistration):
         super(Opcode, self).__init__()
         self.args = args
 
-    def update(self, *args):
+    def update(self, *args) -> None:
+        """
+        Update the instruction's arguments
+        """
         self.args = args
 
-    def resolve(self):
+    def resolve(self) -> bytes:
+        """
+        Validates this instruction and convert it to binary bytecode
+        """
         if len(self.args) != len(self.ARGS):
             raise ValueError('Mismatched argument count. Expected {}, got {}'.format(len(self.ARGS), len(self.args)))
 
@@ -43,17 +60,27 @@ class Opcode(object, metaclass=OpcodeRegistration):
         return struct.pack(self.format_string(), self.OPCODE, *self.args)
 
     @classmethod
-    def format_string(cls):
+    def format_string(cls) -> str:
+        """
+        Generates the formating string used when this opcode is serialized.
+        Assumes all operands are unsigned 32-bit integers
+        """
         return '<B{}'.format('I' * len(cls.ARGS))
 
     @classmethod
-    def all(cls):
+    def all(cls) -> List[OpcodeDescription]:
+        """
+        Returns a list of all opcodes deriving from this class
+        """
         return [
             OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in collection_utils.subclasses(cls) if opcode.executable()
         ]
 
     @classmethod
-    def name(cls):
+    def name(cls) -> str:
+        """
+        Returns the canonical name of this opcode
+        """
         return camelcase_to_underscore(cls.__name__.replace('Opcode', ''))
 
     @classmethod
@@ -66,7 +93,7 @@ class Opcode(object, metaclass=OpcodeRegistration):
     def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.args == other.args
 
-    def __str__(self):
+    def __str__(self) -> str:
         return '{}({})'.format(type(self).__name__, self.args)
 
 
@@ -74,14 +101,23 @@ class ElementReferenced(Opcode):
 
     @classmethod
     def from_reference(cls, ref):
+        """
+        Automatically construct an appropriate opcode instance using a a given element reference
+        """
         return cls.local_reference(ref) if ref.is_local else cls.type_reference(ref)
 
     @classmethod
     def type_reference(cls, element_ref):
+        """
+        Generate a type-referencing opcode
+        """
         return cls(element_ref.thing_index, element_ref.element_index)
 
     @classmethod
     def local_reference(cls, element_ref):
+        """
+        Generate a locally-referencing opcode.
+        """
         return cls(element_ref.local_index, element_ref.element_index)
 
 
@@ -89,10 +125,16 @@ class LocalReferenced(Opcode):
 
     @classmethod
     def from_reference(cls, local_ref, *args):
+        """
+        Create a locally referencing opcode
+        """
         return cls(local_ref.local_index, *args)
 
     @classmethod
     def from_references(cls, destination_ref, source_ref):
+        """
+        Create a source->destination locally-referencing opcode instance
+        """
         return cls(destination_ref.local_index, source_ref.local_index)
 
 
@@ -119,14 +161,14 @@ class OpcodePushNull(Opcode):
     pass
 
 
-class OpcodePushLocal(OpcodeLocalReferenced):
+class OpcodePushLocal(LocalReferenced):
     """
     Push a reference to a local object from the stack frame into the program stack
     """
     ARGS = LOCAL_ID,
 
 
-class OpcodePushMember(OpcodeElementReferenced):
+class OpcodePushMember(ElementReferenced):
     """
     Push a reference to a member from a local object on the stack frame into the program stack
     """
@@ -149,21 +191,21 @@ class OpcodePop(Opcode):
     pass
 
 
-class OpcodePopLocal(OpcodeLocalReferenced):
+class OpcodePopLocal(LocalReferenced):
     """
     Pops a reference from the program stack into a local object
     """
     ARGS = LOCAL_ID,
 
 
-class OpcodePopMember(OpcodeElementReferenced):
+class OpcodePopMember(ElementReferenced):
     """
     Sets a reference frm the stack into a member of a local object
     """
     ARGS = LOCAL_ID, MEMBER_ID
 
 
-class OpcodePopDereferenced(OpcodeElementReferenced):
+class OpcodePopDereferenced(ElementReferenced):
     """
     Sets a reference from the stack into a dereferenced member on the stack
     """
@@ -172,14 +214,14 @@ class OpcodePopDereferenced(OpcodeElementReferenced):
 
 # Assignment operations
 
-class OpcodeAssignStatic(OpcodeLocalReferenced):
+class OpcodeAssignStatic(LocalReferenced):
     """
     Sets a reference from the static segment into the stack frame
     """
     ARGS = LOCAL_ID, STATIC_ID
 
 
-class OpcodeAssignLocal(OpcodeLocalReferenced):
+class OpcodeAssignLocal(LocalReferenced):
     """
     Overrides a local object with a reference to another local object
     """
@@ -197,14 +239,14 @@ class OpcodeDereference(Opcode):
 
 # Method Calls
 
-class OpcodeCall(OpcodeElementReferenced):
+class OpcodeCall(ElementReferenced):
     """
     Calls a user defined method
     """
     ARGS = TYPE_ID, METHOD_ID
 
 
-class OpcodeCallInternal(OpcodeElementReferenced):
+class OpcodeCallInternal(ElementReferenced):
     """
     Calls a native (compiled) method
     """

@@ -57,7 +57,7 @@ class AssignmentOperation(BaseNode):
             if target.extensions:
                 target.compile(context, pop_last=True)
             else:
-                context.append(OpcodePopMember.local_reference(context.resolve(target)))
+                context.append(OpcodePopMember.from_reference(context.resolve(target)))
 
         else:
             raise Exception('Cannot pull up {}'.format(target))

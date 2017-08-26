@@ -3,7 +3,7 @@ from collections import OrderedDict
 
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.base import AssignmentOperation
-from thinglang.parser.nodes.classes import MethodDefinition
+from thinglang.parser.nodes.classes import MethodDefinition, ThingDefinition
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 
@@ -11,6 +11,12 @@ LocalMember = collections.namedtuple('LocalMember', ['type', 'index'])
 
 
 class Indexer(TreeTraversal):
+    """
+    The indexer scans the AST for local variable declarations and allocates a slot for them in their respective
+    method definitions's locals.
+
+    This information is used during linking and reference resolution
+    """
 
     def __init__(self, ast):
         super(Indexer, self).__init__(ast)
@@ -35,11 +41,17 @@ class Indexer(TreeTraversal):
 
 
 class IndexerContext(object):
+    """
+    An IndexerContext object is created for every method definition, and describes the slot ordering of the
+    method's stack frame locals.
 
-    def __init__(self, method, thing):
+    When flushed, it copies the local descriptions into the appropriate method.
+    """
+
+    def __init__(self, method: MethodDefinition, thing: ThingDefinition):
         super(IndexerContext, self).__init__()
 
-        self.current_method: MethodDefinition = method
+        self.current_method = method
         self.locals = OrderedDict({LexicalIdentifier.self(): LocalMember(thing.name, 0)})
         for arg in method.arguments:
             self.locals[arg] = LocalMember(arg.type, len(self.locals))

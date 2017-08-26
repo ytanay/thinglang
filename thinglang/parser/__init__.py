@@ -6,20 +6,25 @@ from thinglang.lexer.tokens import LexicalToken, LexicalGroupEnd
 from thinglang.parser.vector import TokenVector, ParenthesesVector, VECTOR_CREATION_TOKENS
 
 
-def parse(lexical_groups) -> RootNode:
+def parse(lexical_groups: List[List[LexicalToken]]) -> RootNode:
     """
-    The parser takes a list<list<lexical-token>>, where each inner list (list<lexical-token>) is referred to as a lexical group (why? because).
-    Each lexical group is parsed independently, through a process that reduces the group iteratively until no further reductions can be made.
-    Then, lexical groups are processed in order, creating a tree structure based on indentation.
-    Each TokenNode in the tree contains n-children, where each child is also a token node.
-    The root node of this tree is returned
+    The parser takes a list<list<lexical-token>>, where each inner list (list<lexical-token>) is referred to as a lexical group.
+
+    Each lexical group is parsed independently as follows:
+        1. A nested TokenVector is created for the group
+        2. The token vector is processed - that is to say, the lexical group is parsed using the thinglang parsing rules.
+        3. The result of this parsing operation is an AST node, which includes indentation structure information.
+        4. The AST node is added into a list of nodes pending attachment.
+
+    Next, the nodes are processed in order, creating a tree structure based on indentation.
+    The root node of this tree is returned.
     """
     stack = [RootNode()]
     processed_groups = []
 
     for group in lexical_groups:
         token_vector = collect_vectors(group)
-        if not token_vector.empty():
+        if not token_vector.empty:
             processed_groups.append(token_vector.parse())
 
     for idx, node in enumerate(processed_groups):
@@ -43,6 +48,10 @@ def parse(lexical_groups) -> RootNode:
 
 
 def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
+    """
+    Generates a token vector from a list of lexical tokens, using an iterative process where vector initiating and
+    termination tokens (e.g. parentheses of all kinds) are resolved.
+    """
     stack = [TokenVector()]
     closing_tokens = []
 

@@ -1,6 +1,6 @@
 import collections
 
-from thinglang.lexer.tokens import LexicalGroupEnd
+from thinglang.lexer.tokens import LexicalGroupEnd, LexicalToken
 from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation
 from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator, LexicalIndent, \
     LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
@@ -8,6 +8,7 @@ from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDec
     LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
     LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
+from thinglang.parser.nodes import BaseNode
 from thinglang.parser.nodes.arithmetic import ArithmeticOperation
 from thinglang.parser.nodes.base import  AssignmentOperation, InlineCode
 from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
@@ -23,7 +24,10 @@ class TokenVector(object):
     def __init__(self, tokens=None):
         self.tokens = tokens if tokens is not None else []
 
-    def parse(self):
+    def parse(self) -> BaseNode:
+        """
+        Iteratively parses the token vector until a single node remains, or no further rule replacements can be made.
+        """
         while self.perform_replacements():
             pass
 
@@ -75,15 +79,15 @@ class TokenVector(object):
 
     @staticmethod
     def finalize_slice(token_slice):
+        """
+        Parses all nested vectors in a slice
+        """
         return [token.parse() if isinstance(token, TokenVector) else token for token in token_slice]
 
     def process_indentation(self):
         """
         Converts a list of LEXICAL_INDENTATION tokens at the beginning of a parsed group into indentation value stored on the first real token.
-        :param group:
-        :return:
         """
-
         if not self.tokens:
             return
 
@@ -104,8 +108,18 @@ class TokenVector(object):
         if self.tokens:
             self.tokens[0].indent = size
 
-    def append(self, token):
+    def append(self, token: LexicalToken):
+        """
+        Append a token to this vector
+        """
         self.tokens.append(token)
+
+    @property
+    def empty(self):
+        """
+        Returns whether this token vector is effectively empty
+        """
+        return all(isinstance(x, (LexicalIndent, LexicalGroupEnd)) for x in self.tokens)
 
     def __len__(self):
         return len(self.tokens)
@@ -113,11 +127,12 @@ class TokenVector(object):
     def __getitem__(self, item):
         return self.tokens[item]
 
-    def empty(self):
-        return all(isinstance(x, (LexicalIndent, LexicalGroupEnd)) for x in self.tokens)
-
 
 class ParenthesesVector(TokenVector, ValueType):
+    """
+    Describes a vector of tokens bounded in parentheses, such as those in a method call's arguments or those
+    signifying order-of-operations in an arithmetic operations
+    """
 
     def parse(self):
         if not self.tokens:
@@ -137,6 +152,9 @@ class ParenthesesVector(TokenVector, ValueType):
 
 
 class TypeVector(TokenVector):
+    """
+    Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
+    """
 
     def parse(self):
         output = []
