@@ -11,30 +11,28 @@
 #include "../errors/RuntimeError.h"
 
 enum class Opcode {
-    PUSH_MEMBER = 6,
-    POP_MEMBER = 10,
-    POP_DEREFERENCED = 11,
-    CALL = 15,
-    CALL_INTERNAL = 16,
-    ELEMENT_REFERENCED = 0,
-    PUSH_LOCAL = 5,
-    POP_LOCAL = 9,
-    ASSIGN_STATIC = 12,
-    ASSIGN_LOCAL = 13,
-    LOCAL_REFERENCED = 1,
-    INVALID = 2,
-    PASS = 3,
-    PUSH_NULL = 4,
-    PUSH_STATIC = 7,
-    POP = 8,
-    DEREFERENCE = 14,
-    RETURN = 17,
-    INSTANTIATE = 18,
-    JUMP = 19,
-    JUMP_CONDITIONAL = 20,
-    THING_DEFINITION = 21,
-    METHOD_DEFINITION = 22,
-    METHOD_END = 23
+    PUSH_MEMBER = 4,
+    POP_MEMBER = 8,
+    POP_DEREFERENCED = 9,
+    CALL = 13,
+    CALL_INTERNAL = 14,
+    PUSH_LOCAL = 3,
+    POP_LOCAL = 7,
+    ASSIGN_STATIC = 10,
+    ASSIGN_LOCAL = 11,
+    INVALID = 0,
+    PASS = 1,
+    PUSH_NULL = 2,
+    PUSH_STATIC = 5,
+    POP = 6,
+    DEREFERENCE = 12,
+    RETURN = 15,
+    INSTANTIATE = 16,
+    JUMP = 17,
+    JUMP_CONDITIONAL = 18,
+    THING_DEFINITION = 19,
+    METHOD_DEFINITION = 20,
+    METHOD_END = 21
 };
 
 
@@ -56,9 +54,6 @@ inline auto describe(Opcode val){
         case Opcode::CALL_INTERNAL:
             return "CALL_INTERNAL";
 
-        case Opcode::ELEMENT_REFERENCED:
-            return "ELEMENT_REFERENCED";
-
         case Opcode::PUSH_LOCAL:
             return "PUSH_LOCAL";
 
@@ -70,9 +65,6 @@ inline auto describe(Opcode val){
 
         case Opcode::ASSIGN_LOCAL:
             return "ASSIGN_LOCAL";
-
-        case Opcode::LOCAL_REFERENCED:
-            return "LOCAL_REFERENCED";
 
         case Opcode::INVALID:
             return "INVALID";
@@ -136,9 +128,6 @@ inline auto arg_count(Opcode val){
         case Opcode::CALL_INTERNAL:
             return 2;
 
-        case Opcode::ELEMENT_REFERENCED:
-            return 0;
-
         case Opcode::PUSH_LOCAL:
             return 1;
 
@@ -150,9 +139,6 @@ inline auto arg_count(Opcode val){
 
         case Opcode::ASSIGN_LOCAL:
             return 2;
-
-        case Opcode::LOCAL_REFERENCED:
-            return 0;
 
         case Opcode::INVALID:
             return 0;

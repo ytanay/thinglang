@@ -17,8 +17,8 @@ class OpcodeRegistration(type):
 
     def __new__(mcs, name, bases, dct):
         mcs = super(OpcodeRegistration, mcs).__new__(mcs, name, bases, dct)
-        assert name.startswith('Opcode')
-        mcs.OPCODE = next(OpcodeRegistration.COUNT)
+        if name.startswith('Opcode'):
+            mcs.OPCODE = next(OpcodeRegistration.COUNT)
         return mcs
 
 
@@ -49,21 +49,28 @@ class Opcode(object, metaclass=OpcodeRegistration):
     @classmethod
     def all(cls):
         return [
-            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in collection_utils.subclasses(cls)
+            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in collection_utils.subclasses(cls) if opcode.executable()
         ]
 
     @classmethod
     def name(cls):
         return camelcase_to_underscore(cls.__name__.replace('Opcode', ''))
 
-    def __eq__(self, other):
+    @classmethod
+    def executable(cls) -> bool:
+        """
+        Returns whether this is a real executable opcode (e.g. opcode leaf) or a base class
+        """
+        return cls.__name__.startswith('Opcode') and cls is not Opcode
+
+    def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.args == other.args
 
     def __str__(self):
         return '{}({})'.format(type(self).__name__, self.args)
 
 
-class OpcodeElementReferenced(Opcode):
+class ElementReferenced(Opcode):
 
     @classmethod
     def from_reference(cls, ref):
@@ -78,7 +85,7 @@ class OpcodeElementReferenced(Opcode):
         return cls(element_ref.local_index, element_ref.element_index)
 
 
-class OpcodeLocalReferenced(Opcode):
+class LocalReferenced(Opcode):
 
     @classmethod
     def from_reference(cls, local_ref, *args):
