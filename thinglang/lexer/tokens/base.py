@@ -63,9 +63,9 @@ class LexicalAssignment(LexicalToken):
 
 
 class LexicalIdentifier(LexicalToken, ValueType):
-    def __init__(self, value, type=None):
-        super(LexicalIdentifier, self).__init__(value, value)
-        self.type = type
+    def __init__(self, value, source_ref=None):
+        super(LexicalIdentifier, self).__init__(value, source_ref)
+        self.type = None
         self.index = None
 
     def compile(self, context):

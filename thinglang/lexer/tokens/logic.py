@@ -67,12 +67,12 @@ class LexicalBoolean(LexicalNumericalValue):
 
 class LexicalBooleanTrue(LexicalBoolean):
 
-    def __init__(self, value):
-        super(LexicalBooleanTrue, self).__init__(True)
+    def __init__(self, _, source_ref):
+        super(LexicalBooleanTrue, self).__init__(True, source_ref)
 
 
 class LexicalBooleanFalse(LexicalBoolean):
 
-    def __init__(self, value):
-        super(LexicalBooleanFalse, self).__init__(False)
+    def __init__(self, _, source_ref):
+        super(LexicalBooleanFalse, self).__init__(False, source_ref)
 

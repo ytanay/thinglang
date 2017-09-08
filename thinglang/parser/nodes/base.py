@@ -68,9 +68,8 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     TYPE = LexicalIdentifier("text")
     TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[LexicalIdentifier("text")]
 
-    def __init__(self, value):
-        super().__init__(None)
-        self.value = value
+    def __init__(self, value, source_ref=None):
+        super().__init__(value, source_ref)
 
     def serialize(self):
         return struct.pack('<iI', self.TYPE_IDX, len(self.value)) + bytes(self.value, 'utf-8')
@@ -94,8 +93,8 @@ class InlineCode(LexicalToken):
     STATIC = True
     SCOPING = False
 
-    def __init__(self, value):
-        super(InlineCode, self).__init__(None, value)
+    def __init__(self, value, source_ref):
+        super(InlineCode, self).__init__(value, source_ref)
         self.children = []
 
     def tree(self, depth):

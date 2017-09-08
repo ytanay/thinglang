@@ -13,8 +13,8 @@ class LexicalNumericalValue(LexicalToken, ValueType):
     TYPE = LexicalIdentifier("number")
     TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[LexicalIdentifier("number")]
 
-    def __init__(self, value):
-        super(LexicalNumericalValue, self).__init__(value)
+    def __init__(self, value, source_ref=None):
+        super(LexicalNumericalValue, self).__init__(value, source_ref)
         self.value = int(value)
 
     def evaluate(self, _=None):

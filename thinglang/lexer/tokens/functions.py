@@ -10,8 +10,8 @@ class LexicalArgumentListIndicator(LexicalToken):
 
 
 class LexicalDeclarationMethod(LexicalToken):
-    def __init__(self, raw):
-        super().__init__(raw)
+    def __init__(self, value, source_ref):
+        super().__init__(value, source_ref)
         self.static_member = False
 
 
