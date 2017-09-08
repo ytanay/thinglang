@@ -27,10 +27,17 @@ class Access(BaseNode, ValueType):
     def transpile(self):
             return '->'.join(x.transpile() for x in self.target)
 
-    def compile(self, context: CompilationContext, pop_last=False):
+    def compile(self, context: CompilationContext, pop_last=False, without_last=False):
+
+        if without_last and not self.extensions:
+            return self[0].compile(context)
+
         ref = context.push_ref(context.resolve(self.root))
 
         for ext, last in self.extensions:
+            if last and without_last:
+                break
+
             ref = context.symbols.dereference(ref.element, ext)
             cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
             context.append(cls(ref.element_index))
@@ -41,7 +48,8 @@ class Access(BaseNode, ValueType):
 
     @property
     def extensions(self):
-        return [(x, x is self.target[-1]) for x in self.target[2:]]
+        last = self.target[-1]
+        return [(x, x is last) for x in self.target[2:]]
 
     def __getitem__(self, item):
         return self.target[item]
@@ -88,11 +96,19 @@ class MethodCall(BaseNode, ValueType):
         if self.target[0].implements(MethodCall):
             inner_target = self.target[0].compile(context, True)
             target = context.resolve(Access([inner_target.type, self.target[1]]))
-        else:
-            target = context.resolve(self.target)
+        elif self.target.implements(Access):
+            target = context.resolve(self.target.root)
+
+            for ext, _ in self.target.extensions:
+                target = context.resolve(target, ext)
+
+            assert target.kind == Symbol.METHOD, 'Target is not callable'
 
             if not target.static and not self.constructing_call:
-                self.target[0].compile(context)
+                self.target.compile(context, without_last=True)
+
+        else:
+            raise Exception('Cannot call method on target {}'.format(self.target))
 
         for arg in self.arguments:
             arg.compile(context)
