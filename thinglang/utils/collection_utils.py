@@ -1,14 +1,20 @@
 import functools
 
-def drain(func):
+
+def drain(predicate=lambda x: True):
     """
     Drains a generator function into a list
     """
-    @functools.wraps(func)
-    def inner(*args, **kwargs) -> list:
-        return list(func(*args, **kwargs))
 
-    return inner
+    def wrapper(func):
+
+        @functools.wraps(func)
+        def inner(*args, **kwargs) -> list:
+            return [x for x in func(*args, **kwargs) if predicate(x)]
+
+        return inner
+
+    return wrapper
 
 
 def subclasses(cls):
