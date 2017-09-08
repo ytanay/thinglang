@@ -1,4 +1,4 @@
-from thinglang import utils
+from thinglang.utils import logging_utils
 from thinglang.compiler import CompilationContext
 from thinglang.compiler.indexer import Indexer
 from thinglang.lexer import lexer
@@ -11,13 +11,10 @@ from thinglang.utils.source_context import SourceContext
 
 
 def preprocess(source: SourceContext) -> RootNode:
-    if not source:
-        raise ValueError('Source cannot be empty')
-
     lexical_groups = lexer(source)
     ast = parse(lexical_groups)
 
-    utils.print_header("Original AST", ast.tree())
+    logging_utils.print_header("Original AST", ast.tree())
 
     return ast
 
@@ -37,7 +34,7 @@ def compile(entrypoint: SourceContext, executable: bool=True) -> CompilationCont
     Simplifier(ast).run()
     Indexer(ast).run()
 
-    utils.print_header("Final AST", ast.tree())
+    logging_utils.print_header("Final AST", ast.tree())
 
     context = CompilationContext(symbols, entry=symbols.entry() if executable else None)
 

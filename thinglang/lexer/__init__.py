@@ -60,7 +60,6 @@ def analyze_line(line: SourceLine):
 def finalize_group(group, terminating_char, entity_class, source_ref):
 
     if group in KEYWORDS:
-        print(KEYWORDS[group])
         return KEYWORDS[group](group, source_ref) if KEYWORDS[group].EMITTABLE else None
 
     if group.isdigit():

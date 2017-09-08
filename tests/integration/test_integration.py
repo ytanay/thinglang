@@ -5,7 +5,7 @@ import subprocess
 
 import thinglang
 from tests.infrastructure.test_utils import ProgramTestCase
-from thinglang import utils
+from thinglang.utils import logging_utils
 from thinglang.utils.source_context import SourceContext
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +29,7 @@ def test_thing_program(test_file: ProgramTestCase):
 
     bytecode = thinglang.compile(SourceContext.wrap(test_file.code))
 
-    utils.print_header('VM execution')
+    logging_utils.print_header('VM execution')
 
     with open(test_file.target_path, 'wb') as f:
         f.write(bytecode.bytes())
@@ -38,7 +38,7 @@ def test_thing_program(test_file: ProgramTestCase):
     stdout, stderr = (stream.decode('utf-8').strip() for stream in vm.communicate())
     print(stderr)
 
-    utils.print_header('VM output')
+    logging_utils.print_header('VM output')
     print(stdout)
 
     if not isinstance(expected_output, str):
@@ -46,8 +46,3 @@ def test_thing_program(test_file: ProgramTestCase):
 
     assert vm.returncode == 0, 'VM process crashed'
     assert stdout == expected_output, 'VM output did not match expected output'
-
-
-def test_entry_validation():
-    with pytest.raises(ValueError):
-        thinglang.preprocess('')

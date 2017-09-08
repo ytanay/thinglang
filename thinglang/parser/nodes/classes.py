@@ -135,7 +135,6 @@ class MemberDefinition(BaseNode):
 
         _, self.type, self.name = slice
 
-
     def describe(self):
         return 'has {} {}'.format(self.type, self.name)
 
