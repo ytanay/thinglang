@@ -41,12 +41,12 @@ class CompilationContext(object):
 
         return len(self.instruction_block) - 1
 
-    def resolve(self, item) -> Reference:
+    def resolve(self, item, next_item=None) -> Reference:
         """
         Resolves an arbitrary item into a reference (e.g. LexicalIdentifier, Access)
         """
 
-        return self.symbols.resolve(item, self.current_locals)
+        return self.symbols.resolve(item, self.current_locals, next_item)
 
     def push_ref(self, ref: Reference) -> Reference:
         """

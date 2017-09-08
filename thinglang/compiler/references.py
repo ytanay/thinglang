@@ -71,6 +71,10 @@ class ElementReference(Reference):
         """
         return self.element.static
 
+    @property
+    def kind(self) -> object:
+        return self.element.kind
+
 
 class LocalReference(Reference):
     """
