@@ -60,3 +60,13 @@ class SourceReference(object):
     def __add__(self, other):
         assert isinstance(other, int)
         return SourceReference(self.filename, self.line_number, self.column_start, self.column_end + other)
+
+    @classmethod
+    def combine(cls, slice):
+        refs = [x.source_ref for x in slice if x.source_ref]
+
+        if not refs:
+            return None
+
+        assert len(set(x.filename for x in refs)) == len(set(x.line_number for x in refs)) == 1
+        return cls(refs[0].filename, refs[0].line_number, min(x.column_start for x in refs), max(x.column_end for x in refs))

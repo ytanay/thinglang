@@ -5,6 +5,7 @@ from thinglang.compiler import CompilationContext
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import Describable
+from thinglang.utils.source_context import SourceReference
 
 
 class BaseNode(Describable):
@@ -17,12 +18,9 @@ class BaseNode(Describable):
         self.children = []
         self.indent = 0
         self.value = None
-        self.raw_slice = slice
         self.parent = None
-        if slice and any(x is not None for x in slice): # TODO: fix this mess
-            self.context = [x for x in slice if x is not None][0].context
-        else:
-            self.context = None
+
+        self.source_ref = SourceReference.combine(collection_utils.flatten(slice))
 
     def attach(self, child):
         self.children.append(child)
@@ -30,7 +28,8 @@ class BaseNode(Describable):
 
     def tree(self, depth=1):
         separator = ('\n' if self.children else '') + ('\t' * depth)
-        return '<L{}> {}({}){}{}'.format(self.context.number if self.context else "?", type(self).__name__,
+        return '<L{}> {}({}){}{}'.format(self.source_ref.line_number if self.source_ref else "?",
+                                         type(self).__name__,
                                          self.describe(),
                                          separator,
                                          separator.join(child.tree(depth=depth + 1) for child in self.children))
@@ -59,7 +58,7 @@ class BaseNode(Describable):
 
 class RootNode(BaseNode):
     def __init__(self):
-        super(RootNode, self).__init__(None)
+        super(RootNode, self).__init__(())
 
     def compile(self, context):
         super(RootNode, self).compile(context)
