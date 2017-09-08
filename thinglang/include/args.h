@@ -69,7 +69,7 @@ namespace args
      * \param string The string to count glyphs from
      * \return The UTF-8 glyphs in the string
      */
-    std::string::size_type Glyphs(const std::string &string_)
+    inline std::string::size_type Glyphs(const std::string &string_)
     {
         std::string::size_type length = 0;
         for (const char c: string_)
@@ -91,7 +91,7 @@ namespace args
      * \param the widtho f the first line, defaults to the width of the body
      * \return the vector of lines
      */
-    std::vector<std::string> Wrap(const std::string &in, const std::string::size_type width, std::string::size_type firstlinewidth = 0)
+    inline std::vector<std::string> Wrap(const std::string &in, const std::string::size_type width, std::string::size_type firstlinewidth = 0)
     {
         // Preserve existing line breaks
         const auto newlineloc = in.find('\n');
@@ -1409,7 +1409,7 @@ namespace args
         }
     };
 
-    std::ostream &operator<<(std::ostream &os, const ArgumentParser &parser)
+    inline std::ostream &operator<<(std::ostream &os, const ArgumentParser &parser)
     {
         parser.Help(os);
         return os;
@@ -1627,12 +1627,26 @@ namespace args
     class ValueFlagList : public ValueFlagBase
     {
     private:
-        List<T> values;
+        using Container = List<T>;
+        Container values;
         Reader reader;
 
     public:
 
-        ValueFlagList(Group &group_, const std::string &name_, const std::string &help_, Matcher &&matcher_, const List<T> &defaultValues_ = List<T>()): ValueFlagBase(name_, help_, std::move(matcher_)), values(defaultValues_)
+        typedef T value_type;
+        typedef typename Container::allocator_type allocator_type;
+        typedef typename Container::pointer pointer;
+        typedef typename Container::const_pointer const_pointer;
+        typedef T& reference;
+        typedef const T& const_reference;
+        typedef typename Container::size_type size_type;
+        typedef typename Container::difference_type difference_type;
+        typedef typename Container::iterator iterator;
+        typedef typename Container::const_iterator const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+        ValueFlagList(Group &group_, const std::string &name_, const std::string &help_, Matcher &&matcher_, const Container &defaultValues_ = Container()): ValueFlagBase(name_, help_, std::move(matcher_)), values(defaultValues_)
         {
             group_.Add(*this);
         }
@@ -1655,7 +1669,7 @@ namespace args
 
         /** Get the values
          */
-        List<T> &Get() noexcept
+        Container &Get() noexcept
         {
             return values;
         }
@@ -1669,6 +1683,36 @@ namespace args
         {
             ValueFlagBase::Reset();
             values.clear();
+        }
+
+        iterator begin() noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator begin() const noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator cbegin() const noexcept
+        {
+            return values.cbegin();
+        }
+
+        iterator end() noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator end() const noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator cend() const noexcept
+        {
+            return values.cend();
         }
     };
 
@@ -1752,13 +1796,26 @@ namespace args
     class MapFlagList : public ValueFlagBase
     {
     private:
+        using Container = List<T>;
         const Map<K, T> map;
-        List<T> values;
+        Container values;
         Reader reader;
 
     public:
+        typedef T value_type;
+        typedef typename Container::allocator_type allocator_type;
+        typedef typename Container::pointer pointer;
+        typedef typename Container::const_pointer const_pointer;
+        typedef T& reference;
+        typedef const T& const_reference;
+        typedef typename Container::size_type size_type;
+        typedef typename Container::difference_type difference_type;
+        typedef typename Container::iterator iterator;
+        typedef typename Container::const_iterator const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
-        MapFlagList(Group &group_, const std::string &name_, const std::string &help_, Matcher &&matcher_, const Map<K, T> &map_, const List<T> &defaultValues_ = List<T>()): ValueFlagBase(name_, help_, std::move(matcher_)), map(map_), values(defaultValues_)
+        MapFlagList(Group &group_, const std::string &name_, const std::string &help_, Matcher &&matcher_, const Map<K, T> &map_, const Container &defaultValues_ = Container()): ValueFlagBase(name_, help_, std::move(matcher_)), map(map_), values(defaultValues_)
         {
             group_.Add(*this);
         }
@@ -1794,7 +1851,7 @@ namespace args
 
         /** Get the value
          */
-        List<T> &Get() noexcept
+        Container &Get() noexcept
         {
             return values;
         }
@@ -1808,6 +1865,36 @@ namespace args
         {
             ValueFlagBase::Reset();
             values.clear();
+        }
+
+        iterator begin() noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator begin() const noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator cbegin() const noexcept
+        {
+            return values.cbegin();
+        }
+
+        iterator end() noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator end() const noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator cend() const noexcept
+        {
+            return values.cend();
         }
     };
 
@@ -1867,11 +1954,25 @@ namespace args
     class PositionalList : public PositionalBase
     {
     private:
-        List<T> values;
+        using Container = List<T>;
+        Container values;
         Reader reader;
 
     public:
-        PositionalList(Group &group_, const std::string &name_, const std::string &help_, const List<T> &defaultValues_ = List<T>()): PositionalBase(name_, help_), values(defaultValues_)
+        typedef T value_type;
+        typedef typename Container::allocator_type allocator_type;
+        typedef typename Container::pointer pointer;
+        typedef typename Container::const_pointer const_pointer;
+        typedef T& reference;
+        typedef const T& const_reference;
+        typedef typename Container::size_type size_type;
+        typedef typename Container::difference_type difference_type;
+        typedef typename Container::iterator iterator;
+        typedef typename Container::const_iterator const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+
+        PositionalList(Group &group_, const std::string &name_, const std::string &help_, const Container &defaultValues_ = Container()): PositionalBase(name_, help_), values(defaultValues_)
         {
             group_.Add(*this);
         }
@@ -1900,7 +2001,7 @@ namespace args
 
         /** Get the values
          */
-        List<T> &Get() noexcept
+        Container &Get() noexcept
         {
             return values;
         }
@@ -1909,6 +2010,36 @@ namespace args
         {
             PositionalBase::Reset();
             values.clear();
+        }
+
+        iterator begin() noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator begin() const noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator cbegin() const noexcept
+        {
+            return values.cbegin();
+        }
+
+        iterator end() noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator end() const noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator cend() const noexcept
+        {
+            return values.cend();
         }
     };
 
@@ -1994,13 +2125,27 @@ namespace args
     class MapPositionalList : public PositionalBase
     {
     private:
+        using Container = List<T>;
+
         const Map<K, T> map;
-        List<T> values;
+        Container values;
         Reader reader;
 
     public:
+        typedef T value_type;
+        typedef typename Container::allocator_type allocator_type;
+        typedef typename Container::pointer pointer;
+        typedef typename Container::const_pointer const_pointer;
+        typedef T& reference;
+        typedef const T& const_reference;
+        typedef typename Container::size_type size_type;
+        typedef typename Container::difference_type difference_type;
+        typedef typename Container::iterator iterator;
+        typedef typename Container::const_iterator const_iterator;
+        typedef std::reverse_iterator<iterator> reverse_iterator;
+        typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
-        MapPositionalList(Group &group_, const std::string &name_, const std::string &help_, const Map<K, T> &map_, const List<T> &defaultValues_ = List<T>()): PositionalBase(name_, help_), map(map_), values(defaultValues_)
+        MapPositionalList(Group &group_, const std::string &name_, const std::string &help_, const Map<K, T> &map_, const Container &defaultValues_ = Container()): PositionalBase(name_, help_), map(map_), values(defaultValues_)
         {
             group_.Add(*this);
         }
@@ -2037,7 +2182,7 @@ namespace args
 
         /** Get the value
          */
-        List<T> &Get() noexcept
+        Container &Get() noexcept
         {
             return values;
         }
@@ -2051,6 +2196,36 @@ namespace args
         {
             PositionalBase::Reset();
             values.clear();
+        }
+
+        iterator begin() noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator begin() const noexcept
+        {
+            return values.begin();
+        }
+
+        const_iterator cbegin() const noexcept
+        {
+            return values.cbegin();
+        }
+
+        iterator end() noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator end() const noexcept
+        {
+            return values.end();
+        }
+
+        const_iterator cend() const noexcept
+        {
+            return values.cend();
         }
     };
 }
