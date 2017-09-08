@@ -23,15 +23,18 @@ def analyze_line(line: SourceLine):
 
     for char, ref in line:
 
+        if current_ref is None:
+            current_ref = ref  # update the group's starting source reference
+
         if char not in operator_working_set:
             group += char  # continue appending characters to the current group
 
         else:  # i.e. if we are on an operator
 
             if group or (entity_class and entity_class.ALLOW_EMPTY):  # emit the collected group thus far
-                yield finalize_group(group, char, entity_class)  # char is the character that terminated the group
+                yield finalize_group(group, char, entity_class, current_ref)
 
-            group = ""  # reset the group
+            group, current_ref = '', None  # reset the group and the starting source reference
             entity_class = operator_working_set[char]
 
             if entity_class is None:  # if there is no lexical entity for this character, nothing further to do
@@ -46,31 +49,32 @@ def analyze_line(line: SourceLine):
 
             # Emit an instance of the entity class if it is emittable
             if entity_class.EMITTABLE:
-                yield OPERATORS[char](char)
+                yield OPERATORS[char](char, ref)
 
     if group:
-        yield finalize_group(group, StopIteration, entity_class)
+        yield finalize_group(group, StopIteration, entity_class, current_ref)
 
-    yield LexicalGroupEnd(None)
+    yield LexicalGroupEnd()
 
 
-def finalize_group(group, termination_reason, entity_class):
+def finalize_group(group, terminating_char, entity_class, source_ref):
 
     if group in KEYWORDS:
-        return KEYWORDS[group](group) if KEYWORDS[group].EMITTABLE else None
+        print(KEYWORDS[group])
+        return KEYWORDS[group](group, source_ref) if KEYWORDS[group].EMITTABLE else None
 
     if group.isdigit():
-        return LexicalNumericalValue(group)
+        return LexicalNumericalValue(group, source_ref)
 
-    if termination_reason == '"':
+    if terminating_char == '"':
         if entity_class is not LexicalQuote:
             raise ValueError("Unexpected end of string")
-        return InlineString(group)
+        return InlineString(group, source_ref)
 
-    if termination_reason == '`':
+    if terminating_char == '`':
         if entity_class is not LexicalTick:
             raise ValueError("Unexpected end of inline code")
-        return InlineCode(group)
+        return InlineCode(group, source_ref)
 
     if is_identifier(group):
         if entity_class in (LexicalQuote, LexicalTick):
