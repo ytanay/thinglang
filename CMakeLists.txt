@@ -28,7 +28,7 @@ set(SOURCE_FILES
 
         thinglang/runtime/utils/Formatting.h
         thinglang/runtime/utils/TypeNames.h
-        )
+        thinglang/runtime/errors/Aborts.h)
 
 set(CMAKE_EXE_LINKER_FLAGS "-static")
 add_executable(thinglang ${SOURCE_FILES})
