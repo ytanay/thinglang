@@ -3,6 +3,7 @@ import json
 import os
 
 import thinglang
+from thinglang.utils.source_context import SourceContext
 from thinglang.compiler import Opcode
 from thinglang.foundation import templates, definitions
 from thinglang.lexer.tokens import LexicalToken
@@ -27,13 +28,11 @@ class JSONSerializer(json.JSONEncoder):
 
 def generate_types():
     for path in glob.glob(SOURCE_PATTERN, recursive=True):
-        with open(path, 'r') as f:
-            contents = f.read()
 
         name = os.path.basename(path).replace('.thing', '')
         name_id = LexicalIdentifier(name)
         target_name = '{}Type'.format(name.capitalize())
-        ast = thinglang.preprocess(contents)
+        ast = thinglang.preprocess(SourceContext(path))
         symbols = SymbolMapper(ast)
 
         with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:

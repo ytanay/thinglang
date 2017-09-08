@@ -1,19 +1,19 @@
 from thinglang import utils
 from thinglang.compiler import CompilationContext
 from thinglang.compiler.indexer import Indexer
-from thinglang.lexer.lexer import lexer
+from thinglang.lexer import lexer
 from thinglang.parser.nodes import RootNode
 from thinglang.parser import parse
 from thinglang.parser.simplifier import Simplifier
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.symbols.symbol_map import SymbolMap
+from thinglang.utils.source_context import SourceContext
 
 
-def preprocess(source: str) -> RootNode:
+def preprocess(source: SourceContext) -> RootNode:
     if not source:
         raise ValueError('Source cannot be empty')
 
-    source = source.strip().replace(' ' * 4, '\t')
     lexical_groups = lexer(source)
     ast = parse(lexical_groups)
 
@@ -22,15 +22,15 @@ def preprocess(source: str) -> RootNode:
     return ast
 
 
-def compile(source: str, executable: bool=True) -> CompilationContext:
+def compile(entrypoint: SourceContext, executable: bool=True) -> CompilationContext:
     """
     Compile a thinglang program
-    :param source: source code of main module
+    :param entrypoint: file path of the program entrypoint
     :param executable: should an executable file be made?
     :return: thinglang bytecode
     """
 
-    ast = preprocess(source)
+    ast = preprocess(entrypoint)
 
     symbols = SymbolMapper(ast)
 
