@@ -11,8 +11,8 @@ from thinglang.utils.source_context import SourceLine
 INDENT = '\n' + ' ' * 8
 
 
-def lexer_single(source: str):
-    return list(analyze_line(SourceLine.inline(source)))
+def lexer_single(source: str, without_end: bool=False):
+    return list(analyze_line(SourceLine.inline(source)))[:-1 if without_end else None]
 
 
 def parse_local(code):

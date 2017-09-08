@@ -10,9 +10,9 @@ UNTERMINATED_GROUPS = 'hello"', '"hello', 'hello`', '`hello', '"hello`', '`hello
 
 
 def test_empty_string():
-    symbols = lexer_single('""')
+    symbols = lexer_single('""', without_end=True)
 
-    assert len(symbols) == 2
+    assert len(symbols) == 1
     assert isinstance(symbols[0], InlineString) and symbols[0].value == ""
 
 
@@ -22,7 +22,7 @@ def test_whitespace_handling():
 
 
 def test_indentation_handling():
-    assert lexer_single("\t\t\tid") == [LexicalIndent('\t')] * 3 + [LexicalIdentifier('id'), LexicalGroupEnd(None)]
+    assert lexer_single("\t\t\tid", without_end=True) == [LexicalIndent('\t', None)] * 3 + [LexicalIdentifier('id')]
 
 
 @pytest.mark.parametrize('code', UNTERMINATED_GROUPS)
