@@ -19,12 +19,12 @@ def lexer(source: SourceContext) -> List[List[LexicalToken]]:
 
 @collection_utils.drain(lambda x: x is not None)
 def analyze_line(line: SourceLine):
-    group, entity_class, current_ref, operator_working_set = '', None, None, OPERATORS
+    group, entity_class, start_ref, operator_working_set = '', None, None, OPERATORS
 
-    for char, ref in line:
+    for char, current_ref in line:
 
-        if current_ref is None:
-            current_ref = ref  # update the group's starting source reference
+        if start_ref is None:
+            start_ref = current_ref  # update the group's starting source reference
 
         if char not in operator_working_set:
             group += char  # continue appending characters to the current group
@@ -32,9 +32,9 @@ def analyze_line(line: SourceLine):
         else:  # i.e. if we are on an operator
 
             if group or (entity_class and entity_class.ALLOW_EMPTY):  # emit the collected group thus far
-                yield finalize_group(group, char, entity_class, current_ref)
+                yield finalize_group(group, char, entity_class, current_ref - start_ref)
 
-            group, current_ref = '', None  # reset the group and the starting source reference
+            group, start_ref = '', None  # reset the group and the starting source reference
             entity_class = operator_working_set[char]
 
             if entity_class is None:  # if there is no lexical entity for this character, nothing further to do
@@ -49,10 +49,10 @@ def analyze_line(line: SourceLine):
 
             # Emit an instance of the entity class if it is emittable
             if entity_class.EMITTABLE:
-                yield OPERATORS[char](char, ref)
+                yield OPERATORS[char](char, current_ref)
 
     if group:
-        yield finalize_group(group, StopIteration, entity_class, current_ref)
+        yield finalize_group(group, StopIteration, entity_class, current_ref - start_ref + 1)
 
     yield LexicalGroupEnd()
 
@@ -79,7 +79,7 @@ def finalize_group(group, terminating_char, entity_class, source_ref):
     if is_identifier(group):
         if entity_class in (LexicalQuote, LexicalTick):
             raise ValueError("String was not closed")
-        return LexicalIdentifier(group)
+        return LexicalIdentifier(group, source_ref)
 
     if group:
         raise ValueError('Lexer: cannot terminate group {}'.format(group))
