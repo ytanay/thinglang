@@ -1,5 +1,3 @@
-import pprint
-
 from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.tokens.base import LexicalIdentifier
@@ -31,7 +29,7 @@ class SymbolMapper(object):
 
         if next_item is not None:
             assert isinstance(target, Reference)
-            return self.resolve_access(Access([target.type, next_item]))
+            return self.resolve_access([target.type, next_item])
 
         if target.implements(LexicalIdentifier):
             return LocalReference(locals[target])
@@ -42,7 +40,7 @@ class SymbolMapper(object):
 
         raise Exception("Unknown reference type {}".format(target))
 
-    def resolve_access(self, target: Access, locals=()):
+    def resolve_access(self, target, locals=()):
         assert len(target) == 2
 
         first, second, local = target[0], target[1], None

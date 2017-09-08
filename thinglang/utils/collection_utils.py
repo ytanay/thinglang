@@ -1,3 +1,4 @@
+import collections
 import functools
 
 
@@ -30,3 +31,12 @@ def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
         yield l[i:i + n]
+
+
+@drain()
+def flatten(lst):
+    for item in lst:
+        if isinstance(item, list):
+            yield from flatten(item)
+        else:
+            yield item

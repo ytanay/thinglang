@@ -5,7 +5,7 @@ from thinglang.parser.nodes import BaseNode
 class ListInitialization(BaseNode):
 
     def __init__(self, slice=None):
-        super(ListInitialization, self).__init__(slice if isinstance(slice, list) else [slice])
+        super(ListInitialization, self).__init__(slice if isinstance(slice, list) else ([slice] if slice else ()))
 
         if not slice:
             self.arguments = []

@@ -136,7 +136,7 @@ class ParenthesesVector(TokenVector, ValueType):
 
     def parse(self):
         if not self.tokens:
-            return
+            return []
 
         if not any(isinstance(token, LexicalSeparator) for token in self.tokens):
             return super().parse()
