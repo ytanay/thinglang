@@ -1,15 +1,27 @@
 /*
 {
-    "expected_output": ["created InnerContainer", "1", "2", "10", "20", "100", "200", "100", "200"]
+    "expected_output": ["Created InnerContainer", "1", "2", "10", "20", "100", "200", "100", "200", "Printing InnerContainer", "100", "15", "Created InnerContainer", "Printing InnerContainer", "999"]
 }
 */
 
 thing InnerContainer
     has number val1
     has number val2
+    has InnerContainer nested
 
     setup
-        Output.write("created InnerContainer")
+        Output.write("Created InnerContainer")
+        self.val1 = 999
+
+    does print
+        Output.write("Printing InnerContainer")
+        Output.write(self.val1)
+
+    does get returns number
+        return 15
+
+    does make_inner
+        self.nested = create InnerContainer()
 
 thing Container
     has InnerContainer inner
@@ -43,3 +55,10 @@ thing Program
 
         Output.write(c.inner.val1)
         Output.write(c.inner.val2)
+
+        c.inner.print()
+
+        Output.write(c.inner.get())
+
+        c.inner.make_inner()
+        c.inner.nested.print()
