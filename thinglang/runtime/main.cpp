@@ -19,10 +19,10 @@ int main(const int argc, const char **argv)
 
     try {
         parser.ParseCLI(argc, argv);
-    } catch (args::Help) {
+    } catch (const args::Help&) {
         std::cout << parser;
         return 0;
-    } catch (args::Error e)  {
+    } catch (const args::Error& e)  {
         std::cerr << e.what() << std::endl;
         std::cerr << parser;
         return 1;

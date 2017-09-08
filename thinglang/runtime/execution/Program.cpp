@@ -2,6 +2,7 @@
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
 #include "../types/core/OutputType.h"
+#include "../errors/Aborts.h"
 
 
 ThingStack Program::stack;
@@ -20,8 +21,8 @@ Types Program::types = {};
 
 
 Thing Program::pop() {
-    if(stack.empty())  // TODO: remove check
-        throw RuntimeError("Empty program stack");
+    if(stack.empty())
+        critical_abort(EMPTY_PROGRAM_STACK);
 
     auto ti = static_cast<std::shared_ptr<BaseThingInstance> &&>(stack.top());
     stack.pop();
