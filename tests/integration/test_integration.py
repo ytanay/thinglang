@@ -6,6 +6,7 @@ import subprocess
 import thinglang
 from tests.infrastructure.test_utils import ProgramTestCase
 from thinglang import utils
+from thinglang.utils.source_context import SourceContext
 
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -14,7 +15,7 @@ SEARCH_PATTERN = os.path.join(BASE_PATH, '**/*.thing')
 
 def collect_tests():
     for path in glob.glob(SEARCH_PATTERN, recursive=True):
-       #if 'external' in path:
+        #if 'nested_thing_access' in path:
             yield ProgramTestCase(path)
 
 
@@ -26,7 +27,7 @@ def split_lines(param):
 def test_thing_program(test_file: ProgramTestCase):
     expected_output = test_file.metadata['expected_output']
 
-    bytecode = thinglang.compile(test_file.code)
+    bytecode = thinglang.compile(SourceContext.wrap(test_file.code))
 
     utils.print_header('VM execution')
 

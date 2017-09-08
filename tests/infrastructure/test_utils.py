@@ -5,13 +5,18 @@ import random
 import string
 
 from thinglang import parser
-from thinglang.lexer import lexer
+from thinglang.lexer import analyze_line
+from thinglang.utils.source_context import SourceLine
 
 INDENT = '\n' + ' ' * 8
 
 
+def lexer_single(source: str):
+    return list(analyze_line(SourceLine.inline(source)))
+
+
 def parse_local(code):
-    tokens = lexer.lexer_single(code)
+    tokens = lexer_single(code)
     vector = parser.collect_vectors(tokens)
     return vector.parse()
 
@@ -24,12 +29,6 @@ def validate_types(elements, types: list, descend_cls=None, descend_key=lambda x
             validate_types(descend_key(elem), expected_type, descend_cls, descend_key)
         else:
             assert isinstance(elem, expected_type)
-
-
-def generate_simple_output_program(source):
-    return """thing Program
-    setup{source}
-    """.format(source=INDENT + INDENT.join([source] if isinstance(source, str) else source))
 
 
 def generate_test_case_structure(dct):
@@ -61,3 +60,4 @@ class ProgramTestCase(object):
         self.code = contents[metadata_end + 2:]
         self.metadata = metadata
         self.target_path = path + 'c'
+        self.source_path = path

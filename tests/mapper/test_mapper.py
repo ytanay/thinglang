@@ -1,5 +1,6 @@
 import thinglang
-from thinglang import SymbolMapper
+from thinglang.symbols.symbol_mapper import SymbolMapper
+from thinglang.utils.source_context import SourceContext
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.symbols.symbol import Symbol
 
@@ -39,7 +40,7 @@ thing Person
 
 
 def get_symbols(code):
-    return SymbolMapper(thinglang.preprocess(code))
+    return SymbolMapper(thinglang.preprocess(SourceContext.wrap(code)))
 
 
 def test_mapper_existence():
