@@ -198,8 +198,8 @@ PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationConstructor, TypeVector), MethodDefinition),  # setup with text name
     ((LexicalDeclarationConstructor,), MethodDefinition),  # setup
 
-    ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.name
-    ((Access, LexicalAccess, LexicalIdentifier), Access),
+    ((Access, LexicalAccess, LexicalIdentifier), Access), # person.info.name
+    ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.info
 
     ((Access, ParenthesesVector), MethodCall),
     ((LexicalClassInitialization, LexicalIdentifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
