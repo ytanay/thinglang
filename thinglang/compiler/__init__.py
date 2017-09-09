@@ -1,8 +1,9 @@
 import collections
 import struct
 
-from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, SentinelMethodEnd, OpcodePushLocal, \
-    SentinelMethodDefinition, OpcodePushMember, OpcodePopLocal, OpcodePopMember, SentinelCodeEnd, SentinelDataEnd
+from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodePushLocal, \
+    OpcodePushMember, OpcodePopLocal, OpcodePopMember
+from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd
 from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
 from thinglang.utils.source_context import SourceReference, SourceContext
 

@@ -36,6 +36,6 @@ def compile(entrypoint: SourceContext, executable: bool=True) -> CompilationCont
 
     logging_utils.print_header("Final AST", ast.tree())
 
-    context = CompilationContext(symbols, entry=symbols.entry() if executable else None)
+    context = CompilationContext(symbols, entrypoint, entry=symbols.entry() if executable else None)
 
     return ast.compile(context)

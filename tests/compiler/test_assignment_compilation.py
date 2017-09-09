@@ -66,7 +66,7 @@ def compile_local(code):
             }
         ]
     })])
-    context = CompilationContext(symbols)
+    context = CompilationContext(symbols, SourceContext.wrap(''))
     context.current_locals = {
         LexicalIdentifier.self(): LocalMember(LexicalIdentifier('Container'), 0),
         LexicalIdentifier('a'): LocalMember(LexicalIdentifier('number'), 1),
