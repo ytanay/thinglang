@@ -14,36 +14,44 @@
 
 namespace OutputNamespace {
 
-class OutputInstance : public BaseThingInstance {
-public:
-	OutputInstance() {};
-	OutputInstance(std::string val) : val(val) {};
 
+class OutputInstance : public BaseThingInstance {
+    
+    public:
+    explicit OutputInstance(std::string val) : val(val) {}; // value constructor
+    
+    /** Mixins **/
+    
     virtual std::string text() override {
         return to_string(val);
     }
-    virtual bool boolean() override {
+    
+    bool boolean() override {
         return to_boolean(val);
     }
-                
-
-	std::string val;
+    
+    /** Members **/
+    
+    std::string val;
 };
+
+
 typedef OutputInstance this_type;
 
 class OutputType : public ThingTypeInternal {
-public:
-	OutputType() : ThingTypeInternal({&write}) {};
-
-    Thing create(){
-        return Thing(new this_type());
-    }
-
-	static Thing write() {
+    
+    public:
+    OutputType() : ThingTypeInternal({ &write }) {}; // constructor
+    
+    
+    static Thing write() {
 		auto message = Program::argument<TextNamespace::TextInstance>();
 
 		std::cout << message->text() << std::endl;
-		return NULL;
-	}
+		return nullptr;
+    }
+
+    
 };
+
 }

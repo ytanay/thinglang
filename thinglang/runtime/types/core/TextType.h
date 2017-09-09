@@ -14,46 +14,58 @@
 
 namespace TextNamespace {
 
-class TextInstance : public BaseThingInstance {
-public:
-	TextInstance() {};
-	TextInstance(std::string val) : val(val) {};
 
+class TextInstance : public BaseThingInstance {
+    
+    public:
+    explicit TextInstance(std::string val) : val(val) {}; // value constructor
+    
+    /** Mixins **/
+    
     virtual std::string text() override {
         return to_string(val);
     }
-    virtual bool boolean() override {
+    
+    bool boolean() override {
         return to_boolean(val);
     }
-                
-
-	std::string val;
+    
+    /** Members **/
+    
+    std::string val;
 };
+
+
 typedef TextInstance this_type;
 
 class TextType : public ThingTypeInternal {
-public:
-	TextType() : ThingTypeInternal({&__LexicalAddition__, &__LexicalEquality__}) {};
-
-    Thing create(){
-        return Thing(new this_type());
-    }
-
-	static Thing __LexicalAddition__() {
+    
+    public:
+    TextType() : ThingTypeInternal({ &__LexicalAddition__, &__LexicalEquality__ }) {}; // constructor
+    
+    
+    static Thing __LexicalAddition__() {
 		auto other = Program::argument<TextNamespace::TextInstance>();
 		auto self = Program::argument<this_type>();
 
 		return Thing(new this_type(self->val + other->val));
-		return NULL;
-	}
-	static Thing __LexicalEquality__() {
+		return nullptr;
+    }
+
+
+    static Thing __LexicalEquality__() {
 		auto other = Program::argument<TextNamespace::TextInstance>();
 		auto self = Program::argument<this_type>();
 
-		if(self->val == other->val) {
+		
+        if(self->val == other->val) {
 			return Thing(new this_type(" "));
-		}
-		return NULL;
-	}
+        }
+
+		return nullptr;
+    }
+
+    
 };
+
 }
