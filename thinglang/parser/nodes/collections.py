@@ -29,16 +29,24 @@ class ListInitialization(BaseNode):
     def describe(self):
         return self.arguments
 
-    def transpile(self, pops=False, static=False):
+    def transpile(self, static=False):
         lines = []
 
         for arg in reversed(self.arguments):
             if arg.type in definitions.INTERNAL_TYPE_ORDERING:
-                lines.append('\t\tauto {} = Program::argument<{}>();'.format(arg.transpile(), templates.format_internal_type(arg.type)))
+                lines.append(templates.ARGUMENT_POP_TYPE.format(
+                    name=arg.transpile(),
+                    type=templates.format_internal_type_name(arg.type))
+                )
             else:
-                lines.append('\t\tauto {} = Program::pop();'.format(arg.transpile()))
+                lines.append(templates.ARGUMENT_POP_GENERIC.format(
+                    name=arg.transpile())
+                )
 
         if not static:
-            lines.append('\t\tauto self = Program::argument<this_type>();')
+            lines.append(templates.ARGUMENT_POP_TYPE.format(
+                name='self',
+                type='this_type'
+            ))
 
         return '\n'.join(lines) + '\n'

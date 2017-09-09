@@ -15,36 +15,14 @@ class ThingDefinition(DefinitionPairNode):
         return self.name
 
     def transpile(self):
-        name = self.name.transpile().capitalize()
-        type_name, instance_name = '{}Type'.format(name), '{}Instance'.format(name)
-        constructor = '\t{}({}) : val(val) {{}};'.format(
-            instance_name,
-            ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members())
+        type_cls_name, instance_cls_name = templates.get_names(self.name)
+        return templates.FOUNDATION_TYPE.format(
+            type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
+            member_list=templates.format_member_list(self.members()),
+            method_list=templates.format_method_list(self.methods()),
+            members=self.transpile_children(indent=0, children_override=self.members()),
+            methods=self.transpile_children(indent=0, children_override=self.methods())
         )
-
-        return '\n'.join([
-            '\nclass {} : public BaseThingInstance {{\npublic:\n{}\n{}\n{}\n\n{}\n}};'.format(
-                instance_name,
-                templates.DEFAULT_CONSTRUCTOR.format(instance_name),
-                constructor,
-                '''
-    virtual std::string text() override {
-        return to_string(val);
-    }
-    virtual bool boolean() override {
-        return to_boolean(val);
-    }
-                ''',
-                self.transpile_children(indent=1, children_override=self.members())
-            ),
-
-            'typedef {} this_type;\n'.format(instance_name),
-            'class {} : public ThingTypeInternal {{\npublic:\n{}\n{}\n{}\n}};'.format(
-                type_name,
-                '\t{}() : ThingTypeInternal({{{}}}) {{}};'.format(type_name, ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods()])),
-                templates.FOUNDATION_VIRTUALS.format(first_member=self.members()[0].name.transpile()) if len(self.members()) > 0 else '',
-                self.transpile_children(indent=1, children_override=self.methods()))
-        ])
 
     def members(self):
         return [x for x in self.children if x.implements(MemberDefinition)]
@@ -95,12 +73,13 @@ class MethodDefinition(BaseNode):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
-        return 'static {} {}({}) {{\n{}\n{}\n\t}}'.format(
-            'Thing' if not self.is_constructor() else '',
-            (self.parent.name if self.is_constructor() else self.name).transpile(),
-            '',  # Pop directly from stack, otherwise: self.arguments.transpile(definition=True),
-            self.arguments.transpile(pops=True, static=self.static),
-            self.transpile_children(2, self.children + [ReturnStatement([])]))
+        return templates.FOUNDATION_METHOD.format(
+            name=(self.parent.name if self.is_constructor() else self.name).transpile(),
+            return_type='Thing' if not self.is_constructor() else '',
+            arguments='',  # Popped directly from stack
+            preamble=self.arguments.transpile(static=self.static),
+            body=self.transpile_children(2, self.children + [ReturnStatement([])])
+        )
 
     def compile(self, context: CompilationContext):
         context.method_start(self.locals, self.frame_size, self.argument_count)

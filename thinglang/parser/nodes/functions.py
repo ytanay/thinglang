@@ -1,6 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn, OpcodeDereference, \
     OpcodePopDereferenced
+from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.nodes import BaseNode
@@ -129,9 +130,9 @@ class ReturnStatement(BaseNode):
 
     def transpile(self):
         if self.value:
-            return 'return Thing(new this_type({}));'.format(self.value.transpile())
+            return templates.RETURN_VALUE.format(value=self.value.transpile())
         else:
-            return 'return NULL;'
+            return templates.RETURN_NULL
 
     def compile(self, context: CompilationContext):
         self.value.compile(context)

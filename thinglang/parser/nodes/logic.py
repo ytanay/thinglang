@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
+from thinglang.foundation import templates
 from thinglang.parser.nodes import BaseNode
 
 
@@ -21,7 +22,10 @@ class Conditional(BaseNode):
         return 'if {}'.format(self.value)
 
     def transpile(self):
-        return 'if({}) {{\n{}\n\t\t}}'.format(self.value.transpile(), self.transpile_children(indent=3))
+        return templates.CONDITIONAL.format(
+            condition=self.value.transpile(),
+            body=self.transpile_children(indent=3)
+        )
 
     def compile(self, context: CompilationContext):
         if not context.conditional_groups or self not in context.conditional_groups[-1]:
@@ -54,7 +58,7 @@ class UnconditionalElse(BaseNode, ElseBranchInterface):
         context.update_conditional_jumps()
 
     def transpile(self):
-        return 'else {{\n{}\n\t\t}}'.format(self.transpile_children(indent=3))
+        return templates.ELSE_CLAUSE.format(body=self.transpile_children(indent=3))
 
 
 class ConditionalElse(Conditional, ElseBranchInterface):

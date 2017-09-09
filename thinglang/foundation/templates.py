@@ -22,6 +22,7 @@ namespace {name}Namespace {{
 
 """.strip()
 
+
 FOUNDATION_SOURCE = HEADER + """
 #include "{name}Type.h"
 
@@ -30,6 +31,50 @@ namespace {name}Namespace {{
 }}
 
 """.strip()
+
+
+FOUNDATION_TYPE = """
+
+class {instance_cls_name} : public BaseThingInstance {{
+    
+    public:
+    explicit {instance_cls_name}({member_list}) : val(val) {{}}; // value constructor
+    
+    /** Mixins **/
+    
+    virtual std::string text() override {{
+        return to_string(val);
+    }}
+    
+    bool boolean() override {{
+        return to_boolean(val);
+    }}
+    
+    /** Members **/
+    
+    {members}
+}};
+
+
+typedef {instance_cls_name} this_type;
+
+class {type_cls_name} : public ThingTypeInternal {{
+    
+    public:
+    {type_cls_name}() : ThingTypeInternal({{ {method_list} }}) {{}}; // constructor
+    
+    {methods}
+    
+}};
+"""
+
+
+FOUNDATION_METHOD = """
+    static {return_type} {name}({arguments}) {{
+{preamble}
+{body}
+    }}
+"""
 
 
 FOUNDATION_ENUM = HEADER + """
@@ -45,13 +90,6 @@ enum class {name} {{
 """
 
 
-FOUNDATION_VIRTUALS = """
-    Thing create(){{
-        return Thing(new this_type());
-    }}
-"""
-
-
 FOUNDATION_SWITCH = """
 inline auto {func_name}({name} val){{
     switch (val){{
@@ -63,14 +101,46 @@ inline auto {func_name}({name} val){{
 }}
 """
 
+
 ENUM_CASE = """
         case {enum_class}::{name}:
             return {value};"""
 
+ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 
-DEFAULT_CONSTRUCTOR = '\t{}() {{}};'
+ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
+
+CONDITIONAL = """
+        if({condition}) {{
+{body}
+        }}
+"""
+
+ELSE_CLAUSE = """
+        else {{
+{body}
+    }}
+"""
+
+RETURN_VALUE = 'return Thing(new this_type({value}));'
+
+RETURN_NULL = 'return nullptr;'
 
 
-def format_internal_type(type):
+def format_internal_type_name(type):
     name = type.value.capitalize()
     return '{}Namespace::{}Instance'.format(name, name)
+
+
+def get_names(name):
+    name = name.transpile().capitalize()
+    return '{}Type'.format(name), '{}Instance'.format(name)
+
+
+def format_member_list(members):
+    return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in members)
+
+
+def format_method_list(methods):
+    return ', '.join(['&{}'.format(x.name.transpile()) for x in methods])
+
