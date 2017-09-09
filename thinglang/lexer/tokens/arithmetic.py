@@ -32,7 +32,7 @@ class LexicalNumericalValue(LexicalToken, ValueType):
 
     def compile(self, context):
         ref = context.append_static(self.serialize())
-        context.append(OpcodePushStatic(ref))
+        context.append(OpcodePushStatic(ref), self.source_ref)
 
 
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction

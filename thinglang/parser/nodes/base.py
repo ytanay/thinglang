@@ -39,10 +39,10 @@ class AssignmentOperation(BaseNode):
 
             if self.value.STATIC:
                 ref = context.append_static(self.value.serialize())
-                return context.append(OpcodeAssignStatic.from_reference(target, ref))
+                return context.append(OpcodeAssignStatic.from_reference(target, ref), self.source_ref)
             elif self.value.implements(LexicalIdentifier):
                 ref = context.resolve(self.value)
-                return context.append(OpcodeAssignLocal.from_references(target, ref))
+                return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
 
         if self.value.implements(MethodCall):
             self.value.compile(context, True)
@@ -52,12 +52,12 @@ class AssignmentOperation(BaseNode):
         target = self.name
         if target.implements(LexicalIdentifier):
             target = context.resolve(target)
-            context.append(OpcodePopLocal.from_reference(target))
+            context.append(OpcodePopLocal.from_reference(target), self.source_ref)
         elif target.implements(Access):
             if target.extensions:
                 target.compile(context, pop_last=True)
             else:
-                context.append(OpcodePopMember.from_reference(context.resolve(target)))
+                context.append(OpcodePopMember.from_reference(context.resolve(target)), self.source_ref)
 
         else:
             raise Exception('Cannot pull up {}'.format(target))
@@ -86,7 +86,7 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
 
     def compile(self, context: CompilationContext):
         ref = context.append_static(self.serialize())
-        context.append(OpcodePushStatic(ref))
+        context.append(OpcodePushStatic(ref), self.source_ref)
 
 
 class InlineCode(LexicalToken):

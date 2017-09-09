@@ -32,7 +32,7 @@ class Access(BaseNode, ValueType):
         if without_last and not self.extensions:
             return self[0].compile(context)
 
-        ref = context.push_ref(context.resolve(self.root))
+        ref = context.push_ref(context.resolve(self.root), self.source_ref)
 
         for ext, last in self.extensions:
             if last and without_last:
@@ -40,7 +40,7 @@ class Access(BaseNode, ValueType):
 
             ref = context.symbols.dereference(ref.element, ext)
             cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
-            context.append(cls(ref.element_index))
+            context.append(cls(ref.element_index), self.source_ref)
 
     @property
     def root(self):
@@ -92,7 +92,7 @@ class MethodCall(BaseNode, ValueType):
     def create(cls, target, arguments=None):
         return cls([Access(target), arguments])
 
-    def compile(self, context, captured=False):
+    def compile(self, context: CompilationContext, captured=False):
         if self.target[0].implements(MethodCall):
             inner_target = self.target[0].compile(context, True)
             target = context.resolve(Access([inner_target.type, self.target[1]]))
@@ -114,10 +114,10 @@ class MethodCall(BaseNode, ValueType):
             arg.compile(context)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
-        context.append(instruction.type_reference(target))
+        context.append(instruction.type_reference(target), self.source_ref)
 
         if self.parent:
-            context.append(OpcodePop())  # pop the return value, if the return value is not captured
+            context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
 
         return target
 
@@ -133,6 +133,6 @@ class ReturnStatement(BaseNode):
         else:
             return 'return NULL;'
 
-    def compile(self, context):
+    def compile(self, context: CompilationContext):
         self.value.compile(context)
-        context.append(OpcodeReturn())
+        context.append(OpcodeReturn(), self.source_ref)

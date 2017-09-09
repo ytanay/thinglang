@@ -30,7 +30,7 @@ class Conditional(BaseNode):
 
         self.value.compile(context)
         opcode = OpcodeJumpConditional()
-        context.append(opcode)
+        context.append(opcode, self.source_ref)
         super(Conditional, self).compile(context)
 
         if list(context.conditional_groups[-1].keys())[-1] is self:
@@ -38,7 +38,7 @@ class Conditional(BaseNode):
         else:
             jump_out = OpcodeJump()
             context.conditional_groups[-1][self] = jump_out
-            context.append(jump_out)
+            context.append(jump_out, self.source_ref)
 
         opcode.update(context.current_index())
 
@@ -82,7 +82,7 @@ class Loop(BaseNode):
         idx = context.current_index()
         self.value.compile(context)
         opcode = OpcodeJumpConditional()
-        context.append(opcode)
+        context.append(opcode, self.source_ref)
         super(Loop, self).compile(context)
-        context.append(OpcodeJump(idx))
+        context.append(OpcodeJump(idx), self.source_ref)
         opcode.update(context.current_index())

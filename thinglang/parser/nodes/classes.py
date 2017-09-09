@@ -1,5 +1,6 @@
 from thinglang.compiler import CompilationContext
-from thinglang.compiler.opcodes import OpcodePushNull, OpcodeThingDefinition, OpcodeInstantiate
+from thinglang.compiler.opcodes import OpcodePushNull, OpcodeInstantiate
+from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
@@ -52,7 +53,7 @@ class ThingDefinition(DefinitionPairNode):
         return [x for x in self.children if x.implements(MethodDefinition)]
 
     def compile(self, context: CompilationContext):
-        context.append(OpcodeThingDefinition(len(self.members()), len(self.methods())))
+        context.append(SentinelThingDefinition(len(self.members()), len(self.methods())), self.source_ref)
         super().compile(context)
 
 
@@ -101,16 +102,16 @@ class MethodDefinition(BaseNode):
             self.arguments.transpile(pops=True, static=self.static),
             self.transpile_children(2, self.children + [ReturnStatement([])]))
 
-    def compile(self, context):
+    def compile(self, context: CompilationContext):
         context.method_start(self.locals, self.frame_size, self.argument_count)
 
         if self.is_constructor():
-            context.append(OpcodeInstantiate(context.symbols.index(self.parent)))
+            context.append(OpcodeInstantiate(context.symbols.index(self.parent)), self.source_ref)
 
         super(MethodDefinition, self).compile(context)
 
         if not self.is_constructor() and not self.children[-1].implements(ReturnStatement):
-            context.append(OpcodePushNull())
+            context.append(OpcodePushNull(), self.source_ref)
 
         context.method_end()
 
