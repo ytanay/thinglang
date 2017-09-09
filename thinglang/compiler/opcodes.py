@@ -1,12 +1,11 @@
-import struct
-
-import itertools
-
 import collections
+import itertools
+import struct
 from typing import List
 
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import camelcase_to_underscore
+from thinglang.utils.source_context import SourceReference
 
 STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
 
@@ -21,7 +20,7 @@ class OpcodeRegistration(type):
 
     def __new__(mcs, name, bases, dct):
         mcs = super(OpcodeRegistration, mcs).__new__(mcs, name, bases, dct)
-        if name.startswith('Opcode'):
+        if name.startswith('Opcode') or name.startswith('Sentinel'):
             mcs.OPCODE = next(OpcodeRegistration.COUNT)
         return mcs
 
@@ -37,9 +36,10 @@ class Opcode(object, metaclass=OpcodeRegistration):
     ARGS = ()
     OPCODE = -1
 
-    def __init__(self, *args):
+    def __init__(self, *args, source_ref=SourceReference.invalid()):
         super(Opcode, self).__init__()
         self.args = args
+        self.source_ref = source_ref
 
     def update(self, *args) -> None:
         """
@@ -88,7 +88,7 @@ class Opcode(object, metaclass=OpcodeRegistration):
         """
         Returns whether this is a real executable opcode (e.g. opcode leaf) or a base class
         """
-        return cls.__name__.startswith('Opcode') and cls is not Opcode
+        return cls is not Opcode and (cls.__name__.startswith('Opcode') or cls.__name__.startswith('Sentinel'))
 
     def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.args == other.args
@@ -282,26 +282,5 @@ class OpcodeJumpConditional(Opcode):
     ARGS = IDX,
 
 
-class OpcodeThingDefinition(Opcode):
-    """
-    Signifies a thing definition boundary.
-    Used as a sentinel during bytecode parsing
-    """
-    ARGS = MEMBERS, METHODS
 
-
-class OpcodeMethodDefinition(Opcode):
-    """
-    Signifies a method definition boundary.
-    Used as a sentinel during bytecode parsing
-    """
-    ARGS = FRAME_SIZE, ARGUMENTS
-
-
-class OpcodeMethodEnd(Opcode):
-    """
-    Signifies a method boundary.
-    Used as a sentinel during bytecode parsing
-    """
-    pass
 
