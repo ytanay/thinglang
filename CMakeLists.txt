@@ -15,7 +15,7 @@ set(SOURCE_FILES
         thinglang/runtime/errors/RuntimeError.cpp
 
         thinglang/runtime/execution/Opcodes.h
-        thinglang/runtime/execution/Symbol.cpp
+        thinglang/runtime/execution/Instruction.cpp
 
         thinglang/runtime/types/core/NumberType.h
         thinglang/runtime/types/core/TextType.h

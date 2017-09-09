@@ -3,13 +3,13 @@
 #include <utility>
 #include <vector>
 
-#include "../execution/Symbol.h"
+#include "../execution/Instruction.h"
 #include "../utils/TypeNames.h"
 
 
 class Method {
 public:
-    Method(Size frame_size, Size arguments, SymbolList symbols) :
+    Method(Size frame_size, Size arguments, InstructionList symbols) :
             frame_size(frame_size), arguments(arguments), symbols(std::move(symbols)) {};
 
     void execute();
@@ -18,7 +18,7 @@ public:
     Size arguments = 0;
 
 private:
-    SymbolList symbols;
+    InstructionList symbols;
 
 };
 

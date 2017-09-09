@@ -5,9 +5,11 @@
 #include <stack>
 #include <memory>
 #include <tuple>
+#include <string>
+
 
 class BaseThingInstance;
-class Symbol;
+class Instruction;
 class Method;
 class ThingType;
 class Program;
@@ -16,7 +18,9 @@ using Index = uint32_t;
 using Size = Index;
 using SignedIndex = int32_t;
 
-using SymbolList = std::vector<Symbol>;
+using InstructionList = std::vector<Instruction>;
+using SymbolList = std::vector<Index>;
+using Source = std::vector<std::string>;
 
 using Thing = std::shared_ptr<BaseThingInstance>;
 using Things = std::vector<Thing>;
@@ -33,4 +37,4 @@ using InternalMethods = std::vector<InternalMethod>;
 using Type = ThingType*;
 using Types = std::vector<Type>;
 
-using ProgramInfo = std::tuple<Index, Things, Types>;
+using ProgramInfo = std::tuple<Types, Things, Index, SymbolList, Source>;
