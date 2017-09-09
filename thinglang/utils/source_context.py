@@ -1,3 +1,6 @@
+import struct
+
+
 class SourceContext(object):
     """
     Wraps a single source file
@@ -6,13 +9,13 @@ class SourceContext(object):
     def __init__(self, filename, override_source=None):
         self.filename = filename
 
-        if override_source is not None:
-            self.raw_contents = override_source.split('\n')
-        else:
-            with open(filename) as f:
-                self.raw_contents = f.readlines()
+        self.raw_contents = override_source
 
-        self.contents = [SourceLine(line, idx, filename) for idx, line in enumerate(self.raw_contents)]
+        if self.raw_contents is None:
+            with open(filename) as f:
+                self.raw_contents = f.read()
+
+        self.contents = [SourceLine(line, idx, filename) for idx, line in enumerate(self.raw_contents.split('\n'))]
 
     def __iter__(self):
         return iter(self.contents)
@@ -47,6 +50,7 @@ class SourceReference(object):
     """
     Refers to a slice of source code, from which a lexical token (or AST node) was derived.
     """
+
     def __init__(self, filename, line_number, column_start, column_end):
         self.filename, self.line_number, self.column_start, self.column_end = filename, line_number, column_start, column_end
 
@@ -60,6 +64,13 @@ class SourceReference(object):
     def __add__(self, other):
         assert isinstance(other, int)
         return SourceReference(self.filename, self.line_number, self.column_start, self.column_end + other)
+
+    def serialize(self):
+        return struct.pack('<i', self.line_number)
+
+    @classmethod
+    def invalid(cls):
+        return cls('<invalid>', -1, -1, -1)
 
     @classmethod
     def combine(cls, slice):
