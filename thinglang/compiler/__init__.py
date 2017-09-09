@@ -1,15 +1,26 @@
+import collections
 import struct
 
-from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodeMethodEnd, OpcodePushLocal, \
-    OpcodeMethodDefinition, OpcodePushMember, OpcodePopLocal, OpcodePopMember
+from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, SentinelMethodEnd, OpcodePushLocal, \
+    SentinelMethodDefinition, OpcodePushMember, OpcodePopLocal, OpcodePopMember, SentinelCodeEnd, SentinelDataEnd
 from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
+from thinglang.utils.source_context import SourceReference, SourceContext
+
+HEADER_FORMAT = '<HIII'
+BytecodeHeader = collections.namedtuple('BytecodeHeader', [
+    'version',
+    'instruction_count',
+    'data_item_count',
+    'entrypoint'
+])
 
 
 class CompilationContext(object):
 
-    def __init__(self, symbols, entry=None):
+    def __init__(self, symbols, source: SourceContext, entry=None):
 
         self.symbols = symbols
+        self.source = source
 
         self.current_locals = None
         self.entry = entry or 0
@@ -19,11 +30,11 @@ class CompilationContext(object):
         self.instruction_block = []
         self.conditional_groups = []
 
-    def append(self, opcode: Opcode) -> None:
+    def append(self, opcode: Opcode, source_ref: SourceReference) -> None:
         """
         Append an opcode to the instruction block of the current method
         """
-
+        opcode.source_ref = source_ref
         self.instruction_block.append(opcode)
 
     def append_static(self, data: bytes) -> int:
@@ -48,17 +59,17 @@ class CompilationContext(object):
 
         return self.symbols.resolve(item, self.current_locals, next_item)
 
-    def push_ref(self, ref: Reference) -> Reference:
+    def push_ref(self, ref: Reference, source_ref: SourceReference) -> Reference:
         """
         Push down a reference object into the program stack
         """
 
         if isinstance(ref, StaticReference):
-            self.append(OpcodePushStatic(self.append_static(ref.value.serialize())))
+            self.append(OpcodePushStatic(self.append_static(ref.value.serialize())), source_ref)
         elif isinstance(ref, LocalReference):
-            self.append(OpcodePushLocal.from_reference(ref))
+            self.append(OpcodePushLocal.from_reference(ref), source_ref)
         elif isinstance(ref, ElementReference):
-            self.append(OpcodePushMember.from_reference(ref))
+            self.append(OpcodePushMember.from_reference(ref), source_ref)
         else:
             raise Exception('Cannot push down {}'.format(ref))
 
@@ -74,7 +85,7 @@ class CompilationContext(object):
         self.current_locals = method_locals
 
         self.instruction_block = [
-            OpcodeMethodDefinition(*args)
+            SentinelMethodDefinition(*args)
         ]
 
     def method_end(self) -> None:
@@ -82,7 +93,7 @@ class CompilationContext(object):
         Mark the end of a method
         """
 
-        self.instruction_block.append(OpcodeMethodEnd())
+        self.instruction_block.append(SentinelMethodEnd())
 
     def update_conditional_jumps(self) -> None:
         """
@@ -99,8 +110,18 @@ class CompilationContext(object):
         Serializes the compilation context into thinglang bytecode
         """
 
-        data = bytes().join(x for x in self.data)
-        code = bytes().join(x.resolve() for x in self.instructions + self.instruction_block)
-        header = bytes('THING\x0C', 'utf-8') + struct.pack('<HIII', 1, len(data) + len(code), len(data), self.entry)
+        instructions = self.instructions + self.instruction_block + [SentinelCodeEnd()]
 
-        return header + data + code
+        code = bytes().join(x.resolve() for x in instructions)
+        data = bytes().join(x for x in self.data) + SentinelDataEnd().resolve()
+        symbols = bytes().join(x.source_ref.serialize() for x in instructions)
+
+        header = bytes('THING', 'utf-8') + bytes([0xcc]) + struct.pack(HEADER_FORMAT, *BytecodeHeader(
+            version=1,
+            instruction_count=len(instructions),
+            data_item_count=len(self.data),
+            entrypoint=self.entry
+
+        ))
+
+        return header + code + data + symbols + bytes(self.source.raw_contents, 'utf-8')
