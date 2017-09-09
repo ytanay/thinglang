@@ -9,6 +9,8 @@ ThingStack Program::stack;
 FrameStack Program::frames;
 Things Program::static_data;
 Index Program::entry = 0;
+SymbolList Program::symbols;
+Source Program::source;
 
 Types Program::internals = {
         nullptr,
@@ -30,20 +32,29 @@ Thing Program::pop() {
 }
 
 void Program::load(ProgramInfo &info) {
-    entry = std::get<0>(info);
-    auto loaded_data = std::get<1>(info);
-    auto loaded_types = std::get<2>(info);
+    auto loaded_types = static_cast<std::vector<Type> &&>(std::get<0>(info));
+    auto loaded_data = static_cast<std::vector<Thing> &&>(std::get<1>(info));
+    auto loaded_symbols = static_cast<SymbolList &&>(std::get<3>(info));
+    auto loaded_source = static_cast<Source &&>(std::get<4>(info));
+
+    entry = std::get<2>(info);
+
     static_data.insert(static_data.end(), loaded_data.begin(), loaded_data.end());
     types.insert(types.end(), loaded_types.begin(), loaded_types.end());
-
+    symbols.insert(symbols.end(), loaded_symbols.begin(), loaded_symbols.end());
+    source.insert(source.end(), loaded_source.begin(), loaded_source.end());
 }
 
 
-void Program::status(Index counter, const Symbol& symbol) {
-    std::cerr << "[" << counter << "] Executing symbol " << describe(symbol.opcode) << ": " << symbol.target << ", "
-              << symbol.secondary << " -> [";
+void Program::status(Index counter, const Instruction& instruction) {
+    auto symbol = symbols[instruction.index];
+
+    assert(symbol < source.size());
+
+    std::cerr << "[" << counter << "] Executing instruction " << describe(instruction.opcode) << ": " << instruction.target << ", "
+              << instruction.secondary << " -> [";
     std::for_each(Program::frame().begin(), Program::frame().end(),
                   [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
-    std::cerr << "]" << std::endl;
+    std::cerr << "] -> [" << trim(source[symbol]) << "]" << std::endl;
 
 }

@@ -30,9 +30,11 @@ enum class Opcode {
     INSTANTIATE = 16,
     JUMP = 17,
     JUMP_CONDITIONAL = 18,
-    THING_DEFINITION = 19,
-    METHOD_DEFINITION = 20,
-    METHOD_END = 21
+    SENTINEL_THING_DEFINITION = 19,
+    SENTINEL_METHOD_DEFINITION = 20,
+    SENTINEL_METHOD_END = 21,
+    SENTINEL_CODE_END = 22,
+    SENTINEL_DATA_END = 23
 };
 
 
@@ -96,14 +98,20 @@ inline auto describe(Opcode val){
         case Opcode::JUMP_CONDITIONAL:
             return "JUMP_CONDITIONAL";
 
-        case Opcode::THING_DEFINITION:
-            return "THING_DEFINITION";
+        case Opcode::SENTINEL_THING_DEFINITION:
+            return "SENTINEL_THING_DEFINITION";
 
-        case Opcode::METHOD_DEFINITION:
-            return "METHOD_DEFINITION";
+        case Opcode::SENTINEL_METHOD_DEFINITION:
+            return "SENTINEL_METHOD_DEFINITION";
 
-        case Opcode::METHOD_END:
-            return "METHOD_END";
+        case Opcode::SENTINEL_METHOD_END:
+            return "SENTINEL_METHOD_END";
+
+        case Opcode::SENTINEL_CODE_END:
+            return "SENTINEL_CODE_END";
+
+        case Opcode::SENTINEL_DATA_END:
+            return "SENTINEL_DATA_END";
         
         default:
             throw RuntimeError("Unrecognized Opcode in describe");
@@ -170,13 +178,19 @@ inline auto arg_count(Opcode val){
         case Opcode::JUMP_CONDITIONAL:
             return 1;
 
-        case Opcode::THING_DEFINITION:
+        case Opcode::SENTINEL_THING_DEFINITION:
             return 2;
 
-        case Opcode::METHOD_DEFINITION:
+        case Opcode::SENTINEL_METHOD_DEFINITION:
             return 2;
 
-        case Opcode::METHOD_END:
+        case Opcode::SENTINEL_METHOD_END:
+            return 0;
+
+        case Opcode::SENTINEL_CODE_END:
+            return 0;
+
+        case Opcode::SENTINEL_DATA_END:
             return 0;
         
         default:

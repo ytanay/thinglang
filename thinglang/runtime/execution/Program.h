@@ -52,7 +52,7 @@ public:
 
     static void load(ProgramInfo &info);
 
-    static void status(Index counter, const Symbol& symbol);
+    static void status(Index counter, const Instruction& instruction);
 
     static Types internals;
     static Types types;
@@ -63,6 +63,9 @@ private:
     static FrameStack frames;
     static Things static_data;
     static Index entry;
+    static SymbolList symbols;
+    static Source source;
+
 
 };
 
