@@ -11,7 +11,7 @@
 #include "../utils/TypeNames.h"
 
 #include "../containers/Method.h"
-
+#include "../types/InternalTypes.h"
 
 
 class ProgramReader {
@@ -36,21 +36,19 @@ public:
 
     Method read_method();
 
-    Symbol read_symbol(Opcode opcode);
+    Instruction read_instruction(Opcode opcode);
 
 
     template<typename T>
     T read() {
         T val;
         file.read(reinterpret_cast<char *>(&val), sizeof(T));
-        index += sizeof(T);
         return val;
     }
 
     std::string read_string(Size size) {
         std::string val(size, '\0');
         file.read(&val[0], size);
-        index += size;
         return val;
     }
 
@@ -59,25 +57,32 @@ public:
     }
 
     Opcode read_opcode() {
-        return static_cast<Opcode>(read<uint8_t>());
+        last_opcode = static_cast<Opcode>(read<uint8_t>());
+        instruction_counter++;
+        return last_opcode;
     }
 
-    bool in_data() const {
-        return index < data_size;
+    InternalTypes read_data_type(){
+        return static_cast<InternalTypes>(read<int32_t>());
     }
 
-    bool in_program() const {
-        return index < program_size;
-    }
+
 
 private:
     const std::string filename;
     std::ifstream file;
-    Index index = 0, entry = 0;
-    Size program_size = 0, data_size = 0;
+    Index entry = 0;
+
+    Size program_size = 0, instruction_count = 0, data_item_count = 0, symbol_size = 0, instruction_counter = 0;
+
+    Opcode last_opcode = Opcode::INVALID;
 
     static const std::string EXPECTED_MAGIC;
     static const uint16_t EXPECTED_VERSION = 1;
 
     void prepare_stream();
+
+    SymbolList read_symbols();
+
+    Source read_source();
 };
