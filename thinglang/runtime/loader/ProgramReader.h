@@ -73,7 +73,7 @@ private:
     std::ifstream file;
     Index entry = 0;
 
-    Size program_size = 0, instruction_count = 0, data_item_count = 0, symbol_size = 0, instruction_counter = 0;
+    Size program_size = 0, instruction_count = 0, data_item_count = 0, instruction_counter = 0;
 
     Opcode last_opcode = Opcode::INVALID;
 
@@ -82,7 +82,7 @@ private:
 
     void prepare_stream();
 
-    SymbolList read_symbols();
+    SourceMap read_source_map();
 
     Source read_source();
 };

@@ -63,7 +63,7 @@ private:
     static FrameStack frames;
     static Things static_data;
     static Index entry;
-    static SymbolList symbols;
+    static SourceMap source_map;
     static Source source;
 
 

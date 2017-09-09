@@ -19,7 +19,7 @@ using Size = Index;
 using SignedIndex = int32_t;
 
 using InstructionList = std::vector<Instruction>;
-using SymbolList = std::vector<Index>;
+using SourceMap = std::vector<Index>;
 using Source = std::vector<std::string>;
 
 using Thing = std::shared_ptr<BaseThingInstance>;
@@ -37,4 +37,4 @@ using InternalMethods = std::vector<InternalMethod>;
 using Type = ThingType*;
 using Types = std::vector<Type>;
 
-using ProgramInfo = std::tuple<Types, Things, Index, SymbolList, Source>;
+using ProgramInfo = std::tuple<Types, Things, Index, SourceMap, Source>;

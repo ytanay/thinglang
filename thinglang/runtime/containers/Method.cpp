@@ -14,49 +14,49 @@ void Method::execute() {
         Program::frame()[arguments - i - 1] = Program::pop();
     }
 
-    auto counter_end = symbols.size();
+    auto counter_end = instructions.size();
 
 
     for (Index counter = 0; counter < counter_end;) {
-        auto symbol = symbols[counter];
+        auto instruction = instructions[counter];
 
-        Program::status(counter, symbol);
+        Program::status(counter, instruction);
 
-        switch (symbol.opcode) {
+        switch (instruction.opcode) {
 
             case Opcode::PASS:
                 break;
 
             case Opcode::CALL: {
-                Program::types[symbol.target]->call(symbol.secondary);
+                Program::types[instruction.target]->call(instruction.secondary);
                 break;
             }
 
             case Opcode::CALL_INTERNAL: {
-                auto ret_val = Program::internals[symbol.target]->call(symbol.secondary);
+                auto ret_val = Program::internals[instruction.target]->call(instruction.secondary);
                 Program::push(ret_val);
                 break;
             }
 
             case Opcode::INSTANTIATE: {
-                auto new_thing = Thing(new ThingInstance(Program::types[symbol.target]->members));
+                auto new_thing = Thing(new ThingInstance(Program::types[instruction.target]->members));
                 Program::frame()[0] = new_thing;
                 Program::push(new_thing);
                 break;
             }
 
             case Opcode::PUSH_LOCAL: {
-                Program::push(Program::frame()[symbol.target]);
+                Program::push(Program::frame()[instruction.target]);
                 break;
             };
 
             case Opcode::PUSH_STATIC: {
-                Program::push(Program::data(symbol.target));
+                Program::push(Program::data(instruction.target));
                 break;
             }
 
             case Opcode::PUSH_MEMBER: {
-                Program::push(Program::frame()[symbol.target]->get(symbol.secondary));
+                Program::push(Program::frame()[instruction.target]->get(instruction.secondary));
                 break;
             }
 
@@ -71,29 +71,29 @@ void Method::execute() {
             }
 
             case Opcode::POP_LOCAL: {
-                Program::frame()[symbol.target] = Program::pop();
+                Program::frame()[instruction.target] = Program::pop();
                 break;
             }
 
             case Opcode::ASSIGN_STATIC: {
-                Program::frame()[symbol.target] = Program::data(symbol.secondary);
+                Program::frame()[instruction.target] = Program::data(instruction.secondary);
                 break;
             }
 
             case Opcode::POP_MEMBER: {
-                Program::frame()[symbol.target]->set(symbol.secondary, Program::pop());
+                Program::frame()[instruction.target]->set(instruction.secondary, Program::pop());
                 break;
             }
 
             case Opcode::POP_DEREFERENCED: {
                 auto container = Program::pop();
                 auto value = Program::pop();
-                container->set(symbol.target, value);
+                container->set(instruction.target, value);
                 break;
             }
 
             case Opcode::DEREFERENCE: {
-                Program::push(Program::pop()->get(symbol.target));
+                Program::push(Program::pop()->get(instruction.target));
                 break;
             }
 
@@ -103,7 +103,7 @@ void Method::execute() {
             }
 
             case Opcode::JUMP: {
-                counter = symbol.target;
+                counter = instruction.target;
                 continue;
             }
 
@@ -111,7 +111,7 @@ void Method::execute() {
                 auto value = Program::pop();
 
                 if (!value || !value->boolean()) {
-                    counter = symbol.target;
+                    counter = instruction.target;
                     continue;
                 }
 
@@ -120,7 +120,7 @@ void Method::execute() {
 
             default:
                 throw RuntimeError(
-                        std::string("Cannot handle symbol ") + describe(symbol.opcode) + " (" + std::to_string((int) symbol.opcode) +
+                        std::string("Cannot handle instruction ") + describe(instruction.opcode) + " (" + std::to_string((int) instruction.opcode) +
                         ")");
 
         }

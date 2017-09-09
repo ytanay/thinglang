@@ -9,8 +9,8 @@
 
 class Method {
 public:
-    Method(Size frame_size, Size arguments, InstructionList symbols) :
-            frame_size(frame_size), arguments(arguments), symbols(std::move(symbols)) {};
+    Method(Size frame_size, Size arguments, InstructionList instructions) :
+            frame_size(frame_size), arguments(arguments), instructions(std::move(instructions)) {};
 
     void execute();
 
@@ -18,7 +18,7 @@ public:
     Size arguments = 0;
 
 private:
-    InstructionList symbols;
+    InstructionList instructions;
 
 };
 

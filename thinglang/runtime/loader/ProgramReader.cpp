@@ -12,10 +12,10 @@ ProgramInfo ProgramReader::process() {
 
     auto code = read_code();
     auto data = read_data();
-    auto symbols = read_symbols();
+    auto source_map = read_source_map();
     auto source = read_source();
 
-    return ProgramInfo(code, data, entry, symbols, source);
+    return ProgramInfo(code, data, entry, source_map, source);
 }
 
 void ProgramReader::read_header() {
@@ -36,11 +36,11 @@ void ProgramReader::read_header() {
     data_item_count = read<uint32_t>();
     entry = read<uint32_t>();
 
-    program_size = 0;
 
-    std::cerr << "thinglang bytecode version: " << version << ", total size: " << program_size
-              << ", code size: " << instruction_count << ", data size: " << data_item_count
-              << ", symbol size: " << symbol_size << ", entry point: " << entry << std::endl;
+    std::cerr << "thinglang bytecode version: " << version << ", "
+              << ", instruction count: " << instruction_count
+              << ", data item count: " << data_item_count
+              << ", entry point: " << entry << std::endl;
 }
 
 
@@ -89,18 +89,18 @@ Method ProgramReader::read_method() {
     uint32_t arguments = read_size();
 
     std::cerr << "Encountered method (frame size=" << frame_size << ", args=" << arguments << ")" << std::endl;
-    std::vector<Instruction> symbols;
+    std::vector<Instruction> instructions;
 
     for (auto opcode = read_opcode(); opcode != Opcode::SENTINEL_METHOD_END; opcode = read_opcode()) {
-        auto symbol = read_instruction(opcode);
+        auto instruction = read_instruction(opcode);
 
-        std::cerr << "\t\t\tReading instruction [" << symbols.size() << "] " << describe(opcode) << " (" << symbol.target << ", " << symbol.secondary
+        std::cerr << "\t\t\tReading instruction [" << instructions.size() << "] " << describe(opcode) << " (" << instruction.target << ", " << instruction.secondary
                   << ")" << std::endl;
 
-        symbols.push_back(symbol);
+        instructions.push_back(instruction);
     }
 
-    return Method(frame_size, arguments, symbols);
+    return Method(frame_size, arguments, instructions);
 }
 
 Instruction ProgramReader::read_instruction(Opcode opcode) {
@@ -120,7 +120,7 @@ Instruction ProgramReader::read_instruction(Opcode opcode) {
         }
 
         default:
-            throw RuntimeError(std::string("Unparsable symbol ") + describe(opcode));
+            throw RuntimeError(std::string("Invalid instruction argument count ") + describe(opcode));
     }
 }
 
@@ -179,7 +179,7 @@ void ProgramReader::prepare_stream() {
 
 }
 
-SymbolList ProgramReader::read_symbols() {
+SourceMap ProgramReader::read_source_map() {
     auto refs = std::vector<Index>(instruction_count);
 
     for(int i = 0; i <instruction_count; i++){
