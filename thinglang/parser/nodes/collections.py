@@ -20,6 +20,9 @@ class ListInitialization(BaseNode):
     def __len__(self):
         return len(self.arguments)
 
+    def __getitem__(self, item):
+        return self.arguments[item]
+
     def __setitem__(self, key, value):
         self.arguments[key] = value
 
