@@ -1,4 +1,4 @@
-from tests.infrastructure.test_utils import parse_local, validate_types
+from tests.infrastructure.test_utils import parse_local
 from tests.parser.test_method_call_parsing import validate_method_call
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier

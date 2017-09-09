@@ -2,9 +2,9 @@ import glob
 import json
 import os
 
-import thinglang
+from thinglang import pipeline
 from thinglang.utils.source_context import SourceContext
-from thinglang.compiler import Opcode
+from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.symbols.symbol import Symbol
@@ -32,7 +32,7 @@ def generate_types():
         name = os.path.basename(path).replace('.thing', '')
         name_id = LexicalIdentifier(name)
         target_name = '{}Type'.format(name.capitalize())
-        ast = thinglang.preprocess(SourceContext(path))
+        ast = pipeline.preprocess(SourceContext(path))
         symbols = SymbolMapper(ast)
 
         with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:

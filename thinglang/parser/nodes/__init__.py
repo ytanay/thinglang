@@ -1,8 +1,6 @@
 import itertools
 
 
-from thinglang.compiler import CompilationContext
-from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import Describable
 from thinglang.utils.source_context import SourceReference
@@ -48,7 +46,7 @@ class BaseNode(Describable):
         sep = '\t' * indent
         return sep + ('\n' + sep).join(x.transpile() for x in children_override or self.children)
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context):
         for child in self.children:
             child.compile(context)
 

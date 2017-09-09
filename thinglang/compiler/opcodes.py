@@ -3,6 +3,7 @@ import itertools
 import struct
 from typing import List
 
+from thinglang.compiler.references import ElementReference, LocalReference
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import camelcase_to_underscore
 from thinglang.utils.source_context import SourceReference
@@ -100,21 +101,21 @@ class Opcode(object, metaclass=OpcodeRegistration):
 class ElementReferenced(Opcode):
 
     @classmethod
-    def from_reference(cls, ref):
+    def from_reference(cls, ref: ElementReference):
         """
         Automatically construct an appropriate opcode instance using a a given element reference
         """
         return cls.local_reference(ref) if ref.is_local else cls.type_reference(ref)
 
     @classmethod
-    def type_reference(cls, element_ref):
+    def type_reference(cls, element_ref: ElementReference):
         """
         Generate a type-referencing opcode
         """
         return cls(element_ref.thing_index, element_ref.element_index)
 
     @classmethod
-    def local_reference(cls, element_ref):
+    def local_reference(cls, element_ref: ElementReference):
         """
         Generate a locally-referencing opcode.
         """
@@ -124,14 +125,14 @@ class ElementReferenced(Opcode):
 class LocalReferenced(Opcode):
 
     @classmethod
-    def from_reference(cls, local_ref, *args):
+    def from_reference(cls, local_ref: LocalReference, *args):
         """
         Create a locally referencing opcode
         """
         return cls(local_ref.local_index, *args)
 
     @classmethod
-    def from_references(cls, destination_ref, source_ref):
+    def from_references(cls, destination_ref: LocalReference, source_ref):
         """
         Create a source->destination locally-referencing opcode instance
         """

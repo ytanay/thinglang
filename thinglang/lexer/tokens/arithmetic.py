@@ -1,6 +1,6 @@
 import struct
 
-from thinglang.compiler import OpcodePushStatic
+from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.type_descriptors import ValueType

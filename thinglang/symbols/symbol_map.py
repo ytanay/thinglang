@@ -1,5 +1,3 @@
-import pprint
-
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.symbols.symbol import Symbol
 

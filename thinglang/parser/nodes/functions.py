@@ -1,4 +1,4 @@
-from thinglang import CompilationContext
+from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeReturn, OpcodeDereference, \
     OpcodePopDereferenced
 from thinglang.lexer.tokens.base import LexicalAccess, LexicalIdentifier

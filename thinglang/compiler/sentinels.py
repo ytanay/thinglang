@@ -1,4 +1,4 @@
-from thinglang.compiler import Opcode
+from thinglang.compiler.opcodes import Opcode
 from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS
 
 # Sentinels and file boundaries

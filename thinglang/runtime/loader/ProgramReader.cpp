@@ -1,6 +1,5 @@
 #include "ProgramReader.h"
 #include "../types/core/TextType.h"
-#include "../types/core/NumberType.h"
 
 const std::string ProgramReader::EXPECTED_MAGIC = "THING\xCC";
 

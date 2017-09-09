@@ -1,7 +1,7 @@
-import pytest
-
-import thinglang
-from thinglang import CompilationContext, SymbolMapper, SymbolMap, SourceContext
+from thinglang import pipeline
+from thinglang.compiler.context import CompilationContext
+from thinglang.symbols.symbol_mapper import SymbolMapper, SymbolMap
+from thinglang.utils.source_context import SourceContext
 from thinglang.compiler.indexer import LocalMember
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePushMember, OpcodePopLocal, \
     OpcodeDereference
@@ -9,7 +9,7 @@ from thinglang.lexer.tokens.base import LexicalIdentifier
 
 
 def compile_local(code):
-    ast = thinglang.preprocess(SourceContext.wrap(code))
+    ast = pipeline.preprocess(SourceContext.wrap(code))
     symbols = SymbolMapper(override=[SymbolMap.from_serialized({
         "index": 0,
         "name": "Container",

@@ -1,4 +1,4 @@
-from thinglang.compiler import CompilationContext
+from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushNull, OpcodeInstantiate
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates

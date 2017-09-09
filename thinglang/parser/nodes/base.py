@@ -1,8 +1,8 @@
 import struct
 
-from thinglang.compiler import CompilationContext, LocalReference
+from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePopLocal, OpcodePushStatic, OpcodeAssignStatic, OpcodePopMember, \
-    OpcodeAssignLocal, OpcodePushLocal, OpcodePushMember, OpcodePopDereferenced
+    OpcodeAssignLocal
 from thinglang.foundation import definitions
 from thinglang.lexer.tokens import LexicalToken
 from thinglang.lexer.tokens.base import LexicalIdentifier

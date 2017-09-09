@@ -1,6 +1,7 @@
 import collections
 from collections import OrderedDict
 
+from thinglang.parser.nodes import RootNode
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.base import AssignmentOperation
 from thinglang.parser.nodes.classes import MethodDefinition, ThingDefinition
@@ -18,7 +19,7 @@ class Indexer(TreeTraversal):
     This information is used during linking and reference resolution
     """
 
-    def __init__(self, ast):
+    def __init__(self, ast: RootNode):
         super(Indexer, self).__init__(ast)
         self.context = None
 

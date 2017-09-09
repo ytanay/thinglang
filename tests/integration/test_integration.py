@@ -3,8 +3,9 @@ import pytest
 import glob
 import subprocess
 
-import thinglang
+
 from tests.infrastructure.test_utils import ProgramTestCase
+from thinglang import pipeline
 from thinglang.utils import logging_utils
 from thinglang.utils.source_context import SourceContext
 
@@ -27,7 +28,7 @@ def split_lines(param):
 def test_thing_program(test_file: ProgramTestCase):
     expected_output = test_file.metadata['expected_output']
 
-    bytecode = thinglang.compile(SourceContext.wrap(test_file.code))
+    bytecode = pipeline.compile(SourceContext.wrap(test_file.code))
 
     logging_utils.print_header('VM execution')
 
