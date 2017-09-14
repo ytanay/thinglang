@@ -23,6 +23,9 @@ class ArithmeticOperation(BaseNode, ValueType):
         self.arguments = [slice[0], slice[2]]
         self.operator = type(slice[1])
 
+    def __getitem__(self, item):
+        return self.arguments[item]
+
     def evaluate(self):
         return self.OPERATIONS[self.operator](self[0].evaluate(), self[1].evaluate())
 
@@ -31,6 +34,3 @@ class ArithmeticOperation(BaseNode, ValueType):
 
     def transpile(self):
         return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
-
-    def __getitem__(self, item):
-        return self.arguments[item]

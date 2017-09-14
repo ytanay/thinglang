@@ -33,8 +33,8 @@ class SymbolMap(object):
 
     @classmethod
     def from_thing(cls, thing, index):
-        members = [elem.symbol().update_index(index) for index, elem in enumerate(thing.members())]
-        methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods())]
+        members = [elem.symbol().update_index(index) for index, elem in enumerate(thing.members)]
+        methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods)]
 
         return cls(members, methods, thing.name, index)
 

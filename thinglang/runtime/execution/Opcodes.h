@@ -112,9 +112,6 @@ inline auto describe(Opcode val){
 
         case Opcode::SENTINEL_DATA_END:
             return "SENTINEL_DATA_END";
-        
-        default:
-            throw RuntimeError("Unrecognized Opcode in describe");
     }
 }
 
@@ -192,8 +189,5 @@ inline auto arg_count(Opcode val){
 
         case Opcode::SENTINEL_DATA_END:
             return 0;
-        
-        default:
-            throw RuntimeError("Unrecognized Opcode in arg_count");
     }
 }

@@ -94,9 +94,6 @@ FOUNDATION_SWITCH = """
 inline auto {func_name}({name} val){{
     switch (val){{
         {cases}
-        
-        default:
-            throw RuntimeError("Unrecognized {name} in {func_name}");
     }}
 }}
 """
@@ -106,9 +103,6 @@ ENUM_CASE = """
         case {enum_class}::{name}:
             return {value};"""
 
-ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
-
-ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
 
 CONDITIONAL = """
         if({condition}) {{
@@ -116,14 +110,18 @@ CONDITIONAL = """
         }}
 """
 
+
 ELSE_CLAUSE = """
         else {{
 {body}
     }}
 """
 
-RETURN_VALUE = 'return Thing(new this_type({value}));'
 
+ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
+ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
+
+RETURN_VALUE = 'return Thing(new this_type({value}));'
 RETURN_NULL = 'return nullptr;'
 
 
@@ -143,4 +141,3 @@ def format_member_list(members):
 
 def format_method_list(methods):
     return ', '.join(['&{}'.format(x.name.transpile()) for x in methods])
-

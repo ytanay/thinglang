@@ -32,8 +32,5 @@ inline auto describe(InternalTypes val){
 
         case InternalTypes::OUTPUT:
             return "OUTPUT";
-        
-        default:
-            throw RuntimeError("Unrecognized InternalTypes in describe");
     }
 }
