@@ -44,7 +44,7 @@ class BaseNode(Describable):
 
     def transpile_children(self, indent=0, children_override=None):
         sep = '\t' * indent
-        return sep + ('\n' + sep).join(x.transpile() for x in children_override or self.children)
+        return sep + ('\n' + sep).join(x.transpile() for x in (children_override if children_override is not None else self.children))
 
     def compile(self, context):
         for child in self.children:
