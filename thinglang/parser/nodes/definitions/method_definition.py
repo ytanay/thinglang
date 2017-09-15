@@ -1,41 +1,12 @@
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.opcodes import OpcodePushNull, OpcodeInstantiate
-from thinglang.compiler.sentinels import SentinelThingDefinition
+from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull
 from thinglang.foundation import templates
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
-from thinglang.parser.nodes import DefinitionPairNode, BaseNode
-from thinglang.parser.nodes.functions import ArgumentList, ReturnStatement
+from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.definitions.argument_list import ArgumentList
+from thinglang.parser.nodes.statements.return_statement import ReturnStatement
 from thinglang.symbols.symbol import Symbol
-
-
-class ThingDefinition(DefinitionPairNode):
-
-    def describe(self):
-        return self.name
-
-    def compile(self, context: CompilationContext):
-        context.append(SentinelThingDefinition(len(self.members), len(self.methods)), self.source_ref)
-        super().compile(context)
-
-    def transpile(self):
-        type_cls_name, instance_cls_name = templates.get_names(self.name)
-        print('\n\n\n', self.name, self.methods)
-        return templates.FOUNDATION_TYPE.format(
-            type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
-            member_list=templates.format_member_list(self.members),
-            method_list=templates.format_method_list(self.methods),
-            members=self.transpile_children(indent=0, children_override=self.members),
-            methods=self.transpile_children(indent=0, children_override=self.methods)
-        )
-
-    @property
-    def members(self):
-        return [x for x in self.children if x.implements(MemberDefinition)]
-
-    @property
-    def methods(self):
-        return [x for x in self.children if x.implements(MethodDefinition)]
 
 
 class MethodDefinition(BaseNode):
@@ -110,22 +81,3 @@ class MethodDefinition(BaseNode):
 
     def update_locals(self, locals):
         self.locals = locals
-
-
-class MemberDefinition(BaseNode):
-    def __init__(self, slice):
-        super(MemberDefinition, self).__init__(slice)
-
-        _, self.type, self.name = slice
-
-    def describe(self):
-        return 'has {} {}'.format(self.type, self.name)
-
-    def transpile(self):
-        return '{} {};'.format(self.type.transpile(), self.name.transpile())
-
-    def symbol(self):
-        return Symbol.member(self.name, self.type)
-
-    def compile(self, context: CompilationContext):
-        return

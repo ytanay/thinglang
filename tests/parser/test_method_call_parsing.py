@@ -1,9 +1,10 @@
 from tests.infrastructure.test_utils import validate_types, parse_local
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import InlineString
-from thinglang.parser.nodes.functions import Access, MethodCall
+from thinglang.parser.nodes.values.binary_operation import BinaryOperation
+from thinglang.parser.nodes.values.inline_text import InlineString
+from thinglang.parser.nodes.values.access import Access
+from thinglang.parser.nodes.values.method_call import MethodCall
 
 
 def validate_method_call(node, target, argument_types):
@@ -39,7 +40,7 @@ def test_simple_nested_method_calls():
 
 def test_nested_method_calls():
     method = parse_local('person.walk(8 * (1 + 3), Location.random(2 * (4 + 9)))')
-    validate_method_call(method, ['person', 'walk'], [ArithmeticOperation, [ArithmeticOperation]])
+    validate_method_call(method, ['person', 'walk'], [BinaryOperation, [BinaryOperation]])
 
 
 def test_constructing_call():

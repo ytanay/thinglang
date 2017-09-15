@@ -1,8 +1,10 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import AssignmentOperation
-from thinglang.parser.nodes.functions import MethodCall, ReturnStatement
-from thinglang.parser.nodes.logic import Conditional, Loop
+from thinglang.parser.nodes.values.binary_operation import BinaryOperation
+from thinglang.parser.nodes.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.nodes.blocks.conditional import Conditional
+from thinglang.parser.nodes.blocks.loop import Loop
+from thinglang.parser.nodes.values.method_call import MethodCall
+from thinglang.parser.nodes.statements.return_statement import ReturnStatement
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 
@@ -17,7 +19,7 @@ class Simplifier(TreeTraversal):
         Checks the value of an assignment operation for values requiring simplification.
         Simplifies the value if needed.
         """
-        if node.value.implements(ArithmeticOperation):
+        if node.value.implements(BinaryOperation):
             node.value = self.convert_arithmetic_operations(node.value)
 
     @inspects(MethodCall)
@@ -27,22 +29,22 @@ class Simplifier(TreeTraversal):
         Simplifies each argument in turn.
         """
         for idx, arg in enumerate(node.arguments):
-            if arg.implements(ArithmeticOperation):
+            if arg.implements(BinaryOperation):
                 node.replace_argument(idx, self.convert_arithmetic_operations(arg))
             elif arg.implements(MethodCall):
                 self.simply_method_call(arg)
 
-    def convert_arithmetic_operations(self, node: ArithmeticOperation) -> MethodCall:
+    def convert_arithmetic_operations(self, node: BinaryOperation) -> MethodCall:
         """
         Converts an arithmetic (binary) operation into a method call on the relevant type, recursively.
         """
         lhs, rhs = node.arguments
 
-        if lhs.implements(ArithmeticOperation):
+        if lhs.implements(BinaryOperation):
             lhs = self.convert_arithmetic_operations(lhs)
         elif lhs.implements(MethodCall):
             self.simply_method_call(lhs)
-        if rhs.implements(ArithmeticOperation):
+        if rhs.implements(BinaryOperation):
             rhs = self.convert_arithmetic_operations(rhs)
         elif rhs.implements(MethodCall):
             self.simply_method_call(rhs)

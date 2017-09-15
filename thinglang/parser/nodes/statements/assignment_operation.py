@@ -1,14 +1,9 @@
-import struct
-
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.opcodes import OpcodePopLocal, OpcodePushStatic, OpcodeAssignStatic, OpcodePopMember, \
-    OpcodeAssignLocal
-from thinglang.foundation import definitions
-from thinglang.lexer.tokens import LexicalToken
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
+from thinglang.lexer import LexicalIdentifier
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.functions import MethodCall, Access
-from thinglang.utils.type_descriptors import ValueType
+from thinglang.parser.nodes.values.access import Access
+from thinglang.parser.nodes.values.method_call import MethodCall
 
 
 class AssignmentOperation(BaseNode):
@@ -64,41 +59,3 @@ class AssignmentOperation(BaseNode):
 
         else:
             raise Exception('Cannot pull up {}'.format(target))
-
-
-class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
-    STATIC = True
-    TYPE = LexicalIdentifier("text")
-    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[LexicalIdentifier("text")]
-
-    def __init__(self, value, source_ref=None):
-        super().__init__(value, source_ref)
-
-    def serialize(self):
-        return struct.pack('<iI', self.TYPE_IDX, len(self.value)) + bytes(self.value, 'utf-8')
-
-    def transpile(self):
-        return f'"{self.value}"'
-
-    @property
-    def type(self):
-        return self.TYPE
-
-    def describe(self):
-        return '"{}"'.format(self.value)
-
-    def compile(self, context: CompilationContext):
-        ref = context.append_static(self.serialize())
-        context.append(OpcodePushStatic(ref), self.source_ref)
-
-
-class InlineCode(LexicalToken):
-    STATIC = True
-    SCOPING = False
-
-    def __init__(self, value, source_ref):
-        super(InlineCode, self).__init__(value, source_ref)
-        self.children = []
-
-    def tree(self, depth):
-        return self.value

@@ -3,8 +3,7 @@ import pytest
 from tests.infrastructure.test_utils import lexer_single
 from thinglang.lexer.tokens import LexicalGroupEnd
 from thinglang.lexer.tokens.base import LexicalIndent, LexicalIdentifier
-from thinglang.parser.nodes.base import InlineString
-
+from thinglang.parser.nodes.values.inline_text import InlineString
 
 UNTERMINATED_GROUPS = 'hello"', '"hello', 'hello`', '`hello', '"hello`', '`hello"'
 

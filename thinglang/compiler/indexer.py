@@ -3,8 +3,9 @@ from collections import OrderedDict
 
 from thinglang.parser.nodes import RootNode
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.base import AssignmentOperation
-from thinglang.parser.nodes.classes import MethodDefinition, ThingDefinition
+from thinglang.parser.nodes.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.nodes.definitions.method_definition import MethodDefinition
+from thinglang.parser.nodes.definitions.thing_definition import ThingDefinition
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 

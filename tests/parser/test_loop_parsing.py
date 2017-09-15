@@ -1,16 +1,16 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.functions import MethodCall
-from thinglang.parser.nodes.logic import Loop
+from thinglang.parser.nodes.values.binary_operation import BinaryOperation
+from thinglang.parser.nodes.blocks.loop import Loop
+from thinglang.parser.nodes.values.method_call import MethodCall
 
 
 def validate_loop(node, condition):
     assert node.implements(Loop)
 
     if isinstance(condition, list):
-        validate_types(node.value.arguments, condition, (ArithmeticOperation, MethodCall), lambda x: x.arguments)
+        validate_types(node.value.arguments, condition, (BinaryOperation, MethodCall), lambda x: x.arguments)
     else:
         assert isinstance(node.value, condition)
 

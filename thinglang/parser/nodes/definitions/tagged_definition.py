@@ -2,7 +2,7 @@ from thinglang.parser.nodes import BaseNode
 from thinglang.utils.type_descriptors import ValueType
 
 
-class TaggedLexicalDeclaration(BaseNode, ValueType):
+class TaggedDeclaration(BaseNode, ValueType):
 
     @classmethod
     def construct(cls, slice):

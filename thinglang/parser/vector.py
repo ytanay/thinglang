@@ -9,12 +9,20 @@ from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDec
     LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import  AssignmentOperation, InlineCode
-from thinglang.parser.nodes.classes import ThingDefinition, MemberDefinition, MethodDefinition
-from thinglang.parser.nodes.functions import Access, MethodCall, ReturnStatement
-from thinglang.parser.nodes.logic import Conditional, ConditionalElse, UnconditionalElse, Loop
-from thinglang.parser.nodes.proxies import TaggedLexicalDeclaration
+from thinglang.parser.nodes.values.binary_operation import BinaryOperation
+from thinglang.parser.nodes.values.inline_code import InlineCode
+from thinglang.parser.nodes.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.nodes.blocks.loop import Loop
+from thinglang.parser.nodes.definitions.member_definition import MemberDefinition
+from thinglang.parser.nodes.definitions.method_definition import MethodDefinition
+from thinglang.parser.nodes.definitions.thing_definition import ThingDefinition
+from thinglang.parser.nodes.values.access import Access
+from thinglang.parser.nodes.values.method_call import MethodCall
+from thinglang.parser.nodes.statements.return_statement import ReturnStatement
+from thinglang.parser.nodes.blocks.conditional_else import ConditionalElse
+from thinglang.parser.nodes.blocks.unconditional_else import UnconditionalElse
+from thinglang.parser.nodes.blocks.conditional import Conditional
+from thinglang.parser.nodes.definitions.tagged_definition import TaggedDeclaration
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType
 
@@ -184,13 +192,13 @@ VECTOR_CREATION_TOKENS = {
 }
 
 
-METHOD_ID = (LexicalIdentifier,) + tuple(ArithmeticOperation.OPERATIONS.keys())
+METHOD_ID = (LexicalIdentifier,) + tuple(BinaryOperation.OPERATIONS.keys())
 
 PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMember, (InlineCode, LexicalIdentifier), LexicalIdentifier), MemberDefinition),
 
-    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedLexicalDeclaration),
+    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedDeclaration),
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
@@ -204,9 +212,9 @@ PATTERNS = collections.OrderedDict([
     ((Access, ParenthesesVector), MethodCall),
     ((LexicalClassInitialization, LexicalIdentifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
 
-    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 * 2
-    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), ArithmeticOperation),  # 4 + 2
-    ((ValueType, LexicalComparison, ValueType), ArithmeticOperation),  # 4 == 2
+    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), BinaryOperation),  # 4 * 2
+    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), BinaryOperation),  # 4 + 2
+    ((ValueType, LexicalComparison, ValueType), BinaryOperation),  # 4 == 2
 
 
     ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1

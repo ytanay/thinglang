@@ -2,9 +2,10 @@ from tests.infrastructure.test_utils import parse_local
 from tests.parser.test_method_call_parsing import validate_method_call
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.arithmetic import ArithmeticOperation
-from thinglang.parser.nodes.base import AssignmentOperation, InlineString
-from thinglang.parser.nodes.functions import MethodCall
+from thinglang.parser.nodes.values.binary_operation import BinaryOperation
+from thinglang.parser.nodes.values.inline_text import InlineString
+from thinglang.parser.nodes.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.nodes.values.method_call import MethodCall
 
 
 def validate_assignment(node, type, name, value):
@@ -13,7 +14,7 @@ def validate_assignment(node, type, name, value):
     assert node.name.type == (LexicalIdentifier(type) if type else None)
     assert node.intent == (AssignmentOperation.DECELERATION if type else AssignmentOperation.REASSIGNMENT)
 
-    if value in (MethodCall, ArithmeticOperation):
+    if value in (MethodCall, BinaryOperation):
         assert isinstance(node.value, value)
 
 
@@ -41,5 +42,5 @@ def test_complex_method_call_value_type():
 
 def test_arithmetic_operation_value_type():
     assignment = parse_local('number a = 2 * (4 + 2) * (3 + 2)')
-    validate_assignment(assignment, 'number', 'a', ArithmeticOperation)
+    validate_assignment(assignment, 'number', 'a', BinaryOperation)
     assert assignment.value.evaluate() == 60

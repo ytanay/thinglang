@@ -4,6 +4,7 @@ from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.foundation import templates
 from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.blocks.common import ElseBranchInterface
 
 
 class Conditional(BaseNode):
@@ -44,49 +45,4 @@ class Conditional(BaseNode):
             context.conditional_groups[-1][self] = jump_out
             context.append(jump_out, self.source_ref)
 
-        opcode.update(context.current_index())
-
-
-class ElseBranchInterface(object):
-    SCOPING = True
-    pass
-
-
-class UnconditionalElse(BaseNode, ElseBranchInterface):
-    def compile(self, context: CompilationContext):
-        super(UnconditionalElse, self).compile(context)
-        context.update_conditional_jumps()
-
-    def transpile(self):
-        return templates.ELSE_CLAUSE.format(body=self.transpile_children(indent=3))
-
-
-class ConditionalElse(Conditional, ElseBranchInterface):
-
-    def __init__(self, slice):
-        super(ConditionalElse, self).__init__(slice)
-        _, self.conditional = slice
-
-    def describe(self):
-        return 'otherwise if {}'.format(self.value)
-
-
-class Loop(BaseNode):
-    ADVANCE = False
-    SCOPING = True
-
-    def __init__(self, slice):
-        super(Loop, self).__init__(slice)
-        _, self.value = slice
-
-    def describe(self):
-        return str(self.value)
-
-    def compile(self, context: CompilationContext):
-        idx = context.current_index()
-        self.value.compile(context)
-        opcode = OpcodeJumpConditional()
-        context.append(opcode, self.source_ref)
-        super(Loop, self).compile(context)
-        context.append(OpcodeJump(idx), self.source_ref)
         opcode.update(context.current_index())

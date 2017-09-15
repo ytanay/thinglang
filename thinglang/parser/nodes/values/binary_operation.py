@@ -6,7 +6,7 @@ from thinglang.parser.nodes import BaseNode
 from thinglang.utils.type_descriptors import ValueType
 
 
-class ArithmeticOperation(BaseNode, ValueType):
+class BinaryOperation(BaseNode, ValueType):
     OPERATIONS = {
         LexicalAddition: lambda lhs, rhs: lhs + rhs,
         LexicalMultiplication: lambda lhs, rhs: lhs * rhs,
@@ -19,7 +19,7 @@ class ArithmeticOperation(BaseNode, ValueType):
     }
 
     def __init__(self, slice):
-        super(ArithmeticOperation, self).__init__(slice)
+        super(BinaryOperation, self).__init__(slice)
         self.arguments = [slice[0], slice[2]]
         self.operator = type(slice[1])
 
