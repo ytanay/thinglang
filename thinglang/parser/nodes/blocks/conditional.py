@@ -9,9 +9,6 @@ from thinglang.parser.nodes.blocks.common import ElseBranchInterface
 
 class Conditional(BaseNode):
 
-    ADVANCE = False
-    SCOPING = True
-
     def __init__(self, slice):
         super(Conditional, self).__init__(slice)
         _, self.value = slice

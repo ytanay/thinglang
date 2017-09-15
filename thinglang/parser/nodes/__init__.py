@@ -7,9 +7,7 @@ from thinglang.utils.source_context import SourceReference
 
 
 class BaseNode(Describable):
-    SCOPING = False
-    ADVANCE = True
-    EXECUTABLE = True
+
     STATIC = False
 
     def __init__(self, slice):

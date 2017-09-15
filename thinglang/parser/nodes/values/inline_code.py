@@ -3,7 +3,6 @@ from thinglang.lexer import LexicalToken
 
 class InlineCode(LexicalToken):
     STATIC = True
-    SCOPING = False
 
     def __init__(self, value, source_ref):
         super(InlineCode, self).__init__(value, source_ref)

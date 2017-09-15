@@ -4,8 +4,6 @@ from thinglang.parser.nodes import BaseNode
 
 
 class Loop(BaseNode):
-    ADVANCE = False
-    SCOPING = True
 
     def __init__(self, slice):
         super(Loop, self).__init__(slice)
