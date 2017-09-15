@@ -69,7 +69,7 @@ class LexicalIdentifier(LexicalToken, ValueType):
         self.index = None
 
     def compile(self, context):
-        context.push_ref(context.resolve(self), self.source_ref)
+        return context.push_ref(context.resolve(self), self.source_ref)
 
     def transpile(self):
         return self.value

@@ -31,3 +31,4 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def compile(self, context: CompilationContext):
         ref = context.append_static(self.serialize())
         context.append(OpcodePushStatic(ref), self.source_ref)
+        return self

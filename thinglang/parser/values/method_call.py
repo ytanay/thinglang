@@ -1,4 +1,5 @@
 from thinglang.compiler.context import CompilationContext
+from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.lexer import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
@@ -34,26 +35,33 @@ class MethodCall(BaseNode, ValueType):
     def create(cls, target, arguments=None):
         return cls([Access(target), arguments])
 
-    def compile(self, context: CompilationContext, captured=False):
+    def compile(self, context: CompilationContext):
         if self.target[0].implements(MethodCall):
-            inner_target = self.target[0].compile(context, True)
+            inner_target = self.target[0].compile(context)
             target = context.resolve(Access([inner_target.type, self.target[1]]))
-        elif self.target.implements(Access):
+        else:
+            assert self.target.implements(Access)
             target = context.resolve(self.target.root)
 
             for ext, _ in self.target.extensions:
                 target = context.resolve(target, ext)
 
-            assert target.kind == Symbol.METHOD, 'Target is not callable'
+            if target.kind != Symbol.METHOD:
+                raise TargetNotCallable()
 
             if not target.static and not self.constructing_call:
                 self.target.compile(context, without_last=True)
 
-        else:
-            raise Exception('Cannot call method on target {}'.format(self.target))
+        expected_arguments = target.element.arguments
 
-        for arg in self.arguments:
-            arg.compile(context)
+        if len(expected_arguments) != len(self.arguments):
+            raise ArgumentCountMismatch(len(expected_arguments), len(self.arguments))
+
+        for idx, (arg, expected_type) in enumerate(zip(self.arguments, expected_arguments)):
+            compiled_target = arg.compile(context)
+
+            if not self.validate_types(compiled_target, expected_type):
+                raise ArgumentTypeMismatch(idx, expected_type, compiled_target.type)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target), self.source_ref)
@@ -62,3 +70,12 @@ class MethodCall(BaseNode, ValueType):
             context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
 
         return target
+
+    @staticmethod
+    def validate_types(compiled_target, expected_type):
+        if expected_type == LexicalIdentifier('object'):
+            return True
+
+        return compiled_target.type == expected_type
+
+
