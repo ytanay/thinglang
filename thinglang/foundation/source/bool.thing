@@ -1,0 +1,4 @@
+thing bool
+    
+    has bool val
+   

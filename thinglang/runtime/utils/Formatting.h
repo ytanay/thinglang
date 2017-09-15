@@ -12,6 +12,10 @@ inline std::string to_string(std::string val){
     return val;
 }
 
+inline std::string to_string(bool val){
+    return val ? "true" : "false";
+}
+
 template <typename T>
 inline bool to_boolean(T val){
     return val != 0;

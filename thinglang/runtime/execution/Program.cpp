@@ -16,6 +16,7 @@ Types Program::internals = {
         nullptr,
         new TextNamespace::TextType(),
         new NumberNamespace::NumberType(),
+        new BoolNamespace::BoolType(),
         new OutputNamespace::OutputType()
 };
 

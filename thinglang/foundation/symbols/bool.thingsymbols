@@ -1,0 +1,15 @@
+{
+    "index": 3,
+    "name": "bool",
+    "symbols": [
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "val",
+            "static": false,
+            "type": "bool"
+        }
+    ]
+}
