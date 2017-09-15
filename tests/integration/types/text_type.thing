@@ -1,0 +1,19 @@
+/*
+{
+    "expected_output": ["Hello, world!", "Goodbye, world!", "true", "false"]
+}
+*/
+
+thing Program
+    setup
+
+        text part1 = "Hello, "
+        text part2 = "world!"
+
+        text combined = part1 + part2
+
+        Output.write(combined)
+        Output.write("Goodbye, " + part2)
+
+        Output.write(part2.contains("world"))
+        Output.write(part1.contains("Goodbye"))
