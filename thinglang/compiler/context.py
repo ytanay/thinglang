@@ -1,10 +1,10 @@
 import collections
 import struct
 
-from thinglang.compiler.opcodes import OpcodePushStatic, Opcode, OpcodePushLocal, \
+from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, \
     OpcodePushMember
 from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd
-from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
+from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.utils.source_context import SourceReference, SourceContext
 
 HEADER_FORMAT = '<HIII'
@@ -65,9 +65,7 @@ class CompilationContext(object):
         Push down a reference object into the program stack
         """
 
-        if isinstance(ref, StaticReference):
-            self.append(OpcodePushStatic(self.append_static(ref.value.serialize())), source_ref)
-        elif isinstance(ref, LocalReference):
+        if isinstance(ref, LocalReference):
             self.append(OpcodePushLocal.from_reference(ref), source_ref)
         elif isinstance(ref, ElementReference):
             self.append(OpcodePushMember.from_reference(ref), source_ref)

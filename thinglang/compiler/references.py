@@ -92,13 +92,5 @@ class LocalReference(Reference):
         return self.local.index
 
 
-class StaticReference(Reference):
-    """
-    Describes a reference to a static entity, e.g. an inline string or numeric value
-    """
-    def __init__(self, value):
-        super(StaticReference, self).__init__(value.type)
-        self.value = value
-
 
 

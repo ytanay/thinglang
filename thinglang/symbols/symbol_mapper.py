@@ -1,4 +1,4 @@
-from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
+from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.definitions.thing_definition import ThingDefinition
@@ -31,10 +31,10 @@ class SymbolMapper(object):
             assert isinstance(target, Reference)
             return self.resolve_access([target.type, next_item])
 
+        assert not target.STATIC
+
         if target.implements(LexicalIdentifier):
             return LocalReference(locals[target])
-        elif target.STATIC:
-            return StaticReference(target)
         elif target.implements(Access):
             return self.resolve_access(target, locals)
 
