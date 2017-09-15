@@ -20,6 +20,7 @@ class ThingDefinition(DefinitionPairNode):
 
     def transpile(self):
         type_cls_name, instance_cls_name = templates.get_names(self.name)
+        print('\n\n\n', self.name, self.methods)
         return templates.FOUNDATION_TYPE.format(
             type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
             member_list=templates.format_member_list(self.members),

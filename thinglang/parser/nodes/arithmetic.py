@@ -1,7 +1,7 @@
 from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalMultiplication, LexicalSubtraction, \
     LexicalDivision
-from thinglang.lexer.tokens.logic import LexicalEquality, LexicalInequality, LexicalGreaterThan, LexicalLessThan
+from thinglang.lexer.tokens.logic import LexicalEquals, LexicalInequality, LexicalGreaterThan, LexicalLessThan
 from thinglang.parser.nodes import BaseNode
 from thinglang.utils.type_descriptors import ValueType
 
@@ -12,7 +12,7 @@ class ArithmeticOperation(BaseNode, ValueType):
         LexicalMultiplication: lambda lhs, rhs: lhs * rhs,
         LexicalSubtraction: lambda lhs, rhs: lhs - rhs,
         LexicalDivision: lambda lhs, rhs: lhs / rhs,
-        LexicalEquality: lambda lhs, rhs: lhs == rhs,
+        LexicalEquals: lambda lhs, rhs: lhs == rhs,
         LexicalInequality: lambda lhs, rhs: lhs != rhs,
         LexicalGreaterThan: lambda lhs, rhs: lhs > rhs,
         LexicalLessThan: lambda lhs, rhs: lhs < rhs

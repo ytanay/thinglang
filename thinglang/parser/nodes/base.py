@@ -12,9 +12,12 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class AssignmentOperation(BaseNode):
-    DECELERATION = object()
-    REASSIGNMENT = object()
-    INDETERMINATE = object()
+    """
+    Represents all flavors of assignment operations, static-to-local, static-to-member, local-to-local, member-to-member, etc...
+    """
+
+    DECELERATION = object()  # This assignment declares a local variable, and assigns an initial value to it
+    REASSIGNMENT = object()  # This assignment refers to an existing local variable or to a member variable
 
     def __init__(self, slice):
         super(AssignmentOperation, self).__init__(slice)

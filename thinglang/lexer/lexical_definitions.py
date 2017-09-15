@@ -1,7 +1,7 @@
 import re
 
 
-from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquality, LexicalElse, LexicalNegation, \
+from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquals, LexicalElse, LexicalNegation, \
     LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeat, LexicalRepeatWhile, \
     LexicalIn, LexicalRepeatFor, LexicalInequality
 from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
@@ -67,7 +67,7 @@ KEYWORDS = {
     'in': LexicalIn,
     'for': LexicalRepeatFor,
 
-    'eq': LexicalEquality,
+    'eq': LexicalEquals,
     'not': LexicalNegation,
 
     'true': LexicalBooleanTrue,
@@ -81,6 +81,6 @@ REVERSE_OPERATORS = {
 }
 
 REVERSE_OPERATORS.update({
-    LexicalEquality: "==",
+    LexicalEquals: "==",
     LexicalInequality: '!='
 })

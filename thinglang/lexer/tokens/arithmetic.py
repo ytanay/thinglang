@@ -35,6 +35,7 @@ class LexicalNumericalValue(LexicalToken, ValueType):
         context.append(OpcodePushStatic(ref), self.source_ref)
 
 
+
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction
     pass
 

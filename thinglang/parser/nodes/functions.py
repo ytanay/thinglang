@@ -129,10 +129,14 @@ class ReturnStatement(BaseNode):
         self.value = slice[1] if len(slice) == 2 else None
 
     def transpile(self):
-        if self.value:
+        if not self.value:
+            return templates.RETURN_NULL
+
+        elif self.value.STATIC:
             return templates.RETURN_VALUE.format(value=self.value.transpile())
         else:
-            return templates.RETURN_NULL
+            return templates.RETURN_VALUE_INSTANTIATE.format(value=self.value.transpile())
+
 
     def compile(self, context: CompilationContext):
         self.value.compile(context)
