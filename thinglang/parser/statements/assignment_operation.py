@@ -43,7 +43,7 @@ class AssignmentOperation(BaseNode):
                 return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
 
         if self.value.implements(MethodCall):
-            self.value.compile(context, True)
+            self.value.compile(context)
         else:
             self.value.compile(context)
 

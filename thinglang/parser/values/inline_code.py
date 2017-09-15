@@ -10,3 +10,6 @@ class InlineCode(LexicalToken):
 
     def tree(self, depth):
         return self.value
+
+    def finalize(self):
+        pass
