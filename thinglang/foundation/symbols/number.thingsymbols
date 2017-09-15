@@ -9,7 +9,7 @@
             "convention": "internal",
             "index": 0,
             "kind": "method",
-            "name": "__LexicalAddition__",
+            "name": "__addition__",
             "static": false,
             "type": "number"
         },
@@ -20,7 +20,7 @@
             "convention": "internal",
             "index": 1,
             "kind": "method",
-            "name": "__LexicalSubtraction__",
+            "name": "__subtraction__",
             "static": false,
             "type": "number"
         },
@@ -31,7 +31,7 @@
             "convention": "internal",
             "index": 2,
             "kind": "method",
-            "name": "__LexicalMultiplication__",
+            "name": "__multiplication__",
             "static": false,
             "type": "number"
         },
@@ -42,7 +42,7 @@
             "convention": "internal",
             "index": 3,
             "kind": "method",
-            "name": "__LexicalDivision__",
+            "name": "__division__",
             "static": false,
             "type": "number"
         },
@@ -53,9 +53,9 @@
             "convention": "internal",
             "index": 4,
             "kind": "method",
-            "name": "__LexicalEquality__",
+            "name": "__equals__",
             "static": false,
-            "type": "number"
+            "type": "bool"
         },
         {
             "arguments": [
@@ -64,9 +64,9 @@
             "convention": "internal",
             "index": 5,
             "kind": "method",
-            "name": "__LexicalLessThan__",
+            "name": "__less_than__",
             "static": false,
-            "type": "number"
+            "type": "bool"
         },
         {
             "arguments": null,

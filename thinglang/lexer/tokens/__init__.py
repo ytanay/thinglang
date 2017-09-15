@@ -1,6 +1,6 @@
 import abc
 
-from thinglang.utils.describable import Describable
+from thinglang.utils.describable import Describable, camelcase_to_underscore
 
 
 class LexicalToken(Describable):
@@ -26,6 +26,10 @@ class LexicalToken(Describable):
     def __hash__(self):
         return hash((type(self), self.value))
 
+    @classmethod
+    def format_name(cls):
+        return '__{}__'.format(camelcase_to_underscore(cls.__name__.replace('Lexical', '')))
+
 
 class LexicalBinaryOperation(LexicalToken):
     def __init__(self, value, source_ref):
@@ -34,7 +38,7 @@ class LexicalBinaryOperation(LexicalToken):
 
     @classmethod
     def transpile(cls):
-        return '__{}__'.format(cls.__name__)
+        return cls.format_name()
 
 
 class LexicalGroupEnd(LexicalToken):

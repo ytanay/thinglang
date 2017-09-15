@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "../../execution/Globals.h"
 #include "../../utils/Formatting.h"
 #include "../infrastructure/ThingType.h"
 #include "../infrastructure/ThingInstance.h"
@@ -41,10 +42,10 @@ typedef NumberInstance this_type;
 class NumberType : public ThingTypeInternal {
     
     public:
-    NumberType() : ThingTypeInternal({ &__LexicalAddition__, &__LexicalSubtraction__, &__LexicalMultiplication__, &__LexicalDivision__, &__LexicalEquality__, &__LexicalLessThan__ }) {}; // constructor
+    NumberType() : ThingTypeInternal({ &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__less_than__ }) {}; // constructor
     
     
-    static Thing __LexicalAddition__() {
+    static Thing __addition__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
 
@@ -53,7 +54,7 @@ class NumberType : public ThingTypeInternal {
     }
 
 
-    static Thing __LexicalSubtraction__() {
+    static Thing __subtraction__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
 
@@ -62,7 +63,7 @@ class NumberType : public ThingTypeInternal {
     }
 
 
-    static Thing __LexicalMultiplication__() {
+    static Thing __multiplication__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
 
@@ -71,7 +72,7 @@ class NumberType : public ThingTypeInternal {
     }
 
 
-    static Thing __LexicalDivision__() {
+    static Thing __division__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
 
@@ -80,31 +81,31 @@ class NumberType : public ThingTypeInternal {
     }
 
 
-    static Thing __LexicalEquality__() {
+    static Thing __equals__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
 
 		
         if(self->val == other->val) {
-			return Thing(new this_type(1));
+			return BOOL_TRUE;
         }
 
 		
         else {
-			return Thing(new this_type(0));
+			return BOOL_FALSE;
     }
 
 		return nullptr;
     }
 
 
-    static Thing __LexicalLessThan__() {
+    static Thing __less_than__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
 
 		
         if(self->val < other->val) {
-			return Thing(new this_type(self->val - other->val));
+			return BOOL_TRUE;
         }
 
 		return nullptr;

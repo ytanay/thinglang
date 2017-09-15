@@ -8,7 +8,7 @@ class LexicalComparison(LexicalToken):  # one of eq, neq, >, <, etc...
 
     @classmethod
     def transpile(cls):
-        return '__{}__'.format(cls.__name__)
+        return cls.format_name()
 
 
 class LexicalConditional(LexicalToken):  # if conditional
@@ -33,7 +33,7 @@ class LexicalRepeatWhile(LexicalToken):  # repeat while
     pass
 
 
-class LexicalEquality(LexicalComparison):  # lhs eq rhs
+class LexicalEquals(LexicalComparison):  # lhs eq rhs
     pass
 
 
@@ -70,9 +70,14 @@ class LexicalBooleanTrue(LexicalBoolean):
     def __init__(self, _, source_ref):
         super(LexicalBooleanTrue, self).__init__(True, source_ref)
 
+    def transpile(self):
+        return 'BOOL_TRUE'
+
 
 class LexicalBooleanFalse(LexicalBoolean):
 
     def __init__(self, _, source_ref):
         super(LexicalBooleanFalse, self).__init__(False, source_ref)
 
+    def transpile(self):
+        return 'BOOL_FALSE'

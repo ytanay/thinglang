@@ -9,9 +9,9 @@
             "convention": "internal",
             "index": 0,
             "kind": "method",
-            "name": "__LexicalAddition__",
+            "name": "__addition__",
             "static": false,
-            "type": null
+            "type": "text"
         },
         {
             "arguments": [
@@ -20,9 +20,20 @@
             "convention": "internal",
             "index": 1,
             "kind": "method",
-            "name": "__LexicalEquality__",
+            "name": "__equals__",
             "static": false,
-            "type": null
+            "type": "bool"
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "contains",
+            "static": false,
+            "type": "bool"
         },
         {
             "arguments": null,

@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "../../execution/Globals.h"
 #include "../../utils/Formatting.h"
 #include "../infrastructure/ThingType.h"
 #include "../infrastructure/ThingInstance.h"
@@ -41,10 +42,10 @@ typedef TextInstance this_type;
 class TextType : public ThingTypeInternal {
     
     public:
-    TextType() : ThingTypeInternal({ &__LexicalAddition__, &__LexicalEquality__ }) {}; // constructor
+    TextType() : ThingTypeInternal({ &__addition__, &__equals__, &contains }) {}; // constructor
     
     
-    static Thing __LexicalAddition__() {
+    static Thing __addition__() {
 		auto other = Program::argument<TextNamespace::TextInstance>();
 		auto self = Program::argument<this_type>();
 
@@ -53,14 +54,38 @@ class TextType : public ThingTypeInternal {
     }
 
 
-    static Thing __LexicalEquality__() {
+    static Thing __equals__() {
 		auto other = Program::argument<TextNamespace::TextInstance>();
 		auto self = Program::argument<this_type>();
 
 		
         if(self->val == other->val) {
-			return Thing(new this_type(" "));
+			return BOOL_TRUE;
         }
+
+		
+        else {
+			return BOOL_FALSE;
+    }
+
+		return nullptr;
+    }
+
+
+    static Thing contains() {
+		auto substring = Program::argument<TextNamespace::TextInstance>();
+		auto self = Program::argument<this_type>();
+
+		auto found = self->val.find(substring->val) != std::string::npos;
+		
+        if(found) {
+			return BOOL_TRUE;
+        }
+
+		
+        else {
+			return BOOL_FALSE;
+    }
 
 		return nullptr;
     }
