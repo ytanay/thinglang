@@ -13,6 +13,7 @@ from thinglang.parser import parser
 def preprocess(source: SourceContext) -> RootNode:
     lexical_groups = lexer(source)
     ast = parser.parse(lexical_groups)
+    ast.finalize()
 
     logging_utils.print_header("Original AST", ast.tree())
 

@@ -73,6 +73,10 @@ class SourceReference(object):
         return cls('<invalid>', -1, -1, -1)
 
     @classmethod
+    def generated(cls, reason):
+        return cls('<generated:{}>'.format(reason), -1, -1, -1)
+
+    @classmethod
     def combine(cls, slice):
         refs = [x.source_ref for x in slice if x.source_ref]
 

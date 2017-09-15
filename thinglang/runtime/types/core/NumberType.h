@@ -111,6 +111,7 @@ class NumberType : public ThingTypeInternal {
 		return nullptr;
     }
 
+
     
 };
 

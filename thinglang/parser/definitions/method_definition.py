@@ -7,6 +7,7 @@ from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.symbols.symbol import Symbol
+from thinglang.utils.source_context import SourceReference
 
 
 class MethodDefinition(BaseNode):
@@ -47,6 +48,9 @@ class MethodDefinition(BaseNode):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
+        if self.is_constructor() and not self.children: # Fix for empty implicit constructor
+            return ''
+
         return templates.FOUNDATION_METHOD.format(
             name=(self.parent.name if self.is_constructor() else self.name).transpile(),
             return_type='Thing' if not self.is_constructor() else '',
@@ -81,3 +85,9 @@ class MethodDefinition(BaseNode):
 
     def update_locals(self, locals):
         self.locals = locals
+
+    @classmethod
+    def empty_constructor(cls, parent):
+        instance = cls([LexicalDeclarationConstructor('setup', SourceReference.generated('implicit constructor'))])
+        instance.parent = parent
+        return instance

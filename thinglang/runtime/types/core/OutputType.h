@@ -46,11 +46,12 @@ class OutputType : public ThingTypeInternal {
     
     
     static Thing write() {
-		auto message = Program::argument<TextNamespace::TextInstance>();
+		auto message = Program::pop();
 
 		std::cout << message->text() << std::endl;
 		return nullptr;
     }
+
 
     
 };

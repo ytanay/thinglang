@@ -4,13 +4,22 @@
     "symbols": [
         {
             "arguments": [
-                "text"
+                "object"
             ],
             "convention": "internal",
             "index": 0,
             "kind": "method",
             "name": "write",
             "static": true,
+            "type": null
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "constructor",
+            "static": false,
             "type": null
         },
         {

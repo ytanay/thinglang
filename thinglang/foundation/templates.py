@@ -137,9 +137,3 @@ def get_names(name):
     return '{}Type'.format(name), '{}Instance'.format(name)
 
 
-def format_member_list(members):
-    return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in members)
-
-
-def format_method_list(methods):
-    return ', '.join(['&{}'.format(x.name.transpile()) for x in methods])

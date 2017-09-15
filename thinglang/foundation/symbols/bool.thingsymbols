@@ -3,6 +3,15 @@
     "name": "bool",
     "symbols": [
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "constructor",
+            "static": false,
+            "type": null
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "index": 0,

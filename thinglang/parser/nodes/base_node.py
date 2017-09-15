@@ -43,9 +43,10 @@ class BaseNode(Describable):
         sep = '\t' * indent
         return sep + ('\n' + sep).join(x.transpile() for x in (children_override if children_override is not None else self.children))
 
+    def finalize(self):
+        for x in self.children:
+            x.finalize()
+
     def compile(self, context):
         for child in self.children:
             child.compile(context)
-
-        if not self.children:
-            raise Exception('Cannot compile {}!'.format(self))

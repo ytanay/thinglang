@@ -1,12 +1,17 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
-from thinglang.parser.common.definition_pair import DefinitionPairNode
+from thinglang.lexer import LexicalIdentifier
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
+from thinglang.parser.nodes import BaseNode
 
 
-class ThingDefinition(DefinitionPairNode):
+class ThingDefinition(BaseNode):
+
+    def __init__(self, slice):
+        super(ThingDefinition, self).__init__(slice)
+        self.name = slice[1]
 
     def describe(self):
         return self.name
@@ -17,14 +22,19 @@ class ThingDefinition(DefinitionPairNode):
 
     def transpile(self):
         type_cls_name, instance_cls_name = templates.get_names(self.name)
-        print('\n\n\n', self.name, self.methods)
         return templates.FOUNDATION_TYPE.format(
             type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
-            member_list=templates.format_member_list(self.members),
-            method_list=templates.format_method_list(self.methods),
+            member_list=self.format_member_list(),
+            method_list=self.format_method_list(),
             members=self.transpile_children(indent=0, children_override=self.members),
             methods=self.transpile_children(indent=0, children_override=self.methods)
         )
+
+    def finalize(self):
+        super().finalize()
+
+        if LexicalIdentifier.constructor() not in self.names:  # Add implicit constructor
+            self.children.append(MethodDefinition.empty_constructor(self))
 
     @property
     def members(self):
@@ -33,3 +43,13 @@ class ThingDefinition(DefinitionPairNode):
     @property
     def methods(self):
         return [x for x in self.children if x.implements(MethodDefinition)]
+
+    @property
+    def names(self):
+        return [x.name for x in self.members + self.methods]
+
+    def format_member_list(self):
+        return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members)
+
+    def format_method_list(self):
+        return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods if not x.is_constructor()])

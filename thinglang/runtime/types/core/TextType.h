@@ -90,6 +90,7 @@ class TextType : public ThingTypeInternal {
 		return nullptr;
     }
 
+
     
 };
 

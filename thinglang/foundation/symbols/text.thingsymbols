@@ -36,6 +36,15 @@
             "type": "bool"
         },
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 3,
+            "kind": "method",
+            "name": "constructor",
+            "static": false,
+            "type": null
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "index": 0,

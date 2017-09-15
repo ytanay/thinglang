@@ -2,5 +2,5 @@ thing Output
 
     has `std::string` val
 
-    static does write with text message
+    static does write with object message
         `std::cout << message->text() << std::endl;`
