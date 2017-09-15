@@ -19,16 +19,6 @@ class LexicalElse(LexicalToken):  # otherwise
     pass
 
 
-class LexicalRepeat(LexicalToken):
-    EMITTABLE = False
-
-    @classmethod
-    def next_operator_set(cls, current, original):
-        if current is original:
-            return {'while': LexicalRepeatWhile, 'for': LexicalRepeatFor}
-        return original
-
-
 class LexicalRepeatWhile(LexicalToken):  # repeat while
     pass
 

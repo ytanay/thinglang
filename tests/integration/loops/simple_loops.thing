@@ -7,6 +7,6 @@
 thing Program
     setup
         number i = 0
-        repeat while i < 5
+        while i < 5
             Output.write(i)
             i = i + 1
