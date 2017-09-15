@@ -11,6 +11,7 @@ FOUNDATION_HEADER = HEADER + """
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "../../execution/Globals.h"
 #include "../../utils/Formatting.h"
 #include "../infrastructure/ThingType.h"
 #include "../infrastructure/ThingInstance.h"
@@ -121,7 +122,8 @@ ELSE_CLAUSE = """
 ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
 
-RETURN_VALUE = 'return Thing(new this_type({value}));'
+RETURN_VALUE = "return {value};"
+RETURN_VALUE_INSTANTIATE = 'return Thing(new this_type({value}));'
 RETURN_NULL = 'return nullptr;'
 
 

@@ -1,10 +1,20 @@
 thing text
-    
+
     has `std::string` val
 
-    does + with text other
+    does + with text other returns text
         return self.val + other.val
 
-    does eq with text other
+    does eq with text other returns bool
         if self.val eq other.val
-            return " " # TODO: terrible hack, fix this ASAP
+            return true
+        otherwise
+            return false
+
+
+    does contains with text substring returns bool
+        `auto found = self->val.find(substring->val) != std::string::npos;`
+        if found
+            return true
+        otherwise
+            return false

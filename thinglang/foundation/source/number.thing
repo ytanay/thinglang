@@ -14,12 +14,12 @@ thing number
     does / with number other returns number
         return self.val / other.val
 
-    does eq with number other returns number
+    does eq with number other returns bool
         if self.val eq other.val
-            return 1
+            return true
         otherwise
-            return 0
+            return false
 
-    does < with number other returns number
+    does < with number other returns bool
         if self.val < other.val
-            return self.val - other.val
+            return true
