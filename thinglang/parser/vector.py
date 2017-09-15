@@ -16,6 +16,7 @@ from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.definitions.tagged_definition import TaggedDeclaration
 from thinglang.parser.definitions.thing_definition import ThingDefinition
+from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
@@ -42,7 +43,7 @@ class TokenVector(object):
         self.process_indentation()
 
         if len(self.tokens) != 1:
-            raise ValueError('Could not reduce vector: {}'.format(self.tokens))
+            raise VectorReductionError('Could not reduce vector: {}'.format(self.tokens))
 
         return self.tokens[0]
 
@@ -96,9 +97,6 @@ class TokenVector(object):
         """
         Converts a list of LEXICAL_INDENTATION tokens at the beginning of a parsed group into indentation value stored on the first real token.
         """
-        if not self.tokens:
-            return
-
         if isinstance(self.tokens[-1], LexicalGroupEnd):
             self.tokens[-1:] = []
 

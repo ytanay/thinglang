@@ -66,4 +66,3 @@ def test_extraneous_closing_tokens():
     tokens = lexer_single('(5 * (2 + 3)))')
     with pytest.raises(ValueError):
         parser.collect_vectors(tokens)
-

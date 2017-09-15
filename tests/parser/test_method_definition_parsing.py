@@ -64,3 +64,9 @@ def test_method_definition_argument_invalid_syntax():
 
     with pytest.raises(ValueError):
         parse_local("does say_hello with number, age")
+
+    with pytest.raises(ValueError):
+        parse_local("does say_hello with number 2")
+
+
+
