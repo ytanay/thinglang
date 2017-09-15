@@ -1,5 +1,5 @@
 from thinglang.foundation import definitions, templates
-from thinglang.parser.nodes.common.list_type import ListInitialization
+from thinglang.parser.common.list_type import ListInitialization
 
 
 class ArgumentList(ListInitialization):

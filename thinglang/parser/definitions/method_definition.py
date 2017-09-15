@@ -3,9 +3,9 @@ from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull
 from thinglang.foundation import templates
 from thinglang.lexer import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
-from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.definitions.argument_list import ArgumentList
-from thinglang.parser.nodes.statements.return_statement import ReturnStatement
+from thinglang.parser.definitions.argument_list import ArgumentList
+from thinglang.parser.nodes.base_node import BaseNode
+from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.symbols.symbol import Symbol
 
 

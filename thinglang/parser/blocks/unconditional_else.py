@@ -1,7 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.foundation import templates
-from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.blocks.common import ElseBranchInterface
+from thinglang.parser.blocks.common import ElseBranchInterface
+from thinglang.parser.nodes.base_node import BaseNode
 
 
 class UnconditionalElse(BaseNode, ElseBranchInterface):

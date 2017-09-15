@@ -1,7 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference
 from thinglang.lexer.tokens.base import LexicalAccess
-from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.utils.type_descriptors import ValueType
 
 

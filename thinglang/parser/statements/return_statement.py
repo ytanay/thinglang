@@ -1,7 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeReturn
 from thinglang.foundation import templates
-from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.base_node import BaseNode
 
 
 class ReturnStatement(BaseNode):

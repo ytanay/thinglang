@@ -1,6 +1,6 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
-from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.base_node import BaseNode
 
 
 class Loop(BaseNode):

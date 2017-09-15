@@ -1,12 +1,11 @@
 import pytest
 
 from tests.infrastructure.test_utils import validate_types, lexer_single
-from thinglang import parser
-from thinglang.lexer import lexer
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue, LexicalMultiplication, LexicalAddition
 from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator
-from thinglang.parser import TokenVector
-from thinglang.parser.nodes.values.inline_text import InlineString
+from thinglang.parser import parser
+from thinglang.parser.values.inline_text import InlineString
+from thinglang.parser.vector import TokenVector
 
 
 def test_simple_vectorization():

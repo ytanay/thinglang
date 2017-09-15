@@ -1,11 +1,10 @@
-import os
-
 import json
+import os
 import random
 import string
 
-from thinglang import parser
 from thinglang.lexer import analyze_line
+from thinglang.parser import parser
 from thinglang.utils.source_context import SourceLine
 
 INDENT = '\n' + ' ' * 8

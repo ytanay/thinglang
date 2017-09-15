@@ -1,8 +1,8 @@
 from thinglang.compiler.references import ElementReference, LocalReference, StaticReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.definitions.thing_definition import ThingDefinition
-from thinglang.parser.nodes.values.access import Access
+from thinglang.parser.definitions.thing_definition import ThingDefinition
+from thinglang.parser.values.access import Access
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
 

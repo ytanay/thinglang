@@ -1,14 +1,13 @@
 from typing import List
 
+from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
+from thinglang.lexer.tokens import LexicalGroupEnd, LexicalToken
+from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
+from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote, LexicalTick
+from thinglang.parser.values.inline_code import InlineCode
+from thinglang.parser.values.inline_text import InlineString
 from thinglang.utils import collection_utils
 from thinglang.utils.source_context import SourceContext, SourceLine
-
-from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
-from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
-from thinglang.lexer.tokens import LexicalGroupEnd, LexicalToken
-from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalIdentifier, LexicalQuote, LexicalTick
-from thinglang.parser.nodes.values.inline_code import InlineCode
-from thinglang.parser.nodes.values.inline_text import InlineString
 
 
 @collection_utils.drain()

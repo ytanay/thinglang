@@ -1,10 +1,10 @@
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.values.binary_operation import BinaryOperation
-from thinglang.parser.nodes.statements.assignment_operation import AssignmentOperation
-from thinglang.parser.nodes.blocks.conditional import Conditional
-from thinglang.parser.nodes.blocks.loop import Loop
-from thinglang.parser.nodes.values.method_call import MethodCall
-from thinglang.parser.nodes.statements.return_statement import ReturnStatement
+from thinglang.parser.blocks.conditional import Conditional
+from thinglang.parser.blocks.loop import Loop
+from thinglang.parser.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.statements.return_statement import ReturnStatement
+from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
 

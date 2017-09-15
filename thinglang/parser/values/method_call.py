@@ -2,9 +2,9 @@ from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.lexer import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
-from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.definitions.argument_list import ArgumentList
-from thinglang.parser.nodes.values.access import Access
+from thinglang.parser.definitions.argument_list import ArgumentList
+from thinglang.parser.nodes.base_node import BaseNode
+from thinglang.parser.values.access import Access
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import ValueType
 

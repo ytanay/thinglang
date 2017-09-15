@@ -1,5 +1,5 @@
-from thinglang.parser.errors import UnresolvedReference
 from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.parser.errors import UnresolvedReference
 
 
 def test_error_infrastructure():

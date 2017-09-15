@@ -1,10 +1,9 @@
 from tests.infrastructure.test_utils import validate_types, parse_local
 from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.values.binary_operation import BinaryOperation
-from thinglang.parser.nodes.values.inline_text import InlineString
-from thinglang.parser.nodes.values.access import Access
-from thinglang.parser.nodes.values.method_call import MethodCall
+from thinglang.parser.values.access import Access
+from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_method_call(node, target, argument_types):
@@ -25,6 +24,7 @@ def test_single_argument():
 
 def test_multiple_inline_arguments():
     method = parse_local('person.say_hello(1, "text")')
+    from thinglang.parser.values.inline_text import InlineString
     validate_method_call(method, ['person', 'say_hello'], [LexicalNumericalValue, InlineString])
 
 

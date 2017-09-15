@@ -1,4 +1,3 @@
-import thinglang
 from thinglang import pipeline
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext

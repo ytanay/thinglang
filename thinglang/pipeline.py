@@ -1,17 +1,18 @@
-from thinglang.utils import logging_utils
+from thinglang import parser
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.indexer import Indexer
 from thinglang.lexer import lexer
-from thinglang.parser.nodes import RootNode
-from thinglang.parser import parse
+from thinglang.parser.nodes.root_node import RootNode
 from thinglang.parser.simplifier import Simplifier
 from thinglang.symbols.symbol_mapper import SymbolMapper
+from thinglang.utils import logging_utils
 from thinglang.utils.source_context import SourceContext
+from thinglang.parser import parser
 
 
 def preprocess(source: SourceContext) -> RootNode:
     lexical_groups = lexer(source)
-    ast = parse(lexical_groups)
+    ast = parser.parse(lexical_groups)
 
     logging_utils.print_header("Original AST", ast.tree())
 

@@ -1,5 +1,5 @@
-from thinglang.parser.nodes.blocks.common import ElseBranchInterface
-from thinglang.parser.nodes.blocks.conditional import Conditional
+from thinglang.parser.blocks.common import ElseBranchInterface
+from thinglang.parser.blocks.conditional import Conditional
 
 
 class ConditionalElse(Conditional, ElseBranchInterface):

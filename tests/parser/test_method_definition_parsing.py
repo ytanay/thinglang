@@ -1,8 +1,8 @@
 import pytest
 
-from tests.infrastructure.test_utils import parse_local, validate_types
+from tests.infrastructure.test_utils import parse_local
 from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.parser.nodes.definitions.method_definition import MethodDefinition
+from thinglang.parser.definitions.method_definition import MethodDefinition
 
 
 def validate_method_definition(node, name, expected_arguments=(), return_type=None):

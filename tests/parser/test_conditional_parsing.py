@@ -1,11 +1,11 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
 from thinglang.lexer.tokens.logic import LexicalBooleanTrue
-from thinglang.parser.nodes.values.binary_operation import BinaryOperation
-from thinglang.parser.nodes.values.inline_text import InlineString
-from thinglang.parser.nodes.values.method_call import MethodCall
-from thinglang.parser.nodes.blocks.conditional_else import ConditionalElse
-from thinglang.parser.nodes.blocks.unconditional_else import UnconditionalElse
-from thinglang.parser.nodes.blocks.conditional import Conditional
+from thinglang.parser.blocks.conditional import Conditional
+from thinglang.parser.blocks.conditional_else import ConditionalElse
+from thinglang.parser.blocks.unconditional_else import UnconditionalElse
+from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.inline_text import InlineString
+from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_assignment(node, condition, expected_type=Conditional):

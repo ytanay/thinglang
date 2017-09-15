@@ -1,9 +1,9 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
-from thinglang.parser.nodes import DefinitionPairNode
-from thinglang.parser.nodes.definitions.member_definition import MemberDefinition
-from thinglang.parser.nodes.definitions.method_definition import MethodDefinition
+from thinglang.parser.common.definition_pair import DefinitionPairNode
+from thinglang.parser.definitions.member_definition import MemberDefinition
+from thinglang.parser.definitions.method_definition import MethodDefinition
 
 
 class ThingDefinition(DefinitionPairNode):

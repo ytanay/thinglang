@@ -1,4 +1,4 @@
-from thinglang.parser.nodes import BaseNode
+from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.utils.type_descriptors import ValueType
 
 

@@ -8,21 +8,21 @@ from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDec
     LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
     LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
 from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
+from thinglang.parser.blocks.conditional import Conditional
+from thinglang.parser.blocks.conditional_else import ConditionalElse
+from thinglang.parser.blocks.loop import Loop
+from thinglang.parser.blocks.unconditional_else import UnconditionalElse
+from thinglang.parser.definitions.member_definition import MemberDefinition
+from thinglang.parser.definitions.method_definition import MethodDefinition
+from thinglang.parser.definitions.tagged_definition import TaggedDeclaration
+from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.nodes import BaseNode
-from thinglang.parser.nodes.values.binary_operation import BinaryOperation
-from thinglang.parser.nodes.values.inline_code import InlineCode
-from thinglang.parser.nodes.statements.assignment_operation import AssignmentOperation
-from thinglang.parser.nodes.blocks.loop import Loop
-from thinglang.parser.nodes.definitions.member_definition import MemberDefinition
-from thinglang.parser.nodes.definitions.method_definition import MethodDefinition
-from thinglang.parser.nodes.definitions.thing_definition import ThingDefinition
-from thinglang.parser.nodes.values.access import Access
-from thinglang.parser.nodes.values.method_call import MethodCall
-from thinglang.parser.nodes.statements.return_statement import ReturnStatement
-from thinglang.parser.nodes.blocks.conditional_else import ConditionalElse
-from thinglang.parser.nodes.blocks.unconditional_else import UnconditionalElse
-from thinglang.parser.nodes.blocks.conditional import Conditional
-from thinglang.parser.nodes.definitions.tagged_definition import TaggedDeclaration
+from thinglang.parser.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.statements.return_statement import ReturnStatement
+from thinglang.parser.values.access import Access
+from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.inline_code import InlineCode
+from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType
 

@@ -1,5 +1,5 @@
-from thinglang.parser.nodes.definitions.method_definition import MethodDefinition
-from thinglang.parser.nodes.definitions.thing_definition import ThingDefinition
+from thinglang.parser.definitions.method_definition import MethodDefinition
+from thinglang.parser.definitions.thing_definition import ThingDefinition
 
 
 def inspects(*args, predicate=None, priority=0):
