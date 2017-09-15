@@ -59,6 +59,3 @@ class Symbol(object):
     @classmethod
     def member(cls, name, type):
         return cls(name, cls.MEMBER, type, False)
-
-    def __str__(self):
-        return 'Symbol({} {})'.format(self.type, self.name)

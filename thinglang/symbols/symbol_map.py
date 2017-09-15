@@ -46,6 +46,3 @@ class SymbolMap(object):
 
     def __iter__(self):
         return iter(self.lookup.values())
-
-    def __str__(self):
-        return 'SymbolMap({})'.format(self.name)
