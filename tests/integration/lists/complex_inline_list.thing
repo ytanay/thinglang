@@ -1,0 +1,20 @@
+/*
+{
+    "expected_output": ["[1, 2, 9, 42, [1, 2, 3]]", "[1, 2, 9, 42, [1, 2, 3]]"]
+}
+*/
+
+thing Program
+    setup
+        number num = 2
+        list lst = [1, num, (1 + 2) * 3, self.add(20, 22), [1, 2, 3]]
+
+        Output.write(lst)
+
+        Output.write([1, num, (1 + 2) * 3, self.add(20, 22), [1, 2, 3]])
+
+    does add with number lhs, number rhs returns number
+        return lhs + rhs
+
+
+
