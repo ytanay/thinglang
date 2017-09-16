@@ -15,7 +15,8 @@ enum class InternalTypes {
     TEXT = 1,
     NUMBER = 2,
     BOOL = 3,
-    OUTPUT = 4
+    LIST = 4,
+    OUTPUT = 5
 };
 
 
@@ -33,6 +34,9 @@ inline auto describe(InternalTypes val){
 
         case InternalTypes::BOOL:
             return "BOOL";
+
+        case InternalTypes::LIST:
+            return "LIST";
 
         case InternalTypes::OUTPUT:
             return "OUTPUT";

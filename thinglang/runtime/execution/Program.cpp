@@ -2,6 +2,7 @@
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
 #include "../types/core/OutputType.h"
+#include "../types/core/ListType.h"
 #include "../errors/Aborts.h"
 
 
@@ -17,6 +18,7 @@ Types Program::internals = {
         new TextNamespace::TextType(),
         new NumberNamespace::NumberType(),
         new BoolNamespace::BoolType(),
+        new ListNamespace::ListType(),
         new OutputNamespace::OutputType()
 };
 

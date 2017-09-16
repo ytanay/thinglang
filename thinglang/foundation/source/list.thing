@@ -1,0 +1,6 @@
+thing list
+
+    has `std::vector<Thing>` val
+
+    does append with object item
+        `self->val.push_back(item);`
