@@ -16,7 +16,7 @@ inline std::string to_string(T val){
 template <typename T>
 inline std::string to_string(std::vector<T> lst){
     if(lst.size() == 0)
-        return "";
+        return "[]";
 
     std::stringstream stream;
     std::copy(lst.begin(), lst.end(), std::ostream_iterator<T>(stream, ", "));
@@ -25,7 +25,7 @@ inline std::string to_string(std::vector<T> lst){
 
     result.erase(result.size() - 2);
 
-    return result;
+    return "[" + result + "]";
 }
 
 

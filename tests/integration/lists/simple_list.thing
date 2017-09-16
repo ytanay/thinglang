@@ -1,11 +1,14 @@
 /*
 {
-    "expected_output": "alex, andrew, aaron"
+    "expected_output": ["[]", "[alex, andrew, aaron]"]
 }
 */
 
 thing Program
     setup
+        list empty = create list()
+        Output.write(empty)
+
         list names = create list()
         names.append("alex")
         names.append("andrew")
