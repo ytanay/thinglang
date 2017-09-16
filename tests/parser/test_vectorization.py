@@ -59,13 +59,15 @@ def test_complex_vectorization():
     ], TokenVector)
 
 
-def test_missing_closing_token():
-    tokens = lexer_single('(5 * (2 + 3)')
+@pytest.mark.parametrize('source', ['(5 * (2 + 3)', '[[1, 2, 3]'])
+def test_missing_closing_token(source):
+    tokens = lexer_single(source)
     with pytest.raises(ValueError):
         parser.collect_vectors(tokens)
 
 
-def test_extraneous_closing_tokens():
-    tokens = lexer_single('(5 * (2 + 3)))')
+@pytest.mark.parametrize('source', ['(5 * (2 + 3)))', '[[1, 2, 3]]]'])
+def test_extraneous_closing_tokens(source):
+    tokens = lexer_single(source)
     with pytest.raises(ValueError):
         parser.collect_vectors(tokens)

@@ -11,3 +11,5 @@ class LexicalBracketClose(LexicalToken):
     """
     Signifies a closing bracket: ]
     """
+
+    MUST_CLOSE = True
