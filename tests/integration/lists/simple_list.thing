@@ -1,0 +1,14 @@
+/*
+{
+    "expected_output": "alex, andrew, aaron"
+}
+*/
+
+thing Program
+    setup
+        list names = create list()
+        names.append("alex")
+        names.append("andrew")
+        names.append("aaron")
+        Output.write(names)
+
