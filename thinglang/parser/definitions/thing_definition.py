@@ -1,7 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.nodes import BaseNode
@@ -33,7 +33,7 @@ class ThingDefinition(BaseNode):
     def finalize(self):
         super().finalize()
 
-        if LexicalIdentifier.constructor() not in self.names:  # Add implicit constructor
+        if Identifier.constructor() not in self.names:  # Add implicit constructor
             self.children.append(MethodDefinition.empty_constructor(self))
 
     @property

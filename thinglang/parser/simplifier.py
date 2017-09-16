@@ -1,4 +1,4 @@
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
@@ -49,4 +49,4 @@ class Simplifier(TreeTraversal):
         elif rhs.implements(MethodCall):
             self.simply_method_call(rhs)
 
-        return MethodCall.create([lhs, LexicalIdentifier(node.operator.transpile())], [rhs])
+        return MethodCall.create([lhs, Identifier(node.operator.transpile())], [rhs])

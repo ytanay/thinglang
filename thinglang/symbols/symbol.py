@@ -1,4 +1,4 @@
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 
 
 class Symbol(object):
@@ -43,11 +43,11 @@ class Symbol(object):
         assert data['convention'] in ('user', 'internal')
 
         return cls(
-            name=LexicalIdentifier(data['name']),
+            name=Identifier(data['name']),
             kind=Symbol.METHOD if data['kind'] == 'method' else Symbol.MEMBER,
-            type=LexicalIdentifier(data['type']),
+            type=Identifier(data['type']),
             static=data['static'],
-            arguments=data['arguments'] is not None and [LexicalIdentifier(x) for x in data['arguments']],
+            arguments=data['arguments'] is not None and [Identifier(x) for x in data['arguments']],
             index=data['index'],
             convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
         )

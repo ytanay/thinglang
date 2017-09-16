@@ -1,7 +1,7 @@
 import collections
 from collections import OrderedDict
 
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.nodes.root_node import RootNode
@@ -53,7 +53,7 @@ class IndexerContext(object):
         super(IndexerContext, self).__init__()
 
         self.current_method = method
-        self.locals = OrderedDict({LexicalIdentifier.self(): LocalMember(thing.name, 0)})
+        self.locals = OrderedDict({Identifier.self(): LocalMember(thing.name, 0)})
         for arg in method.arguments:
             self.locals[arg] = LocalMember(arg.type, len(self.locals))
 

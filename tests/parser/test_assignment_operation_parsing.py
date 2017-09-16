@@ -1,7 +1,7 @@
 from tests.infrastructure.test_utils import parse_local
 from tests.parser.test_method_call_parsing import validate_method_call
-from thinglang.lexer.tokens.arithmetic import NumericValue
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.numeric import NumericValue
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.inline_text import InlineString
@@ -10,8 +10,8 @@ from thinglang.parser.values.method_call import MethodCall
 
 def validate_assignment(node, type, name, value):
     assert node.implements(AssignmentOperation)
-    assert node.name == LexicalIdentifier(name)
-    assert node.name.type == (LexicalIdentifier(type) if type else None)
+    assert node.name == Identifier(name)
+    assert node.name.type == (Identifier(type) if type else None)
     assert node.intent == (AssignmentOperation.DECELERATION if type else AssignmentOperation.REASSIGNMENT)
 
     if value in (MethodCall, BinaryOperation):

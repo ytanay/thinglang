@@ -1,9 +1,13 @@
 from typing import List
 
+from thinglang.lexer.grouping.quote import LexicalQuote
+from thinglang.lexer.grouping.backtick import LexicalBacktick
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
-from thinglang.lexer.tokens import LexicalToken, LexicalGroupEnd
-from thinglang.lexer.tokens.arithmetic import NumericValue
-from thinglang.lexer.tokens.base import LexicalInlineComment, LexicalQuote, LexicalTick, LexicalIdentifier
+from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
+from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.tokens.misc import LexicalGroupEnd
+from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.values.inline_code import InlineCode
 from thinglang.parser.values.inline_text import InlineString
 from thinglang.utils import collection_utils
@@ -71,14 +75,14 @@ def finalize_group(group, terminating_char, entity_class, source_ref):
         return InlineString(group, source_ref)
 
     if terminating_char == '`':
-        if entity_class is not LexicalTick:
+        if entity_class is not LexicalBacktick:
             raise ValueError("Unexpected end of inline code")
         return InlineCode(group, source_ref)
 
     if is_identifier(group):
-        if entity_class in (LexicalQuote, LexicalTick):
+        if entity_class in (LexicalQuote, LexicalBacktick):
             raise ValueError("String was not closed")
-        return LexicalIdentifier(group, source_ref)
+        return Identifier(group, source_ref)
 
     if group:
         raise ValueError('Lexer: cannot terminate group {}'.format(group))

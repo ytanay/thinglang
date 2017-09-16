@@ -1,6 +1,6 @@
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.values.access import Access
 from thinglang.symbols.symbol import Symbol
@@ -33,7 +33,7 @@ class SymbolMapper(object):
 
         assert not target.STATIC
 
-        if target.implements(LexicalIdentifier):
+        if target.implements(Identifier):
             return LocalReference(locals[target])
         elif target.implements(Access):
             return self.resolve_access(target, locals)
@@ -62,9 +62,9 @@ class SymbolMapper(object):
         return self[thing.name].index
 
     def entry(self):
-        return self[LexicalIdentifier('Program')].index
+        return self[Identifier('Program')].index
 
-    def dereference(self, parent: Symbol, child: LexicalIdentifier):
+    def dereference(self, parent: Symbol, child: Identifier):
         symbol = self.maps[parent.type][child]
         return ElementReference(self.maps[symbol.type], symbol)
 

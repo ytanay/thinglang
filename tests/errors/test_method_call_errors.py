@@ -2,7 +2,7 @@ import pytest
 
 from thinglang import pipeline
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.source_context import SourceContext
 
 BASE = """
@@ -40,10 +40,10 @@ def test_argument_type_mismatch():
     with pytest.raises(ArgumentTypeMismatch) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args("hello", 3)')))
 
-    assert e.value.index == 0 and e.value.expected_type == LexicalIdentifier("number") and e.value.actual_type == LexicalIdentifier("text")
+    assert e.value.index == 0 and e.value.expected_type == Identifier("number") and e.value.actual_type == Identifier("text")
 
     with pytest.raises(ArgumentTypeMismatch) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args(3, 3)')))
 
-    assert e.value.index == 1 and e.value.actual_type == LexicalIdentifier("number") and e.value.expected_type == LexicalIdentifier("text")
+    assert e.value.index == 1 and e.value.actual_type == Identifier("number") and e.value.expected_type == Identifier("text")
 

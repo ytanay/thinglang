@@ -2,16 +2,19 @@ import struct
 
 from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.type_descriptors import ValueType
-from thinglang.lexer.tokens import LexicalToken, LexicalBinaryOperation
 
 
 class NumericValue(LexicalToken, ValueType):
+    """
+    An inline numeric value
+    """
 
     STATIC = True
-    TYPE = LexicalIdentifier("number")
-    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[LexicalIdentifier("number")]
+    TYPE = Identifier("number")
+    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[Identifier("number")]
 
     def __init__(self, value, source_ref=None):
         super(NumericValue, self).__init__(value, source_ref)
@@ -34,27 +37,3 @@ class NumericValue(LexicalToken, ValueType):
         ref = context.append_static(self.serialize())
         context.append(OpcodePushStatic(ref), self.source_ref)
         return self
-
-
-class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):  # addition, subtraction
-    pass
-
-
-class SecondOrderLexicalBinaryOperation(LexicalBinaryOperation):  # division, multiplication
-    pass
-
-
-class LexicalAddition(FirstOrderLexicalBinaryOperation):
-    pass
-
-
-class LexicalSubtraction(FirstOrderLexicalBinaryOperation):
-    pass
-
-
-class LexicalMultiplication(SecondOrderLexicalBinaryOperation):
-    pass
-
-
-class LexicalDivision(SecondOrderLexicalBinaryOperation):
-    pass

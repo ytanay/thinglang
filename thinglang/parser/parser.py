@@ -1,7 +1,8 @@
 from typing import List
 
 from thinglang.parser.nodes.root_node import RootNode
-from thinglang.lexer.tokens import LexicalToken, LexicalGroupEnd
+from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.tokens.misc import LexicalGroupEnd
 
 from thinglang.parser.vector import TokenVector, VECTOR_CREATION_TOKENS
 
@@ -70,7 +71,7 @@ def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
         elif token.MUST_CLOSE:
             raise ValueError('Unexpected group end token')
 
-        elif not isinstance(token, LexicalGroupEnd):  # TODO: remove group end token
+        elif not isinstance(token, LexicalGroupEnd):
             stack[-1].append(token)
 
     if len(stack) != 1:

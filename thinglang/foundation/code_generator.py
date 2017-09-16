@@ -6,10 +6,10 @@ from thinglang import pipeline
 from thinglang.utils.source_context import SourceContext
 from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
-from thinglang.lexer.tokens import LexicalToken
+from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 SOURCE_PATTERN = os.path.join(CURRENT_PATH,  'source/**/*.thing')
@@ -30,7 +30,7 @@ def generate_types():
     for path in glob.glob(SOURCE_PATTERN, recursive=True):
 
         name = os.path.basename(path).replace('.thing', '')
-        name_id = LexicalIdentifier(name)
+        name_id = Identifier(name)
         target_name = '{}Type'.format(name.capitalize())
         ast = pipeline.preprocess(SourceContext(path))
         symbols = SymbolMapper(ast)

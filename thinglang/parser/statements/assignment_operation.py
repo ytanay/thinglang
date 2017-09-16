@@ -1,6 +1,6 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.method_call import MethodCall
@@ -30,7 +30,7 @@ class AssignmentOperation(BaseNode):
 
     def compile(self, context: CompilationContext):
 
-        is_local = self.name.implements(LexicalIdentifier)
+        is_local = self.name.implements(Identifier)
 
         if is_local:
             target = context.resolve(self.name)
@@ -38,7 +38,7 @@ class AssignmentOperation(BaseNode):
             if self.value.STATIC:
                 ref = context.append_static(self.value.serialize())
                 return context.append(OpcodeAssignStatic.from_reference(target, ref), self.source_ref)
-            elif self.value.implements(LexicalIdentifier):
+            elif self.value.implements(Identifier):
                 ref = context.resolve(self.value)
                 return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
 
@@ -48,7 +48,7 @@ class AssignmentOperation(BaseNode):
             self.value.compile(context)
 
         target = self.name
-        if target.implements(LexicalIdentifier):
+        if target.implements(Identifier):
             target = context.resolve(target)
             context.append(OpcodePopLocal.from_reference(target), self.source_ref)
         elif target.implements(Access):

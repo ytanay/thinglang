@@ -1,7 +1,8 @@
 import pytest
 
 from tests.infrastructure.test_utils import lexer_single
-from thinglang.lexer.tokens.base import LexicalIndent, LexicalIdentifier
+from thinglang.lexer.tokens.indent import LexicalIndent
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.values.inline_text import InlineString
 
 UNTERMINATED_GROUPS = 'hello"', '"hello', 'hello`', '`hello', '"hello`', '`hello"'
@@ -20,7 +21,7 @@ def test_whitespace_handling():
 
 
 def test_indentation_handling():
-    assert lexer_single("\t\t\tid", without_end=True) == [LexicalIndent('\t', None)] * 3 + [LexicalIdentifier('id')]
+    assert lexer_single("\t\t\tid", without_end=True) == [LexicalIndent('\t', None)] * 3 + [Identifier('id')]
 
 
 @pytest.mark.parametrize('code', UNTERMINATED_GROUPS)

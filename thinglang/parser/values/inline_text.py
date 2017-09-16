@@ -3,15 +3,15 @@ import struct
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
-from thinglang.lexer.tokens import LexicalToken
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.type_descriptors import ValueType
 
 
 class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
     STATIC = True
-    TYPE = LexicalIdentifier("text")
-    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[LexicalIdentifier("text")]
+    TYPE = Identifier("text")
+    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[Identifier("text")]
 
     def __init__(self, value, source_ref=None):
         super().__init__(value, source_ref)

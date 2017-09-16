@@ -1,18 +1,28 @@
 import re
 
-
-from thinglang.lexer.tokens.logic import LexicalConditional, LexicalEquals, LexicalElse, LexicalNegation, \
-    LexicalGreaterThan, LexicalLessThan, LexicalBooleanTrue, LexicalBooleanFalse, LexicalRepeatWhile, \
-    LexicalIn, LexicalRepeatFor, LexicalInequality
-from thinglang.lexer.tokens.arithmetic import LexicalAddition, LexicalSubtraction, LexicalDivision, \
-    LexicalMultiplication
-from thinglang.lexer.tokens.base import LexicalParenthesesOpen, LexicalParenthesesClose, LexicalQuote, LexicalSeparator, \
-    LexicalIndent, LexicalAccess, LexicalInlineComment, LexicalAssignment, LexicalBracketOpen, LexicalBracketClose, \
-    LexicalTick
-from thinglang.lexer.tokens.functions import LexicalReturnStatement, LexicalArgumentListIndicator, \
-    LexicalDeclarationMethod, LexicalDeclarationThing, LexicalDeclarationMember, LexicalDeclarationConstructor, \
-    LexicalClassInitialization, LexicalDeclarationReturnType, LexicalDeclarationStatic
-from thinglang.lexer.tokens.typing import LexicalCast
+from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
+from thinglang.lexer.blocks.loops import LexicalRepeatFor, LexicalRepeatWhile
+from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
+    LexicalDeclarationConstructor, LexicalDeclarationStatic, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
+    LexicalDeclarationMethod
+from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
+from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
+from thinglang.lexer.grouping.quote import LexicalQuote
+from thinglang.lexer.grouping.backtick import LexicalBacktick
+from thinglang.lexer.operators.assignment import LexicalAssignment
+from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction, LexicalMultiplication, \
+    LexicalDivision
+from thinglang.lexer.operators.casts import LexicalCast
+from thinglang.lexer.operators.comparison import LexicalEquals, LexicalInequality, LexicalNegation, LexicalGreaterThan, \
+    LexicalLessThan
+from thinglang.lexer.operators.membership import LexicalIn
+from thinglang.lexer.statements.return_statement import LexicalReturnStatement
+from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
+from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
+from thinglang.lexer.tokens.access import LexicalAccess
+from thinglang.lexer.tokens.indent import LexicalIndent
+from thinglang.lexer.tokens.separator import LexicalSeparator
+from thinglang.lexer.values.booleans import LexicalBooleanTrue, LexicalBooleanFalse
 
 IDENTIFIER_BASE = r"[a-zA-Z]\w*"
 IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")
@@ -21,7 +31,7 @@ OPERATORS = {
     ' ': None,
 
     '"': LexicalQuote,
-    '`': LexicalTick,
+    '`': LexicalBacktick,
     '\t': LexicalIndent,
 
     '.': LexicalAccess,
@@ -54,7 +64,7 @@ KEYWORDS = {
     'setup': LexicalDeclarationConstructor,
     'returns': LexicalDeclarationReturnType,
 
-    'create': LexicalClassInitialization,
+    'create': LexicalThingInstantiation,
 
     'with': LexicalArgumentListIndicator,
     'return': LexicalReturnStatement,

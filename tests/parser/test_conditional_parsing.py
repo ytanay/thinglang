@@ -1,5 +1,5 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
-from thinglang.lexer.tokens.logic import LexicalBooleanTrue
+from thinglang.lexer.values.booleans import LexicalBooleanTrue
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse

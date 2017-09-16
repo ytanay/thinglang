@@ -5,7 +5,7 @@ from thinglang.utils.source_context import SourceContext
 from thinglang.compiler.indexer import LocalMember
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePushMember, OpcodePopLocal, \
     OpcodeDereference
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 
 
 def compile_local(code):
@@ -68,10 +68,10 @@ def compile_local(code):
     })])
     context = CompilationContext(symbols, SourceContext.wrap(''))
     context.current_locals = {
-        LexicalIdentifier.self(): LocalMember(LexicalIdentifier('Container'), 0),
-        LexicalIdentifier('a'): LocalMember(LexicalIdentifier('number'), 1),
-        LexicalIdentifier('b'): LocalMember(LexicalIdentifier('number'), 2),
-        LexicalIdentifier('inst'): LocalMember(LexicalIdentifier('Container'), 3),
+        Identifier.self(): LocalMember(Identifier('Container'), 0),
+        Identifier('a'): LocalMember(Identifier('number'), 1),
+        Identifier('b'): LocalMember(Identifier('number'), 2),
+        Identifier('inst'): LocalMember(Identifier('Container'), 3),
     }
     return ast.compile(context).instruction_block
 

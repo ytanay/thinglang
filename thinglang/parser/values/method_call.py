@@ -1,8 +1,8 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
-from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.lexer.tokens.functions import LexicalClassInitialization
+from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.values.access import Access
@@ -14,8 +14,8 @@ class MethodCall(BaseNode, ValueType):
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
 
-        if isinstance(slice[0], LexicalClassInitialization):
-            self.target = Access([slice[1], LexicalIdentifier.constructor()])
+        if isinstance(slice[0], LexicalThingInstantiation):
+            self.target = Access([slice[1], Identifier.constructor()])
             self.arguments = ArgumentList(slice[2])
             self.constructing_call = True
         else:
@@ -73,7 +73,7 @@ class MethodCall(BaseNode, ValueType):
 
     @staticmethod
     def validate_types(compiled_target, expected_type):
-        if expected_type == LexicalIdentifier('object'):
+        if expected_type == Identifier('object'):
             return True
 
         return compiled_target.type == expected_type

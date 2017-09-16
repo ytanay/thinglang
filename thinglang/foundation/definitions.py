@@ -1,9 +1,9 @@
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 
 INTERNAL_TYPE_ORDERING = {
-    LexicalIdentifier("none"): 0,
-    LexicalIdentifier("text"): 1,
-    LexicalIdentifier("number"): 2,
-    LexicalIdentifier("bool"): 3,
-    LexicalIdentifier("Output"): 4
+    Identifier("none"): 0,
+    Identifier("text"): 1,
+    Identifier("number"): 2,
+    Identifier("bool"): 3,
+    Identifier("Output"): 4
 }

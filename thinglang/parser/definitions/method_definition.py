@@ -1,8 +1,8 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull
 from thinglang.foundation import templates
-from thinglang.lexer.tokens.base import LexicalIdentifier
-from thinglang.lexer.tokens.functions import LexicalDeclarationConstructor, LexicalDeclarationReturnType
+from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.definitions.thing_definition import LexicalDeclarationConstructor, LexicalDeclarationReturnType
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.statements.return_statement import ReturnStatement
@@ -22,7 +22,7 @@ class MethodDefinition(BaseNode):
         self.locals = None
 
         if isinstance(slice[0], LexicalDeclarationConstructor):
-            self.name = LexicalIdentifier.constructor()
+            self.name = Identifier.constructor()
             if len(slice) > 1:
                 self.arguments = slice[1]
         else:
@@ -42,7 +42,7 @@ class MethodDefinition(BaseNode):
             self.arguments = ArgumentList()
 
     def is_constructor(self):
-        return self.name == LexicalIdentifier.constructor()
+        return self.name == Identifier.constructor()
 
     def describe(self):
         return '{}, args={}'.format(self.name, self.arguments)

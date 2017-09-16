@@ -1,10 +1,10 @@
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.symbol import Symbol
 
 
 class SymbolMap(object):
 
-    def __init__(self, members: list, methods: list, name: LexicalIdentifier, index: int):
+    def __init__(self, members: list, methods: list, name: Identifier, index: int):
         self.members, self.methods, self.name, self.index = members, methods, name, index
 
         self.lookup = {
@@ -29,7 +29,7 @@ class SymbolMap(object):
         members = [symbol for symbol in symbols if symbol.kind == Symbol.MEMBER]
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
 
-        return cls(members, methods, LexicalIdentifier(data['name']), data['index'])
+        return cls(members, methods, Identifier(data['name']), data['index'])
 
     @classmethod
     def from_thing(cls, thing, index):
@@ -38,10 +38,10 @@ class SymbolMap(object):
 
         return cls(members, methods, thing.name, index)
 
-    def __getitem__(self, item: LexicalIdentifier) -> Symbol:
+    def __getitem__(self, item: Identifier) -> Symbol:
         return self.lookup[item]
 
-    def __contains__(self, item: LexicalIdentifier) -> bool:
+    def __contains__(self, item: Identifier) -> bool:
         return item in self.lookup
 
     def __iter__(self):

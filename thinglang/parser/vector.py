@@ -1,13 +1,22 @@
 import collections
 
-from thinglang.lexer.tokens import LexicalGroupEnd, LexicalToken
-from thinglang.lexer.tokens.arithmetic import SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation
-from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator, LexicalIndent, \
-    LexicalParenthesesOpen, LexicalParenthesesClose, LexicalAssignment
-from thinglang.lexer.tokens.functions import LexicalDeclarationThing, LexicalDeclarationMember, \
-    LexicalDeclarationConstructor, LexicalDeclarationMethod, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
-    LexicalReturnStatement, LexicalClassInitialization, LexicalDeclarationStatic
-from thinglang.lexer.tokens.logic import LexicalConditional, LexicalComparison, LexicalElse, LexicalRepeatWhile
+from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.tokens.misc import LexicalGroupEnd
+from thinglang.lexer.operators.binary import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
+from thinglang.lexer.tokens.access import LexicalAccess
+from thinglang.lexer.tokens.indent import LexicalIndent
+from thinglang.lexer.tokens.separator import LexicalSeparator
+from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
+from thinglang.lexer.operators.assignment import LexicalAssignment
+from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
+from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
+    LexicalDeclarationConstructor, LexicalDeclarationStatic, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
+    LexicalDeclarationMethod
+from thinglang.lexer.statements.return_statement import LexicalReturnStatement
+from thinglang.lexer.blocks.loops import LexicalRepeatWhile
+from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
+from thinglang.lexer.operators.comparison import LexicalComparison
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.loop import Loop
@@ -165,14 +174,14 @@ class TypeVector(TokenVector):
     def parse(self):
         output = []
 
-        if not all(isinstance(x, (LexicalIdentifier, LexicalSeparator)) for x in self.tokens):
+        if not all(isinstance(x, (Identifier, LexicalSeparator)) for x in self.tokens):
             raise ValueError('Only types, names and separators are allowed in a type vector')
 
         if len(self.tokens) < 2:
             raise ValueError('Not enough items in a type vector')
 
         for components in collection_utils.chunks(self.tokens, 3):
-            if len(components) < 2 or not isinstance(components[0], LexicalIdentifier) or not isinstance(components[1], LexicalIdentifier):
+            if len(components) < 2 or not isinstance(components[0], Identifier) or not isinstance(components[1], Identifier):
                 raise ValueError('Invalid syntax in type vector element - must be 2 consecutive names')
 
             if len(components) > 2 and not isinstance(components[2], LexicalSeparator):
@@ -190,33 +199,33 @@ VECTOR_CREATION_TOKENS = {
 }
 
 
-METHOD_ID = (LexicalIdentifier,) + tuple(BinaryOperation.OPERATIONS.keys())
+METHOD_ID = (Identifier,) + tuple(BinaryOperation.OPERATIONS.keys())
 
 PATTERNS = collections.OrderedDict([
-    ((LexicalDeclarationThing, LexicalIdentifier), ThingDefinition),  # thing Program
-    ((LexicalDeclarationMember, (InlineCode, LexicalIdentifier), LexicalIdentifier), MemberDefinition),
+    ((LexicalDeclarationThing, Identifier), ThingDefinition),  # thing Program
+    ((LexicalDeclarationMember, (InlineCode, Identifier), Identifier), MemberDefinition),
 
     ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedDeclaration),
-    ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, Identifier), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, LexicalIdentifier), MethodDefinition),  # does compute with number a
+    ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, Identifier), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID), MethodDefinition),  # does say_hello
     ((LexicalDeclarationConstructor, TypeVector), MethodDefinition),  # setup with text name
     ((LexicalDeclarationConstructor,), MethodDefinition),  # setup
 
-    ((Access, LexicalAccess, LexicalIdentifier), Access),  # person.info.name
-    ((LexicalIdentifier, LexicalAccess, LexicalIdentifier), Access),  # person.info
+    ((Access, LexicalAccess, Identifier), Access),  # person.info.name
+    ((Identifier, LexicalAccess, Identifier), Access),  # person.info
 
     ((Access, ParenthesesVector), MethodCall),
-    ((LexicalClassInitialization, LexicalIdentifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
+    ((LexicalThingInstantiation, Identifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
 
     ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), BinaryOperation),  # 4 * 2
     ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), BinaryOperation),  # 4 + 2
     ((ValueType, LexicalComparison, ValueType), BinaryOperation),  # 4 == 2
 
 
-    ((LexicalIdentifier, LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
-    ((LexicalIdentifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
+    ((Identifier, Identifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
+    ((Identifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
     ((Access, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
 
     ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2

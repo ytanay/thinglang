@@ -1,7 +1,7 @@
 from thinglang import pipeline
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
-from thinglang.lexer.tokens.base import LexicalIdentifier
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.symbol import Symbol
 
 source = """
@@ -45,46 +45,46 @@ def get_symbols(code):
 
 def test_mapper_existence():
     symbols = get_symbols(source)
-    assert all(LexicalIdentifier(x) in symbols for x in ("Location", "Person"))
+    assert all(Identifier(x) in symbols for x in ("Location", "Person"))
 
 
 def test_member_symbol_description():
     symbols = get_symbols(source)
-    person = symbols[LexicalIdentifier('Person')]
+    person = symbols[Identifier('Person')]
 
-    assert all(LexicalIdentifier(x) in person for x in ("name", "age", "location", "walk_to", "say_hello", "shout"))
+    assert all(Identifier(x) in person for x in ("name", "age", "location", "walk_to", "say_hello", "shout"))
 
-    name_desc = person[LexicalIdentifier("name")]
+    name_desc = person[Identifier("name")]
 
     assert name_desc.kind is Symbol.MEMBER
-    assert name_desc.type == LexicalIdentifier("text")
+    assert name_desc.type == Identifier("text")
     assert name_desc.visibility is Symbol.PUBLIC
     assert not name_desc.static
     assert name_desc.index == 0
 
-    location_desc = person[LexicalIdentifier("location")]
+    location_desc = person[Identifier("location")]
     assert location_desc.kind is Symbol.MEMBER
-    assert location_desc.type == LexicalIdentifier("Location")
+    assert location_desc.type == Identifier("Location")
     assert location_desc.visibility is Symbol.PUBLIC
     assert not location_desc.static
     assert location_desc.index == 2
 
-    assert LexicalIdentifier('x') in symbols[location_desc.type]
+    assert Identifier('x') in symbols[location_desc.type]
 
 
 def test_method_symbol_description():
     symbols = get_symbols(source)
-    person, location = symbols[LexicalIdentifier('Person')], symbols[LexicalIdentifier('Location')]
+    person, location = symbols[Identifier('Person')], symbols[Identifier('Location')]
 
-    walk_to = person[LexicalIdentifier("walk_to")]
+    walk_to = person[Identifier("walk_to")]
     assert walk_to.kind is Symbol.METHOD
     assert walk_to.type is None
-    assert walk_to.arguments == [LexicalIdentifier("Location")]
+    assert walk_to.arguments == [Identifier("Location")]
     assert not walk_to.static
 
-    distance = location[LexicalIdentifier('distance')]
+    distance = location[Identifier('distance')]
     assert distance.kind is Symbol.METHOD
-    assert distance.type == LexicalIdentifier("number")
-    assert distance.arguments == [LexicalIdentifier("Location")] * 2
+    assert distance.type == Identifier("number")
+    assert distance.arguments == [Identifier("Location")] * 2
     assert distance.static
 

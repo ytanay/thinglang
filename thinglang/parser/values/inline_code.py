@@ -1,4 +1,4 @@
-from thinglang.lexer.tokens import LexicalToken
+from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.utils.type_descriptors import ValueType
 
 
