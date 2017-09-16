@@ -1,5 +1,5 @@
 from tests.infrastructure.test_utils import validate_types, parse_local
-from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
+from thinglang.lexer.tokens.arithmetic import NumericValue
 from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
@@ -19,13 +19,13 @@ def test_simple_method_call():
 
 def test_single_argument():
     method = parse_local('person.say_hello(1)')
-    validate_method_call(method, ['person', 'say_hello'], [LexicalNumericalValue])
+    validate_method_call(method, ['person', 'say_hello'], [NumericValue])
 
 
 def test_multiple_inline_arguments():
     method = parse_local('person.say_hello(1, "text")')
     from thinglang.parser.values.inline_text import InlineString
-    validate_method_call(method, ['person', 'say_hello'], [LexicalNumericalValue, InlineString])
+    validate_method_call(method, ['person', 'say_hello'], [NumericValue, InlineString])
 
 
 def test_local_arguments():
@@ -46,5 +46,5 @@ def test_nested_method_calls():
 def test_constructing_call():
     method = parse_local('create Empty(1)')
     assert method.target == Access([LexicalIdentifier('Empty'), LexicalIdentifier.constructor()])
-    validate_types(method.arguments, [LexicalNumericalValue], MethodCall, lambda x: x.arguments)
+    validate_types(method.arguments, [NumericValue], MethodCall, lambda x: x.arguments)
     assert method.constructing_call

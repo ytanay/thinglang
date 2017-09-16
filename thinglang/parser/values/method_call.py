@@ -1,7 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
-from thinglang.lexer import LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.lexer.tokens.functions import LexicalClassInitialization
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode

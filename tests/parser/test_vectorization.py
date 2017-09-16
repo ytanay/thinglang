@@ -1,7 +1,7 @@
 import pytest
 
 from tests.infrastructure.test_utils import validate_types, lexer_single
-from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue, LexicalMultiplication, LexicalAddition
+from thinglang.lexer.tokens.arithmetic import NumericValue, LexicalMultiplication, LexicalAddition
 from thinglang.lexer.tokens.base import LexicalIdentifier, LexicalAccess, LexicalSeparator
 from thinglang.parser import parser
 from thinglang.parser.values.inline_text import InlineString
@@ -18,7 +18,7 @@ def test_simple_vectorization():
         LexicalIdentifier, [
             InlineString,
             LexicalSeparator,
-            LexicalNumericalValue
+            NumericValue
         ]
     ], TokenVector)
 
@@ -31,24 +31,24 @@ def test_complex_vectorization():
         LexicalIdentifier,
         LexicalAccess,
         LexicalIdentifier, [
-            LexicalNumericalValue,
+            NumericValue,
             LexicalMultiplication,
             [
-                LexicalNumericalValue,
+                NumericValue,
                 LexicalAddition,
-                LexicalNumericalValue
+                NumericValue
             ],
             LexicalSeparator,
             LexicalIdentifier,
             LexicalAccess,
             LexicalIdentifier,
             [
-                LexicalNumericalValue,
+                NumericValue,
                 LexicalMultiplication,
                 [
-                    LexicalNumericalValue,
+                    NumericValue,
                     LexicalAddition,
-                    LexicalNumericalValue
+                    NumericValue
                 ]
             ]
 

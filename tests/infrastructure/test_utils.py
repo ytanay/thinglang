@@ -3,7 +3,7 @@ import os
 import random
 import string
 
-from thinglang.lexer import analyze_line
+from thinglang.lexer.lexical_analyzer import analyze_line
 from thinglang.parser import parser
 from thinglang.utils.source_context import SourceLine
 

@@ -1,6 +1,6 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
-from thinglang.lexer import LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.method_call import MethodCall

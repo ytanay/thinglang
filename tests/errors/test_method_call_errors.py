@@ -2,7 +2,7 @@ import pytest
 
 from thinglang import pipeline
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
-from thinglang.lexer import LexicalIdentifier
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.source_context import SourceContext
 
 BASE = """

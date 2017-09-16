@@ -1,5 +1,5 @@
 from thinglang.compiler.opcodes import OpcodePushNull
-from thinglang.lexer.tokens.arithmetic import LexicalNumericalValue
+from thinglang.lexer.tokens.arithmetic import NumericValue
 from thinglang.utils.type_descriptors import ValueType
 from thinglang.lexer.tokens import LexicalToken
 
@@ -51,7 +51,7 @@ class LexicalRepeatFor(LexicalToken):
     pass
 
 
-class LexicalBoolean(LexicalNumericalValue):
+class LexicalBoolean(NumericValue):
     pass
 
 

@@ -3,7 +3,8 @@ import struct
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
-from thinglang.lexer import LexicalToken, LexicalIdentifier
+from thinglang.lexer.tokens import LexicalToken
+from thinglang.lexer.tokens.base import LexicalIdentifier
 from thinglang.utils.type_descriptors import ValueType
 
 
