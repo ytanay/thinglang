@@ -1,30 +1,33 @@
 Compilation Pipeline
 ====================
 
-A thinglang program goes through several steps on its road to becoming an executable. These steps are outlined in this document.
+A thinglang program goes through several steps on its road to becoming an executable, as outlined below:
 
-## Stages
 ### Lexical analysis
-The thinglang source is first fed into the lexical analyzer, which emits a stream of lexical tokens, delimited by lines in the original source.
+The thinglang source is first fed into the lexical analyzer, which emits streams of lexical tokens, delimited by lines in the original source.
 
-Each lexical token contains contextual information about its origin in the code, which can be used to aid the diagnosis of parser errors.
+Each lexical token contains contextual information about its origin in the code, which can be used to aid the diagnosis of parser and execution errors.
 
 ### Parsing
-The parser inspects line-separated groups of lexical tokens and attempts to reduce them into a single AST node, which is then attached to its parent based on indentation rules.
+The parser inspects each stream of lexical tokens and attempts to reduce them into a single AST node, using the thinglang syntactic rules.
+
+Each node is then attached to its parent based on indentation rules.
 
 ### Symbol generation
-A symbol map is generated from each ThingDefinition, mapping the symbol names into descriptor objects. At this point, any external referenced symbols are also loaded and merged into master map.
+A symbol map is generated from each thing (i.e. class) definition, mapping the symbol names into descriptor objects. Symbol maps of external symbols (e.g. internal types, shared libraries, etc...) are also loaded and merged into a master map.
 
 ### Simplification
-Certain constructs in the AST are "simplified" to aid compilation. For example, reference chains are converted into a series of assignment operations.
+Certain constructs in the AST are modified to enable their compilation. For example, the inline list construct (`list lst = [1, 2, 3]`) is converted into a method call against the list's constructor, and subsequent pushes into the list.
 
 ### Indexing
 Each local variable in the program is given a home in its containing stack frame. 
 
 ### Compilation
-The mutated AST is traversed depth-first and bytecode instructions are emitted into the final executable stream.
+The finalized AST is traversed depth-first and bytecode instructions are emitted into a final executable stream.
 
-## Memory conventions
+The stream is combined with a static data stream (containing inline strings and numeric values) and debugging symbol information to produce the final thinglang executable format (THING/CC).
+
+## Access conventions
 
 
 ### Primitive locals
@@ -60,7 +63,7 @@ CALL idx(Output) idx(write)
 ```
 
 
-### Chained references (arugments)
+### Chained references (arguments)
 ```
 Person p = create Person("andy")
 Output.write(p.info.name.upper())

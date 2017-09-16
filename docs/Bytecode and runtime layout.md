@@ -1,8 +1,8 @@
 # Bytecode & Runtime Layout
 
-The thinglang bytecode is a lightweight language which operates over a state consisting of:
+The thinglang bytecode is a lightweight stack based language which operates over a state consisting of:
 1. A method-local frame (a vector of Thing instances) - used for method locals - addressed using 32 bit pointers
-2. A stack of Thing instances - used for method call arguments (and some computations)
+2. A stack of Thing instances - used for method call arguments (and some internal operation - e.g. dereferences)
 3. A stack of frames - used for the call stack
 4. A static data array (also a vector of Thing instances) - used for inlined strings, numeric values and user static data - addressed using 32 bit pointers
 5. An internal type array - used for core internal types (text, number, Output, Input, etc...) and dynamically loaded native extensions - addressed using 32 bit internal pointers
@@ -23,8 +23,6 @@ Calls a user defined method (static or member) using bytecode addressing
 **Arguments**:
 1. Index of the type
 2. Index of the method
-
-
 
 ```
 p.say("Hello") # where p is an instance of Person
