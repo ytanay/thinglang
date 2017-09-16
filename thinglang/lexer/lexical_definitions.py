@@ -13,7 +13,7 @@ from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction, LexicalMultiplication, \
     LexicalDivision
 from thinglang.lexer.operators.casts import LexicalCast
-from thinglang.lexer.operators.comparison import LexicalEquals, LexicalInequality, LexicalNegation, LexicalGreaterThan, \
+from thinglang.lexer.operators.comparison import LexicalEquals, LexicalNegation, LexicalGreaterThan, \
     LexicalLessThan
 from thinglang.lexer.operators.membership import LexicalIn
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
@@ -90,6 +90,5 @@ REVERSE_OPERATORS = {
 }
 
 REVERSE_OPERATORS.update({
-    LexicalEquals: "==",
-    LexicalInequality: '!='
+    LexicalEquals: "=="
 })
