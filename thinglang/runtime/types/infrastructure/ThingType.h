@@ -10,7 +10,7 @@ class ThingType{
 public:
     explicit ThingType(Size members) : members(members) {};
     virtual Thing call(Index idx) = 0;
-    virtual Thing create();;
+    virtual Thing create() {return nullptr; }
 
     Size members = 0;
 };
@@ -22,7 +22,7 @@ public:
 
     Thing call(Index idx) override;
 
-    Thing create() override;;
+    Thing create() override;
 
 
 private:

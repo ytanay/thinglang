@@ -1,5 +1,6 @@
 #include "ThingType.h"
 
+
 Thing ThingTypeExternal::call(Index idx) {
     methods[idx].execute();
     return nullptr;
@@ -10,6 +11,3 @@ Thing ThingTypeExternal::create() {
     return nullptr;
 }
 
-Thing ThingType::create() {
-    return nullptr;
-}

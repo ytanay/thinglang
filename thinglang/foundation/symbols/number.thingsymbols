@@ -3,11 +3,20 @@
     "name": "number",
     "symbols": [
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": null
+        },
+        {
             "arguments": [
                 "number"
             ],
             "convention": "internal",
-            "index": 0,
+            "index": 1,
             "kind": "method",
             "name": "__addition__",
             "static": false,
@@ -18,7 +27,7 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 1,
+            "index": 2,
             "kind": "method",
             "name": "__subtraction__",
             "static": false,
@@ -29,7 +38,7 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 2,
+            "index": 3,
             "kind": "method",
             "name": "__multiplication__",
             "static": false,
@@ -40,7 +49,7 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 3,
+            "index": 4,
             "kind": "method",
             "name": "__division__",
             "static": false,
@@ -51,7 +60,7 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 4,
+            "index": 5,
             "kind": "method",
             "name": "__equals__",
             "static": false,
@@ -62,20 +71,11 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 5,
+            "index": 6,
             "kind": "method",
             "name": "__less_than__",
             "static": false,
             "type": "bool"
-        },
-        {
-            "arguments": [],
-            "convention": "internal",
-            "index": 6,
-            "kind": "method",
-            "name": "constructor",
-            "static": false,
-            "type": null
         },
         {
             "arguments": null,

@@ -1,25 +1,25 @@
 {
-    "index": 4,
+    "index": 5,
     "name": "Output",
     "symbols": [
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": null
+        },
         {
             "arguments": [
                 "object"
             ],
             "convention": "internal",
-            "index": 0,
+            "index": 1,
             "kind": "method",
             "name": "write",
             "static": true,
-            "type": null
-        },
-        {
-            "arguments": [],
-            "convention": "internal",
-            "index": 1,
-            "kind": "method",
-            "name": "constructor",
-            "static": false,
             "type": null
         },
         {

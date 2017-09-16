@@ -1,6 +1,6 @@
 {
-    "index": 3,
-    "name": "bool",
+    "index": 4,
+    "name": "list",
     "symbols": [
         {
             "arguments": [],
@@ -12,13 +12,24 @@
             "type": null
         },
         {
+            "arguments": [
+                "object"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "append",
+            "static": false,
+            "type": null
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "index": 0,
             "kind": "member",
             "name": "val",
             "static": false,
-            "type": "bool"
+            "type": "std::vector<Thing>"
         }
     ]
 }

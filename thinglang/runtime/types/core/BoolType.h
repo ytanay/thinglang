@@ -19,6 +19,7 @@ namespace BoolNamespace {
 class BoolInstance : public BaseThingInstance {
     
     public:
+    explicit BoolInstance() = default; // empty constructor
     explicit BoolInstance(bool val) : val(val) {}; // value constructor
     
     /** Mixins **/
@@ -42,9 +43,13 @@ typedef BoolInstance this_type;
 class BoolType : public ThingTypeInternal {
     
     public:
-    BoolType() : ThingTypeInternal({  }) {}; // constructor
+    BoolType() : ThingTypeInternal({ &__constructor__ }) {}; // constructor
+ 
     
-    
+    static Thing __constructor__() {
+        return Thing(new this_type());
+    }
+
     
 };
 

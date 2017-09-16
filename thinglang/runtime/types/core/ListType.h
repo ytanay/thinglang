@@ -1,5 +1,5 @@
 /**
-    OutputType.h
+    ListType.h
     Auto-generated code - do not modify.
     thinglang C++ transpiler, 0.0.0
 **/
@@ -13,14 +13,14 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace OutputNamespace {
+namespace ListNamespace {
 
 
-class OutputInstance : public BaseThingInstance {
+class ListInstance : public BaseThingInstance {
     
     public:
-    explicit OutputInstance() = default; // empty constructor
-    explicit OutputInstance(std::string val) : val(val) {}; // value constructor
+    explicit ListInstance() = default; // empty constructor
+    explicit ListInstance(std::vector<Thing> val) : val(val) {}; // value constructor
     
     /** Mixins **/
     
@@ -34,16 +34,16 @@ class OutputInstance : public BaseThingInstance {
     
     /** Members **/
     
-    std::string val;
+    std::vector<Thing> val;
 };
 
 
-typedef OutputInstance this_type;
+typedef ListInstance this_type;
 
-class OutputType : public ThingTypeInternal {
+class ListType : public ThingTypeInternal {
     
     public:
-    OutputType() : ThingTypeInternal({ &__constructor__, &write }) {}; // constructor
+    ListType() : ThingTypeInternal({ &__constructor__, &append }) {}; // constructor
  
     
     static Thing __constructor__() {
@@ -51,10 +51,11 @@ class OutputType : public ThingTypeInternal {
     }
 
 
-    static Thing write() {
-		auto message = Program::pop();
+    static Thing append() {
+		auto item = Program::pop();
+		auto self = Program::argument<this_type>();
 
-		std::cout << message->text() << std::endl;
+		self->val.push_back(item);
 		return nullptr;
     }
 

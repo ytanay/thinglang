@@ -3,11 +3,20 @@
     "name": "text",
     "symbols": [
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": null
+        },
+        {
             "arguments": [
                 "text"
             ],
             "convention": "internal",
-            "index": 0,
+            "index": 1,
             "kind": "method",
             "name": "__addition__",
             "static": false,
@@ -18,7 +27,7 @@
                 "text"
             ],
             "convention": "internal",
-            "index": 1,
+            "index": 2,
             "kind": "method",
             "name": "__equals__",
             "static": false,
@@ -29,20 +38,11 @@
                 "text"
             ],
             "convention": "internal",
-            "index": 2,
+            "index": 3,
             "kind": "method",
             "name": "contains",
             "static": false,
             "type": "bool"
-        },
-        {
-            "arguments": [],
-            "convention": "internal",
-            "index": 3,
-            "kind": "method",
-            "name": "constructor",
-            "static": false,
-            "type": null
         },
         {
             "arguments": null,

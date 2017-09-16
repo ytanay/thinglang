@@ -19,6 +19,7 @@ namespace TextNamespace {
 class TextInstance : public BaseThingInstance {
     
     public:
+    explicit TextInstance() = default; // empty constructor
     explicit TextInstance(std::string val) : val(val) {}; // value constructor
     
     /** Mixins **/
@@ -42,9 +43,14 @@ typedef TextInstance this_type;
 class TextType : public ThingTypeInternal {
     
     public:
-    TextType() : ThingTypeInternal({ &__addition__, &__equals__, &contains }) {}; // constructor
+    TextType() : ThingTypeInternal({ &__constructor__, &__addition__, &__equals__, &contains }) {}; // constructor
+ 
     
-    
+    static Thing __constructor__() {
+        return Thing(new this_type());
+    }
+
+
     static Thing __addition__() {
 		auto other = Program::argument<TextNamespace::TextInstance>();
 		auto self = Program::argument<this_type>();
@@ -89,7 +95,6 @@ class TextType : public ThingTypeInternal {
 
 		return nullptr;
     }
-
 
     
 };

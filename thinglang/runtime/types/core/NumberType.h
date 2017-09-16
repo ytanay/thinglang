@@ -19,6 +19,7 @@ namespace NumberNamespace {
 class NumberInstance : public BaseThingInstance {
     
     public:
+    explicit NumberInstance() = default; // empty constructor
     explicit NumberInstance(int val) : val(val) {}; // value constructor
     
     /** Mixins **/
@@ -42,9 +43,14 @@ typedef NumberInstance this_type;
 class NumberType : public ThingTypeInternal {
     
     public:
-    NumberType() : ThingTypeInternal({ &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__less_than__ }) {}; // constructor
+    NumberType() : ThingTypeInternal({ &__constructor__, &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__less_than__ }) {}; // constructor
+ 
     
-    
+    static Thing __constructor__() {
+        return Thing(new this_type());
+    }
+
+
     static Thing __addition__() {
 		auto other = Program::argument<NumberNamespace::NumberInstance>();
 		auto self = Program::argument<this_type>();
@@ -110,7 +116,6 @@ class NumberType : public ThingTypeInternal {
 
 		return nullptr;
     }
-
 
     
 };
