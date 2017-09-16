@@ -9,7 +9,7 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": null
+            "type": "list"
         },
         {
             "arguments": [
@@ -20,7 +20,7 @@
             "kind": "method",
             "name": "append",
             "static": false,
-            "type": null
+            "type": "list"
         },
         {
             "arguments": null,

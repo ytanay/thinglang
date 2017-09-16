@@ -16,7 +16,7 @@ class MethodDefinition(BaseNode):
         super(MethodDefinition, self).__init__(slice)
 
         self.arguments = None
-        self.return_type = None
+        self._return_type = None
         self.index = None
         self.static = False
         self.locals = None
@@ -31,12 +31,12 @@ class MethodDefinition(BaseNode):
 
             if len(slice) > 2:
                 if isinstance(slice[2], LexicalDeclarationReturnType):
-                    self.return_type = slice[3]
+                    self._return_type = slice[3]
                 else:
                     self.arguments = ArgumentList(slice[2])
 
             if len(slice) > 4:
-                self.return_type = slice[4]
+                self._return_type = slice[4]
 
         if not isinstance(self.arguments, ArgumentList):
             self.arguments = ArgumentList()
@@ -82,6 +82,12 @@ class MethodDefinition(BaseNode):
     @property
     def argument_count(self):
         return len(self.arguments) + (0 if self.is_constructor() else 1)
+
+    @property
+    def return_type(self):
+        if self.is_constructor():
+            return self.parent.name
+        return self._return_type
 
     def update_locals(self, locals):
         self.locals = locals

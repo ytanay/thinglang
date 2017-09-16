@@ -9,7 +9,7 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": null
+            "type": "Output"
         },
         {
             "arguments": [
