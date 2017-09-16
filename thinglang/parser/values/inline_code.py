@@ -1,7 +1,8 @@
 from thinglang.lexer import LexicalToken
+from thinglang.utils.type_descriptors import ValueType
 
 
-class InlineCode(LexicalToken):
+class InlineCode(LexicalToken, ValueType):
     STATIC = True
 
     def __init__(self, value, source_ref):

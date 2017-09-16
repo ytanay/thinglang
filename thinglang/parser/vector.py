@@ -42,7 +42,7 @@ class TokenVector(object):
 
         self.process_indentation()
 
-        if len(self.tokens) != 1:
+        if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode)):
             raise VectorReductionError('Could not reduce vector: {}'.format(self.tokens))
 
         return self.tokens[0]
