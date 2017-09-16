@@ -23,7 +23,6 @@ public:
 
 
 private:
-
     Methods methods;
 };
 

@@ -17,10 +17,8 @@ class MethodCall(BaseNode, ValueType):
         if isinstance(slice[0], LexicalThingInstantiation):
             self.target = Access([slice[1], Identifier.constructor()])
             self.arguments = ArgumentList(slice[2])
-            self.constructing_call = True
         else:
             self.target, self.arguments = slice[0], ArgumentList(slice[1])
-            self.constructing_call = False
 
         if not self.arguments:
             self.arguments = ArgumentList()
@@ -33,7 +31,7 @@ class MethodCall(BaseNode, ValueType):
 
     @classmethod
     def create(cls, target, arguments=None):
-        return cls([Access(target), arguments])
+        return cls([Access(target), (arguments if arguments is not None else ArgumentList())])
 
     def compile(self, context: CompilationContext):
         if self.target[0].implements(MethodCall):
@@ -78,4 +76,6 @@ class MethodCall(BaseNode, ValueType):
 
         return compiled_target.type == expected_type
 
-
+    @property
+    def constructing_call(self):
+        return self.target[-1] == Identifier.constructor()

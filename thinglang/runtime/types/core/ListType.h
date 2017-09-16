@@ -56,6 +56,7 @@ class ListType : public ThingTypeInternal {
 		auto self = Program::argument<this_type>();
 
 		self->val.push_back(item);
+		return self;
 		return nullptr;
     }
 

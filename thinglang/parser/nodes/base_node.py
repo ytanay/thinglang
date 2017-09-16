@@ -50,3 +50,7 @@ class BaseNode(Describable):
     def compile(self, context):
         for child in self.children:
             child.compile(context)
+
+    def deriving_from(self, node):
+        self.source_ref = node.source_ref
+        return self
