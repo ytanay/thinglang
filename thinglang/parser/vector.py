@@ -1,5 +1,6 @@
 import collections
 
+from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.operators.binary import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
@@ -32,6 +33,7 @@ from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.inline_code import InlineCode
+from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType
@@ -53,6 +55,9 @@ class TokenVector(object):
 
         if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode)):
             raise VectorReductionError('Could not reduce vector: {}'.format(self.tokens))
+
+        if isinstance(self.tokens[0], TokenVector):
+            return self.tokens[0].parse()
 
         return self.tokens[0]
 
@@ -166,6 +171,15 @@ class ParenthesesVector(TokenVector, ValueType):
         return [group.parse() for group in groups]
 
 
+class BracketVector(ParenthesesVector, ValueType):
+    """
+    Describes a vector of tokens bounded in bracket, generally for creating in line lists.
+    """
+
+    def parse(self):
+        return InlineList(super().parse())
+
+
 class TypeVector(TokenVector):
     """
     Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
@@ -195,6 +209,7 @@ class TypeVector(TokenVector):
 
 VECTOR_CREATION_TOKENS = {
     LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector),
+    LexicalBracketOpen: (LexicalBracketClose, BracketVector),
     LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector)
 }
 

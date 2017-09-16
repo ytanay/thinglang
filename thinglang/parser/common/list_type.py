@@ -4,26 +4,31 @@ from thinglang.parser.nodes.base_node import BaseNode
 class ListInitialization(BaseNode):
 
     def __init__(self, slice=None):
-        super(ListInitialization, self).__init__(slice if isinstance(slice, list) else ([slice] if slice else ()))
+        self.values = self.normalize_input(slice)
 
-        if not slice:
-            self.arguments = []
-        elif isinstance(slice, list):
-            self.arguments = slice
-        else:
-            self.arguments = [slice]
+        super(ListInitialization, self).__init__(self.values)
 
     def __iter__(self):
-        return iter(self.arguments)
+        return iter(self.values)
 
     def __len__(self):
-        return len(self.arguments)
+        return len(self.values)
 
     def __getitem__(self, item):
-        return self.arguments[item]
+        return self.values[item]
 
     def __setitem__(self, key, value):
-        self.arguments[key] = value
+        self.values[key] = value
 
     def describe(self):
-        return self.arguments
+        return self.values
+
+    @staticmethod
+    def normalize_input(value):
+        if not value:
+            return []
+
+        if isinstance(value, list):
+            return value
+
+        return [value]

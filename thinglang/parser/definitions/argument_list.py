@@ -7,7 +7,7 @@ class ArgumentList(ListInitialization):
     def transpile(self, static=False):
         lines = []
 
-        for arg in reversed(self.arguments):
+        for arg in reversed(self.values):
             if arg.type in definitions.INTERNAL_TYPE_ORDERING:
                 lines.append(templates.ARGUMENT_POP_TYPE.format(
                     name=arg.transpile(),

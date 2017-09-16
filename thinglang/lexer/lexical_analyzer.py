@@ -23,7 +23,7 @@ def lexer(source: SourceContext) -> List[List[LexicalToken]]:
 
 @collection_utils.drain(lambda x: x is not None)
 def analyze_line(line: SourceLine):
-    group, entity_class, start_ref, operator_working_set = '', None, None, OPERATORS
+    operator_working_set, group, entity_class, start_ref, current_ref = OPERATORS, '', None, None, None
 
     for char, current_ref in line:
 
