@@ -39,6 +39,7 @@ FOUNDATION_TYPE = """
 class {instance_cls_name} : public BaseThingInstance {{
     
     public:
+    explicit {instance_cls_name}() = default; // empty constructor
     explicit {instance_cls_name}({member_list}) : val(val) {{}}; // value constructor
     
     /** Mixins **/
@@ -63,7 +64,7 @@ class {type_cls_name} : public ThingTypeInternal {{
     
     public:
     {type_cls_name}() : ThingTypeInternal({{ {method_list} }}) {{}}; // constructor
-    
+ 
     {methods}
     
 }};
@@ -118,6 +119,11 @@ ELSE_CLAUSE = """
     }}
 """
 
+IMPLICIT_CONSTRUCTOR = """
+    static Thing __constructor__() {
+        return Thing(new this_type());
+    }
+"""
 
 ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'

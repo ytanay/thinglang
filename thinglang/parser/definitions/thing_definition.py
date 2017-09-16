@@ -34,7 +34,7 @@ class ThingDefinition(BaseNode):
         super().finalize()
 
         if Identifier.constructor() not in self.names:  # Add implicit constructor
-            self.children.append(MethodDefinition.empty_constructor(self))
+            self.children.insert(0, MethodDefinition.empty_constructor(self))
 
     @property
     def members(self):
@@ -52,4 +52,4 @@ class ThingDefinition(BaseNode):
         return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members)
 
     def format_method_list(self):
-        return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods if not x.is_constructor()])
+        return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])

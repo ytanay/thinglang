@@ -16,6 +16,8 @@ class Identifier(LexicalToken, ValueType):
         return context.push_ref(context.resolve(self), self.source_ref)
 
     def transpile(self):
+        if self == Identifier.constructor():
+            return '__constructor__'
         return self.value
 
     def upper(self):
@@ -32,7 +34,7 @@ class Identifier(LexicalToken, ValueType):
 
     @classmethod
     def constructor(cls):
-        return cls("constructor")
+        return cls("__constructor__")
 
     @classmethod
     def self(cls):

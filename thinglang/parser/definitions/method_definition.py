@@ -48,8 +48,8 @@ class MethodDefinition(BaseNode):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
-        if self.is_constructor() and not self.children: # Fix for empty implicit constructor
-            return ''
+        if self.is_constructor() and not self.children:
+            return templates.IMPLICIT_CONSTRUCTOR
 
         return templates.FOUNDATION_METHOD.format(
             name=(self.parent.name if self.is_constructor() else self.name).transpile(),
