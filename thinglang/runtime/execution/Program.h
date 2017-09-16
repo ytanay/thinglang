@@ -47,7 +47,7 @@ public:
     }
 
     static void start() {
-        types[entry]->create();
+        types[entry]->call(0);
     }
 
     static void load(ProgramInfo &info);

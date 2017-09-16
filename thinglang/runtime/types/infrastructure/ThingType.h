@@ -10,7 +10,6 @@ class ThingType{
 public:
     explicit ThingType(Size members) : members(members) {};
     virtual Thing call(Index idx) = 0;
-    virtual Thing create() {return nullptr; }
 
     Size members = 0;
 };
@@ -21,8 +20,6 @@ public:
             std::move(methods)) {};
 
     Thing call(Index idx) override;
-
-    Thing create() override;
 
 
 private:

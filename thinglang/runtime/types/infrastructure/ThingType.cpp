@@ -6,8 +6,3 @@ Thing ThingTypeExternal::call(Index idx) {
     return nullptr;
 }
 
-Thing ThingTypeExternal::create() {
-    methods[0].execute();
-    return nullptr;
-}
-
