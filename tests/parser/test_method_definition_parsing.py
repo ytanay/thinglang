@@ -21,12 +21,14 @@ def test_simple_method_definition():
 
 def test_simple_constructor_definition():
     method = parse_local("setup")
-    validate_method_definition(method, Identifier.constructor())
+    parse_local("thing container").attach(method)
+    validate_method_definition(method, Identifier.constructor(), return_type=Identifier('container'))
 
 
 def test_constructor_arguments():
     method = parse_local("setup with text name, number age")
-    validate_method_definition(method, Identifier.constructor(), [('name', 'text'), ('age', 'number')])
+    parse_local("thing container").attach(method)
+    validate_method_definition(method, Identifier.constructor(), [('name', 'text'), ('age', 'number')], Identifier('container'))
 
 
 def test_method_definition_return_type():
