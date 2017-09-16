@@ -4,6 +4,7 @@ from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
@@ -12,6 +13,8 @@ class Simplifier(TreeTraversal):
     """
     The simplifier inspects certain language constructs and modifies them for simpler compilation into equivalent bytecode.
     """
+
+    MULTI_ARG_CONSTRUCTS = MethodCall, InlineList
 
     @inspects((AssignmentOperation, ReturnStatement, Conditional, Loop))
     def simplify_assignment_operation(self, node: AssignmentOperation):
@@ -22,17 +25,21 @@ class Simplifier(TreeTraversal):
         if node.value.implements(BinaryOperation):
             node.value = self.convert_arithmetic_operations(node.value)
 
-    @inspects(MethodCall)
-    def simply_method_call(self, node: MethodCall):
+        if node.value.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+            self.simplify_multi_arg_constructs(node.value)
+
+    @inspects(MULTI_ARG_CONSTRUCTS)
+    def simplify_multi_arg_constructs(self, node: MethodCall):
         """
-        Inspects a method call's arguments for values requiring simplification.
+        Inspects a method call or inline list's arguments for values requiring simplification.
         Simplifies each argument in turn.
         """
+        print('Simplifying {}'.format(node.arguments))
         for idx, arg in enumerate(node.arguments):
             if arg.implements(BinaryOperation):
                 node.replace_argument(idx, self.convert_arithmetic_operations(arg))
-            elif arg.implements(MethodCall):
-                self.simply_method_call(arg)
+            elif arg.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+                self.simplify_multi_arg_constructs(arg)
 
     def convert_arithmetic_operations(self, node: BinaryOperation) -> MethodCall:
         """
@@ -42,11 +49,12 @@ class Simplifier(TreeTraversal):
 
         if lhs.implements(BinaryOperation):
             lhs = self.convert_arithmetic_operations(lhs)
-        elif lhs.implements(MethodCall):
-            self.simply_method_call(lhs)
+        elif lhs.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+            self.simplify_multi_arg_constructs(lhs)
+
         if rhs.implements(BinaryOperation):
             rhs = self.convert_arithmetic_operations(rhs)
-        elif rhs.implements(MethodCall):
-            self.simply_method_call(rhs)
+        elif rhs.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+            self.simplify_multi_arg_constructs(rhs)
 
         return MethodCall.create([lhs, Identifier(node.operator.transpile())], [rhs])

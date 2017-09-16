@@ -51,6 +51,9 @@ class BaseNode(Describable):
         for child in self.children:
             child.compile(context)
 
+        if not self.children:
+            raise Exception('Cannot pass through for further compilation')
+
     def deriving_from(self, node):
         self.source_ref = node.source_ref
         return self

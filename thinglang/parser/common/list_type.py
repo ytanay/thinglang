@@ -23,6 +23,10 @@ class ListInitialization(BaseNode):
     def describe(self):
         return self.values
 
+    @property
+    def arguments(self):
+        return self.values
+
     @staticmethod
     def normalize_input(value):
         if not value:
