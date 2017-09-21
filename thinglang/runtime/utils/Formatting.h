@@ -63,3 +63,7 @@ inline std::string trim(std::string str){
 inline std::ostream &operator<<(std::ostream &os, const Thing& thing){
     return os << thing->text();
 }
+
+inline int to_number(std::string str){
+    return atoi(str.c_str());
+}

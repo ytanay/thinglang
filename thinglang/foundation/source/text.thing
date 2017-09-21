@@ -18,3 +18,6 @@ thing text
             return true
         otherwise
             return false
+
+    static does convert_number with text num returns number
+        `return Thing(new NumberInstance(to_number(num->val)));`

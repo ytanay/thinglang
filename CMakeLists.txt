@@ -16,11 +16,11 @@ set(SOURCE_FILES
         thinglang/runtime/execution/Opcodes.h
         thinglang/runtime/execution/Instruction.cpp
 
-        thinglang/runtime/types/core/TextType.h
-        thinglang/runtime/types/core/NumberType.h
-        thinglang/runtime/types/core/BoolType.h
-        thinglang/runtime/types/core/ListType.h
-        thinglang/runtime/types/core/OutputType.h
+        thinglang/runtime/types/core/TextType.cpp
+        thinglang/runtime/types/core/NumberType.cpp
+        thinglang/runtime/types/core/BoolType.cpp
+        thinglang/runtime/types/core/ListType.cpp
+        thinglang/runtime/types/core/ConsoleType.cpp
 
         thinglang/runtime/types/infrastructure/ThingInstance.cpp
         thinglang/runtime/types/infrastructure/ThingType.cpp
@@ -34,5 +34,5 @@ set(SOURCE_FILES
         thinglang/include/args.h
         thinglang/runtime/execution/Globals.h)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static")
+
 add_executable(thinglang ${SOURCE_FILES})

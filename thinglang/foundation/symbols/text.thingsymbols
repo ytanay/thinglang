@@ -45,6 +45,17 @@
             "type": "bool"
         },
         {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 4,
+            "kind": "method",
+            "name": "convert_number",
+            "static": true,
+            "type": "number"
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "index": 0,
