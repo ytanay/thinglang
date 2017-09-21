@@ -1,10 +1,6 @@
 #include "Program.h"
-#include "../types/core/TextType.h"
-#include "../types/core/NumberType.h"
-#include "../types/core/ListType.h"
-#include "../types/core/ConsoleType.h"
 #include "../errors/Aborts.h"
-
+#include "../types/InternalTypes.h"
 
 ThingStack Program::stack;
 FrameStack Program::frames;

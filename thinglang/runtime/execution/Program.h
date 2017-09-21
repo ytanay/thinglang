@@ -7,8 +7,6 @@
 
 #include "../utils/TypeNames.h"
 #include "../types/infrastructure/ThingType.h"
-#include "../errors/RuntimeError.h"
-#include "../types/InternalTypes.h"
 
 
 class Program {

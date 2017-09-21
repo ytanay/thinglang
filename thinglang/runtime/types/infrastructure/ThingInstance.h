@@ -8,7 +8,7 @@
  */
 class BaseThingInstance {
 protected:
-    BaseThingInstance() = default;;
+    BaseThingInstance() = default;
 
 public:
     virtual std::string text();
@@ -30,7 +30,6 @@ class ThingInstance : public BaseThingInstance {
 public:
 
     explicit ThingInstance(Size members) : members(members) {};
-
 
     Thing get(Index index) override;
 

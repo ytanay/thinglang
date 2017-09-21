@@ -18,7 +18,7 @@ std::string format_abort_reason(AbortReason reason){
 }
 
 
-void critical_abort(AbortReason reason){
+void inline critical_abort(AbortReason reason){
     std::cerr << std::endl << std::endl;
     std::cerr << "THINGLANG VM ERROR: CRITICAL ABORT" << std::endl;
     std::cerr << "==================================" << std::endl << std::endl;

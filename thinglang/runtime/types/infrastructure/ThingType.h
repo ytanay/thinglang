@@ -21,7 +21,6 @@ public:
 
     Thing call(Index idx) override;
 
-
 private:
     Methods methods;
 };
@@ -31,11 +30,7 @@ class ThingTypeInternal : public ThingType {
 public:
     explicit ThingTypeInternal(InternalMethods methods) : ThingType(0), methods(std::move(methods)) {};
 
-    Thing call(Index idx) override  {
-        return methods[idx]();
-    }
-
-
+    Thing call(Index idx) override;
 
 private:
     InternalMethods methods;
