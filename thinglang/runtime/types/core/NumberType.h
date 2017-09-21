@@ -13,7 +13,7 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace NumberNamespace {
+
 
 
 class NumberInstance : public BaseThingInstance {
@@ -25,102 +25,26 @@ class NumberInstance : public BaseThingInstance {
     
     /** Mixins **/
     
-    
-    virtual std::string text() override {
-        return to_string(val);
-    }
-    
-    bool boolean() override {
-        return to_boolean(val);
-    }
+    virtual std::string text() override;
+    virtual bool boolean() override;
 
     
     /** Members **/
-    
     int val;
 };
 
-
-typedef NumberInstance this_type;
 
 class NumberType : public ThingTypeInternal {
     
     public:
     NumberType() : ThingTypeInternal({ &__constructor__, &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__less_than__ }) {}; // constructor
  
-    
-    static Thing __constructor__() {
-        return Thing(new this_type());
-    }
-
-
-    static Thing __addition__() {
-		auto other = Program::argument<NumberNamespace::NumberInstance>();
-		auto self = Program::argument<this_type>();
-
-		return Thing(new this_type(self->val + other->val));
-		return nullptr;
-    }
-
-
-    static Thing __subtraction__() {
-		auto other = Program::argument<NumberNamespace::NumberInstance>();
-		auto self = Program::argument<this_type>();
-
-		return Thing(new this_type(self->val - other->val));
-		return nullptr;
-    }
-
-
-    static Thing __multiplication__() {
-		auto other = Program::argument<NumberNamespace::NumberInstance>();
-		auto self = Program::argument<this_type>();
-
-		return Thing(new this_type(self->val * other->val));
-		return nullptr;
-    }
-
-
-    static Thing __division__() {
-		auto other = Program::argument<NumberNamespace::NumberInstance>();
-		auto self = Program::argument<this_type>();
-
-		return Thing(new this_type(self->val / other->val));
-		return nullptr;
-    }
-
-
-    static Thing __equals__() {
-		auto other = Program::argument<NumberNamespace::NumberInstance>();
-		auto self = Program::argument<this_type>();
-
-		
-        if(self->val == other->val) {
-			return BOOL_TRUE;
-        }
-
-		
-        else {
-			return BOOL_FALSE;
-    }
-
-		return nullptr;
-    }
-
-
-    static Thing __less_than__() {
-		auto other = Program::argument<NumberNamespace::NumberInstance>();
-		auto self = Program::argument<this_type>();
-
-		
-        if(self->val < other->val) {
-			return BOOL_TRUE;
-        }
-
-		return nullptr;
-    }
-
+	static Thing __constructor__();
+	static Thing __addition__();
+	static Thing __subtraction__();
+	static Thing __multiplication__();
+	static Thing __division__();
+	static Thing __equals__();
+	static Thing __less_than__();
     
 };
-
-}

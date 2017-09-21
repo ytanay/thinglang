@@ -8,10 +8,14 @@
 #pragma once
 
 #include <string>
-#include "../errors/RuntimeError.h"
+
+#include "core/TextType.h"
+#include "core/NumberType.h"
+#include "core/BoolType.h"
+#include "core/ListType.h"
+#include "core/ConsoleType.h"
 
 enum class InternalTypes {
-    NONE = 0,
     TEXT = 1,
     NUMBER = 2,
     BOOL = 3,
@@ -23,9 +27,6 @@ enum class InternalTypes {
 inline auto describe(InternalTypes val){
     switch (val){
         
-        case InternalTypes::NONE:
-            return "NONE";
-
         case InternalTypes::TEXT:
             return "TEXT";
 

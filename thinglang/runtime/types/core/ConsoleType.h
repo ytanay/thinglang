@@ -13,7 +13,7 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace ConsoleNamespace {
+
 
 
 class ConsoleInstance : public BaseThingInstance {
@@ -26,52 +26,19 @@ class ConsoleInstance : public BaseThingInstance {
     /** Mixins **/
     
     
-    
     /** Members **/
-    
     
 };
 
-
-typedef ConsoleInstance this_type;
 
 class ConsoleType : public ThingTypeInternal {
     
     public:
     ConsoleType() : ThingTypeInternal({ &__constructor__, &write, &print, &read_line }) {}; // constructor
  
-    
-    static Thing __constructor__() {
-        return Thing(new this_type());
-    }
-
-
-    static Thing write() {
-		auto message = Program::pop();
-
-		std::cout << message->text();
-		return nullptr;
-    }
-
-
-    static Thing print() {
-		auto message = Program::pop();
-
-		std::cout << message->text() << std::endl;
-		return nullptr;
-    }
-
-
-    static Thing read_line() {
-
-
-		std::string input;
-		std::getline(std::cin, input);
-		return Thing(new TextNamespace::TextInstance(input));
-		return nullptr;
-    }
-
+	static Thing __constructor__();
+	static Thing write();
+	static Thing print();
+	static Thing read_line();
     
 };
-
-}

@@ -13,7 +13,7 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace ListNamespace {
+
 
 
 class ListInstance : public BaseThingInstance {
@@ -25,64 +25,22 @@ class ListInstance : public BaseThingInstance {
     
     /** Mixins **/
     
-    
-    virtual std::string text() override {
-        return to_string(val);
-    }
-    
-    bool boolean() override {
-        return to_boolean(val);
-    }
+    virtual std::string text() override;
+    virtual bool boolean() override;
 
     
     /** Members **/
-    
     std::vector<Thing> val;
 };
 
-
-typedef ListInstance this_type;
 
 class ListType : public ThingTypeInternal {
     
     public:
     ListType() : ThingTypeInternal({ &__constructor__, &append, &contains }) {}; // constructor
  
-    
-    static Thing __constructor__() {
-        return Thing(new this_type());
-    }
-
-
-    static Thing append() {
-		auto item = Program::pop();
-		auto self = Program::argument<this_type>();
-
-		self->val.push_back(item);
-		return self;
-		return nullptr;
-    }
-
-
-    static Thing contains() {
-		auto item = Program::pop();
-		auto self = Program::argument<this_type>();
-
-		auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();
-		
-        if(res) {
-			return BOOL_TRUE;
-        }
-
-		
-        else {
-			return BOOL_FALSE;
-    }
-
-		return nullptr;
-    }
-
+	static Thing __constructor__();
+	static Thing append();
+	static Thing contains();
     
 };
-
-}

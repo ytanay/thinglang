@@ -1,3 +1,4 @@
+from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.symbol import Symbol
 
@@ -38,6 +39,29 @@ class SymbolMap(object):
 
         return cls(members, methods, thing.name, index)
 
+    def create_header(self):
+        type_cls_name, instance_cls_name = templates.class_names(self.name)
+
+        return templates.FOUNDATION_TYPE_DECLARATION.format(
+            type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
+            constructors=templates.FOUNDATION_VALUE_CONSTRUCTOR.format(
+                instance_cls_name=instance_cls_name,
+                member_list=self.format_member_list()) if self.members else '',
+            mixins=templates.FOUNDATION_MIXINS_DECLARATION if self.members else '',
+            members=self.format_member_list('\n', ';'),
+            methods=self.format_method_declarations(),
+            method_list=self.format_method_list()
+        )
+
+    def format_member_list(self, separator=', ', delimeter=''):
+        return separator.join('{} {}{}'.format(x.type.transpile(), x.name.transpile(), delimeter) for x in self.members)
+
+    def format_method_list(self):
+        return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
+
+    def format_method_declarations(self):
+        return '\n'.join('\tstatic Thing {}();'.format(x.name.transpile()) for x in self.methods)
+
     def __getitem__(self, item: Identifier) -> Symbol:
         return self.lookup[item]
 
@@ -49,3 +73,5 @@ class SymbolMap(object):
 
     def __repr__(self):
         return f'SymbolMap({self.name})'
+
+

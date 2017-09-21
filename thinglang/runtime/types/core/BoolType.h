@@ -13,7 +13,7 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace BoolNamespace {
+
 
 
 class BoolInstance : public BaseThingInstance {
@@ -25,35 +25,20 @@ class BoolInstance : public BaseThingInstance {
     
     /** Mixins **/
     
-    
-    virtual std::string text() override {
-        return to_string(val);
-    }
-    
-    bool boolean() override {
-        return to_boolean(val);
-    }
+    virtual std::string text() override;
+    virtual bool boolean() override;
 
     
     /** Members **/
-    
     bool val;
 };
 
-
-typedef BoolInstance this_type;
 
 class BoolType : public ThingTypeInternal {
     
     public:
     BoolType() : ThingTypeInternal({ &__constructor__ }) {}; // constructor
  
-    
-    static Thing __constructor__() {
-        return Thing(new this_type());
-    }
-
+	static Thing __constructor__();
     
 };
-
-}

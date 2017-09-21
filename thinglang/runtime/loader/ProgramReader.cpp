@@ -149,13 +149,13 @@ Thing ProgramReader::read_data_block() {
             auto size = read_size();
             auto data = read_string(size);
             std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
-            auto instance = Thing(new TextNamespace::TextInstance(data));
+            auto instance = Thing(new TextInstance(data));
             return instance;
         }
         case InternalTypes::NUMBER: {
             auto data = read<int32_t>();
             std::cerr << "\tReading int: " << data << std::endl;
-            auto instance = Thing(new NumberNamespace::NumberInstance(data));
+            auto instance = Thing(new NumberInstance(data));
             return instance;
         }
 
