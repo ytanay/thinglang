@@ -34,5 +34,6 @@ set(SOURCE_FILES
         thinglang/include/args.h
         thinglang/runtime/execution/Globals.h)
 
+set(CMAKE_EXE_LINKER_FLAGS "-static-libstdc++ -static-libgcc")
 
 add_executable(thinglang ${SOURCE_FILES})
