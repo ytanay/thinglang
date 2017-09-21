@@ -33,7 +33,7 @@ The stream is combined with a static data stream (containing inline strings and 
 ### Primitive locals
 ```
 number n = 5
-Output.write(n)
+Console.print(n)
 n = 10
 ```
 
@@ -48,7 +48,7 @@ SET_STATIC idx(n) idx(10)
 ```
 text name = "andy"
 name = name.uppercase()
-Output.write(name + "says hello")
+Console.print(name + "says hello")
 ```
 
 ```
@@ -66,7 +66,7 @@ CALL idx(Output) idx(write)
 ### Chained references (arguments)
 ```
 Person p = create Person("andy")
-Output.write(p.info.name.upper())
+Console.print(p.info.name.upper())
 ```
 
 ```

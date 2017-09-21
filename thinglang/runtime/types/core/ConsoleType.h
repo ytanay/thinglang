@@ -1,5 +1,5 @@
 /**
-    InputType.h
+    ConsoleType.h
     Auto-generated code - do not modify.
     thinglang C++ transpiler, 0.0.0
 **/
@@ -13,13 +13,13 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace InputNamespace {
+namespace ConsoleNamespace {
 
 
-class InputInstance : public BaseThingInstance {
+class ConsoleInstance : public BaseThingInstance {
     
     public:
-    explicit InputInstance() = default; // empty constructor
+    explicit ConsoleInstance() = default; // empty constructor
     
     
     
@@ -33,16 +33,32 @@ class InputInstance : public BaseThingInstance {
 };
 
 
-typedef InputInstance this_type;
+typedef ConsoleInstance this_type;
 
-class InputType : public ThingTypeInternal {
+class ConsoleType : public ThingTypeInternal {
     
     public:
-    InputType() : ThingTypeInternal({ &__constructor__, &read_line }) {}; // constructor
+    ConsoleType() : ThingTypeInternal({ &__constructor__, &write, &print, &read_line }) {}; // constructor
  
     
     static Thing __constructor__() {
         return Thing(new this_type());
+    }
+
+
+    static Thing write() {
+		auto message = Program::pop();
+
+		std::cout << message->text();
+		return nullptr;
+    }
+
+
+    static Thing print() {
+		auto message = Program::pop();
+
+		std::cout << message->text() << std::endl;
+		return nullptr;
     }
 
 

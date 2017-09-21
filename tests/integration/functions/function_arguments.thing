@@ -11,12 +11,12 @@ thing Program
         self.validate_order(1, 2, 3)
 
     does say_hello with text msg
-        Output.write("Message: " + msg)
+        Console.print("Message: " + msg)
 
     does add_with_3 with number a, number b
-        Output.write(a + b + 3)
+        Console.print(a + b + 3)
 
     does validate_order with number a, number b, number c
-        Output.write(a)
-        Output.write(b)
-        Output.write(c)
+        Console.print(a)
+        Console.print(b)
+        Console.print(c)

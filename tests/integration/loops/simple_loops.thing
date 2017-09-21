@@ -8,5 +8,5 @@ thing Program
     setup
         number i = 0
         while i < 5
-            Output.write(i)
+            Console.print(i)
             i = i + 1

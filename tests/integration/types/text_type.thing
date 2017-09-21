@@ -12,8 +12,8 @@ thing Program
 
         text combined = part1 + part2
 
-        Output.write(combined)
-        Output.write("Goodbye, " + part2)
+        Console.print(combined)
+        Console.print("Goodbye, " + part2)
 
-        Output.write(part2.contains("world"))
-        Output.write(part1.contains("Goodbye"))
+        Console.print(part2.contains("world"))
+        Console.print(part1.contains("Goodbye"))

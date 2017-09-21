@@ -7,7 +7,7 @@
 thing Program
     setup
         if true
-            Output.write("true is truthy")
+            Console.print("true is truthy")
 
         if false
-            Output.write("false is truthy")
+            Console.print("false is truthy")

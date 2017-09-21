@@ -7,11 +7,11 @@
 thing Program
     setup
         if "dog" eq "dog"
-            Output.write("dog is dog")
+            Console.print("dog is dog")
         otherwise
-            Output.write("dog is not dog")
+            Console.print("dog is not dog")
 
         if "dog" eq "cat"
-            Output.write("dog is cat")
+            Console.print("dog is cat")
         otherwise
-            Output.write("dog is not cat")
+            Console.print("dog is not cat")

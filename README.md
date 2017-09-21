@@ -7,7 +7,7 @@ The syntax attempts to extract the core concepts of OOP into familiar terms and 
 ```cs
 thing Program
     setup
-        Output.write("hello world")
+        Console.print("hello world")
 ```
 
 ## Examples
@@ -19,7 +19,7 @@ thing Program
         self.say_hello(name, 10)
 
     does say_hello with name, age
-        Output.write("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
+        Console.print("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
 ```
 
 Class initialization, member definitions and all that jazz:
@@ -33,7 +33,7 @@ thing Person
 
     does say_hello with number repeat_count
         repeat for number i in 0..repeat_count
-            Output.write("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
+            Console.print("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
             
 
 thing Program

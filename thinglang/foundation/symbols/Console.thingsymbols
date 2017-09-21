@@ -1,0 +1,46 @@
+{
+    "index": 5,
+    "name": "Console",
+    "symbols": [
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "Console"
+        },
+        {
+            "arguments": [
+                "object"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "write",
+            "static": true,
+            "type": null
+        },
+        {
+            "arguments": [
+                "object"
+            ],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "print",
+            "static": true,
+            "type": null
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 3,
+            "kind": "method",
+            "name": "read_line",
+            "static": true,
+            "type": "text"
+        }
+    ]
+}

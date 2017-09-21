@@ -8,9 +8,9 @@ thing Program
     setup
         number a = 15
         number b = self.add_or_multiply(a, 10)
-        Output.write(b)
+        Console.print(b)
 
     does add_or_multiply with number a, number b
         return a * b
-        Output.write("never should appear")
+        Console.print("never should appear")
         return a + b

@@ -6,7 +6,7 @@
 
 thing Empty
     setup
-        Output.write("Hello from Empty")
+        Console.print("Hello from Empty")
 
 thing Program
     setup

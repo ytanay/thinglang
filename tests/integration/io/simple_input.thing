@@ -7,7 +7,7 @@
 
 thing Program
     setup
-        text input = Input.read_line()
-        Output.write("Message: " + input)
+        text input = Console.read_line()
+        Console.print("Message: " + input)
 
-        Output.write("Also: " + Input.read_line())
+        Console.print("Also: " + Console.read_line())

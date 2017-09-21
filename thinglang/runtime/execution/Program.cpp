@@ -1,9 +1,8 @@
 #include "Program.h"
 #include "../types/core/TextType.h"
 #include "../types/core/NumberType.h"
-#include "../types/core/OutputType.h"
 #include "../types/core/ListType.h"
-#include "../types/core/InputType.h"
+#include "../types/core/ConsoleType.h"
 #include "../errors/Aborts.h"
 
 
@@ -20,8 +19,7 @@ Types Program::internals = {
         new NumberNamespace::NumberType(),
         new BoolNamespace::BoolType(),
         new ListNamespace::ListType(),
-        new OutputNamespace::OutputType(),
-        new InputNamespace::InputType()
+        new ConsoleNamespace::ConsoleType()
 };
 
 Types Program::types = {};

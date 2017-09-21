@@ -9,4 +9,4 @@ thing Program
         self.say_hello()
 
     does say_hello
-        Output.write("Hello again!")
+        Console.print("Hello again!")

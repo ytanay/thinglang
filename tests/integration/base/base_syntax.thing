@@ -6,7 +6,7 @@
 
 thing Program
     setup
-        Output.write("Operators + in strings") # inline comments
+        Console.print("Operators + in strings") # inline comments
         text name = "Yotam" # Local variables
         number i = 10
-        Output.write(name)
+        Console.print(name)

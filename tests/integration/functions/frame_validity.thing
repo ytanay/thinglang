@@ -14,13 +14,13 @@
 thing Program
     setup
         number n = 1
-        Output.write("in main")
-        Output.write(n)
+        Console.print("in main")
+        Console.print(n)
         self.declare_and_set()
-        Output.write("in main")
-        Output.write(n)
+        Console.print("in main")
+        Console.print(n)
 
     does declare_and_set
         number n = 3
-        Output.write("in declare_and_set")
-        Output.write(n)
+        Console.print("in declare_and_set")
+        Console.print(n)

@@ -15,146 +15,146 @@ thing Program
         # Section 1
 
         if "dog" eq "dog"
-            Output.write("1 outer conditional")
+            Console.print("1 outer conditional")
 
             if "cat" eq "cat"
-                Output.write("2 inner conditional")
+                Console.print("2 inner conditional")
             otherwise if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise if "dog" eq "dog"
-                Output.write("3 inner conditional")
+                Console.print("3 inner conditional")
             otherwise
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise
-                Output.write("4 inner conditional")
+                Console.print("4 inner conditional")
 
 
         otherwise if "dog" eq "dog"
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         otherwise if "dog" eq "cat"
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         otherwise
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         # Section 2
 
         if "dog" eq "cat"
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         otherwise if "dog" eq "dog"
-            Output.write("5 outer conditional")
+            Console.print("5 outer conditional")
 
             if "cat" eq "cat"
-                Output.write("6 inner conditional")
+                Console.print("6 inner conditional")
             otherwise if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise if "dog" eq "dog"
-                Output.write("7 inner conditional")
+                Console.print("7 inner conditional")
             otherwise
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise
-                Output.write("8 inner conditional")
+                Console.print("8 inner conditional")
 
         otherwise if "dog" eq "dog"
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         otherwise
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         # Section 3
 
         if "dog" eq "cat"
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         otherwise if "cat" eq "dog"
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         otherwise
-            Output.write("9 outer conditional")
+            Console.print("9 outer conditional")
 
             if "cat" eq "cat"
-                Output.write("10 inner conditional")
+                Console.print("10 inner conditional")
             otherwise if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise if "dog" eq "dog"
-                Output.write("11 inner conditional")
+                Console.print("11 inner conditional")
             otherwise
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
             otherwise
-                Output.write("12 inner conditional")
+                Console.print("12 inner conditional")
 
 

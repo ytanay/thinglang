@@ -6,11 +6,11 @@
 
 thing Program
     setup
-        Output.write(self.get_20())
+        Console.print(self.get_20())
         number res = self.mul(self.get_13(), self.add(self.get_7(), self.get_7()))
-        Output.write(res)
-        Output.write(self.mul(self.get_13(), self.add(self.get_7(), self.get_7())))
-        Output.write(self.mul(self.add(self.get_7(), self.get_13()), res))
+        Console.print(res)
+        Console.print(self.mul(self.get_13(), self.add(self.get_7(), self.get_7())))
+        Console.print(self.mul(self.add(self.get_7(), self.get_13()), res))
 
     does add with number a, number b returns number
         return a + b

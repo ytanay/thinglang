@@ -7,11 +7,11 @@
 thing Program
     setup
         list empty = create list()
-        Output.write(empty)
+        Console.print(empty)
 
         list names = create list()
         names.append("alex")
         names.append("andrew")
         names.append("aaron")
-        Output.write(names)
+        Console.print(names)
 

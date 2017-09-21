@@ -30,10 +30,10 @@ thing Person
         self.location = new_location
         
     does say_hello with text message
-        Output.write("Message from " + self.name + ": " + message)
+        Console.print("Message from " + self.name + ": " + message)
         
     does shout
-        Output.write("Help!")
+        Console.print("Help!")
         
     
 """

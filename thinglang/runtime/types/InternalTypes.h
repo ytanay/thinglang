@@ -16,8 +16,7 @@ enum class InternalTypes {
     NUMBER = 2,
     BOOL = 3,
     LIST = 4,
-    OUTPUT = 5,
-    INPUT = 6
+    CONSOLE = 5
 };
 
 
@@ -39,10 +38,7 @@ inline auto describe(InternalTypes val){
         case InternalTypes::LIST:
             return "LIST";
 
-        case InternalTypes::OUTPUT:
-            return "OUTPUT";
-
-        case InternalTypes::INPUT:
-            return "INPUT";
+        case InternalTypes::CONSOLE:
+            return "CONSOLE";
     }
 }

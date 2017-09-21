@@ -6,7 +6,7 @@
 
 thing Program
     setup
-        Output.write(self.factorial(10))
+        Console.print(self.factorial(10))
 
     does factorial with number n returns number
         if n eq 1

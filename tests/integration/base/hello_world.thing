@@ -6,4 +6,4 @@
 
 thing Program
     setup
-        Output.write("Hello, world!")
+        Console.print("Hello, world!")

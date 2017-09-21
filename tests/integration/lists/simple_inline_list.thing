@@ -7,7 +7,7 @@
 thing Program
     setup
         list numbers = [1, 2, 3]
-        Output.write(numbers)
+        Console.print(numbers)
 
-        Output.write([4, 5, 6])
+        Console.print([4, 5, 6])
 

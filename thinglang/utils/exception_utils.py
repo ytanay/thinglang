@@ -1,8 +1,9 @@
 class ThinglangException(Exception):
 
-    def __init__(self):
+    def __init__(self, *args):
+        self.args = args
         super(ThinglangException, self).__init__(self.message)
 
     @property
     def message(self):
-        return f'Unknown exception: {type(self).__name__}'
+        return f'{type(self).__name__}: {self.args}'

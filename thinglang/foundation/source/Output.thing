@@ -1,4 +1,0 @@
-thing Output
-
-    static does write with object message
-        `std::cout << message->text() << std::endl;`

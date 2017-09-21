@@ -7,9 +7,9 @@
 thing Program
     setup
         number inter = self.get_13() + self.get_7() + self.get_7() * 3
-        Output.write(inter)
-        Output.write(self.get_7() + self.get_13())
-        Output.write(2 * inter * self.get_7())
+        Console.print(inter)
+        Console.print(self.get_7() + self.get_13())
+        Console.print(2 * inter * self.get_7())
 
     does get_7 returns number
         return 7

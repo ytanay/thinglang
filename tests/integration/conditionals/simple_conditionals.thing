@@ -7,7 +7,7 @@
 thing Program
     setup
         if "dog" eq "dog"
-            Output.write("dog is dog")
+            Console.print("dog is dog")
 
         if "dog" eq "cat"
-            Output.write("dog is cat")
+            Console.print("dog is cat")

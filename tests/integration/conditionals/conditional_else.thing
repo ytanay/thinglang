@@ -7,21 +7,21 @@
 thing Program
     setup
         if "dog" eq "cat"
-            Output.write("dog is cat")
+            Console.print("dog is cat")
         otherwise if "dog" eq "dog"
-            Output.write("dog is dog")
+            Console.print("dog is dog")
         otherwise if "dog" eq "dog"
-            Output.write("dog is still dog")
+            Console.print("dog is still dog")
         otherwise if true
-            Output.write("true is truthy")
+            Console.print("true is truthy")
         otherwise
-            Output.write("dog is not dog and not cat")
+            Console.print("dog is not dog and not cat")
 
         if "dog" eq "cat"
-            Output.write("dog is cat")
+            Console.print("dog is cat")
         otherwise if "dog" eq "Dog"
-            Output.write("dog is Dog")
+            Console.print("dog is Dog")
         otherwise if "dog" eq "mouse"
-            Output.write("dog is mouse")
+            Console.print("dog is mouse")
         otherwise
-            Output.write("dog is not cat and not mouse and not Dog")
+            Console.print("dog is not cat and not mouse and not Dog")

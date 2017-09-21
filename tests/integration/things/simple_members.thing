@@ -13,8 +13,8 @@ thing Container
         self.value = 42
 
     does describe
-        Output.write(self.name)
-        Output.write(self.value)
+        Console.print(self.name)
+        Console.print(self.value)
 
 thing Program
     setup

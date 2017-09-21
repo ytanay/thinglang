@@ -10,12 +10,12 @@ thing InnerContainer
     has InnerContainer nested
 
     setup
-        Output.write("Created InnerContainer")
+        Console.print("Created InnerContainer")
         self.val1 = 999
 
     does print
-        Output.write("Printing InnerContainer")
-        Output.write(self.val1)
+        Console.print("Printing InnerContainer")
+        Console.print(self.val1)
 
     does get returns number
         return 15
@@ -32,8 +32,8 @@ thing Container
         self.inner.val2 = 2
 
     does print
-        Output.write(self.inner.val1)
-        Output.write(self.inner.val2)
+        Console.print(self.inner.val1)
+        Console.print(self.inner.val2)
 
     does set with number a, number b
         self.inner.val1 = a
@@ -53,12 +53,12 @@ thing Program
         c.inner.val2 = 200
         c.print()
 
-        Output.write(c.inner.val1)
-        Output.write(c.inner.val2)
+        Console.print(c.inner.val1)
+        Console.print(c.inner.val2)
 
         c.inner.print()
 
-        Output.write(c.inner.get())
+        Console.print(c.inner.get())
 
         c.inner.make_inner()
         c.inner.nested.print()

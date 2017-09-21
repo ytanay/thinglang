@@ -7,19 +7,19 @@
 thing Program
     setup
         if "dog" eq "dog" # positive outer
-            Output.write("1 outer conditional")
+            Console.print("1 outer conditional")
             if "cat" eq "cat"
-                Output.write("2 inner conditional")
+                Console.print("2 inner conditional")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 
         if "dog" eq "cat" # negative outer
-            Output.write("X")
+            Console.print("X")
 
             if "cat" eq "cat"
-                Output.write("X")
+                Console.print("X")
 
             if "cat" eq "dog"
-                Output.write("X")
+                Console.print("X")
 

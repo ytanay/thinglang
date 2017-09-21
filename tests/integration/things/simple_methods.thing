@@ -6,10 +6,10 @@
 
 thing Empty
     setup
-        Output.write("in constructor")
+        Console.print("in constructor")
 
     does say_hello
-        Output.write("in say_hello")
+        Console.print("in say_hello")
 
 thing Program
     setup
