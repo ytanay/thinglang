@@ -13,7 +13,6 @@ class InlineList(ListInitialization):
         last_call = MethodCall.create([Identifier("list"), Identifier.constructor()]).deriving_from(self)
 
         for value in self:
-            print('Adding {}'.format(value))
             last_call = MethodCall.create([last_call, Identifier("append")], [value]).deriving_from(self)
 
-        last_call.compile(context)
+        return last_call.compile(context)

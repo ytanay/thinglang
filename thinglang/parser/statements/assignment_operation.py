@@ -43,21 +43,24 @@ class AssignmentOperation(BaseNode):
                 ref = context.resolve(self.value)
                 return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
 
-        output_ref = self.value.compile(context)
-
-        if self.value.implements(MethodCall) and self.name.type != output_ref.type:
-            print('Adding implicit cast {} -> {}'.format(output_ref.type, self.name.type))
-            CastOperation.create(source=output_ref.type, destination=self.name.type).deriving_from(self).compile(context)
-
+        value_ref = self.value.compile(context)
         target = self.name
+
+        cast_placeholder = context.current_index() + 1
+
         if target.implements(Identifier):
-            target = context.resolve(target)
-            context.append(OpcodePopLocal.from_reference(target), self.source_ref)
+            target_ref = context.resolve(target)
+            context.append(OpcodePopLocal.from_reference(target_ref), self.source_ref)
         elif target.implements(Access):
             if target.extensions:
-                target.compile(context, pop_last=True)
+                target_ref = target.compile(context, pop_last=True)
             else:
-                context.append(OpcodePopMember.from_reference(context.resolve(target)), self.source_ref)
-
+                target_ref = context.resolve(target)
+                context.append(OpcodePopMember.from_reference(target_ref), self.source_ref)
         else:
             raise Exception('Cannot pull up {}'.format(target))
+
+        if value_ref.type != target_ref.type:
+            buffer = context.buffer()
+            CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(buffer)
+            context.insert(cast_placeholder, buffer)

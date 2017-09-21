@@ -38,6 +38,8 @@ class Access(BaseNode, ValueType):
             cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
             context.append(cls(ref.element_index), self.source_ref)
 
+        return ref
+
     @property
     def root(self):
         return Access(self.target[:2])
