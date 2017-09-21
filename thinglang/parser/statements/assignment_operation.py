@@ -1,6 +1,7 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.method_call import MethodCall
@@ -42,10 +43,11 @@ class AssignmentOperation(BaseNode):
                 ref = context.resolve(self.value)
                 return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
 
-        if self.value.implements(MethodCall):
-            self.value.compile(context)
-        else:
-            self.value.compile(context)
+        output_ref = self.value.compile(context)
+
+        if self.value.implements(MethodCall) and self.name.type != output_ref.type:
+            print('Adding implicit cast {} -> {}'.format(output_ref.type, self.name.type))
+            CastOperation.create(source=output_ref.type, destination=self.name.type).deriving_from(self).compile(context)
 
         target = self.name
         if target.implements(Identifier):
