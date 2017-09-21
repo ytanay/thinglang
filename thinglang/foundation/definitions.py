@@ -6,5 +6,6 @@ INTERNAL_TYPE_ORDERING = {
     Identifier("number"): 2,
     Identifier("bool"): 3,
     Identifier("list"): 4,
-    Identifier("Output"): 5
+    Identifier("Output"): 5,
+    Identifier("Input"): 6
 }

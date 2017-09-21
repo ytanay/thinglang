@@ -1,0 +1,6 @@
+thing Input
+
+    static does read_line returns text
+        `std::string input;`
+        `std::getline(std::cin, input);`
+        `return Thing(new TextNamespace::TextInstance(input));`

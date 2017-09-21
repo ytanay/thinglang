@@ -1,0 +1,24 @@
+{
+    "index": 6,
+    "name": "Input",
+    "symbols": [
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "Input"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "read_line",
+            "static": true,
+            "type": "text"
+        }
+    ]
+}
