@@ -16,8 +16,12 @@ class ReturnStatement(BaseNode):
         elif self.value.STATIC:
             return templates.RETURN_VALUE.format(value=self.value.transpile())
         else:
-            return templates.RETURN_VALUE_INSTANTIATE.format(value=self.value.transpile())
+            return templates.RETURN_VALUE_INSTANTIATE.format(
+                value=self.value.transpile(),
+                instance_cls_name=self.container_name[1]
+            )
 
     def compile(self, context: CompilationContext):
+
         self.value.compile(context)
         context.append(OpcodeReturn(), self.source_ref)

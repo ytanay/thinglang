@@ -22,6 +22,9 @@ class Simplifier(TreeTraversal):
         Checks the value of an assignment operation for values requiring simplification.
         Simplifies the value if needed.
         """
+        if node.implements(ReturnStatement) and not node.value:
+            return
+
         if node.value.implements(BinaryOperation):
             node.value = self.convert_arithmetic_operations(node.value)
 
