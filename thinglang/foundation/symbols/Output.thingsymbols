@@ -21,15 +21,6 @@
             "name": "write",
             "static": true,
             "type": null
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "val",
-            "static": false,
-            "type": "std::string"
         }
     ]
 }

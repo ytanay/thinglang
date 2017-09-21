@@ -23,6 +23,17 @@
             "type": "list"
         },
         {
+            "arguments": [
+                "object"
+            ],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "contains",
+            "static": false,
+            "type": "bool"
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "index": 0,

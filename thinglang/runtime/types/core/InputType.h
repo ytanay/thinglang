@@ -1,5 +1,5 @@
 /**
-    OutputType.h
+    InputType.h
     Auto-generated code - do not modify.
     thinglang C++ transpiler, 0.0.0
 **/
@@ -13,13 +13,13 @@
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace OutputNamespace {
+namespace InputNamespace {
 
 
-class OutputInstance : public BaseThingInstance {
+class InputInstance : public BaseThingInstance {
     
     public:
-    explicit OutputInstance() = default; // empty constructor
+    explicit InputInstance() = default; // empty constructor
     
     
     
@@ -33,12 +33,12 @@ class OutputInstance : public BaseThingInstance {
 };
 
 
-typedef OutputInstance this_type;
+typedef InputInstance this_type;
 
-class OutputType : public ThingTypeInternal {
+class InputType : public ThingTypeInternal {
     
     public:
-    OutputType() : ThingTypeInternal({ &__constructor__, &write }) {}; // constructor
+    InputType() : ThingTypeInternal({ &__constructor__, &read_line }) {}; // constructor
  
     
     static Thing __constructor__() {
@@ -46,10 +46,12 @@ class OutputType : public ThingTypeInternal {
     }
 
 
-    static Thing write() {
-		auto message = Program::pop();
+    static Thing read_line() {
 
-		std::cout << message->text() << std::endl;
+
+		std::string input;
+		std::getline(std::cin, input);
+		return Thing(new TextNamespace::TextInstance(input));
 		return nullptr;
     }
 

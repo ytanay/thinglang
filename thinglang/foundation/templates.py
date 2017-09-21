@@ -40,17 +40,12 @@ class {instance_cls_name} : public BaseThingInstance {{
     
     public:
     explicit {instance_cls_name}() = default; // empty constructor
-    explicit {instance_cls_name}({member_list}) : val(val) {{}}; // value constructor
+    
+    {constructors}
     
     /** Mixins **/
     
-    virtual std::string text() override {{
-        return to_string(val);
-    }}
-    
-    bool boolean() override {{
-        return to_boolean(val);
-    }}
+    {mixins}
     
     /** Members **/
     
@@ -78,6 +73,15 @@ FOUNDATION_METHOD = """
     }}
 """
 
+FOUNDATION_MIXINS = """
+    virtual std::string text() override {
+        return to_string(val);
+    }
+    
+    bool boolean() override {
+        return to_boolean(val);
+    }
+"""
 
 FOUNDATION_ENUM = HEADER + """
 #pragma once
@@ -131,6 +135,8 @@ ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
 RETURN_VALUE = "return {value};"
 RETURN_VALUE_INSTANTIATE = 'return Thing(new this_type({value}));'
 RETURN_NULL = 'return nullptr;'
+
+FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : val(val) {{}}; // value constructor'
 
 
 def format_internal_type_name(type):

@@ -20,9 +20,11 @@ class ListInstance : public BaseThingInstance {
     
     public:
     explicit ListInstance() = default; // empty constructor
+    
     explicit ListInstance(std::vector<Thing> val) : val(val) {}; // value constructor
     
     /** Mixins **/
+    
     
     virtual std::string text() override {
         return to_string(val);
@@ -31,6 +33,7 @@ class ListInstance : public BaseThingInstance {
     bool boolean() override {
         return to_boolean(val);
     }
+
     
     /** Members **/
     
@@ -43,7 +46,7 @@ typedef ListInstance this_type;
 class ListType : public ThingTypeInternal {
     
     public:
-    ListType() : ThingTypeInternal({ &__constructor__, &append }) {}; // constructor
+    ListType() : ThingTypeInternal({ &__constructor__, &append, &contains }) {}; // constructor
  
     
     static Thing __constructor__() {
@@ -57,6 +60,25 @@ class ListType : public ThingTypeInternal {
 
 		self->val.push_back(item);
 		return self;
+		return nullptr;
+    }
+
+
+    static Thing contains() {
+		auto item = Program::pop();
+		auto self = Program::argument<this_type>();
+
+		auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();
+		
+        if(res) {
+			return BOOL_TRUE;
+        }
+
+		
+        else {
+			return BOOL_FALSE;
+    }
+
 		return nullptr;
     }
 

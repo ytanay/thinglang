@@ -20,9 +20,11 @@ class BoolInstance : public BaseThingInstance {
     
     public:
     explicit BoolInstance() = default; // empty constructor
+    
     explicit BoolInstance(bool val) : val(val) {}; // value constructor
     
     /** Mixins **/
+    
     
     virtual std::string text() override {
         return to_string(val);
@@ -31,6 +33,7 @@ class BoolInstance : public BaseThingInstance {
     bool boolean() override {
         return to_boolean(val);
     }
+
     
     /** Members **/
     
