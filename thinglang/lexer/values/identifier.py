@@ -32,6 +32,9 @@ class Identifier(LexicalToken, ValueType):
     def __eq__(self, other):
         return type(other) == type(self) and self.value == other.value
 
+    def __add__(self, other):
+        return Identifier(self.value + other.value)
+
     @classmethod
     def constructor(cls):
         return cls("__constructor__")
