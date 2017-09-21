@@ -78,7 +78,7 @@ class SourceReference(object):
 
     @classmethod
     def combine(cls, slice):
-        refs = [x.source_ref for x in slice if x.source_ref]
+        refs = [x.source_ref for x in slice if hasattr(x, 'source_ref') and x.source_ref]
 
         if not refs:
             return None

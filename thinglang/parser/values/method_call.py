@@ -11,6 +11,9 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class MethodCall(BaseNode, ValueType):
+
+    STACK_ARGS = object()
+
     def __init__(self, slice):
         super(MethodCall, self).__init__(slice)
 
@@ -18,8 +21,9 @@ class MethodCall(BaseNode, ValueType):
             self.target = Access([slice[1], Identifier.constructor()])
             self.arguments = ArgumentList(slice[2])
         else:
-            self.target, self.arguments = slice[0], ArgumentList(slice[1])
+            self.target, self.arguments = slice[0], ArgumentList(slice[1]) if slice[1] is not MethodCall.STACK_ARGS else slice[1]
 
+        print(self.source_ref)
         if not self.arguments:
             self.arguments = ArgumentList()
 
@@ -31,7 +35,7 @@ class MethodCall(BaseNode, ValueType):
 
     @classmethod
     def create(cls, target, arguments=None):
-        return cls([Access(target), (arguments if arguments is not None else ArgumentList())])
+        return cls([Access(target), (arguments if arguments is not None else [])])
 
     def compile(self, context: CompilationContext):
         if self.target[0].implements(MethodCall):
@@ -52,14 +56,16 @@ class MethodCall(BaseNode, ValueType):
 
         expected_arguments = target.element.arguments
 
-        if len(expected_arguments) != len(self.arguments):
-            raise ArgumentCountMismatch(len(expected_arguments), len(self.arguments))
+        if self.arguments is not MethodCall.STACK_ARGS:
 
-        for idx, (arg, expected_type) in enumerate(zip(self.arguments, expected_arguments)):
-            compiled_target = arg.compile(context)
+            if len(expected_arguments) != len(self.arguments):
+                raise ArgumentCountMismatch(len(expected_arguments), len(self.arguments))
 
-            if not self.validate_types(compiled_target, expected_type):
-                raise ArgumentTypeMismatch(idx, expected_type, compiled_target.type)
+            for idx, (arg, expected_type) in enumerate(zip(self.arguments, expected_arguments)):
+                compiled_target = arg.compile(context)
+
+                if not self.validate_types(compiled_target, expected_type):
+                    raise ArgumentTypeMismatch(idx, expected_type, compiled_target.type)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target), self.source_ref)
