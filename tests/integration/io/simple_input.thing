@@ -1,0 +1,13 @@
+/*
+{
+    "expected_output": ["Message: hello world!", "Also: goodbye!"],
+    "input": ["hello world!", "goodbye!"]
+}
+*/
+
+thing Program
+    setup
+        text input = Input.read_line()
+        Output.write("Message: " + input)
+
+        Output.write("Also: " + Input.read_line())

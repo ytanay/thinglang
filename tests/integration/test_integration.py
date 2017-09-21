@@ -27,7 +27,7 @@ def split_lines(param):
 @pytest.mark.parametrize('test_file', collect_tests(), ids=lambda x: x.name)
 def test_thing_program(test_file: ProgramTestCase):
     expected_output = test_file.metadata['expected_output']
-
+    test_input = bytes('\n'.join(test_file.metadata['input']) if 'input' in test_file.metadata else '', 'utf-8')
     bytecode = pipeline.compile(SourceContext.wrap(test_file.code))
 
     logging_utils.print_header('VM execution')
@@ -35,8 +35,9 @@ def test_thing_program(test_file: ProgramTestCase):
     with open(test_file.target_path, 'wb') as f:
         f.write(bytecode.bytes())
 
-    vm = subprocess.Popen(["thinglang", test_file.target_path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = (stream.decode('utf-8').strip() for stream in vm.communicate())
+    vm = subprocess.Popen(["thinglang", test_file.target_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    stdout, stderr = (stream.decode('utf-8').strip() for stream in vm.communicate(test_input))
     print(stderr)
 
     logging_utils.print_header('VM output')
