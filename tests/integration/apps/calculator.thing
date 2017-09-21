@@ -1,0 +1,27 @@
+/*
+{
+    "expected_output": ["6", "81", "Illegal operation", "Goodbye!"],
+    "input": ["add", "2", "4", "sub", "123", "42", "mul", "7", "4", "exit"]
+}
+*/
+
+thing Program
+
+    setup
+        while true
+            text opcode = Console.read_line()
+
+            if opcode eq "exit"
+                Console.print("Goodbye!")
+                return 0
+
+            number lhs = Console.read_line()
+            number rhs = Console.read_line()
+
+            if opcode eq "add"
+                Console.print(lhs + rhs)
+            otherwise if opcode eq "sub"
+                Console.print(lhs - rhs)
+            otherwise
+                Console.print("Illegal operation")
+
