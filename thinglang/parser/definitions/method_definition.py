@@ -48,14 +48,20 @@ class MethodDefinition(BaseNode):
         return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
+        type_cls_name, instance_cls_name = self.container_name
+
         if self.is_constructor() and not self.children:
-            return templates.IMPLICIT_CONSTRUCTOR
+            return templates.IMPLICIT_CONSTRUCTOR.format(
+                type_cls_name=type_cls_name,
+                instance_cls_name=instance_cls_name
+            )
 
         return templates.FOUNDATION_METHOD.format(
             name=(self.parent.name if self.is_constructor() else self.name).transpile(),
+            class_name=type_cls_name,
             return_type='Thing' if not self.is_constructor() else '',
             arguments='',  # Popped directly from stack
-            preamble=self.arguments.transpile(static=self.static),
+            preamble=self.arguments.transpile(instance_cls_name, static=self.static),
             body=self.transpile_children(2, self.children + [ReturnStatement([])])
         )
 

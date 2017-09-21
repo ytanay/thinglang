@@ -17,24 +17,19 @@ FOUNDATION_HEADER = HEADER + """
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
 
-namespace {name}Namespace {{
-{code}
-}}
 
+{code}
 """.strip()
 
 
 FOUNDATION_SOURCE = HEADER + """
-#include "{name}Type.h"
 
-namespace {name}Namespace {{
-{methods}
-}}
+{code}
 
 """.strip()
 
 
-FOUNDATION_TYPE = """
+FOUNDATION_TYPE_DECLARATION = """
 
 class {instance_cls_name} : public BaseThingInstance {{
     
@@ -44,50 +39,67 @@ class {instance_cls_name} : public BaseThingInstance {{
     {constructors}
     
     /** Mixins **/
-    
     {mixins}
     
     /** Members **/
-    
     {members}
 }};
 
-
-typedef {instance_cls_name} this_type;
 
 class {type_cls_name} : public ThingTypeInternal {{
     
     public:
     {type_cls_name}() : ThingTypeInternal({{ {method_list} }}) {{}}; // constructor
  
-    {methods}
+{methods}
     
 }};
 """
 
+FOUNDATION_TYPE_DEFINITION = """
+#include "../InternalTypes.h"
+
+/**
+Methods of {type_cls_name}
+**/
+
+{methods}
+
+/**
+Mixins of {instance_cls_name}
+**/
+{mixins}
+"""
+
 
 FOUNDATION_METHOD = """
-    static {return_type} {name}({arguments}) {{
+{return_type} {class_name}::{name}({arguments}) {{
 {preamble}
 {body}
     }}
 """
 
-FOUNDATION_MIXINS = """
-    virtual std::string text() override {
-        return to_string(val);
-    }
-    
-    bool boolean() override {
-        return to_boolean(val);
-    }
+FOUNDATION_MIXINS_DECLARATION = """
+    virtual std::string text() override;
+    virtual bool boolean() override;
+"""
+
+FOUNDATION_MIXINS_DEFINITION = """
+std::string {instance_cls_name}::text() {{
+    return to_string(val);
+}}
+
+bool {instance_cls_name}::boolean() {{
+    return to_boolean(val);
+}}
 """
 
 FOUNDATION_ENUM = HEADER + """
 #pragma once
 
 #include <string>
-#include "../errors/RuntimeError.h"
+
+{imports}
 
 enum class {name} {{
 {values}
@@ -124,16 +136,16 @@ ELSE_CLAUSE = """
 """
 
 IMPLICIT_CONSTRUCTOR = """
-    static Thing __constructor__() {
-        return Thing(new this_type());
-    }
+Thing {type_cls_name}::__constructor__() {{
+    return Thing(new {instance_cls_name}());
+}}
 """
 
 ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
 
 RETURN_VALUE = "return {value};"
-RETURN_VALUE_INSTANTIATE = 'return Thing(new this_type({value}));'
+RETURN_VALUE_INSTANTIATE = 'return Thing(new {instance_cls_name}({value}));'
 RETURN_NULL = 'return nullptr;'
 
 FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : val(val) {{}}; // value constructor'
@@ -141,10 +153,10 @@ FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : va
 
 def format_internal_type_name(type):
     name = type.value.capitalize()
-    return '{}Namespace::{}Instance'.format(name, name)
+    return '{}Instance'.format(name)
 
 
-def get_names(name):
+def class_names(name):
     name = name.transpile().capitalize()
     return '{}Type'.format(name), '{}Instance'.format(name)
 

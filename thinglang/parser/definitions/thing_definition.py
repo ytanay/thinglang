@@ -21,13 +21,14 @@ class ThingDefinition(BaseNode):
         super().compile(context)
 
     def transpile(self):
-        type_cls_name, instance_cls_name = templates.get_names(self.name)
-        return templates.FOUNDATION_TYPE.format(
+        type_cls_name, instance_cls_name = self.container_name
+
+        return templates.FOUNDATION_TYPE_DEFINITION.format(
             type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
             member_list=self.format_member_list(),
             method_list=self.format_method_list(),
             constructors=templates.FOUNDATION_VALUE_CONSTRUCTOR.format(instance_cls_name=instance_cls_name, member_list=self.format_member_list()) if self.members else '',
-            mixins=templates.FOUNDATION_MIXINS if self.members else '',
+            mixins=templates.FOUNDATION_MIXINS_DEFINITION.format(instance_cls_name=instance_cls_name) if self.members else '',
             members=self.transpile_children(indent=0, children_override=self.members),
             methods=self.transpile_children(indent=0, children_override=self.methods)
         )

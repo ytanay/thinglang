@@ -1,5 +1,6 @@
 import itertools
 
+from thinglang.foundation import templates
 from thinglang.utils import collection_utils
 from thinglang.utils.describable import Describable
 from thinglang.utils.source_context import SourceReference
@@ -57,3 +58,16 @@ class BaseNode(Describable):
     def deriving_from(self, node):
         self.source_ref = node.source_ref
         return self
+
+    @property
+    def container_name(self):
+        from thinglang.parser.definitions.thing_definition import ThingDefinition
+        node = self
+
+        while node and not node.implements(ThingDefinition):
+            node = node.parent
+
+        if node and node.implements(ThingDefinition):
+            return templates.class_names(node.name)
+
+        raise Exception('Could not find parent container')
