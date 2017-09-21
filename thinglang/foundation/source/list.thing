@@ -5,3 +5,10 @@ thing list
     does append with object item returns list
         `self->val.push_back(item);`
         `return self;`
+
+    does contains with object item returns bool
+        `auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();`
+        if res
+            return true
+        otherwise
+            return false
