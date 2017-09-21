@@ -15,11 +15,11 @@ Source Program::source;
 
 Types Program::internals = {
         nullptr,
-        new TextNamespace::TextType(),
-        new NumberNamespace::NumberType(),
-        new BoolNamespace::BoolType(),
-        new ListNamespace::ListType(),
-        new ConsoleNamespace::ConsoleType()
+        new TextType(),
+        new NumberType(),
+        new BoolType(),
+        new ListType(),
+        new ConsoleType()
 };
 
 Types Program::types = {};

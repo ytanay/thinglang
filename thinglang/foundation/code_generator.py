@@ -35,14 +35,20 @@ def generate_types():
         ast = pipeline.preprocess(SourceContext(path))
         symbols = SymbolMapper(ast)
 
+        symbol_map = symbols[name_id]
+        symbol_map.override_index(definitions.INTERNAL_TYPE_ORDERING[name_id])
+
+        with open(os.path.join(CORE_TYPES_TARGET, target_name + '.cpp'), 'w') as f:
+            f.write(templates.FOUNDATION_SOURCE.format(
+                name=name.capitalize(),
+                code=ast.transpile(),
+                file_name=target_name + '.cpp'))
+
         with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:
             f.write(templates.FOUNDATION_HEADER.format(
                 name=name.capitalize(),
-                code=ast.transpile(),
+                code=symbol_map.create_header(),
                 file_name=target_name + '.h'))
-
-        symbol_map = symbols[name_id]
-        symbol_map.override_index(definitions.INTERNAL_TYPE_ORDERING[name_id])
 
         for symbol in symbol_map:
             symbol.convention = Symbol.INTERNAL
@@ -52,8 +58,10 @@ def generate_types():
 
 
 def write_type_enum():
+    imports = '\n'.join('#include "core/{}.h"'.format(templates.class_names(name)[0]) for name in definitions.INTERNAL_TYPE_ORDERING)
+
     with open(os.path.join(TYPES_TARGET, 'InternalTypes.h'), 'w') as f:
-        f.write(generate_enum('InternalTypes', list(definitions.INTERNAL_TYPE_ORDERING.items())))
+        f.write(generate_enum('InternalTypes', list(definitions.INTERNAL_TYPE_ORDERING.items()), imports))
 
 
 def write_opcode_enum():
@@ -61,11 +69,13 @@ def write_opcode_enum():
         f.write(generate_enum('Opcode', Opcode.all()))
 
 
-def generate_enum(cls_name, values):
+def generate_enum(cls_name, values, imports=''):
+
     code = templates.FOUNDATION_ENUM.format(
         name=cls_name,
         values=',\n'.join('    {} = {}'.format(option[0].upper(), option[1]) for option in values),
-        file_name=cls_name + '.h'
+        file_name=cls_name + '.h',
+        imports=imports
     ) + templates.FOUNDATION_SWITCH.format(
         name=cls_name,
         func_name="describe",

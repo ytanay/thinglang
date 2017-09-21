@@ -19,11 +19,6 @@ public:
         return std::static_pointer_cast<T>(pop());
     };
 
-    template <typename T>
-    static T* type(InternalTypes type){
-        return static_cast<T*>(Program::internals[static_cast<int>(type)]);
-    }
-
     static Thing pop();
 
     static void push(const Thing& instance) {

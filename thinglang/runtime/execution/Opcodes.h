@@ -8,7 +8,8 @@
 #pragma once
 
 #include <string>
-#include "../errors/RuntimeError.h"
+
+
 
 enum class Opcode {
     PUSH_MEMBER = 4,
