@@ -10,7 +10,7 @@ thing Program
         number b = self.add_or_multiply(a, 10)
         Console.print(b)
 
-    does add_or_multiply with number a, number b
+    does add_or_multiply with number a, number b returns number
         return a * b
         Console.print("never should appear")
         return a + b
