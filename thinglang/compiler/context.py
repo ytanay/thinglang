@@ -3,8 +3,7 @@ import struct
 
 from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, \
     OpcodePushMember
-from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd, \
-    InstructionPlaceholder
+from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.utils.source_context import SourceReference, SourceContext
 

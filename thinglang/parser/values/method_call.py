@@ -23,7 +23,6 @@ class MethodCall(BaseNode, ValueType):
         else:
             self.target, self.arguments = slice[0], ArgumentList(slice[1]) if slice[1] is not MethodCall.STACK_ARGS else slice[1]
 
-        print(self.source_ref)
         if not self.arguments:
             self.arguments = ArgumentList()
 
