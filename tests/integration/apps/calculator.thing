@@ -13,7 +13,7 @@ thing Program
 
             if opcode eq "exit"
                 Console.print("Goodbye!")
-                return 0
+                return
 
             number lhs = Console.read_line()
             number rhs = Console.read_line()

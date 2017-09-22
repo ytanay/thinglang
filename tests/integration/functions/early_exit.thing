@@ -1,6 +1,6 @@
 /*
 {
-    "expected_output": "150"
+    "expected_output": ["150", "in return_early"]
 }
 */
 
@@ -9,8 +9,14 @@ thing Program
         number a = 15
         number b = self.add_or_multiply(a, 10)
         Console.print(b)
+        self.return_early()
 
     does add_or_multiply with number a, number b returns number
         return a * b
         Console.print("never should appear")
         return a + b
+
+    does return_early
+        Console.print("in return_early")
+        return
+        Console.print("out return_early")
