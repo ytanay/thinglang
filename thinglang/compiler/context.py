@@ -35,6 +35,7 @@ class CompilationContext(object):
         """
         Append an opcode to the instruction block of the current method
         """
+
         opcode.source_ref = source_ref
         self.instruction_block.append(opcode)
 
@@ -42,13 +43,25 @@ class CompilationContext(object):
         """
         Add a serialized blob of static data and return its index
         """
+
         self.data.append(data)
         return len(self.data) - 1
 
     def insert(self, index, buffer: 'CompilationContext'):
+        """
+        Insert a compilation context into this one at a given position
+        """
+
         assert len(buffer.instructions) == 0
         assert len(buffer.instruction_block) == 1
         self.instruction_block.insert(index, buffer.instruction_block[0])
+
+    def buffer(self) -> 'CompilationContext':
+        """
+        Create a new independent compilation context which can later be merged into the primary context
+        """
+
+        return CompilationContext(self.symbols, self.source)
 
     def current_index(self) -> int:
         """
@@ -128,6 +141,3 @@ class CompilationContext(object):
         ))
 
         return header + code + data + source_map + bytes(self.source.raw_contents, 'utf-8')
-
-    def buffer(self) -> 'CompilationContext':
-        return CompilationContext(self.symbols, self.source)

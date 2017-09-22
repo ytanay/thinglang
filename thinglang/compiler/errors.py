@@ -8,6 +8,12 @@ class TargetNotCallable(ThinglangException):
     """
 
 
+class CapturedVoidMethod(ThinglangException):
+    """
+    An attempt was made to use the result of a void method.
+    """
+
+
 class ArgumentCountMismatch(ThinglangException):
     """
     The method was not called with the expected number of arguments

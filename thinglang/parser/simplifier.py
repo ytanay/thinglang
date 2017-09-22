@@ -37,7 +37,6 @@ class Simplifier(TreeTraversal):
         Inspects a method call or inline list's arguments for values requiring simplification.
         Simplifies each argument in turn.
         """
-        print('Simplifying {}'.format(node.arguments))
         for idx, arg in enumerate(node.arguments):
             if arg.implements(BinaryOperation):
                 node.replace_argument(idx, self.convert_arithmetic_operations(arg))

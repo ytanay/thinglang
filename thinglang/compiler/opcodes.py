@@ -74,7 +74,8 @@ class Opcode(object, metaclass=OpcodeRegistration):
         Returns a list of all opcodes deriving from this class
         """
         return [
-            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS)) for opcode in collection_utils.subclasses(cls) if opcode.executable()
+            OpcodeDescription(opcode.name(), opcode.OPCODE, len(opcode.ARGS))
+            for opcode in collection_utils.subclasses(cls) if opcode.executable()
         ]
 
     @classmethod
