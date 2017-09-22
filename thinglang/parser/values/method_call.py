@@ -1,5 +1,5 @@
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
+from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
@@ -69,10 +69,20 @@ class MethodCall(BaseNode, ValueType):
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target), self.source_ref)
 
-        if self.parent:
+        if target.type is None and self.is_captured:
+            raise CapturedVoidMethod()
+
+        if target.type is not None and not self.is_captured:
             context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
 
         return target
+
+    @property
+    def is_captured(self):
+        """
+        Is the return value of this method call being used?
+        """
+        return self.parent is None  # Check if this method call is directly in the AST
 
     @staticmethod
     def validate_types(compiled_target, expected_type):
@@ -84,3 +94,4 @@ class MethodCall(BaseNode, ValueType):
     @property
     def constructing_call(self):
         return self.target[-1] == Identifier.constructor()
+

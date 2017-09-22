@@ -22,6 +22,6 @@ class ReturnStatement(BaseNode):
             )
 
     def compile(self, context: CompilationContext):
-
-        self.value.compile(context)
+        if self.value is not None:
+            self.value.compile(context)
         context.append(OpcodeReturn(), self.source_ref)
