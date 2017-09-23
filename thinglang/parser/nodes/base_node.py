@@ -6,17 +6,27 @@ from thinglang.utils.describable import Describable
 from thinglang.utils.source_context import SourceReference
 
 
-class BaseNode(Describable):
+class NodeRegistration(type):
+    def __new__(mcs, name, bases, dct):
+        mcs = super(NodeRegistration, mcs).__new__(mcs, name, bases, dct)
 
+        mcs.RULES = sorted((value.__func__.parser_rule
+                            for field, value in dct.items()
+                            if hasattr(value, '__func__')
+                            and hasattr(value.__func__, 'parser_rule')), key=lambda x: x.index)
+        return mcs
+
+
+class BaseNode(Describable, metaclass=NodeRegistration):
     STATIC = False
 
-    def __init__(self, slice):
+    def __init__(self, tokens):
         self.children = []
         self.indent = 0
         self.value = None
         self.parent = None
 
-        self.source_ref = SourceReference.combine(collection_utils.flatten(slice))
+        self.source_ref = SourceReference.combine(collection_utils.flatten(tokens))
 
     def attach(self, child):
         self.children.append(child)
@@ -42,7 +52,8 @@ class BaseNode(Describable):
 
     def transpile_children(self, indent=0, children_override=None):
         sep = '\t' * indent
-        return sep + ('\n' + sep).join(x.transpile() for x in (children_override if children_override is not None else self.children))
+        return sep + ('\n' + sep).join(
+            x.transpile() for x in (children_override if children_override is not None else self.children))
 
     def finalize(self):
         for x in self.children:
@@ -58,6 +69,16 @@ class BaseNode(Describable):
     def deriving_from(self, node):
         self.source_ref = node.source_ref
         return self
+
+    @classmethod
+    def propose_replacement(cls, tokens):
+        for rule in cls.RULES:
+            result = rule.matches(tokens)
+
+            if result:
+                return result
+
+        return False
 
     @property
     def container_name(self):
