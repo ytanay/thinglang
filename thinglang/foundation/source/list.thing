@@ -10,5 +10,5 @@ thing list
         `auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();`
         if res
             return true
-        otherwise
+        else
             return false

@@ -19,25 +19,25 @@ thing Program
 
             if "cat" eq "cat"
                 Console.print("2 inner conditional")
-            otherwise if "cat" eq "dog"
+            else if "cat" eq "dog"
                 Console.print("X")
-            otherwise
+            else
                 Console.print("X")
 
             if "cat" eq "dog"
                 Console.print("X")
-            otherwise if "dog" eq "dog"
+            else if "dog" eq "dog"
                 Console.print("3 inner conditional")
-            otherwise
+            else
                 Console.print("X")
 
             if "cat" eq "dog"
                 Console.print("X")
-            otherwise
+            else
                 Console.print("4 inner conditional")
 
 
-        otherwise if "dog" eq "dog"
+        else if "dog" eq "dog"
             Console.print("X")
 
             if "cat" eq "cat"
@@ -46,7 +46,7 @@ thing Program
             if "cat" eq "dog"
                 Console.print("X")
 
-        otherwise if "dog" eq "cat"
+        else if "dog" eq "cat"
             Console.print("X")
 
             if "cat" eq "cat"
@@ -55,7 +55,7 @@ thing Program
             if "cat" eq "dog"
                 Console.print("X")
 
-        otherwise
+        else
             Console.print("X")
 
             if "cat" eq "cat"
@@ -75,29 +75,29 @@ thing Program
             if "cat" eq "dog"
                 Console.print("X")
 
-        otherwise if "dog" eq "dog"
+        else if "dog" eq "dog"
             Console.print("5 outer conditional")
 
             if "cat" eq "cat"
                 Console.print("6 inner conditional")
-            otherwise if "cat" eq "dog"
+            else if "cat" eq "dog"
                 Console.print("X")
-            otherwise
+            else
                 Console.print("X")
 
             if "cat" eq "dog"
                 Console.print("X")
-            otherwise if "dog" eq "dog"
+            else if "dog" eq "dog"
                 Console.print("7 inner conditional")
-            otherwise
+            else
                 Console.print("X")
 
             if "cat" eq "dog"
                 Console.print("X")
-            otherwise
+            else
                 Console.print("8 inner conditional")
 
-        otherwise if "dog" eq "dog"
+        else if "dog" eq "dog"
             Console.print("X")
 
             if "cat" eq "cat"
@@ -106,7 +106,7 @@ thing Program
             if "cat" eq "dog"
                 Console.print("X")
 
-        otherwise
+        else
             Console.print("X")
 
             if "cat" eq "cat"
@@ -126,7 +126,7 @@ thing Program
             if "cat" eq "dog"
                 Console.print("X")
 
-        otherwise if "cat" eq "dog"
+        else if "cat" eq "dog"
             Console.print("X")
 
             if "cat" eq "cat"
@@ -135,26 +135,26 @@ thing Program
             if "cat" eq "dog"
                 Console.print("X")
 
-        otherwise
+        else
             Console.print("9 outer conditional")
 
             if "cat" eq "cat"
                 Console.print("10 inner conditional")
-            otherwise if "cat" eq "dog"
+            else if "cat" eq "dog"
                 Console.print("X")
-            otherwise
+            else
                 Console.print("X")
 
             if "cat" eq "dog"
                 Console.print("X")
-            otherwise if "dog" eq "dog"
+            else if "dog" eq "dog"
                 Console.print("11 inner conditional")
-            otherwise
+            else
                 Console.print("X")
 
             if "cat" eq "dog"
                 Console.print("X")
-            otherwise
+            else
                 Console.print("12 inner conditional")
 
 

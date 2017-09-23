@@ -8,7 +8,7 @@ thing text
     does eq with text other returns bool
         if self.val eq other.val
             return true
-        otherwise
+        else
             return false
 
 
@@ -16,7 +16,7 @@ thing text
         `auto found = self->val.find(substring->val) != std::string::npos;`
         if found
             return true
-        otherwise
+        else
             return false
 
     static does convert_number with text num returns number

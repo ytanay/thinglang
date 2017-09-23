@@ -39,4 +39,5 @@ class ArgumentTypeMismatch(ThinglangException):
 
     @property
     def message(self):
-        return f'Argument #{self.index + 1} has a mismatching type. Expected {self.expected_type}, got {self.actual_type}'
+        return f'Argument #{self.index + 1} is of incorrect type. Expected {self.expected_type}, got {self.actual_type}'
+

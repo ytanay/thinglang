@@ -8,10 +8,10 @@ thing Program
     setup
         if "dog" eq "dog"
             Console.print("dog is dog")
-        otherwise
+        else
             Console.print("dog is not dog")
 
         if "dog" eq "cat"
             Console.print("dog is cat")
-        otherwise
+        else
             Console.print("dog is not cat")

@@ -70,7 +70,7 @@ KEYWORDS = {
     'return': LexicalReturnStatement,
 
     'if': LexicalConditional,
-    'otherwise': LexicalElse,
+    'else': LexicalElse,
 
     'while': LexicalRepeatWhile,
     'in': LexicalIn,

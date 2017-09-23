@@ -20,8 +20,8 @@ thing Program
 
             if opcode eq "add"
                 Console.print(lhs + rhs)
-            otherwise if opcode eq "sub"
+            else if opcode eq "sub"
                 Console.print(lhs - rhs)
-            otherwise
+            else
                 Console.print("Illegal operation")
 

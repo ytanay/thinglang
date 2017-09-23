@@ -33,8 +33,8 @@ def test_equality_method_call():
 
 
 def test_conditional_else():
-    validate_assignment(parse_local('otherwise if "dog" eq "dog"'), [InlineString, InlineString], ConditionalElse)
+    validate_assignment(parse_local('else if "dog" eq "dog"'), [InlineString, InlineString], ConditionalElse)
 
 
 def test_unconditional_else():
-    validate_assignment(parse_local('otherwise'), [], UnconditionalElse)
+    validate_assignment(parse_local('else'), [], UnconditionalElse)

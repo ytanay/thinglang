@@ -17,7 +17,7 @@ thing number
     does eq with number other returns bool
         if self.val eq other.val
             return true
-        otherwise
+        else
             return false
 
     does < with number other returns bool

@@ -16,6 +16,6 @@ class LexicalElse(LexicalToken):
     The *else* block.
 
     Examples:
-        otherwise
-        otherwise if a eq b
+        else
+        else if a eq b
     """

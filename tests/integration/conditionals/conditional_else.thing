@@ -8,20 +8,20 @@ thing Program
     setup
         if "dog" eq "cat"
             Console.print("dog is cat")
-        otherwise if "dog" eq "dog"
+        else if "dog" eq "dog"
             Console.print("dog is dog")
-        otherwise if "dog" eq "dog"
+        else if "dog" eq "dog"
             Console.print("dog is still dog")
-        otherwise if true
+        else if true
             Console.print("true is truthy")
-        otherwise
+        else
             Console.print("dog is not dog and not cat")
 
         if "dog" eq "cat"
             Console.print("dog is cat")
-        otherwise if "dog" eq "Dog"
+        else if "dog" eq "Dog"
             Console.print("dog is Dog")
-        otherwise if "dog" eq "mouse"
+        else if "dog" eq "mouse"
             Console.print("dog is mouse")
-        otherwise
+        else
             Console.print("dog is not cat and not mouse and not Dog")

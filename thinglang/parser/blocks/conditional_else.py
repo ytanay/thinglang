@@ -9,4 +9,4 @@ class ConditionalElse(Conditional, ElseBranchInterface):
         _, self.conditional = slice
 
     def describe(self):
-        return 'otherwise if {}'.format(self.value)
+        return 'else if {}'.format(self.value)
