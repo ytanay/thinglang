@@ -1,13 +1,24 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.foundation import templates
+from thinglang.lexer.blocks.conditionals import LexicalElse
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.nodes.base_node import BaseNode
+from thinglang.parser.rule import ParserRule
 
 
 class UnconditionalElse(BaseNode, ElseBranchInterface):
+
+    def __init__(self, token):
+        super(UnconditionalElse, self).__init__(token)
+
     def compile(self, context: CompilationContext):
         super(UnconditionalElse, self).compile(context)
         context.update_conditional_jumps()
 
     def transpile(self):
         return templates.ELSE_CLAUSE.format(body=self.transpile_children(indent=3))
+
+    @staticmethod
+    @ParserRule.mark
+    def parse_unconditional_else(_: LexicalElse):
+        return UnconditionalElse([_])

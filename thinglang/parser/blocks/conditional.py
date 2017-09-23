@@ -3,15 +3,18 @@ from collections import OrderedDict
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.foundation import templates
+from thinglang.lexer.blocks.conditionals import LexicalConditional
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.nodes.base_node import BaseNode
+from thinglang.parser.rule import ParserRule
+from thinglang.utils.type_descriptors import ValueType
 
 
 class Conditional(BaseNode):
 
-    def __init__(self, slice):
-        super(Conditional, self).__init__(slice)
-        _, self.value = slice
+    def __init__(self, value):
+        super(Conditional, self).__init__([value])
+        self.value = value
 
         if self.value.implements(Conditional):
             self.value = self.value.value
@@ -43,3 +46,8 @@ class Conditional(BaseNode):
             context.append(jump_out, self.source_ref)
 
         opcode.update(context.current_index())
+
+    @staticmethod
+    @ParserRule.mark
+    def parse_simple_conditional(_: LexicalConditional, value: ValueType):
+        return Conditional(value)
