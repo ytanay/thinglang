@@ -1,40 +1,29 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
-from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
+from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.access import Access
 from thinglang.symbols.symbol import Symbol
-from thinglang.utils.type_descriptors import ValueType
+from thinglang.utils.type_descriptors import ValueType, ListType
 
 
 class MethodCall(BaseNode, ValueType):
 
     STACK_ARGS = object()
 
-    def __init__(self, slice):
-        super(MethodCall, self).__init__(slice)
-
-        if isinstance(slice[0], LexicalThingInstantiation):
-            self.target = Access([slice[1], Identifier.constructor()])
-            self.arguments = ArgumentList(slice[2])
-        else:
-            self.target, self.arguments = slice[0], ArgumentList(slice[1]) if slice[1] is not MethodCall.STACK_ARGS else slice[1]
-
-        if not self.arguments:
-            self.arguments = ArgumentList()
+    def __init__(self, target, arguments=None):
+        super(MethodCall, self).__init__([target, arguments])
+        self.target, self.arguments = target, (arguments if arguments is not None else ArgumentList())
 
     def describe(self):
         return 'target={}, args={}'.format(self.target, self.arguments)
 
     def replace_argument(self, idx, replacement):
         self.arguments[idx] = replacement
-
-    @classmethod
-    def create(cls, target, arguments=None):
-        return cls([Access(target), (arguments if arguments is not None else [])])
 
     def compile(self, context: CompilationContext):
         if self.target[0].implements(MethodCall):
@@ -95,3 +84,13 @@ class MethodCall(BaseNode, ValueType):
     def constructing_call(self):
         return self.target[-1] == Identifier.constructor()
 
+    @staticmethod
+    @ParserRule.mark
+    def parse_method_call(target: Access, arguments: ListType):
+        return MethodCall(target, ArgumentList(arguments))
+
+    # TODO: remove this syntax
+    @staticmethod
+    @ParserRule.mark
+    def parse_instantiating_call(_: LexicalThingInstantiation, type_name: Identifier, arguments: ListType):
+        return MethodCall(Access([type_name, Identifier.constructor()]), ArgumentList(arguments))
