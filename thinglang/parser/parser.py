@@ -1,10 +1,20 @@
 from typing import List
 
+from thinglang.lexer.definitions.tags import LexicalArgumentListIndicator, LexicalDeclarationReturnType
+from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
+from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
 from thinglang.parser.nodes.root_node import RootNode
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 
-from thinglang.parser.vector import TokenVector, VECTOR_CREATION_TOKENS
+from thinglang.parser.vector import TokenVector, ParenthesesVector, BracketVector, TypeVector
+
+
+VECTOR_CREATION_TOKENS = {
+    LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector),
+    LexicalBracketOpen: (LexicalBracketClose, BracketVector),
+    LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector)
+}
 
 
 def parse(lexical_groups: List[List[LexicalToken]]) -> RootNode:
@@ -78,3 +88,4 @@ def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
         raise ValueError('Not all token vectors were closed - currently at depth {}'.format(len(stack)))
 
     return stack[0]
+
