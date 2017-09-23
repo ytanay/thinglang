@@ -1,31 +1,14 @@
-import collections
-
-from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.lexical_token import LexicalToken
-from thinglang.lexer.tokens.misc import LexicalGroupEnd
-from thinglang.lexer.operators.binary import FirstOrderLexicalBinaryOperation, SecondOrderLexicalBinaryOperation
-from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.tokens.indent import LexicalIndent
+from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.tokens.separator import LexicalSeparator
-from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
-from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
-from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
-    LexicalDeclarationMethod
-from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationStatic, \
-    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag
-from thinglang.lexer.statements.return_statement import LexicalReturnStatement
-from thinglang.lexer.blocks.loops import LexicalRepeatWhile
-from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
-from thinglang.lexer.operators.comparison import LexicalComparison
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
-from thinglang.parser.definitions.tagged_definition import TaggedMethodDeclaration, TaggedThingDefinition
 from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes import BaseNode
@@ -33,11 +16,31 @@ from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
-from thinglang.parser.values.inline_code import InlineCode
+
 from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils import collection_utils
-from thinglang.utils.type_descriptors import ValueType
+from thinglang.utils.type_descriptors import ValueType, TypeList, ListType
+
+PARSING_ORDER = [
+    ThingDefinition,
+    MemberDefinition,
+    MethodDefinition,
+
+    Access,
+
+    MethodCall,
+    BinaryOperation,
+
+    AssignmentOperation,
+    ReturnStatement,
+
+    Conditional,
+    ConditionalElse,
+    UnconditionalElse,
+
+    Loop
+]
 
 
 class TokenVector(object):
@@ -69,44 +72,24 @@ class TokenVector(object):
         The list is modified in place.
         :return: True if a replacement occurred, None otherwise
         """
-        for pattern, target in PATTERNS.items():
-            start_matches = self.matching_starts(pattern[0])
-            size = len(pattern)
+        for target in PARSING_ORDER:
+            match = target.propose_replacement(self.tokens)
 
-            for match_start in start_matches:
-                token_slice = self.tokens[match_start:match_start + size]
+            if not match:
+                continue
 
-                if self.matches(pattern, token_slice):
-                    token_slice = self.finalize_slice(token_slice)
-                    self.tokens[match_start:match_start + size] = [target.construct(token_slice)]
-                    return True
+            node, match_start, match_end = match
 
-    def matching_starts(self, type_cls):
-        """
-        Returns the index of every element that is an instance of type_cls
-        """
-        return [idx for idx, entity in enumerate(self) if isinstance(entity, type_cls)]
+            token_slice = self.finalize_slice(match_start, match_end)
+            self.tokens[match_start:match_end] = [node(*token_slice)]
 
-    @staticmethod
-    def matches(pattern, token_slice):
-        """
-        Checks if a list matches a pattern exactly.
-        """
-        if len(pattern) != len(token_slice):
-            return False
+            return True
 
-        for type, instance in zip(pattern, token_slice):
-            if not isinstance(instance, type):
-                return False
-
-        return True
-
-    @staticmethod
-    def finalize_slice(token_slice):
+    def finalize_slice(self, start, end):
         """
         Parses all nested vectors in a slice
         """
-        return [token.parse() if isinstance(token, TokenVector) else token for token in token_slice]
+        return [token.parse() if isinstance(token, TokenVector) else token for token in self.tokens[start:end]]
 
     def process_indentation(self):
         """
@@ -149,7 +132,7 @@ class TokenVector(object):
         return self.tokens[item]
 
 
-class ParenthesesVector(TokenVector, ValueType):
+class ParenthesesVector(TokenVector, ValueType, ListType):
     """
     Describes a vector of tokens bounded in parentheses, such as those in a method call's arguments or those
     signifying order-of-operations in an arithmetic operations
@@ -181,7 +164,7 @@ class BracketVector(ParenthesesVector, ValueType):
         return InlineList(super().parse())
 
 
-class TypeVector(TokenVector):
+class TypeVector(TokenVector, TypeList):
     """
     Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
     """
@@ -207,50 +190,3 @@ class TypeVector(TokenVector):
 
         return output
 
-
-VECTOR_CREATION_TOKENS = {
-    LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector),
-    LexicalBracketOpen: (LexicalBracketClose, BracketVector),
-    LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector)
-}
-
-
-METHOD_ID = (Identifier,) + tuple(BinaryOperation.OPERATIONS.keys())
-
-PATTERNS = collections.OrderedDict([
-    ((LexicalDeclarationThing, Identifier), ThingDefinition),  # thing Program
-    ((LexicalDeclarationMember, (InlineCode, Identifier), Identifier), MemberDefinition),
-    ((ThingDefinition, LexicalInheritanceTag, Identifier), TaggedThingDefinition),
-
-    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedMethodDeclaration),
-    ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, Identifier), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, METHOD_ID, TypeVector), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, Identifier), MethodDefinition),  # does compute with number a
-    ((LexicalDeclarationMethod, METHOD_ID), MethodDefinition),  # does say_hello
-    ((LexicalDeclarationConstructor, TypeVector), MethodDefinition),  # setup with text name
-    ((LexicalDeclarationConstructor,), MethodDefinition),  # setup
-
-    ((Access, LexicalAccess, Identifier), Access),  # person.info.name
-    ((Identifier, LexicalAccess, Identifier), Access),  # person.info
-
-    ((Access, ParenthesesVector), MethodCall),
-    ((LexicalThingInstantiation, Identifier, ParenthesesVector), MethodCall), # TODO: consider removing this syntax
-
-    ((ValueType, SecondOrderLexicalBinaryOperation, ValueType), BinaryOperation),  # 4 * 2
-    ((ValueType, FirstOrderLexicalBinaryOperation, ValueType), BinaryOperation),  # 4 + 2
-    ((ValueType, LexicalComparison, ValueType), BinaryOperation),  # 4 == 2
-
-
-    ((Identifier, Identifier, LexicalAssignment, ValueType), AssignmentOperation),  # number n = 1
-    ((Identifier, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
-    ((Access, LexicalAssignment, ValueType), AssignmentOperation),  # n = 2,
-
-    ((LexicalReturnStatement, ValueType), ReturnStatement),  # return 2
-    ((LexicalReturnStatement,), ReturnStatement),
-
-    ((LexicalConditional, ValueType), Conditional),  # if x
-    ((LexicalElse, Conditional), ConditionalElse),
-    ((LexicalElse,), UnconditionalElse),
-
-    ((LexicalRepeatWhile, ValueType), Loop),  # repeat while
-])
