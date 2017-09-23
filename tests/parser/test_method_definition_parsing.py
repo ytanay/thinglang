@@ -3,6 +3,7 @@ import pytest
 from tests.infrastructure.test_utils import parse_local
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.method_definition import MethodDefinition
+from thinglang.parser.errors import VectorReductionError
 
 
 def validate_method_definition(node, name, expected_arguments=(), return_type=None):
@@ -70,5 +71,9 @@ def test_method_definition_argument_invalid_syntax():
     with pytest.raises(ValueError):
         parse_local("does say_hello with number 2")
 
+    with pytest.raises(VectorReductionError):
+        parse_local("does say_hello returns number returns text")
 
+    with pytest.raises(VectorReductionError):
+        parse_local("does say_hello returns number with number a")
 
