@@ -1,8 +1,10 @@
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.loop import Loop
+from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
+from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
@@ -59,4 +61,4 @@ class Simplifier(TreeTraversal):
         elif rhs.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
             self.simplify_multi_arg_constructs(rhs)
 
-        return MethodCall.create([lhs, Identifier(node.operator.transpile())], [rhs])
+        return MethodCall(Access([lhs, Identifier(node.operator.transpile())]), ArgumentList([rhs]))
