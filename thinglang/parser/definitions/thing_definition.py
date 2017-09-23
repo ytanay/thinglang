@@ -1,18 +1,20 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
+from thinglang.lexer.definitions.tags import LexicalInheritanceTag
+from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.nodes import BaseNode
+from thinglang.parser.rule import ParserRule
 
 
 class ThingDefinition(BaseNode):
 
-    def __init__(self, slice):
-        super(ThingDefinition, self).__init__(slice)
-        self.name = slice[1]
-        self.extends = None
+    def __init__(self, name, extends=None):
+        super(ThingDefinition, self).__init__([name, extends])
+        self.name, self.extends = name, extends
 
     def describe(self):
         return self.name
@@ -57,3 +59,16 @@ class ThingDefinition(BaseNode):
 
     def format_method_list(self):
         return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
+
+    @staticmethod
+    @ParserRule.mark
+    def definition_with_extends(_1: LexicalDeclarationThing, name: Identifier, _2: LexicalInheritanceTag, extends: Identifier):
+        return ThingDefinition(name, extends)
+
+    @staticmethod
+    @ParserRule.mark
+    def simple_definition(_: LexicalDeclarationThing, name: Identifier):
+        return ThingDefinition(name)
+
+
+print(ThingDefinition.RULES)
