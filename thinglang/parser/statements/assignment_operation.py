@@ -1,10 +1,12 @@
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
+from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.nodes.base_node import BaseNode
+from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.access import Access
-from thinglang.parser.values.method_call import MethodCall
+from thinglang.utils.type_descriptors import ValueType
 
 
 class AssignmentOperation(BaseNode):
@@ -15,16 +17,12 @@ class AssignmentOperation(BaseNode):
     DECELERATION = object()  # This assignment declares a local variable, and assigns an initial value to it
     REASSIGNMENT = object()  # This assignment refers to an existing local variable or to a member variable
 
-    def __init__(self, slice):
-        super(AssignmentOperation, self).__init__(slice)
+    def __init__(self, intent, name, value, type_name=None):
+        super(AssignmentOperation, self).__init__([name, value, type_name])
+        self.intent, self.name, self.value = intent, name, value
 
-        if len(slice) == 4:
-            _1, self.name, _2, self.value = slice
-            self.name.type = slice[0]
-            self.intent = self.DECELERATION
-        else:
-            self.name, _, self.value = slice
-            self.intent = self.REASSIGNMENT
+        if type_name is not None:
+           self.name.type = type_name
 
     def describe(self):
         return '{} = {}'.format(self.name, self.value)
@@ -64,3 +62,15 @@ class AssignmentOperation(BaseNode):
             buffer = context.buffer()
             CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(buffer)
             context.insert(cast_placeholder, buffer)
+
+    ASSIGNMENT_TARGET = Identifier, Access
+
+    @staticmethod
+    @ParserRule.mark
+    def assignment_declaration(type_name: Identifier, name: Identifier, _: LexicalAssignment, value: ValueType):
+        return AssignmentOperation(AssignmentOperation.DECELERATION, name, value, type_name)
+
+    @staticmethod
+    @ParserRule.mark
+    def assignment_reassignment(name: ASSIGNMENT_TARGET, _: LexicalAssignment, value: ValueType):
+        return AssignmentOperation(AssignmentOperation.REASSIGNMENT, name, value)
