@@ -2,7 +2,7 @@ from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull
 from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.lexer.definitions.thing_definition import LexicalDeclarationConstructor, LexicalDeclarationReturnType
+from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.statements.return_statement import ReturnStatement

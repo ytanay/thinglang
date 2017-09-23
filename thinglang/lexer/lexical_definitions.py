@@ -3,8 +3,9 @@ import re
 from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
 from thinglang.lexer.blocks.loops import LexicalRepeatFor, LexicalRepeatWhile
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
-    LexicalDeclarationConstructor, LexicalDeclarationStatic, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod
+from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationStatic, \
+    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag
 from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
 from thinglang.lexer.grouping.quote import LexicalQuote
@@ -63,6 +64,7 @@ KEYWORDS = {
     'has': LexicalDeclarationMember,
     'setup': LexicalDeclarationConstructor,
     'returns': LexicalDeclarationReturnType,
+    'extends': LexicalInheritanceTag,
 
     'create': LexicalThingInstantiation,
 

@@ -12,6 +12,7 @@ class ThingDefinition(BaseNode):
     def __init__(self, slice):
         super(ThingDefinition, self).__init__(slice)
         self.name = slice[1]
+        self.extends = None
 
     def describe(self):
         return self.name

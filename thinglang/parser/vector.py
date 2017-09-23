@@ -12,8 +12,9 @@ from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
-    LexicalDeclarationConstructor, LexicalDeclarationStatic, LexicalDeclarationReturnType, LexicalArgumentListIndicator, \
     LexicalDeclarationMethod
+from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationStatic, \
+    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
 from thinglang.lexer.blocks.loops import LexicalRepeatWhile
 from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
@@ -24,7 +25,7 @@ from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
-from thinglang.parser.definitions.tagged_definition import TaggedDeclaration
+from thinglang.parser.definitions.tagged_definition import TaggedMethodDeclaration, TaggedThingDefinition
 from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes import BaseNode
@@ -219,8 +220,9 @@ METHOD_ID = (Identifier,) + tuple(BinaryOperation.OPERATIONS.keys())
 PATTERNS = collections.OrderedDict([
     ((LexicalDeclarationThing, Identifier), ThingDefinition),  # thing Program
     ((LexicalDeclarationMember, (InlineCode, Identifier), Identifier), MemberDefinition),
+    ((ThingDefinition, LexicalInheritanceTag, Identifier), TaggedThingDefinition),
 
-    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedDeclaration),
+    ((LexicalDeclarationStatic, LexicalDeclarationMethod), TaggedMethodDeclaration),
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector, LexicalDeclarationReturnType, Identifier), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, TypeVector), MethodDefinition),  # does compute with number a
     ((LexicalDeclarationMethod, METHOD_ID, LexicalDeclarationReturnType, Identifier), MethodDefinition),  # does compute with number a
