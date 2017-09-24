@@ -53,7 +53,7 @@ The original implementation of thinglang was written in pure Python as an exerci
 Since then, the runtime has been rewritten in C++, and the process now resembles that of the classic strictly typed languages, specifically Java/C#. Outlined below is the thinglang compilation pipeline. 
 
 ### Lexical Analysis + Parsing
-The first process is a ine-by-line lexical tokenization process. A token stream from each line is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
+The first stage is a ine-by-line lexical tokenization process. Each time stream (one per line) is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
 ```
 [L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
 ```
@@ -76,7 +76,6 @@ What follows is the likely pattern transformation the stream will undergo:
 The object of this process is to reduce the token stream of a line to a single compound AST node. If at any point no transformations can be applied, and there is more than one element remaining from the original stream, the parser fails on the line. 
 
 The output of the parser is an AST of compound nodes. Examples of nodes include method calls, assignments, conditionals, and so on. 
-
 
 ### Static Analysis
 The AST undergoes two processes during SA: indexing and reduction. 
