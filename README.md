@@ -1,9 +1,9 @@
 # thinglang
 [![Build Status](https://travis-ci.org/ytanay/thinglang.svg?branch=master)](https://travis-ci.org/ytanay/thinglang)
 
-Thinglang is a Python-inspired language I'm toying around with to get some experience on writing a parser/compiler for a high level language.
+Thinglang is a Python-inspired programming language, originally conceived as an educational project.
 
-The syntax attempts to extract the core concepts of OOP into familiar terms and concepts (i.e. meant to be explainable to an elementary school student reasonably easily). Hello World looks like this:
+The syntax attempts to extract the core concepts of OOP into familiar terms and structures (i.e. meant to be explainable to an elementary school student reasonably easily). Put alternatively, the language as a whole is meant to motivate a clean  and consistent style of OOP. First things first, however - Hello World looks like this:
 ```cs
 thing Program
     setup
@@ -22,7 +22,7 @@ thing Program
         Console.print("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
 ```
 
-Class initialization, member definitions and all that jazz:
+Classes, methods, members and all that jazz:
 ```cs
 thing Person
     has text name
@@ -32,14 +32,14 @@ thing Person
         self.name = name
 
     does say_hello with number repeat_count
-        repeat for number i in 0..repeat_count
+        for number i in 0..repeat_count
             Console.print("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
             
 
 thing Program
     setup
         Person person = create Person(Input.get_line("What is your name?"))
-        number age = Input.get_line("What is your age?") as number
+        number age = Console.read_line("What is your age?") as number
     
         if age not eq 0
             person.age = age
@@ -48,10 +48,12 @@ thing Program
 ```
 
 ## General Overview
-The original prototypical implementation of thinglang was written in Python as an exercise to learn about the components that make up a high level programming language and its runtime: lexical analysis, parsing, static analysis, compilation and execution. 
+The original implementation of thinglang was written in pure Python as an exercise to learn about the components that make up a high level programming language and its runtime: lexical analysis, parsing, static analysis, compilation and execution. 
+
+Since then, the runtime has been rewritten in C++, and the process now resembles that of the classic strictly typed languages, specifically Java/C#. Outlined below is the thinglang compilation pipeline. 
 
 ### Lexical Analysis + Parsing
-The process involved a line-by-line lexical tokenization process, which was transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer  will emit the following stream for this line: 
+The first time involves a line-by-line lexical tokenization process. A token stream from each line is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
 ```
 [L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
 ```
@@ -73,53 +75,25 @@ What follows is the likely pattern transformation the stream will undergo:
 
 The object of this process is to reduce the token stream of a line to a single compound AST node. If at any point no transformations can be applied, and there is more than one element remaining from the original stream, the parser fails on the line. 
 
-The output of the parser is an AST of compound nodes.
+The output of the parser is an AST of compound nodes. Examples of nodes include method calls, assignments, conditionals, and so on. 
 
 
 ### Static Analysis
-The AST undergoes two important processes: reduction and binding.
+The AST undergoes two processes during SA: indexing and reduction. 
 
-**Binding** is the process which inspects decelerations, usage and assignment of every variable, instance, method, and member, and resolves it such that a direct link is attached between the definition and every subsequent reference (essentially, indexing every reference against its matching declaration). During this process, the AST is validated and any unresolved references and type mismatches trigger an appropriate error.
-
-
-**Reduction** is the process by which compound nodes containing nested operations (e.g. nested method calls) are simplified into a series of non-compound i instructions. For example:
-```cs
-number val = f(g(), h(), i(j(), k()))
-```
-Is transformed into:
-```cs
-Transient<number> t0 = j()
-Transient<number> t1 = k()
-Transient<number> t2 = i(t0, t1)
-Transient<number> t3 = g()
-Transient<number> t4 = h()
-Transient<number> t5 = f(t3, t4, t2)
-```
-
-### Execution
-
-The original execution model of thinglang was easy to implement, but also rather inefficient: it exploits Python's dynamic typing to execute the thinglang AST directly, using its nodes as execution symbols. The mechanism operates over the following state:
-1. a list of Symbols Pending Execution (SPE).
-2. A stack of frames. Each frame is a mapping of lexical identifiers (e.g. "name", "age") to a pair of `[scope grouping, value]`. When a scope is destroyed (e.g. exit from a loop), entries owned by that scope are removed using their scope grouping.
-
-The execution loop operates as follows: a symbol from the SPE is popped off the front, processed (reading/modifying the stack and heap as needed) and, depending on the symbol, leads to a change in the SPE.
-
-For example, an AssignmentOperation symbol may modify a stack variable while a Conditional symbol might inject its children into the SPE if its condition holds true.
-
-This design has proven tricky to optimize; it depends on many cycles of runtime resolution, despite the fact that every reference is statically analyzed and resolved during compilation. It incurs additional overhead caused by heavy manipulation of the SPE and reliance on dynamic typing in the interpreter itself. In short, it makes thinglang's static typing somewhat redundant by squandering the type information contained in the thinglang syntax.
+**Indexing** is a process which inspects decelerations, usage and assignment of every variable, instance, method, and member, and allocates an appropriate slot for it in its containing structure.
 
 
-### Seriously though, execution
-Since this project has proved interesting thus far, the next stage is to implement a new execution model. The parsing and compilation will remain in Python for now, but with a new twist - bytecode generation!
+**Reduction** is a process in which compound nodes containing certain nested operations (e.g. nested method calls) are simplified into a series of non-compound nodes. This simplifies the logic which is required d compilation for certain constructs. 
 
-Tasks for a new C++ based thinglang VM:
-- [x] Minimal execution infra in C++ (stack frame containers/thing instance containers, etc...)
-- [x] Basic execution loop
-- [x] Type resolution and better reference indexing during static analysis
-- [x] Bytecode generation from thinglang compiler
-- [ ] 1-to-1 transpilation into C++ for precompilation and as a benchmark for performance
-- [ ] Barebones standard library (strings/numbers/lists/maps/math) written in thinglang, transpiled to C++
+### Symbol Generation 
+A symbol map is generated from the AST, and its dependencies are inspected and loaded. If needed, additional source files go through the pipeline as described, otherwise, existing symbol maps are loaded. Processing continue once all dependencies are resolvd.
 
+### Compilation 
+The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches non-syntatic errors. Additionally, static data is collected and debugging maps are generated for the final executable.
+
+### Runtime 
+With an executable in hand, we switch to the C++ runtime, which loads and processes the bytecode and its dependencies. Once ready, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching error, and so on) 
 
 ### The Archives 
 
