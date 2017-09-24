@@ -92,7 +92,7 @@ A symbol map is generated from the AST, and its dependencies are inspected and l
 The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches certain non-syntatic errors. Additionally, static data is collected and debugging maps are generated for the final executable if applicable. 
 
 ### Runtime 
-With an executable in hand, we switch to the C++ runtime. After loading and processing the bytecode and its dependencies, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching error, and so on). 
+With an executable in hand, we switch to the C++ runtime. After loading and processing the bytecode and its dependencies, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching errors, and so on). 
 
 ### The Archives 
 
