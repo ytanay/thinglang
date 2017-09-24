@@ -53,7 +53,7 @@ The original implementation of thinglang was written in pure Python as an exerci
 Since then, the runtime has been rewritten in C++, and the process now resembles that of the classic strictly typed languages, specifically Java/C#. Outlined below is the thinglang compilation pipeline. 
 
 ### Lexical Analysis + Parsing
-The first time involves a line-by-line lexical tokenization process. A token stream from each line is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
+The first process is a ine-by-line lexical tokenization process. A token stream from each line is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
 ```
 [L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
 ```
