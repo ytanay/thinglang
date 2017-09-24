@@ -80,19 +80,19 @@ The output of the parser is an AST of compound nodes. Examples of nodes include 
 ### Static Analysis
 The AST undergoes two processes during SA: indexing and reduction. 
 
-**Indexing** is a process which inspects decelerations, usage and assignment of every variable, instance, method, and member, and allocates an appropriate slot for it in its containing structure.
+**Indexing** is a process which inspects declarations, usages and assignments of variables, instances, methods, and members.  Each entity is given an appropriate slot in its containing structure.
 
 
-**Reduction** is a process in which compound nodes containing certain nested operations (e.g. nested method calls) are simplified into a series of non-compound nodes. This simplifies the logic which is required d compilation for certain constructs. 
+**Reduction** is a process in which compound nodes containing certain nested operations (e.g. nested method calls) are simplified into a series of non-compound nodes. This simplifies the logic required during compilation for certain constructs. 
 
 ### Symbol Generation 
-A symbol map is generated from the AST, and its dependencies are inspected and loaded. If needed, additional source files go through the pipeline as described, otherwise, existing symbol maps are loaded. Processing continue once all dependencies are resolvd.
+A symbol map is generated from the AST, and its dependencies are inspected and loaded. If needed, additional source files go through the pipeline as described, otherwise, existing symbol maps are loaded. Processing continues once all dependencies are resolved. 
 
 ### Compilation 
-The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches non-syntatic errors. Additionally, static data is collected and debugging maps are generated for the final executable.
+The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches certain non-syntatic errors. Additionally, static data is collected and debugging maps are generated for the final executable if applicable. 
 
 ### Runtime 
-With an executable in hand, we switch to the C++ runtime, which loads and processes the bytecode and its dependencies. Once ready, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching error, and so on) 
+With an executable in hand, we switch to the C++ runtime. After loading and processing the bytecode and its dependencies, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching error, and so on). 
 
 ### The Archives 
 
