@@ -54,7 +54,7 @@ class MethodDefinition(BaseNode):
         context.method_start(self.locals, self.frame_size, self.argument_count)
 
         if self.is_constructor():
-            context.append(OpcodeInstantiate(context.symbols.index(self.parent)), self.source_ref)
+            context.append(OpcodeInstantiate(context.symbols[self.parent.name].index), self.source_ref)
 
         super(MethodDefinition, self).compile(context)
 

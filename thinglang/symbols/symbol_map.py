@@ -5,8 +5,8 @@ from thinglang.symbols.symbol import Symbol
 
 class SymbolMap(object):
 
-    def __init__(self, members: list, methods: list, name: Identifier, index: int):
-        self.members, self.methods, self.name, self.index = members, methods, name, index
+    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, index: int):
+        self.members, self.methods, self.name, self.extends, self.index = members, methods, name, extends, index
 
         self.lookup = {
             elem.name: elem for elem in (self.methods + self.members)
@@ -20,6 +20,7 @@ class SymbolMap(object):
     def serialize(self):
         return {
             "name": self.name,
+            "extends": self.extends,
             "index": self.index,
             "symbols": [x.serialize() for x in self.lookup.values()]
         }
@@ -30,14 +31,14 @@ class SymbolMap(object):
         members = [symbol for symbol in symbols if symbol.kind == Symbol.MEMBER]
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
 
-        return cls(members, methods, Identifier(data['name']), data['index'])
+        return cls(members, methods, Identifier(data['name']), Identifier(data['extends']), data['index'])
 
     @classmethod
     def from_thing(cls, thing, index):
         members = [elem.symbol().update_index(index) for index, elem in enumerate(thing.members)]
         methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods)]
 
-        return cls(members, methods, thing.name, index)
+        return cls(members, methods, thing.name, thing.extends, index)
 
     def create_header(self):
         type_cls_name, instance_cls_name = templates.class_names(self.name)

@@ -34,7 +34,7 @@ class MethodCall(BaseNode, ValueType):
             target = context.resolve(self.target.root)
 
             for ext, _ in self.target.extensions:
-                target = context.resolve(target, ext)
+                target = context.symbols.resolve_partial(target, ext)
 
             if target.kind != Symbol.METHOD:
                 raise TargetNotCallable()

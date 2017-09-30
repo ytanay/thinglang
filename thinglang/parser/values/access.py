@@ -32,7 +32,7 @@ class Access(BaseNode, ValueType):
             if last and without_last:
                 break
 
-            ref = context.symbols.dereference(ref.element, ext)
+            ref = context.symbols.resolve_partial(ref, ext)
             cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
             context.append(cls(ref.element_index), self.source_ref)
 
