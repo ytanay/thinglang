@@ -1,0 +1,33 @@
+/*
+{
+    "expected_output": ["Setting up base", "Hello from base!", "Setting up child", "Walking", "Hello from base!"]
+}
+*/
+
+thing Base
+    setup
+        Console.print("Setting up base")
+
+    does say_hello
+        Console.print("Hello from base!")
+
+
+thing Child extends Base
+    setup
+        Console.print("Setting up child")
+
+    does walk
+        Console.print("Walking")
+
+
+thing Program
+    setup
+        Base b = create Base()
+        b.say_hello()
+
+        Child c = create Child()
+        c.walk()
+
+        c.say_hello()
+
+

@@ -13,6 +13,7 @@ def compile_local(code):
     symbols = SymbolMapper(override=[SymbolMap.from_serialized({
         "index": 0,
         "name": "Container",
+        "extends": None,
         "symbols": [
             {
                 "arguments": None,
@@ -45,6 +46,7 @@ def compile_local(code):
     }), SymbolMap.from_serialized({
         "index": 1,
         "name": "InnerContainer",
+        "extends": None,
         "symbols": [
             {
                 "arguments": None,
