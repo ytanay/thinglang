@@ -1,4 +1,5 @@
 {
+    "extends": null,
     "index": 2,
     "name": "number",
     "symbols": [
