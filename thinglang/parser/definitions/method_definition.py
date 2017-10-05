@@ -12,7 +12,6 @@ from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.symbols.symbol import Symbol
-from thinglang.utils.source_context import SourceReference
 from thinglang.utils.type_descriptors import TypeList
 
 
@@ -56,7 +55,8 @@ class MethodDefinition(BaseNode):
         if self.is_constructor():
             context.append(OpcodeInstantiate(context.symbols[self.parent.name].index), self.source_ref)
 
-        super(MethodDefinition, self).compile(context)
+        if self.children:
+            super(MethodDefinition, self).compile(context)
 
         if not self.is_constructor() and not self.children[-1].implements(ReturnStatement) and self.return_type is not None:
             context.append(OpcodePushNull(), self.source_ref)
@@ -85,7 +85,7 @@ class MethodDefinition(BaseNode):
 
     @classmethod
     def empty_constructor(cls, parent):
-        instance = MethodDefinition(Identifier.constructor(), token=SourceReference.generated('implicit constructor'))
+        instance = MethodDefinition(Identifier.constructor()).deriving_from(parent)
         instance.parent = parent
         return instance
 
