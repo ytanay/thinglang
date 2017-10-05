@@ -35,6 +35,8 @@ class CompilationContext(object):
         """
         Append an opcode to the instruction block of the current method
         """
+        if not source_ref:
+            raise Exception('Cannot add instruction without a source ref')
 
         opcode.source_ref = source_ref
         self.instruction_block.append(opcode)
@@ -127,6 +129,9 @@ class CompilationContext(object):
         """
 
         instructions = self.instructions + self.instruction_block + [SentinelCodeEnd()]
+
+        if not all(x.source_ref is not None for x in instructions):
+            raise Exception('Not all instructions could be mapped to their source: {}'.format([x for x in instructions if x.source_ref is None]))
 
         code = bytes().join(x.resolve() for x in instructions)
         data = bytes().join(x for x in self.data) + SentinelDataEnd().resolve()
