@@ -1,0 +1,37 @@
+/*
+{
+    "expected_output": ["b-value-1", "a-value-1", "c-value-2", "b-value-2", "a-value-2"]
+}
+*/
+
+thing A
+    has text a
+
+
+thing B extends A
+    has text b
+
+thing C extends B
+    has text c
+
+thing Program
+    setup
+        B b_instance = create B()
+
+        b_instance.b = "b-value-1"
+        b_instance.a = "a-value-1"
+
+        Console.print(b_instance.b)
+        Console.print(b_instance.a)
+
+        C c_instance = create C()
+
+        c_instance.c = "c-value-2"
+        c_instance.b = "b-value-2"
+        c_instance.a = "a-value-2"
+
+        Console.print(c_instance.c)
+        Console.print(c_instance.b)
+        Console.print(c_instance.a)
+
+
