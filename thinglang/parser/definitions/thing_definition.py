@@ -20,7 +20,7 @@ class ThingDefinition(BaseNode):
         return self.name
 
     def compile(self, context: CompilationContext):
-        context.append(SentinelThingDefinition(len(self.members), len(self.methods)), self.source_ref)
+        context.append(SentinelThingDefinition(self.slots(context), len(self.methods)), self.source_ref)
         super().compile(context)
 
     def transpile(self):
@@ -53,6 +53,9 @@ class ThingDefinition(BaseNode):
     @property
     def names(self):
         return [x.name for x in self.members + self.methods]
+
+    def slots(self, context):
+        return sum(len(container.members) for container in context.symbols.inheritance(self))
 
     def format_member_list(self):
         return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in self.members)
