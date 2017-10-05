@@ -14,6 +14,7 @@ def compile_local(code):
         "index": 0,
         "name": "Container",
         "extends": None,
+        "offset": 0,
         "symbols": [
             {
                 "arguments": None,
@@ -47,6 +48,7 @@ def compile_local(code):
         "index": 1,
         "name": "InnerContainer",
         "extends": None,
+        "offset": 0,
         "symbols": [
             {
                 "arguments": None,
