@@ -72,6 +72,3 @@ class ThingDefinition(BaseNode):
     @ParserRule.mark
     def simple_definition(_: LexicalDeclarationThing, name: Identifier):
         return ThingDefinition(name)
-
-
-print(ThingDefinition.RULES)

@@ -38,7 +38,6 @@ class ElementReference(Reference):
     def element_index(self) -> int:
         """
         Returns the relative index of the element being referenced
-        :return:
         """
         return self.element.index
 

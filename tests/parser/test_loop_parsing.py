@@ -22,5 +22,3 @@ def test_simple_loop_conditionals():
 
 def test_method_call_loop_conditionals():
     validate_loop(parse_local('while i < Threshold.current(1, 5)'), [Identifier, [NumericValue, NumericValue]])
-
-

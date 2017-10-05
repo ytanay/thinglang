@@ -6,9 +6,7 @@
 
 
 void Method::execute() {
-    std::cerr << "Entered method (stack frame size: " << frame_size << ")" << std::endl;
     Program::create_frame(frame_size);
-
 
     for (size_t i = 0; i < arguments; i++) {
         Program::frame()[arguments - i - 1] = Program::pop();
@@ -130,6 +128,5 @@ void Method::execute() {
     };
 
     Program::pop_frame();
-    std::cerr << "Exiting method" << std::endl;
 }
 
