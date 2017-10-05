@@ -7,7 +7,7 @@ from thinglang.parser.errors import VectorReductionError
 
 
 def validate_method_definition(node, name, expected_arguments=(), return_type=None):
-    assert node.implements(MethodDefinition)
+    assert isinstance(node, MethodDefinition)
     assert node.name == (name if isinstance(name, Identifier) else Identifier(name))
     assert node.return_type == return_type
     for actual_argument, expected_argument in zip(node.arguments, expected_arguments):

@@ -1,7 +1,7 @@
-from thinglang.utils.describable import Describable, camelcase_to_underscore
+from thinglang.utils.logging_utils import camelcase_to_underscore
 
 
-class LexicalToken(Describable):
+class LexicalToken(object):
     EMITTABLE = True
     STATIC = False
     ALLOW_EMPTY = False

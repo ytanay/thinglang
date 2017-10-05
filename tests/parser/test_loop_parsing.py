@@ -7,7 +7,7 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_loop(node, condition):
-    assert node.implements(Loop)
+    assert isinstance(node, Loop)
 
     if isinstance(condition, list):
         validate_types(node.value.arguments, condition, (BinaryOperation, MethodCall), lambda x: x.arguments)

@@ -24,13 +24,13 @@ class Simplifier(TreeTraversal):
         Checks the value of an assignment operation for values requiring simplification.
         Simplifies the value if needed.
         """
-        if node.implements(ReturnStatement) and not node.value:
+        if isinstance(node, ReturnStatement) and not node.value:
             return
 
-        if node.value.implements(BinaryOperation):
+        if isinstance(node.value, BinaryOperation):
             node.value = self.convert_arithmetic_operations(node.value)
 
-        if node.value.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+        if isinstance(node.value, Simplifier.MULTI_ARG_CONSTRUCTS):
             self.simplify_multi_arg_constructs(node.value)
 
     @inspects(MULTI_ARG_CONSTRUCTS)
@@ -40,9 +40,9 @@ class Simplifier(TreeTraversal):
         Simplifies each argument in turn.
         """
         for idx, arg in enumerate(node.arguments):
-            if arg.implements(BinaryOperation):
+            if isinstance(arg, BinaryOperation):
                 node.replace_argument(idx, self.convert_arithmetic_operations(arg))
-            elif arg.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+            elif isinstance(arg, Simplifier.MULTI_ARG_CONSTRUCTS):
                 self.simplify_multi_arg_constructs(arg)
 
     def convert_arithmetic_operations(self, node: BinaryOperation) -> MethodCall:
@@ -51,14 +51,14 @@ class Simplifier(TreeTraversal):
         """
         lhs, rhs = node.arguments
 
-        if lhs.implements(BinaryOperation):
+        if isinstance(lhs, BinaryOperation):
             lhs = self.convert_arithmetic_operations(lhs)
-        elif lhs.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+        elif isinstance(lhs, Simplifier.MULTI_ARG_CONSTRUCTS):
             self.simplify_multi_arg_constructs(lhs)
 
-        if rhs.implements(BinaryOperation):
+        if isinstance(rhs, BinaryOperation):
             rhs = self.convert_arithmetic_operations(rhs)
-        elif rhs.implements(Simplifier.MULTI_ARG_CONSTRUCTS):
+        elif isinstance(rhs, Simplifier.MULTI_ARG_CONSTRUCTS):
             self.simplify_multi_arg_constructs(rhs)
 
         return MethodCall(Access([lhs, Identifier(node.operator.transpile())]), ArgumentList([rhs]))

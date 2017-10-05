@@ -5,7 +5,7 @@ from typing import List
 
 from thinglang.compiler.references import ElementReference, LocalReference
 from thinglang.utils import collection_utils
-from thinglang.utils.describable import camelcase_to_underscore
+from thinglang.utils.logging_utils import camelcase_to_underscore
 from thinglang.utils.source_context import SourceReference
 
 STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()

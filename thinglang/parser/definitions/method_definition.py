@@ -58,7 +58,7 @@ class MethodDefinition(BaseNode):
         if self.children:
             super(MethodDefinition, self).compile(context)
 
-        if not self.is_constructor() and not self.children[-1].implements(ReturnStatement) and self.return_type is not None:
+        if not self.is_constructor() and not isinstance(self.children[-1], ReturnStatement) and self.return_type is not None:
             context.append(OpcodePushNull(), self.source_ref)
 
         context.method_end()

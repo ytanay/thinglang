@@ -9,7 +9,7 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_assignment(node, condition, expected_type=Conditional):
-    assert node.implements(expected_type)
+    assert isinstance(node, expected_type)
 
     if expected_type is UnconditionalElse:
         return

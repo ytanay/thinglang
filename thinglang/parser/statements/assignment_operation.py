@@ -29,7 +29,7 @@ class AssignmentOperation(BaseNode):
 
     def compile(self, context: CompilationContext):
 
-        is_local = self.name.implements(Identifier)
+        is_local = isinstance(self.name, Identifier)
 
         if is_local:
             target = context.resolve(self.name)
@@ -37,7 +37,7 @@ class AssignmentOperation(BaseNode):
             if self.value.STATIC:
                 ref = context.append_static(self.value.serialize())
                 return context.append(OpcodeAssignStatic.from_reference(target, ref), self.source_ref)
-            elif self.value.implements(Identifier):
+            elif isinstance(self.value, Identifier):
                 ref = context.resolve(self.value)
                 return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
 
@@ -46,10 +46,10 @@ class AssignmentOperation(BaseNode):
 
         cast_placeholder = context.current_index() + 1
 
-        if target.implements(Identifier):
+        if isinstance(target, Identifier):
             target_ref = context.resolve(target)
             context.append(OpcodePopLocal.from_reference(target_ref), self.source_ref)
-        elif target.implements(Access):
+        elif isinstance(target, Access):
             if target.extensions:
                 target_ref = target.compile(context, pop_last=True)
             else:

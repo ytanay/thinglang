@@ -9,7 +9,7 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_assignment(node, type, name, value):
-    assert node.implements(AssignmentOperation)
+    assert isinstance(node, AssignmentOperation)
     assert node.name == Identifier(name)
     assert node.name.type == (Identifier(type) if type else None)
     assert node.intent == (AssignmentOperation.DECELERATION if type else AssignmentOperation.REASSIGNMENT)

@@ -7,7 +7,7 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_method_call(node, target, argument_types):
-    assert node.implements(MethodCall)
+    assert isinstance(node, MethodCall)
     assert node.target == Access([Identifier(t) for t in target])
     validate_types(node.arguments, argument_types, MethodCall, lambda x: x.arguments)
 

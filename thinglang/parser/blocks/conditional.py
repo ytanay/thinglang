@@ -16,7 +16,7 @@ class Conditional(BaseNode):
         super(Conditional, self).__init__([value])
         self.value = value
 
-        if self.value.implements(Conditional):
+        if isinstance(self.value, Conditional):
             self.value = self.value.value
 
     def describe(self):

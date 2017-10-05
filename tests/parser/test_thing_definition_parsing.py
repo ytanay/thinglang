@@ -4,7 +4,7 @@ from thinglang.parser.definitions.thing_definition import ThingDefinition
 
 
 def validate_thing_definition(node, name, extends=None):
-    assert node.implements(ThingDefinition)
+    assert isinstance(node, ThingDefinition)
     assert node.name == (name if isinstance(name, Identifier) else Identifier(name))
     assert node.extends == (Identifier(extends) if extends else None)
 

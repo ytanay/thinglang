@@ -6,7 +6,7 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_list(node, types):
-    assert node.implements(InlineList)
+    assert isinstance(node, InlineList)
 
     validate_types(node.values, types, InlineList, lambda x: x.values)
 

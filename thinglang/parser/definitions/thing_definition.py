@@ -44,11 +44,11 @@ class ThingDefinition(BaseNode):
 
     @property
     def members(self):
-        return [x for x in self.children if x.implements(MemberDefinition)]
+        return [x for x in self.children if isinstance(x, MemberDefinition)]
 
     @property
     def methods(self):
-        return [x for x in self.children if x.implements(MethodDefinition)]
+        return [x for x in self.children if isinstance(x, MethodDefinition)]
 
     @property
     def names(self):
