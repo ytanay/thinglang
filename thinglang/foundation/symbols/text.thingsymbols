@@ -2,6 +2,7 @@
     "extends": null,
     "index": 1,
     "name": "text",
+    "offset": 1,
     "symbols": [
         {
             "arguments": [],

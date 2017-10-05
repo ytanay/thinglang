@@ -2,6 +2,7 @@
     "extends": null,
     "index": 5,
     "name": "Console",
+    "offset": 0,
     "symbols": [
         {
             "arguments": [],

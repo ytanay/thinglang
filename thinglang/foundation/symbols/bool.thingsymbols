@@ -2,6 +2,7 @@
     "extends": null,
     "index": 3,
     "name": "bool",
+    "offset": 1,
     "symbols": [
         {
             "arguments": [],
