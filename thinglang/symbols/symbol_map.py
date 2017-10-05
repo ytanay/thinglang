@@ -5,8 +5,9 @@ from thinglang.symbols.symbol import Symbol
 
 class SymbolMap(object):
 
-    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, index: int):
-        self.members, self.methods, self.name, self.extends, self.index = members, methods, name, extends, index
+    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, index: int, offset: int):
+        self.members, self.methods, self.name, self.extends, self.index, self.offset = \
+            members, methods, name, extends, index, offset
 
         self.lookup = {
             elem.name: elem for elem in (self.methods + self.members)
@@ -22,6 +23,7 @@ class SymbolMap(object):
             "name": self.name,
             "extends": self.extends,
             "index": self.index,
+            "offset": self.offset,
             "symbols": [x.serialize() for x in self.lookup.values()]
         }
 
@@ -31,14 +33,16 @@ class SymbolMap(object):
         members = [symbol for symbol in symbols if symbol.kind == Symbol.MEMBER]
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
 
-        return cls(members, methods, Identifier(data['name']), Identifier(data['extends']), data['index'])
+        return cls(members, methods, Identifier(data['name']), Identifier(data['extends']), data['index'], data['offset'])
 
     @classmethod
-    def from_thing(cls, thing, index):
-        members = [elem.symbol().update_index(index) for index, elem in enumerate(thing.members)]
+    def from_thing(cls, thing, index, extends: 'SymbolMap'):
+        offset = extends.offset if extends is not None else 0
+
+        members = [elem.symbol().update_index(offset + index) for index, elem in enumerate(thing.members)]
         methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods)]
 
-        return cls(members, methods, thing.name, thing.extends, index)
+        return cls(members, methods, thing.name, thing.extends, index, len(members) + offset)
 
     def create_header(self):
         type_cls_name, instance_cls_name = templates.class_names(self.name)

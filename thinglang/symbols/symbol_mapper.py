@@ -32,10 +32,11 @@ class SymbolMapper(object):
         if override:
             self.maps.update({symbol_map.name: symbol_map for symbol_map in override})
 
-        if ast:
-            self.maps.update({
-                thing.name: SymbolMap.from_thing(thing, index) for index, thing in enumerate(ast.children)
-            })
+        if not ast:
+            return
+
+        for index, thing in enumerate(ast.children):
+            self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))
 
     def resolve(self, target: Union[Identifier, Access], method_locals: dict) -> Reference:
         """
@@ -86,20 +87,34 @@ class SymbolMapper(object):
 
         return ElementReference(container, element, local)
 
-    def pull(self, container: SymbolMap, item: Identifier) -> Tuple[SymbolMap, Symbol]:
+    def pull(self, start: SymbolMap, item: Identifier) -> Tuple[SymbolMap, Symbol]:
         """
         Pull a symbol from a symbol map, iteratively traversing its parents until a match is found
-        :param container: the original symbol map
+        :param start: the original symbol map
         :param item: the item to find
         :return: a pair of SymbolMap, Symbol
         """
+        container = start
+
         while item not in container:
             if container.extends:
-                container = self.maps[container.extends]
+                container = self[container.extends]
             else:
-                raise Exception('Could not find {} in {} or its parents'.format(item, container))
+                raise Exception('Could not find {} in {} or its parents'.format(item, start))
 
         return container, container[item]
+
+    def inheritance(self, start):
+        """
+        Emits an inheritance chain (from descendant to ancestor)
+        :param start: the ThingDefinition to start from
+        """
+        current = self[start.name]
+        yield current
+
+        while current.extends:
+            current = self[current.extends]
+            yield current
 
     def entry(self) -> int:
         """
