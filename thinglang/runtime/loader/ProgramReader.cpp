@@ -74,15 +74,15 @@ Type ProgramReader::read_class() {
               << std::endl;
     std::vector<Method> methods;
 
-    for (int i = 0; i < method_count; i++) {
+    for (Index i = 0; i < method_count; i++) {
         std::cerr << "\t[" << methods.size() << "] ";
-        methods.push_back(read_method());
+        methods.push_back(read_method(i));
     }
     return new ThingTypeExternal("Unknown class", member_count, methods);
 
 }
 
-Method ProgramReader::read_method() {
+Method ProgramReader::read_method(Index index) {
     assert(read_opcode() == Opcode::SENTINEL_METHOD_DEFINITION);
 
     uint32_t frame_size = read_size();
@@ -100,7 +100,7 @@ Method ProgramReader::read_method() {
         instructions.push_back(instruction);
     }
 
-    return Method(frame_size, arguments, instructions);
+    return Method(frame_size, arguments, (index == 0 ? arguments : arguments - 1), instructions);
 }
 
 Instruction ProgramReader::read_instruction(Opcode opcode) {

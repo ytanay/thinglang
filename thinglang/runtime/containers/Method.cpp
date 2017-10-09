@@ -9,7 +9,7 @@ void Method::execute() {
     Program::create_frame(frame_size);
 
     for (size_t i = 0; i < arguments; i++) {
-        Program::frame()[arguments - i - 1] = Program::pop();
+        Program::frame()[offset - i] = Program::pop();
     }
 
     auto counter_end = instructions.size();

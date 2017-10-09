@@ -34,7 +34,7 @@ public:
 
     Type read_class();
 
-    Method read_method();
+    Method read_method(Index index);
 
     Instruction read_instruction(Opcode opcode);
 
