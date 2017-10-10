@@ -289,7 +289,7 @@ class OpcodeThrow(Opcode):
     """
     Throws an exception instance on the stack
     """
-    pass
+    ARGS = TYPE_ID,
 
 
 class OpcodeInstantiate(Opcode):
