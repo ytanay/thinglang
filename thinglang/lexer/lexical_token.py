@@ -18,7 +18,7 @@ class LexicalToken(object):
         return self.value
 
     def __eq__(self, other):
-        return type(self) == type(other) and \
+        return type(self) is type(other) and \
                self.value == other.value
 
     def __hash__(self):
