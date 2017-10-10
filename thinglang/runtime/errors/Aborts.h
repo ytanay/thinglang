@@ -7,15 +7,13 @@
 
 
 enum AbortReason {
-    EMPTY_PROGRAM_STACK,
-    MISSING_RETURN
+    EMPTY_PROGRAM_STACK
 };
 
 
 inline std::string format_abort_reason(AbortReason reason){
     switch(reason){
         case EMPTY_PROGRAM_STACK: return "Empty program stack";
-        case MISSING_RETURN: return "Method ended without returning";
     }
 }
 
