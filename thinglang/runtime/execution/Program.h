@@ -5,8 +5,8 @@
 #include <cassert>
 #include <algorithm>
 
+
 #include "../utils/TypeNames.h"
-#include "../types/infrastructure/ThingType.h"
 
 
 class Program {
@@ -47,7 +47,7 @@ public:
     static void status(Index counter, const Instruction& instruction);
 
     static Types internals;
-    static Types types;
+
 private:
     Program() = default;
 

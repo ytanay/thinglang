@@ -8,9 +8,10 @@
 #include <utility>
 #include <memory>
 
+#include "../execution/Instruction.h"
 #include "../utils/TypeNames.h"
-
 #include "../types/InternalTypes.h"
+#include "../execution/Opcodes.h"
 
 
 class ProgramReader {
@@ -18,21 +19,15 @@ public:
 
     explicit ProgramReader(std::string filename) : filename(std::move(filename)) {}
 
-
+    ProgramInfo process();
 
     void read_header();
 
-    ProgramInfo process();
-
-    Things read_data();
-
-    Thing read_data_block();
-
     InstructionList read_code();
-
-
     Instruction read_instruction(Opcode opcode);
 
+    Things read_data();
+    Thing read_data_block();
 
     template<typename T>
     T read() {
@@ -60,7 +55,6 @@ public:
     InternalTypes read_data_type(){
         return static_cast<InternalTypes>(read<int32_t>());
     }
-
 
 
 private:

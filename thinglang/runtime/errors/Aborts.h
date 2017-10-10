@@ -2,9 +2,6 @@
 
 #include <iostream>
 
-#include "../utils/TypeNames.h"
-#include "../execution/Program.h"
-
 
 enum AbortReason {
     EMPTY_PROGRAM_STACK

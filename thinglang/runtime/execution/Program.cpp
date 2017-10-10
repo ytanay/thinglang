@@ -1,6 +1,7 @@
 #include "Program.h"
 #include "../errors/Aborts.h"
 #include "../types/InternalTypes.h"
+#include "../execution/Instruction.h"
 
 ThingStack Program::stack;
 FrameStack Program::frames;
@@ -20,7 +21,6 @@ Types Program::internals = {
         new ConsoleType()
 };
 
-Types Program::types = {};
 
 
 Thing Program::pop() {
