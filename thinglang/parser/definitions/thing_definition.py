@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
@@ -20,8 +21,11 @@ class ThingDefinition(BaseNode):
         return self.name
 
     def compile(self, context: CompilationContext):
-        context.append(SentinelThingDefinition(self.slots(context), len(self.methods)), self.source_ref, directly=True)
-        super().compile(context)
+        symbol_map = context.symbols[self.name]
+        for method in self.methods:
+            buffer = CompilationBuffer(context.symbols, method.locals)
+            method.compile(buffer)
+            context.add((symbol_map.index, symbol_map[method.name].index), method, buffer)
 
     def transpile(self):
         type_cls_name, instance_cls_name = self.container_name
