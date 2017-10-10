@@ -1,4 +1,5 @@
 from thinglang import pipeline
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.symbols.symbol_mapper import SymbolMapper, SymbolMap
 from thinglang.utils.source_context import SourceContext
@@ -70,14 +71,15 @@ def compile_local(code):
             }
         ]
     })])
-    context = CompilationContext(symbols, SourceContext.wrap(''))
-    context.current_locals = {
+
+    buffer = CompilationBuffer(symbols, {
         Identifier.self(): LocalMember(Identifier('Container'), 0),
         Identifier('a'): LocalMember(Identifier('number'), 1),
         Identifier('b'): LocalMember(Identifier('number'), 2),
         Identifier('inst'): LocalMember(Identifier('Container'), 3),
-    }
-    return ast.compile(context).instruction_block
+    })
+
+    return ast.compile(buffer).instructions
 
 
 def test_static_to_local():
