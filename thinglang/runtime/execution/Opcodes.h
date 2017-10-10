@@ -28,14 +28,15 @@ enum class Opcode {
     POP = 6,
     DEREFERENCE = 12,
     RETURN = 15,
-    INSTANTIATE = 16,
-    JUMP = 17,
-    JUMP_CONDITIONAL = 18,
-    SENTINEL_THING_DEFINITION = 19,
-    SENTINEL_METHOD_DEFINITION = 20,
-    SENTINEL_METHOD_END = 21,
-    SENTINEL_CODE_END = 22,
-    SENTINEL_DATA_END = 23
+    THROW = 16,
+    INSTANTIATE = 17,
+    JUMP = 18,
+    JUMP_CONDITIONAL = 19,
+    SENTINEL_THING_DEFINITION = 20,
+    SENTINEL_METHOD_DEFINITION = 21,
+    SENTINEL_METHOD_END = 22,
+    SENTINEL_CODE_END = 23,
+    SENTINEL_DATA_END = 24
 };
 
 
@@ -89,6 +90,9 @@ inline auto describe(Opcode val){
 
         case Opcode::RETURN:
             return "RETURN";
+
+        case Opcode::THROW:
+            return "THROW";
 
         case Opcode::INSTANTIATE:
             return "INSTANTIATE";
@@ -165,6 +169,9 @@ inline auto arg_count(Opcode val){
             return 1;
 
         case Opcode::RETURN:
+            return 0;
+
+        case Opcode::THROW:
             return 0;
 
         case Opcode::INSTANTIATE:

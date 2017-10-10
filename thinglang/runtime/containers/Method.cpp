@@ -3,11 +3,13 @@
 #include "Method.h"
 #include "../execution/Program.h"
 #include "../types/infrastructure/ThingInstance.h"
+#include "../errors/Aborts.h"
 
 
 void Method::execute() {
     Program::create_frame(frame_size);
 
+    std::cerr << "Reading " << arguments << " arguments at offset " << offset << std::endl;
     for (size_t i = 0; i < arguments; i++) {
         Program::frame()[offset - i] = Program::pop();
     }
@@ -44,6 +46,7 @@ void Method::execute() {
             }
 
             case Opcode::PUSH_LOCAL: {
+                std::cerr << "\tPushing " << Program::frame()[instruction.target]->text() << std::endl;
                 Program::push(Program::frame()[instruction.target]);
                 break;
             };
@@ -96,8 +99,12 @@ void Method::execute() {
             }
 
             case Opcode::RETURN: {
-                counter = counter_end;
-                continue;
+                Program::pop_frame();
+                return;
+            }
+
+            case Opcode::THROW: {
+                return;
             }
 
             case Opcode::JUMP: {

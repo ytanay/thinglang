@@ -262,6 +262,13 @@ class OpcodeReturn(Opcode):
     pass
 
 
+class OpcodeThrow(Opcode):
+    """
+    Throws an exception instance on the stack
+    """
+    pass
+
+
 class OpcodeInstantiate(Opcode):
     """
     Create a reference container to a new thing instance and pushes it to the program stack
