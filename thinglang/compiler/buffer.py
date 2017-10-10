@@ -53,7 +53,7 @@ class CompilationBuffer(object):
 
     def epilogue(self, buffer: 'CompilationBuffer'):
         initial = len(self.epilogues)
-        self.epilogues.extend(instruction.update_offset(initial, len(self.data)) for instruction in buffer.instructions)
+        self.epilogues.extend(instruction.update_offset(initial, len(self.data), True) for instruction in buffer.instructions)
         self.data.extend(buffer.data)
         return initial
 

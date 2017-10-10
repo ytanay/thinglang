@@ -52,7 +52,7 @@ class HandleBlock(BaseNode):
         optional = context.optional()
         optional.append(OpcodePass(), self.source_ref)
         super(HandleBlock, self).compile(optional)
-        optional.append(OpcodeJump(context.next_index), self.source_ref)
+        optional.append(OpcodeJump(context.next_index, absolute=True), self.source_ref)
         return context.epilogue(optional)
 
     @staticmethod
