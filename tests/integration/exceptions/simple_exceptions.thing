@@ -1,0 +1,22 @@
+/*
+{
+    "expected_output": [
+        "Running program",
+        "Entered try block",
+        "Caught exception"
+    ]
+}
+*/
+
+thing MyException
+
+thing Program
+    setup
+        Console.print("Running program")
+        try
+            Console.print("Entered try block")
+            throw create MyException()
+            Console.print("About to exit try block")
+
+        handle MyException
+            Console.print("Caught exception")

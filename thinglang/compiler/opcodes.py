@@ -49,7 +49,7 @@ class Opcode(object, metaclass=OpcodeRegistration):
         """
         self.args = args
 
-    def update_offset(self, method_offset: int, data_offset: int):
+    def update_offset(self, method_offset: int, data_offset: int, relative: bool=False):
         return self
 
     def update_references(self, offsets):
@@ -190,7 +190,7 @@ class OpcodePushStatic(Opcode):
     """
     ARGS = STATIC_ID,
 
-    def update_offset(self, method_offset: int, data_offset: int):
+    def update_offset(self, method_offset: int, data_offset: int, relative: bool=False):
         self.args = self.args[0] + data_offset,
         return self
 
@@ -289,7 +289,7 @@ class OpcodeThrow(Opcode):
     """
     Throws an exception instance on the stack
     """
-    pass
+    ARGS = TYPE_ID,
 
 
 class OpcodeInstantiate(Opcode):
@@ -305,8 +305,13 @@ class OpcodeJump(Opcode):
     """
     ARGS = INSTRUCTION_INDEX,
 
-    def update_offset(self, method_offset: int, data_offset: int):
-        self.args = self.args[0] + method_offset,
+    def __init__(self, *args, absolute=False):
+        super(OpcodeJump, self).__init__(*args)
+        self.absolute = absolute
+
+    def update_offset(self, method_offset: int, data_offset: int, relative: bool=False):
+        if not relative:
+            self.args = self.args[0] + method_offset,
         return self
 
 
@@ -318,5 +323,19 @@ class OpcodeJumpConditional(OpcodeJump):
     ARGS = INSTRUCTION_INDEX,
 
 
+# Exception handling
+
+class OpcodeHandlerDescription(Opcode):
+    """
+    Defines an exception
+    """
+    ARGS = INSTRUCTION_INDEX, INSTRUCTION_INDEX
+
+
+class OpcodeHandlerRangeDefinition(Opcode):
+    """
+    Defines the PC range for the following exception handler
+    """
+    ARGS = TYPE_ID, INSTRUCTION_INDEX
 
 

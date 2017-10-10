@@ -16,8 +16,8 @@ class Access(BaseNode, ValueType):
         self.type = None
         self.arguments = []
 
-    def describe(self):
-        return '{}:{}'.format('.'.join(str(x) for x in self.target), self.type)
+    def __repr__(self):
+        return 'Access({}:{})'.format('.'.join(str(x) for x in self.target), self.type)
 
     def transpile(self):
             return '->'.join(x.transpile() for x in self.target)
@@ -58,6 +58,10 @@ class Access(BaseNode, ValueType):
         size = len(self.target)
         assert size >= 2
         return size
+
+    def append(self, other):
+        self.target.append(other)
+        return self
 
     @staticmethod
     @ParserRule.mark

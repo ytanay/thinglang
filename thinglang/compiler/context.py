@@ -2,7 +2,7 @@ import collections
 import struct
 
 from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, \
-    OpcodePushMember, OpcodeCall
+    OpcodePushMember, OpcodeCall, OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
 from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.utils import collection_utils
@@ -57,9 +57,19 @@ class CompilationContext(object):
         offsets = {}
 
         for method_idx, (method, buffer) in self.methods.items():
-            method_offset, data_offset = len(instructions), len(data_items)
+            instructions.append(SentinelMethodDefinition(0, 0))
+
+            method_offset, data_offset = len(instructions) + len(buffer.exception_table) * 2, len(data_items)
+
+            # First, we write the exception table for this method
+            for exception, handler, start_index, end_index in buffer.exception_table:
+                instructions.append(OpcodeHandlerDescription(method_offset + len(buffer.instructions) + handler, exception))
+                instructions.append(OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset))
+
             offsets[method_idx] = method_offset, method.frame_size
             instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.instructions)
+            instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.epilogues)
+
             data_items.extend(buffer.data)
 
         for instruction in instructions:

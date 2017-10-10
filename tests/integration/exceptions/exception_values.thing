@@ -1,0 +1,26 @@
+/*
+{
+    "expected_output": [
+        "Caught exception",
+        "Something went wrong"
+    ]
+}
+*/
+
+thing MyException
+    has text reason
+
+    setup with text reason
+        self.reason = reason
+
+    does shout
+        Console.print("What?!")
+
+
+thing Program
+    setup
+        try
+            throw create MyException("Something went wrong")
+        handle MyException exc
+            Console.print("Caught exception")
+            Console.print(exc.reason)

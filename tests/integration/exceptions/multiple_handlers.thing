@@ -1,0 +1,45 @@
+/*
+{
+    "expected_output": [
+        "B1 Exception1",
+        "Between B1, B2",
+        "B2 Exception2",
+        "Between B2, B3",
+        "B3 Exception1",
+        "Method end"
+    ]
+}
+*/
+
+thing Exception1
+thing Exception2
+
+
+thing Program
+    setup
+        try
+            throw create Exception1()
+        handle Exception1 exc
+            Console.print("B1 Exception1")
+        handle Exception2 exc
+            Console.print("B1 Exception2")
+
+        Console.print("Between B1, B2")
+
+        try
+            throw create Exception2()
+        handle Exception1 exc
+            Console.print("B2 Exception1")
+        handle Exception2 exc
+            Console.print("B2 Exception2")
+
+        Console.print("Between B2, B3")
+
+        try
+            throw create Exception1()
+        handle Exception1 exc
+            Console.print("B3 Exception1")
+        handle Exception2 exc
+            Console.print("B3 Exception2")
+
+        Console.print("Method end")

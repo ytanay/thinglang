@@ -38,35 +38,38 @@ def generate_types():
         symbol_map = symbols[name_id]
         symbol_map.override_index(definitions.INTERNAL_TYPE_ORDERING[name_id])
 
-        with open(os.path.join(CORE_TYPES_TARGET, target_name + '.cpp'), 'w') as f:
-            f.write(templates.FOUNDATION_SOURCE.format(
-                name=name.capitalize(),
-                code=ast.transpile(),
-                file_name=target_name + '.cpp'))
+        write_if_changed(os.path.join(CORE_TYPES_TARGET, target_name + '.cpp'), templates.FOUNDATION_SOURCE.format(
+            name=name.capitalize(),
+            code=ast.transpile(),
+            file_name=target_name + '.cpp')
+        )
 
-        with open(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), 'w') as f:
-            f.write(templates.FOUNDATION_HEADER.format(
-                name=name.capitalize(),
-                code=symbol_map.create_header(),
-                file_name=target_name + '.h'))
+        write_if_changed(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), templates.FOUNDATION_HEADER.format(
+            name=name.capitalize(),
+            code=symbol_map.create_header(),
+            file_name=target_name + '.h')
+        )
 
         for symbol in symbol_map:
             symbol.convention = Symbol.INTERNAL
 
-        with open(os.path.join(SYMBOLS_TARGET, name + '.thingsymbols'), 'w') as f:
-            json.dump(symbol_map.serialize(), f, cls=JSONSerializer, indent=4, sort_keys=True)
+        write_if_changed(os.path.join(SYMBOLS_TARGET, name + '.thingsymbols'), json.dumps(
+            symbol_map.serialize(),
+            cls=JSONSerializer,
+            indent=4, sort_keys=True)
+        )
 
 
 def write_type_enum():
     imports = '\n'.join('#include "core/{}.h"'.format(templates.class_names(name)[0]) for name in definitions.INTERNAL_TYPE_ORDERING)
 
-    with open(os.path.join(TYPES_TARGET, 'InternalTypes.h'), 'w') as f:
-        f.write(generate_enum('InternalTypes', list(definitions.INTERNAL_TYPE_ORDERING.items()), imports))
+    write_if_changed(os.path.join(TYPES_TARGET, 'InternalTypes.h'), generate_enum(
+        'InternalTypes', list(definitions.INTERNAL_TYPE_ORDERING.items()), imports)
+    )
 
 
 def write_opcode_enum():
-    with open(os.path.join(EXECUTION_TARGET, 'Opcodes.h'), 'w') as f:
-        f.write(generate_enum('Opcode', Opcode.all()))
+    write_if_changed(os.path.join(EXECUTION_TARGET, 'Opcodes.h'), generate_enum('Opcode', Opcode.all()))
 
 
 def generate_enum(cls_name, values, imports=''):
@@ -93,6 +96,17 @@ def generate_enum(cls_name, values, imports=''):
         )
 
     return code
+
+
+def write_if_changed(file_path, contents):
+    with open(file_path, 'r') as f:
+        if f.read() == contents:
+            return
+
+    print('Writing {}'.format(file_path))
+
+    with open(file_path, 'w') as f:
+        f.write(contents)
 
 
 def generate_code():

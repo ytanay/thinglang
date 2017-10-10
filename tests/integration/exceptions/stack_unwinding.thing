@@ -1,0 +1,52 @@
+/*
+{
+    "expected_output": [
+        "Caught Exception3",
+        "Caught Exception3",
+        "Caught Exception2",
+        "Caught Exception1",
+        "Done!"
+    ]
+}
+*/
+
+thing Exception1
+thing Exception2
+thing Exception3
+
+
+thing Program
+    has number count
+
+    setup
+        try
+            self.a(3)
+            self.a(3)
+            self.a(2)
+            self.a(1)
+            Console.print("X")
+        handle Exception1
+            Console.print("Caught Exception1")
+
+        Console.print("Done!")
+
+    does a with number count
+        self.count = count
+        try
+            self.b()
+        handle Exception2
+            Console.print("Caught Exception2")
+
+    does b
+        try
+            self.c()
+        handle Exception3
+            Console.print("Caught Exception3")
+
+    does c
+        if self.count eq 1
+            throw create Exception1()
+        else if self.count eq 2
+            throw create Exception2()
+        else if self.count eq 3
+            throw create Exception3()

@@ -12,8 +12,8 @@ class ThrowStatement(BaseNode):
         self.value = value
 
     def compile(self, context: CompilationBuffer):
-        self.value.compile(context)
-        context.append(OpcodeThrow(), self.source_ref)
+        ref = self.value.compile(context)
+        context.append(OpcodeThrow(ref.thing_index), self.source_ref)
 
     @staticmethod
     @ParserRule.mark

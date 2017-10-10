@@ -4,13 +4,15 @@
 
 
 enum AbortReason {
-    EMPTY_PROGRAM_STACK
+    EMPTY_PROGRAM_STACK,
+    UNHANDLED_EXCEPTION
 };
 
 
 inline std::string format_abort_reason(AbortReason reason){
     switch(reason){
         case EMPTY_PROGRAM_STACK: return "Empty program stack";
+        case UNHANDLED_EXCEPTION: return "Unhandled exception";
     }
 }
 

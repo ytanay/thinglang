@@ -72,13 +72,19 @@ void inline Program::copy_args(Size count, Size offset){
 void Program::execute() {
 
     auto counter_end = instructions.size();
+
     std::stack<Index> return_stack;
+    std::stack<Index> call_stack;
 
     return_stack.push(counter_end);
+    call_stack.push(entry);
+
     Program::create_frame(initial_frame_size);
 
     std::cerr << "Starting execution (upper boundary " << counter_end << ")" << std::endl;
     for (Index counter = entry; counter < counter_end;) {
+        handle_instruction:
+
         auto instruction = instructions[counter];
 
         Program::status(counter, instruction);
@@ -90,10 +96,11 @@ void Program::execute() {
 
             case Opcode::CALL: {
                 return_stack.push(counter + 1);
+                call_stack.push(instruction.target);
                 Program::create_frame(instruction.secondary);
                 counter = instruction.target;
 
-                continue;
+                goto handle_instruction;
             }
 
             case Opcode::CALL_INTERNAL: {
@@ -173,16 +180,40 @@ void Program::execute() {
                 Program::pop_frame();
                 counter = return_stack.top();
                 return_stack.pop();
-                continue;
+                call_stack.pop();
+                continue; // Not goto handle_instruction because this may be the program end
             }
 
             case Opcode::THROW: {
-                return;
+
+                while(!call_stack.empty()){
+
+                    // Look for an exception handler which matches the exception we are throwing.
+                    for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
+                        auto range = instructions[i], definition = instructions[i - 1];
+
+                        if(definition.secondary == instruction.target && counter >= range.target && counter <= range.secondary){
+                            counter = definition.target;
+                            goto handle_instruction;
+                        }
+                    }
+
+                    // If we couldn't find any, walk up the call stack
+                    counter = return_stack.top() - 1;
+
+                    Program::pop_frame();
+                    call_stack.pop();
+                    return_stack.pop();
+
+                }
+
+                critical_abort(UNHANDLED_EXCEPTION);
+
             }
 
             case Opcode::JUMP: {
                 counter = instruction.target;
-                continue;
+                goto handle_instruction;
             }
 
             case Opcode::JUMP_CONDITIONAL: {
@@ -190,7 +221,7 @@ void Program::execute() {
 
                 if (!value || !value->boolean()) {
                     counter = instruction.target;
-                    continue;
+                    goto handle_instruction;
                 }
 
                 break;
