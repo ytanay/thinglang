@@ -83,6 +83,8 @@ void Program::execute() {
 
     std::cerr << "Starting execution (upper boundary " << counter_end << ")" << std::endl;
     for (Index counter = entry; counter < counter_end;) {
+        handle_instruction:
+
         auto instruction = instructions[counter];
 
         Program::status(counter, instruction);
@@ -183,14 +185,30 @@ void Program::execute() {
             }
 
             case Opcode::THROW: {
-                for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
-                    auto range = instructions[i], definition = instructions[i - 1];
-                    if(definition.secondary == instruction.target && counter >= range.target && counter <= range.secondary){
-                        counter = definition.target;
+
+                while(!call_stack.empty()){
+
+                    // Look for an exception handler which matches the exception we are throwing.
+                    for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
+                        auto range = instructions[i], definition = instructions[i - 1];
+
+                        if(definition.secondary == instruction.target && counter >= range.target && counter <= range.secondary){
+                            counter = definition.target;
+                            goto handle_instruction;
+                        }
                     }
+
+                    // If we couldn't find any, walk up the call stack
+                    counter = return_stack.top() - 1;
+
+                    Program::pop_frame();
+                    call_stack.pop();
+                    return_stack.pop();
+
                 }
 
-                continue;
+                critical_abort(UNHANDLED_EXCEPTION);
+
             }
 
             case Opcode::JUMP: {
