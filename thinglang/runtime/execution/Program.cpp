@@ -72,9 +72,13 @@ void inline Program::copy_args(Size count, Size offset){
 void Program::execute() {
 
     auto counter_end = instructions.size();
+
     std::stack<Index> return_stack;
+    std::stack<Index> call_stack;
 
     return_stack.push(counter_end);
+    call_stack.push(entry);
+
     Program::create_frame(initial_frame_size);
 
     std::cerr << "Starting execution (upper boundary " << counter_end << ")" << std::endl;
@@ -90,6 +94,7 @@ void Program::execute() {
 
             case Opcode::CALL: {
                 return_stack.push(counter + 1);
+                call_stack.push(instruction.target);
                 Program::create_frame(instruction.secondary);
                 counter = instruction.target;
 
@@ -173,11 +178,19 @@ void Program::execute() {
                 Program::pop_frame();
                 counter = return_stack.top();
                 return_stack.pop();
+                call_stack.pop();
                 continue;
             }
 
             case Opcode::THROW: {
-                return;
+                for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
+                    auto range = instructions[i], definition = instructions[i - 1];
+                    if(counter >= range.target && counter <= range.secondary){
+                        counter = definition.target;
+                    }
+                }
+
+                continue;
             }
 
             case Opcode::JUMP: {
