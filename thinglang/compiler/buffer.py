@@ -8,8 +8,10 @@ class CompilationBuffer(object):
         self.symbols, self.current_locals = symbols, current_locals
 
         self.instructions = []
+        self.epilogues = []
         self.data = []
         self.conditional_groups = []
+        self.exception_table = []
 
     def append(self, opcode: Opcode, source_ref: SourceReference):
         """
@@ -42,6 +44,12 @@ class CompilationBuffer(object):
         """
         self.data.append(data)
         return len(self.data) - 1
+
+    def add_entry(self, exception, handler, start_index, end_index):
+        """
+        Add an entry to the exception handling table.
+        """
+        self.exception_table.append((exception, handler, start_index, end_index))
 
     def epilogue(self, buffer: 'CompilationBuffer'):
         initial = len(self.epilogues)
@@ -85,8 +93,16 @@ class CompilationBuffer(object):
         return len(self.instructions) - 1
 
     @property
+    def next_index(self) -> int:
+        """
+        Returns the index of the next instruction
+        """
+        return len(self.instructions)
+
+    @property
     def last_instruction(self) -> Opcode:
         """
         Returns the last instruction added to the method-local buffer
         """
         return self.instructions[-1]
+
