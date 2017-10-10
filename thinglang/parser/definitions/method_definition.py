@@ -1,5 +1,5 @@
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull
+from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn
 from thinglang.foundation import templates
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.values.identifier import Identifier
@@ -60,6 +60,9 @@ class MethodDefinition(BaseNode):
 
         if not self.is_constructor() and not isinstance(self.children[-1], ReturnStatement) and self.return_type is not None:
             context.append(OpcodePushNull(), self.source_ref)
+
+        if not isinstance(context.last_instruction, OpcodeReturn):
+            context.append(OpcodeReturn(), self.source_ref)
 
         context.method_end()
 
