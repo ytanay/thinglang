@@ -318,5 +318,19 @@ class OpcodeJumpConditional(OpcodeJump):
     ARGS = INSTRUCTION_INDEX,
 
 
+# Exception handling
+
+class OpcodeHandlerDescription(Opcode):
+    """
+    Defines an exception
+    """
+    ARGS = INSTRUCTION_INDEX, INSTRUCTION_INDEX
+
+
+class OpcodeHandlerRangeDefinition(Opcode):
+    """
+    Defines the PC range for the following exception handler
+    """
+    ARGS = TYPE_ID, INSTRUCTION_INDEX
 
 
