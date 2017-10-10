@@ -18,5 +18,5 @@ thing Program
             throw create MyException()
             Console.print("About to exit try block")
 
-        handle MyException exc
+        handle MyException
             Console.print("Caught exception")
