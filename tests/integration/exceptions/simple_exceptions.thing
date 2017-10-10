@@ -1,0 +1,26 @@
+/*
+{
+    "expected_output": ["dog is dog", "dog is not cat and not mouse and not Dog"]
+}
+*/
+
+thing MyException
+    has text reason
+
+    setup with text reason
+        Console.print("Created MyException instance")
+        self.reason = reason
+
+    does details returns text
+        return self.reason
+
+thing Program
+    setup
+        Console.print("Running program")
+        try
+            Console.print("Entered try block")
+            throw create MyException("some reason")
+            Console.print("About to exit try block")
+
+        handle MyException exc
+            Console.print("Caught exception")
