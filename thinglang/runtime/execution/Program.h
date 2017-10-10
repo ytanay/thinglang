@@ -39,9 +39,8 @@ public:
         return frames.top();
     }
 
-    static void start() {
-        types[entry]->call(0);
-    }
+    static void execute();
+    static void copy_args(Size count, Size offset);
 
     static void load(ProgramInfo &info);
 
