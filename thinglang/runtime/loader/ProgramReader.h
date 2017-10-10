@@ -25,12 +25,11 @@ public:
 
     ProgramInfo process();
 
-
     Things read_data();
 
     Thing read_data_block();
 
-    Types read_code();
+    InstructionList read_code();
 
     Type read_class();
 
@@ -73,7 +72,7 @@ private:
     std::ifstream file;
     Index entry = 0;
 
-    Size program_size = 0, instruction_count = 0, data_item_count = 0, instruction_counter = 0;
+    Size program_size = 0, instruction_count = 0, data_item_count = 0, instruction_counter = 0, initial_frame_size = 0;
 
     Opcode last_opcode = Opcode::INVALID;
 

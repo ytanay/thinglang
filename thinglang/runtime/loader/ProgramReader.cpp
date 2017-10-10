@@ -15,7 +15,7 @@ ProgramInfo ProgramReader::process() {
     auto source_map = read_source_map();
     auto source = read_source();
 
-    return ProgramInfo(code, data, entry, source_map, source);
+    return ProgramInfo(code, data, entry, initial_frame_size, source_map, source);
 }
 
 void ProgramReader::read_header() {
@@ -35,22 +35,27 @@ void ProgramReader::read_header() {
     instruction_count = read<uint32_t>();
     data_item_count = read<uint32_t>();
     entry = read<uint32_t>();
+    initial_frame_size = read<uint32_t>();
 
 
-    std::cerr << "thinglang bytecode version: " << version << ", "
+    std::cerr << "thinglang bytecode version: " << version
               << ", instruction count: " << instruction_count
               << ", data item count: " << data_item_count
               << ", entry point: " << entry << std::endl;
 }
 
 
-Types ProgramReader::read_code() {
+InstructionList ProgramReader::read_code() {
     std::cerr << "Reading code section..." << std::endl;
-    Types user_types;
+    InstructionList instructions;
 
-    while (read_opcode() == Opcode::SENTINEL_THING_DEFINITION) {
-        std::cerr << "\t[" << user_types.size() << "] ";
-        user_types.push_back(read_class());
+    for(Opcode opcode = read_opcode(); opcode != Opcode::SENTINEL_CODE_END; opcode = read_opcode()) {
+        auto instruction = read_instruction(opcode);
+
+        std::cerr << "\t\t\tReading instruction [" << instructions.size() << "] " << describe(opcode) << " (" << instruction.target << ", " << instruction.secondary
+                  << ")" << std::endl;
+
+        instructions.push_back(instruction);
     }
 
     assert(last_opcode == Opcode::SENTINEL_CODE_END);
@@ -59,10 +64,10 @@ Types ProgramReader::read_code() {
         throw RuntimeError(
                 std::string("Index mismatch " + std::to_string(instruction_counter) + ", " + std::to_string(program_size)));
     } else {
-        std::cerr << "Program processed successfully" << std::endl << std::endl;
+        std::cerr << "Code section processed successfully" << std::endl << std::endl;
     }
 
-    return user_types;
+    return instructions;
 }
 
 
@@ -135,6 +140,8 @@ Things ProgramReader::read_data() {
     }
 
     assert(read_opcode() == Opcode::SENTINEL_DATA_END);
+
+    std::cerr << "Data section processed successfully" << std::endl << std::endl;
 
     return static_data;
 
