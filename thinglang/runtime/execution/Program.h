@@ -56,8 +56,11 @@ private:
     static FrameStack frames;
     static Things static_data;
     static Index entry;
+    static Size initial_frame_size;
     static SourceMap source_map;
     static Source source;
+    static InstructionList instructions;
+
 
 
 };

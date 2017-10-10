@@ -6,8 +6,10 @@ ThingStack Program::stack;
 FrameStack Program::frames;
 Things Program::static_data;
 Index Program::entry = 0;
+Index Program::initial_frame_size = 0;
 SourceMap Program::source_map;
 Source Program::source;
+InstructionList Program::instructions;
 
 Types Program::internals = {
         nullptr,
@@ -31,15 +33,16 @@ Thing Program::pop() {
 }
 
 void Program::load(ProgramInfo &info) {
-    auto loaded_types = static_cast<std::vector<Type> &&>(std::get<0>(info));
-    auto loaded_data = static_cast<std::vector<Thing> &&>(std::get<1>(info));
-    auto loaded_source_map = static_cast<SourceMap &&>(std::get<3>(info));
-    auto loaded_source = static_cast<Source &&>(std::get<4>(info));
+    auto loaded_code = static_cast<InstructionList &&>(std::get<0>(info));
+    auto loaded_data = static_cast<Things &&>(std::get<1>(info));
+    auto loaded_source_map = static_cast<SourceMap &&>(std::get<4>(info));
+    auto loaded_source = static_cast<Source &&>(std::get<5>(info));
 
     entry = std::get<2>(info);
+    initial_frame_size = std::get<3>(info);
 
     static_data.insert(static_data.end(), loaded_data.begin(), loaded_data.end());
-    types.insert(types.end(), loaded_types.begin(), loaded_types.end());
+    instructions.insert(instructions.end(), loaded_code.begin(), loaded_code.end());
     source_map.insert(source_map.end(), loaded_source_map.begin(), loaded_source_map.end());
     source.insert(source.end(), loaded_source.begin(), loaded_source.end());
 }
