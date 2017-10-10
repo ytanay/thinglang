@@ -1,5 +1,7 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn
+from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
+from thinglang.compiler.sentinels import SentinelMethodDefinition
 from thinglang.foundation import templates
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.values.identifier import Identifier
@@ -12,6 +14,7 @@ from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.symbols.symbol import Symbol
+from thinglang.symbols.symbol_map import SymbolMap
 from thinglang.utils.type_descriptors import TypeList
 
 
@@ -49,11 +52,12 @@ class MethodDefinition(BaseNode):
             body=self.transpile_children(2, self.children + [ReturnStatement([])])
         )
 
-    def compile(self, context: CompilationContext):
-        context.method_start(self.locals, self.frame_size, self.argument_count)
+    def compile(self, context: CompilationBuffer):
 
         if self.is_constructor():
-            context.append(OpcodeInstantiate(context.symbols[self.parent.name].index), self.source_ref)
+            context.append(OpcodeInstantiate(self.argument_count, context.symbols[self.parent.name].offset), self.source_ref)
+        elif self.argument_count:
+            context.append(OpcodeArgCopy(self.argument_count), self.source_ref)
 
         if self.children:
             super(MethodDefinition, self).compile(context)
@@ -64,7 +68,7 @@ class MethodDefinition(BaseNode):
         if not isinstance(context.last_instruction, OpcodeReturn):
             context.append(OpcodeReturn(), self.source_ref)
 
-        context.method_end()
+        return context
 
     def symbol(self):
         return Symbol.method(self.name, self.return_type, self.static, self.arguments)
