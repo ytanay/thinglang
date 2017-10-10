@@ -43,6 +43,12 @@ class CompilationBuffer(object):
         self.data.append(data)
         return len(self.data) - 1
 
+    def epilogue(self, buffer: 'CompilationBuffer'):
+        initial = len(self.epilogues)
+        self.epilogues.extend(instruction.update_offset(initial, len(self.data)) for instruction in buffer.instructions)
+        self.data.extend(buffer.data)
+        return initial
+
     def push_ref(self, ref: Reference, source_ref: SourceReference) -> Reference:
         """
         Push down a reference object into the program stack

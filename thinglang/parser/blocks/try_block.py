@@ -23,12 +23,13 @@ class HandleBlock(BaseNode):
         super(HandleBlock, self).__init__([exception_type, exception_name])
         self.exception_type, self.exception_name = exception_type, exception_name
 
-    def compile(self, context: CompilationContext):
-        buffer = context.buffer()
-        buffer.append(OpcodePass(), self.source_ref)
-        super(HandleBlock, self).compile(buffer)
-        buffer.append(OpcodeJump(context.current_index() + 1), self.source_ref)
-        context.epilogue(buffer)
+    def compile(self, context: CompilationBuffer):
+        assert self.parent is None
+        optional = context.optional()
+        optional.append(OpcodePass(), self.source_ref)
+        super(HandleBlock, self).compile(optional)
+        optional.append(OpcodeJump(context.next_index), self.source_ref)
+        return context.epilogue(optional)
 
     @staticmethod
     @ParserRule.mark
