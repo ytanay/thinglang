@@ -10,7 +10,6 @@
 
 #include "../utils/TypeNames.h"
 
-#include "../containers/Method.h"
 #include "../types/InternalTypes.h"
 
 
@@ -31,9 +30,6 @@ public:
 
     InstructionList read_code();
 
-    Type read_class();
-
-    Method read_method(Index index);
 
     Instruction read_instruction(Opcode opcode);
 
