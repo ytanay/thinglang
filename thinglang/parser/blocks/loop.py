@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.lexer.blocks.loops import LexicalRepeatWhile
@@ -15,14 +16,14 @@ class Loop(BaseNode):
     def describe(self):
         return str(self.value)
 
-    def compile(self, context: CompilationContext):
-        idx = context.current_index()
+    def compile(self, context: CompilationBuffer):
+        idx = context.current_index + 1
         self.value.compile(context)
         opcode = OpcodeJumpConditional()
         context.append(opcode, self.source_ref)
         super(Loop, self).compile(context)
         context.append(OpcodeJump(idx), self.source_ref)
-        opcode.update(context.current_index())
+        opcode.update(context.current_index + 1)
 
     @staticmethod
     @ParserRule.mark

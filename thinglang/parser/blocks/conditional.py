@@ -1,5 +1,6 @@
 from collections import OrderedDict
 
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.foundation import templates
@@ -28,7 +29,7 @@ class Conditional(BaseNode):
             body=self.transpile_children(indent=3)
         )
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         if not context.conditional_groups or self not in context.conditional_groups[-1]:
             elements = [self] + list(self.siblings_while(lambda x: isinstance(x, ElseBranchInterface)))
             context.conditional_groups.append(OrderedDict((x, None) for x in elements))
@@ -45,7 +46,7 @@ class Conditional(BaseNode):
             context.conditional_groups[-1][self] = jump_out
             context.append(jump_out, self.source_ref)
 
-        opcode.update(context.current_index())
+        opcode.update(context.current_index + 1)
 
     @staticmethod
     @ParserRule.mark
