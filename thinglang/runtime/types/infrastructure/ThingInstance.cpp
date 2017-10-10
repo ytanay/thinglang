@@ -3,6 +3,7 @@
 //
 
 #include "ThingInstance.h"
+#include "../../utils/Formatting.h"
 
 std::string BaseThingInstance::text() {
     return "instance";
@@ -27,4 +28,8 @@ void ThingInstance::set(const Index index, const Thing &thing) {
 
 Thing ThingInstance::get(const Index index) {
     return members[index];
+}
+
+std::string ThingInstance::text() {
+    return "instance<" + to_string(members.size()) + ">";
 }
