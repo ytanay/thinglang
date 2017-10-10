@@ -185,7 +185,7 @@ void Program::execute() {
             case Opcode::THROW: {
                 for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
                     auto range = instructions[i], definition = instructions[i - 1];
-                    if(counter >= range.target && counter <= range.secondary){
+                    if(definition.secondary == instruction.target && counter >= range.target && counter <= range.secondary){
                         counter = definition.target;
                     }
                 }

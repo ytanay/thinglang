@@ -187,7 +187,7 @@ inline auto arg_count(Opcode val){
             return 0;
 
         case Opcode::THROW:
-            return 0;
+            return 1;
 
         case Opcode::INSTANTIATE:
             return 2;
