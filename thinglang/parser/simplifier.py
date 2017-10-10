@@ -61,4 +61,7 @@ class Simplifier(TreeTraversal):
         elif isinstance(rhs, Simplifier.MULTI_ARG_CONSTRUCTS):
             self.simplify_multi_arg_constructs(rhs)
 
-        return MethodCall(Access([lhs, Identifier(node.operator.transpile())]), ArgumentList([rhs]))
+        if isinstance(lhs, Access):
+            return MethodCall(lhs.append(Identifier(node.operator.transpile())), ArgumentList([rhs]))
+        else:
+            return MethodCall(Access([lhs, Identifier(node.operator.transpile())]), ArgumentList([rhs]))
