@@ -18,6 +18,12 @@ class TryBlock(BaseNode):
 
         self.handlers = None
 
+    def finalize(self):
+        super().finalize()
+        self.handlers = self.siblings_while(lambda x: isinstance(x, HandleBlock))
+
+        for handler in self.handlers:
+            handler.remove()
 
     def compile(self, context: CompilationBuffer):
         start_index = context.next_index
