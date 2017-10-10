@@ -31,6 +31,13 @@ class BaseNode(object, metaclass=NodeRegistration):
         self.children.append(child)
         child.parent = self
 
+    def remove(self):
+        """
+        Remove this node from the AST
+        """
+        self.parent.children.remove(self)
+        self.parent = None
+
     def tree(self, depth=1):
         separator = ('\n' if self.children else '') + ('\t' * depth)
         return '<L{}> {}({}){}{}'.format(self.source_ref.line_number if self.source_ref else "?",
@@ -42,6 +49,7 @@ class BaseNode(object, metaclass=NodeRegistration):
     def describe(self):
         return self.value if self.value is not None else ''
 
+    @collection_utils.drain()
     def siblings_while(self, predicate):
         return itertools.takewhile(predicate, self.next_siblings())
 
