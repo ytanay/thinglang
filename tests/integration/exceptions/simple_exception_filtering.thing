@@ -3,38 +3,21 @@
     "expected_output": [
         "Running program",
         "Entered try block",
-        "Created Exception2 instance",
         "Caught exception"
     ]
 }
 */
 
 thing Exception1
-    has text reason
-
-    setup with text reason
-        Console.print("Created Exception1 instance")
-        self.reason = reason
-
-    does details returns text
-        return self.reason
 
 thing Exception2
-    has text reason
-
-    setup with text reason
-        Console.print("Created Exception2 instance")
-        self.reason = reason
-
-    does details returns text
-        return self.reason
 
 thing Program
     setup
         Console.print("Running program")
         try
             Console.print("Entered try block")
-            throw create Exception2("some reason")
+            throw create Exception2()
             Console.print("About to exit try block")
 
         handle Exception2 exc
