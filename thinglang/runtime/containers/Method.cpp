@@ -134,6 +134,6 @@ void Method::execute() {
         counter++;
     };
 
-    Program::pop_frame();
+    critical_abort(MISSING_RETURN);
 }
 
