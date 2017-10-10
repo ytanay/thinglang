@@ -2,6 +2,7 @@ import collections
 from collections import OrderedDict
 
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.parser.blocks.try_block import TryBlock
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.nodes.root_node import RootNode
@@ -38,7 +39,13 @@ class Indexer(TreeTraversal):
     @inspects(AssignmentOperation)
     def index_local_variable(self, node: AssignmentOperation):
         if node.intent == node.DECELERATION:
-            self.context.append(node)
+            self.context.append(node.name, node.name.type)
+
+    @inspects(TryBlock)
+    def index_handle_block(self, node: TryBlock):
+        for handler in node.handlers:
+            if handler.exception_name is not None:
+                self.context.append(handler.exception_name, handler.exception_type)
 
 
 class IndexerContext(object):
@@ -60,6 +67,8 @@ class IndexerContext(object):
     def flush(self):
         self.current_method.update_locals(self.locals)
 
-    def append(self, node: AssignmentOperation):
-        self.locals[node.name] = LocalMember(node.name.type, len(self.locals))
+    def append(self, name: Identifier, type: Identifier):
+        if name in self.locals:  # TODO: this should be resolved within scoping rules
+            return
+        self.locals[name] = LocalMember(type, len(self.locals))
 
