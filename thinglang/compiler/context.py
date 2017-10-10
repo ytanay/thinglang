@@ -5,6 +5,7 @@ from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, \
     OpcodePushMember
 from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
+from thinglang.utils import collection_utils
 from thinglang.utils.source_context import SourceReference, SourceContext
 
 HEADER_FORMAT = '<HIII'
@@ -29,17 +30,23 @@ class CompilationContext(object):
         self.instructions = []
         self.data = []
         self.instruction_block = []
+        self.epilogues = []
         self.conditional_groups = []
 
-    def append(self, opcode: Opcode, source_ref: SourceReference) -> None:
+    def append(self, opcode: Opcode, source_ref: SourceReference, directly: bool=None) -> None:
         """
-        Append an opcode to the instruction block of the current method
+        Append an opcode to the instruction block of the current method.
+        If directly is set to True, the instruction will not be written into the method-local buffer
         """
         if not source_ref:
             raise Exception('Cannot add instruction without a source ref')
 
         opcode.source_ref = source_ref
-        self.instruction_block.append(opcode)
+
+        if directly:
+            self.instructions.append(opcode)
+        else:
+            self.instruction_block.append(opcode)
 
     def append_static(self, data: bytes) -> int:
         """
@@ -57,6 +64,13 @@ class CompilationContext(object):
         assert len(buffer.instructions) == 0
         assert len(buffer.instruction_block) == 1
         self.instruction_block.insert(index, buffer.instruction_block[0])
+
+    def epilogue(self, buffer):
+        """
+        Appends an epilogue context into the pending buffer list
+        """
+
+        self.epilogues.append(buffer.instruction_block)
 
     def buffer(self) -> 'CompilationContext':
         """
@@ -99,7 +113,6 @@ class CompilationContext(object):
         Additionally, updates the list of available locals, and flushes the instruction block.
         """
 
-        self.instructions += self.instruction_block
         self.current_locals = method_locals
 
         self.instruction_block = [
@@ -111,7 +124,8 @@ class CompilationContext(object):
         Mark the end of a method
         """
 
-        self.instruction_block.append(SentinelMethodEnd())
+        self.instructions += self.instruction_block + collection_utils.flatten(self.epilogues) + [SentinelMethodEnd()]
+        self.instruction_block = None
 
     def update_conditional_jumps(self) -> None:
         """
@@ -128,7 +142,7 @@ class CompilationContext(object):
         Serializes the compilation context into thinglang bytecode
         """
 
-        instructions = self.instructions + self.instruction_block + [SentinelCodeEnd()]
+        instructions = self.instructions + [SentinelCodeEnd()]
 
         if not all(x.source_ref is not None for x in instructions):
             raise Exception('Not all instructions could be mapped to their source: {}'.format([x for x in instructions if x.source_ref is None]))
@@ -146,3 +160,10 @@ class CompilationContext(object):
         ))
 
         return header + code + data + source_map + bytes(self.source.raw_contents, 'utf-8')
+
+    @property
+    def last_instruction(self) -> Opcode:
+        """
+        Returns the last instruction added to the method-local buffer
+        """
+        return self.instruction_block[-1]

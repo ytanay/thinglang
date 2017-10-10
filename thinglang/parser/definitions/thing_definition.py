@@ -20,7 +20,7 @@ class ThingDefinition(BaseNode):
         return self.name
 
     def compile(self, context: CompilationContext):
-        context.append(SentinelThingDefinition(self.slots(context), len(self.methods)), self.source_ref)
+        context.append(SentinelThingDefinition(self.slots(context), len(self.methods)), self.source_ref, directly=True)
         super().compile(context)
 
     def transpile(self):
