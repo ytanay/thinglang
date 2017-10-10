@@ -21,7 +21,7 @@ class TryBlock(BaseNode):
         super().finalize()
         self.handlers = self.siblings_while(lambda x: isinstance(x, HandleBlock))
 
-        for handler in self.handlers:
+        for handler in self.handlers:  # TODO: check for type uniqueness
             handler.remove()
 
     def compile(self, context: CompilationBuffer):
