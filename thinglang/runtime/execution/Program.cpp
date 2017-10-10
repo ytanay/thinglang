@@ -100,7 +100,7 @@ void Program::execute() {
                 Program::create_frame(instruction.secondary);
                 counter = instruction.target;
 
-                continue;
+                goto handle_instruction;
             }
 
             case Opcode::CALL_INTERNAL: {
@@ -181,7 +181,7 @@ void Program::execute() {
                 counter = return_stack.top();
                 return_stack.pop();
                 call_stack.pop();
-                continue;
+                continue; // Not goto handle_instruction because this may be the program end
             }
 
             case Opcode::THROW: {
@@ -213,7 +213,7 @@ void Program::execute() {
 
             case Opcode::JUMP: {
                 counter = instruction.target;
-                continue;
+                goto handle_instruction;
             }
 
             case Opcode::JUMP_CONDITIONAL: {
@@ -221,7 +221,7 @@ void Program::execute() {
 
                 if (!value || !value->boolean()) {
                     counter = instruction.target;
-                    continue;
+                    goto handle_instruction;
                 }
 
                 break;
