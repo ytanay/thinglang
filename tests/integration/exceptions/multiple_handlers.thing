@@ -42,5 +42,4 @@ thing Program
         handle Exception2 exc
             Console.print("B3 Exception2")
 
-
         Console.print("Method end")

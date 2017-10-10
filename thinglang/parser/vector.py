@@ -6,7 +6,8 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.loop import Loop
-from thinglang.parser.blocks.try_block import TryBlock, HandleBlock
+from thinglang.parser.blocks.try_block import TryBlock
+from thinglang.parser.blocks.handle_block import HandleBlock
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
