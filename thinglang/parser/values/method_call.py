@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
@@ -25,7 +26,7 @@ class MethodCall(BaseNode, ValueType):
     def replace_argument(self, idx, replacement):
         self.arguments[idx] = replacement
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         if isinstance(self.target[0], MethodCall):
             inner_target = self.target[0].compile(context)
             target = context.resolve(Access([inner_target.type, self.target[1]]))

@@ -1,4 +1,4 @@
-from thinglang.compiler.context import CompilationContext
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeThrow
 from thinglang.lexer.statements.throw_statement import LexicalThrowStatement
 from thinglang.parser.nodes.base_node import BaseNode
@@ -11,7 +11,7 @@ class ThrowStatement(BaseNode):
         super().__init__([value])
         self.value = value
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         self.value.compile(context)
         context.append(OpcodeThrow(), self.source_ref)
 

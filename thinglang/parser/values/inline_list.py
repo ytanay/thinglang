@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.common.list_type import ListInitialization
@@ -11,7 +12,7 @@ class InlineList(ListInitialization):
     def replace_argument(self, idx, replacement):
         self.arguments[idx] = replacement
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         last_call = MethodCall(Access([Identifier("list"), Identifier.constructor()])).deriving_from(self)
 
         for value in self:

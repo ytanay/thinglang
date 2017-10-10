@@ -1,5 +1,6 @@
 import struct
 
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
@@ -29,7 +30,7 @@ class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello wor
     def describe(self):
         return '"{}"'.format(self.value)
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         ref = context.append_static(self.serialize())
         context.append(OpcodePushStatic(ref), self.source_ref)
         return self

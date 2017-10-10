@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalElse
@@ -11,7 +12,7 @@ class UnconditionalElse(BaseNode, ElseBranchInterface):
     def __init__(self, token):
         super(UnconditionalElse, self).__init__(token)
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         super(UnconditionalElse, self).compile(context)
         context.update_conditional_jumps()
 

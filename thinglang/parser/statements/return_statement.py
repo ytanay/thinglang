@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeReturn
 from thinglang.foundation import templates
@@ -24,7 +25,7 @@ class ReturnStatement(BaseNode):
                 instance_cls_name=self.container_name[1]
             )
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
         if self.value is not None:
             self.value.compile(context)
         context.append(OpcodeReturn(), self.source_ref)
