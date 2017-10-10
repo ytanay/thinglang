@@ -15,28 +15,29 @@ enum class Opcode {
     PUSH_MEMBER = 4,
     POP_MEMBER = 8,
     POP_DEREFERENCED = 9,
-    CALL = 13,
-    CALL_INTERNAL = 14,
+    CALL = 14,
+    CALL_INTERNAL = 15,
     PUSH_LOCAL = 3,
     POP_LOCAL = 7,
-    ASSIGN_STATIC = 10,
-    ASSIGN_LOCAL = 11,
+    ASSIGN_STATIC = 11,
+    ASSIGN_LOCAL = 12,
     INVALID = 0,
     PASS = 1,
     PUSH_NULL = 2,
     PUSH_STATIC = 5,
     POP = 6,
-    DEREFERENCE = 12,
-    RETURN = 15,
-    THROW = 16,
-    INSTANTIATE = 17,
-    JUMP = 18,
-    JUMP_CONDITIONAL = 19,
-    SENTINEL_THING_DEFINITION = 20,
-    SENTINEL_METHOD_DEFINITION = 21,
-    SENTINEL_METHOD_END = 22,
-    SENTINEL_CODE_END = 23,
-    SENTINEL_DATA_END = 24
+    ARG_COPY = 10,
+    DEREFERENCE = 13,
+    RETURN = 16,
+    THROW = 17,
+    INSTANTIATE = 18,
+    JUMP_CONDITIONAL = 20,
+    JUMP = 19,
+    SENTINEL_THING_DEFINITION = 21,
+    SENTINEL_METHOD_DEFINITION = 22,
+    SENTINEL_METHOD_END = 23,
+    SENTINEL_CODE_END = 24,
+    SENTINEL_DATA_END = 25
 };
 
 
@@ -85,6 +86,9 @@ inline auto describe(Opcode val){
         case Opcode::POP:
             return "POP";
 
+        case Opcode::ARG_COPY:
+            return "ARG_COPY";
+
         case Opcode::DEREFERENCE:
             return "DEREFERENCE";
 
@@ -97,11 +101,11 @@ inline auto describe(Opcode val){
         case Opcode::INSTANTIATE:
             return "INSTANTIATE";
 
-        case Opcode::JUMP:
-            return "JUMP";
-
         case Opcode::JUMP_CONDITIONAL:
             return "JUMP_CONDITIONAL";
+
+        case Opcode::JUMP:
+            return "JUMP";
 
         case Opcode::SENTINEL_THING_DEFINITION:
             return "SENTINEL_THING_DEFINITION";
@@ -165,6 +169,9 @@ inline auto arg_count(Opcode val){
         case Opcode::POP:
             return 0;
 
+        case Opcode::ARG_COPY:
+            return 1;
+
         case Opcode::DEREFERENCE:
             return 1;
 
@@ -175,12 +182,12 @@ inline auto arg_count(Opcode val){
             return 0;
 
         case Opcode::INSTANTIATE:
+            return 2;
+
+        case Opcode::JUMP_CONDITIONAL:
             return 1;
 
         case Opcode::JUMP:
-            return 1;
-
-        case Opcode::JUMP_CONDITIONAL:
             return 1;
 
         case Opcode::SENTINEL_THING_DEFINITION:
