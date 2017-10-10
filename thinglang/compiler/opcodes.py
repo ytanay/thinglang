@@ -8,7 +8,8 @@ from thinglang.utils import collection_utils
 from thinglang.utils.logging_utils import camelcase_to_underscore
 from thinglang.utils.source_context import SourceReference
 
-STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
+STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = TYPE_ID = METHOD_ID = TARGET = ID = object()
+INSTRUCTION_INDEX = object()
 
 OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode', 'arg_count'])
 
@@ -245,7 +246,8 @@ class OpcodeCall(ElementReferenced):
     """
     Calls a user defined method
     """
-    ARGS = TYPE_ID, METHOD_ID
+    ARGS = INSTRUCTION_INDEX, FRAME_SIZE
+
 
 
 class OpcodeCallInternal(ElementReferenced):
@@ -273,14 +275,14 @@ class OpcodeInstantiate(Opcode):
     """
     Create a reference container to a new thing instance and pushes it to the program stack
     """
-    ARGS = TYPE_ID,
+    ARGS = ARGUMENTS, ARGUMENTS
 
 
 class OpcodeJump(Opcode):
     """
     Jumps to an absolute instruction in the current method
     """
-    ARGS = IDX,
+    ARGS = INSTRUCTION_INDEX,
 
 
 class OpcodeJumpConditional(Opcode):
@@ -288,7 +290,7 @@ class OpcodeJumpConditional(Opcode):
     Pops a reference from the stack and evaluates it.
     If it evaluates to true, jumps to an absolute instruction in the current method
     """
-    ARGS = IDX,
+    ARGS = INSTRUCTION_INDEX,
 
 
 
