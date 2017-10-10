@@ -1,7 +1,7 @@
 # thinglang
 [![Build Status](https://travis-ci.org/ytanay/thinglang.svg?branch=master)](https://travis-ci.org/ytanay/thinglang)
 
-Thinglang is a Python-inspired programming language, originally conceived as an educational project.
+thinglang is a Python-inspired programming language, originally conceived as an educational project.
 
 The syntax attempts to extract the core concepts of OOP into familiar terms and structures (i.e. meant to be explainable to an elementary school student reasonably easily). Put alternatively, the language as a whole is meant to motivate a clean  and consistent style of OOP. First things first, however - Hello World looks like this:
 ```cs
@@ -53,7 +53,7 @@ The original implementation of thinglang was written in pure Python as an exerci
 Since then, the runtime has been rewritten in C++, and the process now resembles that of the classic strictly typed languages, specifically Java/C#. Outlined below is the thinglang compilation pipeline. 
 
 ### Lexical Analysis + Parsing
-The first stage is a ine-by-line lexical tokenization process. Each time stream (one per line) is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
+The first stage is a line-by-line lexical tokenization process. Each time stream (one per line) is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
 ```
 [L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
 ```
@@ -89,7 +89,7 @@ The AST undergoes two processes during SA: indexing and reduction.
 A symbol map is generated from the AST, and its dependencies are inspected and loaded. If needed, additional source files go through the pipeline as described, otherwise, existing symbol maps are loaded. Processing continues once all dependencies are resolved. 
 
 ### Compilation 
-The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches certain non-syntatic errors. Additionally, static data is collected and debugging maps are generated for the final executable if applicable. 
+The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches certain non-syntactic errors. Additionally, static data is collected and debugging maps are generated for the final executable if applicable. 
 
 ### Runtime 
 With an executable in hand, we switch to the C++ runtime. After loading and processing the bytecode and its dependencies, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching errors, and so on). 
@@ -101,7 +101,7 @@ This is a description of the old Python-based execution model - it's slow, but s
 Execution can begin after a bounded-reduced AST is created (see above)
 
 The initialization sequence for any program goes roughly like this:
-1. A program-global "heap" space is created, and first-order builtins are initialized inside it (currently, this means the `Input` and `Output` objects).
+1. A program-global "heap" space is created, and first-order built-ins are initialized inside it (currently, this means the `Input` and `Output` objects).
 2. The *targets array* is created. The program is said to be executing as long as there are targets in the array. The program thus exits when there are no more targets, or when an error that the program cannot handle occurs.
 3. The AST is scanned for a ThingDefinition with `name=Program` and an instance of it (`Thing<Program>`) is created. This instance is initially stored in an temporary (unreachable) location.
 4. A root level stack frame is created, and contains a reference to the newly created `Thing<Program>` instance.
@@ -115,7 +115,7 @@ While a target is processed it can (and frequently does) affect the *targets arr
 We'll look at a few examples of more intricate execution targets below.
 
 #### Method calls
-Method calls involve a bit of extra handholding. Described below is the general procedure for executing most method calls (the procedure for instance construction - i.e. creating a new `Thing` instance - is a bit different, and will be described seperately):
+Method calls involve a bit of extra hand-holding. Described below is the general procedure for executing most method calls (the procedure for instance construction - i.e. creating a new `Thing` instance - is a bit different, and will be described separately):
 
 1. The target instance is looked up, first on the stack, then on the heap.
 2. The method is looked up on the target instance.
