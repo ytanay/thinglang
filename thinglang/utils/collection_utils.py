@@ -1,4 +1,5 @@
 import functools
+from typing import Iterable, Type, Sequence
 
 
 def drain(predicate=lambda x: True):
@@ -17,7 +18,7 @@ def drain(predicate=lambda x: True):
     return wrapper
 
 
-def subclasses(cls):
+def subclasses(cls: Type) -> Iterable[type]:
     """
     Recursively emit subclasses of cls
     """
@@ -26,14 +27,19 @@ def subclasses(cls):
         yield subclass
 
 
-def chunks(l, n):
-    """Yield successive n-sized chunks from l."""
-    for i in range(0, len(l), n):
-        yield l[i:i + n]
+def chunks(collection: Sequence, n: int) -> Iterable[list]:
+    """
+    Yield successive n-sized chunks from collection.
+    """
+    for i in range(0, len(collection), n):
+        yield collection[i:i + n]
 
 
 @drain()
-def flatten(lst):
+def flatten(lst: Iterable) -> list:
+    """
+    Recursively descend into lst, producing a flattened list from its contents.
+    """
     for item in lst:
         if isinstance(item, list):
             yield from flatten(item)
