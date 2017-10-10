@@ -14,6 +14,7 @@ from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
+from thinglang.parser.statements.throw_statement import ThrowStatement
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
 
@@ -34,6 +35,7 @@ PARSING_ORDER = [
 
     AssignmentOperation,
     ReturnStatement,
+    ThrowStatement,
 
     Conditional,
     ConditionalElse,
