@@ -8,10 +8,10 @@
 #include <utility>
 #include <memory>
 
+#include "../execution/Instruction.h"
 #include "../utils/TypeNames.h"
-
-#include "../containers/Method.h"
 #include "../types/InternalTypes.h"
+#include "../execution/Opcodes.h"
 
 
 class ProgramReader {
@@ -19,25 +19,15 @@ public:
 
     explicit ProgramReader(std::string filename) : filename(std::move(filename)) {}
 
-
+    ProgramInfo process();
 
     void read_header();
 
-    ProgramInfo process();
-
-
-    Things read_data();
-
-    Thing read_data_block();
-
-    Types read_code();
-
-    Type read_class();
-
-    Method read_method();
-
+    InstructionList read_code();
     Instruction read_instruction(Opcode opcode);
 
+    Things read_data();
+    Thing read_data_block();
 
     template<typename T>
     T read() {
@@ -67,18 +57,17 @@ public:
     }
 
 
-
 private:
     const std::string filename;
     std::ifstream file;
     Index entry = 0;
 
-    Size program_size = 0, instruction_count = 0, data_item_count = 0, instruction_counter = 0;
+    Size program_size = 0, instruction_count = 0, data_item_count = 0, instruction_counter = 0, initial_frame_size = 0;
 
     Opcode last_opcode = Opcode::INVALID;
 
     static const std::string EXPECTED_MAGIC;
-    static const uint16_t EXPECTED_VERSION = 1;
+    static const uint16_t EXPECTED_VERSION = 2;
 
     void prepare_stream();
 

@@ -4,6 +4,8 @@
 
 #include "../include/args.h"
 
+
+
 #include "errors/RuntimeError.h"
 #include "execution/Program.h"
 #include "loader/ProgramReader.h"
@@ -38,7 +40,7 @@ int main(const int argc, const char **argv)
     try {
         auto info = reader.process();
         Program::load(info);
-        Program::start();
+        Program::execute();
     } catch (const RuntimeError &err) {
         std::cerr << "Error during execution: " << err.what() << std::endl;
         return 1;

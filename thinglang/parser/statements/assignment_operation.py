@@ -1,3 +1,4 @@
+from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
 from thinglang.lexer.operators.assignment import LexicalAssignment
@@ -27,7 +28,7 @@ class AssignmentOperation(BaseNode):
     def describe(self):
         return '{} = {}'.format(self.name, self.value)
 
-    def compile(self, context: CompilationContext):
+    def compile(self, context: CompilationBuffer):
 
         is_local = isinstance(self.name, Identifier)
 
@@ -44,7 +45,7 @@ class AssignmentOperation(BaseNode):
         value_ref = self.value.compile(context)
         target = self.name
 
-        cast_placeholder = context.current_index() + 1
+        cast_placeholder = context.current_index + 1
 
         if isinstance(target, Identifier):
             target_ref = context.resolve(target)
@@ -59,9 +60,9 @@ class AssignmentOperation(BaseNode):
             raise Exception('Cannot pull up {}'.format(target))
 
         if value_ref.type != target_ref.type:
-            buffer = context.buffer()
-            CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(buffer)
-            context.insert(cast_placeholder, buffer)
+            optional = context.optional()
+            CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(optional)
+            context.insert(cast_placeholder, optional)
 
     ASSIGNMENT_TARGET = Identifier, Access
 

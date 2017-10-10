@@ -1,6 +1,7 @@
 import re
 
 from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
+from thinglang.lexer.blocks.exceptions import LexicalTry, LexicalHandle
 from thinglang.lexer.blocks.loops import LexicalRepeatFor, LexicalRepeatWhile
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationMethod
@@ -19,6 +20,7 @@ from thinglang.lexer.operators.comparison import LexicalEquals, LexicalNegation,
 from thinglang.lexer.operators.membership import LexicalIn
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
+from thinglang.lexer.statements.throw_statement import LexicalThrowStatement
 from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.tokens.indent import LexicalIndent
@@ -84,7 +86,11 @@ KEYWORDS = {
     'true': LexicalBooleanTrue,
     'false': LexicalBooleanFalse,
 
-    'as': LexicalCast
+    'as': LexicalCast,
+
+    'try': LexicalTry,
+    'handle': LexicalHandle,
+    'throw': LexicalThrowStatement
 }
 
 REVERSE_OPERATORS = {

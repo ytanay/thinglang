@@ -7,8 +7,6 @@ set(SOURCE_FILES
         thinglang/runtime/main.cpp
         thinglang/runtime/loader/ProgramReader.cpp
 
-        thinglang/runtime/containers/Method.cpp
-
         thinglang/runtime/execution/Program.cpp
 
         thinglang/runtime/errors/RuntimeError.cpp

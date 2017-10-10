@@ -5,8 +5,8 @@
 #include <cassert>
 #include <algorithm>
 
+
 #include "../utils/TypeNames.h"
-#include "../types/infrastructure/ThingType.h"
 
 
 class Program {
@@ -39,16 +39,15 @@ public:
         return frames.top();
     }
 
-    static void start() {
-        types[entry]->call(0);
-    }
+    static void execute();
+    static void copy_args(Size count, Size offset);
 
     static void load(ProgramInfo &info);
 
     static void status(Index counter, const Instruction& instruction);
 
     static Types internals;
-    static Types types;
+
 private:
     Program() = default;
 
@@ -56,8 +55,11 @@ private:
     static FrameStack frames;
     static Things static_data;
     static Index entry;
+    static Size initial_frame_size;
     static SourceMap source_map;
     static Source source;
+    static InstructionList instructions;
+
 
 
 };

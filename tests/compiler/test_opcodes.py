@@ -12,4 +12,4 @@ def test_opcode_resolution(test_case):
     expected_error, opcode = test_case
 
     with pytest.raises(expected_error):
-        opcode.resolve()
+        opcode.serialize()

@@ -34,6 +34,7 @@ public:
     Thing get(Index index) override;
 
     void set(Index index, const Thing& thing) override;
+    virtual std::string text() override;
 };
 
 

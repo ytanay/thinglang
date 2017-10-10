@@ -8,7 +8,8 @@ from thinglang.utils import collection_utils
 from thinglang.utils.logging_utils import camelcase_to_underscore
 from thinglang.utils.source_context import SourceReference
 
-STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = IDX = TYPE_ID = METHOD_ID = TARGET = ID = object()
+STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = TYPE_ID = METHOD_ID = TARGET = ID = object()
+INSTRUCTION_INDEX = object()
 
 OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode', 'arg_count'])
 
@@ -48,7 +49,13 @@ class Opcode(object, metaclass=OpcodeRegistration):
         """
         self.args = args
 
-    def resolve(self) -> bytes:
+    def update_offset(self, method_offset: int, data_offset: int):
+        return self
+
+    def update_references(self, offsets):
+        pass
+
+    def serialize(self) -> bytes:
         """
         Validates this instruction and convert it to binary bytecode
         """
@@ -183,6 +190,10 @@ class OpcodePushStatic(Opcode):
     """
     ARGS = STATIC_ID,
 
+    def update_offset(self, method_offset: int, data_offset: int):
+        self.args = self.args[0] + data_offset,
+        return self
+
 
 # Stack pop operations
 
@@ -214,6 +225,11 @@ class OpcodePopDereferenced(ElementReferenced):
     ARGS = MEMBER_ID,
 
 
+class OpcodeArgCopy(Opcode):
+
+    ARGS = ARGUMENTS,
+
+
 # Assignment operations
 
 class OpcodeAssignStatic(LocalReferenced):
@@ -221,6 +237,10 @@ class OpcodeAssignStatic(LocalReferenced):
     Sets a reference from the static segment into the stack frame
     """
     ARGS = LOCAL_ID, STATIC_ID
+
+    def update_offset(self, method_offset: int, data_offset: int):
+        self.args = self.args[0], self.args[1] + data_offset
+        return self
 
 
 class OpcodeAssignLocal(LocalReferenced):
@@ -245,7 +265,10 @@ class OpcodeCall(ElementReferenced):
     """
     Calls a user defined method
     """
-    ARGS = TYPE_ID, METHOD_ID
+    ARGS = INSTRUCTION_INDEX, FRAME_SIZE
+
+    def update_references(self, offsets):
+        self.args = offsets[self.args]
 
 
 class OpcodeCallInternal(ElementReferenced):
@@ -262,26 +285,37 @@ class OpcodeReturn(Opcode):
     pass
 
 
+class OpcodeThrow(Opcode):
+    """
+    Throws an exception instance on the stack
+    """
+    pass
+
+
 class OpcodeInstantiate(Opcode):
     """
     Create a reference container to a new thing instance and pushes it to the program stack
     """
-    ARGS = TYPE_ID,
+    ARGS = ARGUMENTS, ARGUMENTS
 
 
 class OpcodeJump(Opcode):
     """
     Jumps to an absolute instruction in the current method
     """
-    ARGS = IDX,
+    ARGS = INSTRUCTION_INDEX,
+
+    def update_offset(self, method_offset: int, data_offset: int):
+        self.args = self.args[0] + method_offset,
+        return self
 
 
-class OpcodeJumpConditional(Opcode):
+class OpcodeJumpConditional(OpcodeJump):
     """
     Pops a reference from the stack and evaluates it.
     If it evaluates to true, jumps to an absolute instruction in the current method
     """
-    ARGS = IDX,
+    ARGS = INSTRUCTION_INDEX,
 
 
 

@@ -3,7 +3,6 @@
 #include <utility>
 
 #include "../../utils/TypeNames.h"
-#include "../../containers/Method.h"
 
 
 class ThingType{
@@ -12,17 +11,6 @@ public:
     virtual Thing call(Index idx) = 0;
 
     Size members = 0;
-};
-
-class ThingTypeExternal : public ThingType {
-public:
-    ThingTypeExternal(const std::string &name, Size members, Methods methods) : ThingType(members), methods(
-            std::move(methods)) {};
-
-    Thing call(Index idx) override;
-
-private:
-    Methods methods;
 };
 
 

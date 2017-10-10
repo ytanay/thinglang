@@ -6,6 +6,7 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.loop import Loop
+from thinglang.parser.blocks.try_block import TryBlock, HandleBlock
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
@@ -14,6 +15,7 @@ from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
+from thinglang.parser.statements.throw_statement import ThrowStatement
 from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
 
@@ -34,12 +36,16 @@ PARSING_ORDER = [
 
     AssignmentOperation,
     ReturnStatement,
+    ThrowStatement,
 
     Conditional,
     ConditionalElse,
     UnconditionalElse,
 
-    Loop
+    Loop,
+
+    TryBlock,
+    HandleBlock
 ]
 
 

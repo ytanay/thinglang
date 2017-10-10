@@ -77,8 +77,8 @@ class SourceReference(object):
         return cls('<generated:{}>'.format(reason), -1, -1, -1)
 
     @classmethod
-    def combine(cls, slice):
-        refs = [x.source_ref for x in slice if hasattr(x, 'source_ref') and x.source_ref]
+    def combine(cls, tokens):
+        refs = [x.source_ref for x in tokens if hasattr(x, 'source_ref') and x.source_ref]
 
         if not refs:
             return None

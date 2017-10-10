@@ -37,5 +37,5 @@ using InternalMethods = std::vector<InternalMethod>;
 using Type = ThingType*;
 using Types = std::vector<Type>;
 
-using ProgramInfo = std::tuple<Types, Things, Index, SourceMap, Source>;
+using ProgramInfo = std::tuple<InstructionList, Things, Index, Size, SourceMap, Source>;
 
