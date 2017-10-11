@@ -22,7 +22,7 @@ Thing NumberType::__addition__() {
 		auto self = Program::argument<NumberInstance>();
 
 		return Thing(new NumberInstance(self->val + other->val));
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -31,7 +31,7 @@ Thing NumberType::__subtraction__() {
 		auto self = Program::argument<NumberInstance>();
 
 		return Thing(new NumberInstance(self->val - other->val));
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -40,7 +40,7 @@ Thing NumberType::__multiplication__() {
 		auto self = Program::argument<NumberInstance>();
 
 		return Thing(new NumberInstance(self->val * other->val));
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -49,7 +49,7 @@ Thing NumberType::__division__() {
 		auto self = Program::argument<NumberInstance>();
 
 		return Thing(new NumberInstance(self->val / other->val));
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -67,7 +67,7 @@ Thing NumberType::__equals__() {
 			return BOOL_FALSE;
     }
 
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -80,7 +80,7 @@ Thing NumberType::__less_than__() {
 			return BOOL_TRUE;
         }
 
-		return nullptr;
+        return nullptr;
     }
 
 

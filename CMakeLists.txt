@@ -19,6 +19,7 @@ set(SOURCE_FILES
         thinglang/runtime/types/core/BoolType.cpp
         thinglang/runtime/types/core/ListType.cpp
         thinglang/runtime/types/core/ConsoleType.cpp
+        thinglang/runtime/types/core/FileType.cpp
 
         thinglang/runtime/types/infrastructure/ThingInstance.cpp
         thinglang/runtime/types/infrastructure/ThingType.cpp

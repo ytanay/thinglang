@@ -22,7 +22,7 @@ Thing TextType::__addition__() {
 		auto self = Program::argument<TextInstance>();
 
 		return Thing(new TextInstance(self->val + other->val));
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -40,7 +40,7 @@ Thing TextType::__equals__() {
 			return BOOL_FALSE;
     }
 
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -59,7 +59,7 @@ Thing TextType::contains() {
 			return BOOL_FALSE;
     }
 
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -67,7 +67,7 @@ Thing TextType::convert_number() {
 		auto num = Program::argument<TextInstance>();
 
 		return Thing(new NumberInstance(to_number(num->val)));
-		return nullptr;
+        return nullptr;
     }
 
 

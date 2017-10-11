@@ -23,7 +23,7 @@ Thing ListType::append() {
 
 		self->val.push_back(item);
 		return self;
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -42,7 +42,7 @@ Thing ListType::contains() {
 			return BOOL_FALSE;
     }
 
-		return nullptr;
+        return nullptr;
     }
 
 

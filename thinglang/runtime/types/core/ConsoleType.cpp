@@ -21,7 +21,7 @@ Thing ConsoleType::write() {
 		auto message = Program::pop();
 
 		std::cout << message->text();
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -29,7 +29,7 @@ Thing ConsoleType::print() {
 		auto message = Program::pop();
 
 		std::cout << message->text() << std::endl;
-		return nullptr;
+        return nullptr;
     }
 
 
@@ -39,7 +39,7 @@ Thing ConsoleType::read_line() {
 		std::string input;
 		std::getline(std::cin, input);
 		return Thing(new TextInstance(input));
-		return nullptr;
+        return nullptr;
     }
 
 
