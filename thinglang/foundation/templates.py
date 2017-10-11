@@ -143,6 +143,7 @@ Thing {type_cls_name}::__constructor__() {{
 
 ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
+ARGUMENT_INSTANTIATE_SELF = '\t\tauto self = std::static_pointer_cast<{cls}>(Thing(new {cls}()));'
 
 RETURN_VALUE = "return {value};"
 RETURN_VALUE_INSTANTIATE = 'return Thing(new {instance_cls_name}({value}));'

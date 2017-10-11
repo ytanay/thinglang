@@ -4,7 +4,7 @@ from thinglang.parser.common.list_type import ListInitialization
 
 class ArgumentList(ListInitialization):
 
-    def transpile(self, instance_cls_name, static=False):
+    def transpile(self, instance_cls_name, static=False, constructor=False):
         lines = []
 
         for arg in reversed(self.values):
@@ -18,7 +18,9 @@ class ArgumentList(ListInitialization):
                     name=arg.transpile())
                 )
 
-        if not static:
+        if constructor:
+            lines.append(templates.ARGUMENT_INSTANTIATE_SELF.format(cls=instance_cls_name))
+        elif not static:
             lines.append(templates.ARGUMENT_POP_TYPE.format(
                 name='self',
                 type=instance_cls_name
