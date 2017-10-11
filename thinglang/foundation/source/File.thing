@@ -1,0 +1,23 @@
+thing File
+    has `std::string` file_path
+    has `std::fstream` file
+
+    setup with text file_path
+        `self->file_path = file_path->text();`
+
+    does open with text mode
+        if `mode->text()` eq "r"
+            `self->file.open(self->file_path, std::ios::in);`
+        else if `mode->text()` eq "w"
+            `self->file.open(self->file_path, std::ios::out);`
+
+    does close
+        `self->file.close();`
+
+    does write with text contents
+        `self->file << contents->text();`
+
+    does read returns text
+        `std::stringstream sstr;`
+        `sstr << self->file.rdbuf();`
+        `return Thing(new TextInstance(sstr.str()));`

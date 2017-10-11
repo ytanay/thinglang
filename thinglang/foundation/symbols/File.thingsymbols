@@ -1,0 +1,77 @@
+{
+    "extends": null,
+    "index": 6,
+    "name": "File",
+    "offset": 2,
+    "symbols": [
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "File"
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "open",
+            "static": false,
+            "type": null
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "close",
+            "static": false,
+            "type": null
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 3,
+            "kind": "method",
+            "name": "write",
+            "static": false,
+            "type": null
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 4,
+            "kind": "method",
+            "name": "read",
+            "static": false,
+            "type": "text"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "file_path",
+            "static": false,
+            "type": "std::string"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 1,
+            "kind": "member",
+            "name": "file",
+            "static": false,
+            "type": "std::fstream"
+        }
+    ]
+}
