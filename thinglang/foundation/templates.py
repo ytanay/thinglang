@@ -86,11 +86,11 @@ FOUNDATION_MIXINS_DECLARATION = """
 
 FOUNDATION_MIXINS_DEFINITION = """
 std::string {instance_cls_name}::text() {{
-    return to_string(val);
+    return to_string({first_member});
 }}
 
 bool {instance_cls_name}::boolean() {{
-    return to_boolean(val);
+    return to_boolean({first_member});
 }}
 """
 
@@ -161,3 +161,13 @@ def class_names(name):
     return '{}Type'.format(name), '{}Instance'.format(name)
 
 
+def format_member_list(members):
+    return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in members)
+
+
+def format_value_constructor(instance_cls_name, member_list):
+    return FOUNDATION_VALUE_CONSTRUCTOR.format(
+        instance_cls_name=instance_cls_name,
+        member_list=format_member_list(member_list),
+        initializer=', '.join('{name}({name})'.format(name=name.name.transpile()) for name in member_list[:1])
+    )
