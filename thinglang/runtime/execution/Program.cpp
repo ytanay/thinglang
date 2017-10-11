@@ -18,7 +18,8 @@ Types Program::internals = {
         new NumberType(),
         new BoolType(),
         new ListType(),
-        new ConsoleType()
+        new ConsoleType(),
+        new FileType()
 };
 
 
@@ -63,7 +64,6 @@ void Program::status(Index counter, const Instruction& instruction) {
 }
 
 void inline Program::copy_args(Size count, Size offset){
-    std::cerr << "Reading " << count << " arguments at offset " << offset << std::endl;
     for (size_t i = 0; i < count; i++) {
         Program::frame()[offset - i] = Program::pop();
     }

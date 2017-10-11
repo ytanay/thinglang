@@ -14,13 +14,15 @@
 #include "core/BoolType.h"
 #include "core/ListType.h"
 #include "core/ConsoleType.h"
+#include "core/FileType.h"
 
 enum class InternalTypes {
     TEXT = 1,
     NUMBER = 2,
     BOOL = 3,
     LIST = 4,
-    CONSOLE = 5
+    CONSOLE = 5,
+    FILE = 6
 };
 
 
@@ -41,5 +43,8 @@ inline auto describe(InternalTypes val){
 
         case InternalTypes::CONSOLE:
             return "CONSOLE";
+
+        case InternalTypes::FILE:
+            return "FILE";
     }
 }
