@@ -54,7 +54,7 @@ class MethodCall(BaseNode, ValueType):
                 compiled_target = arg.compile(context)
 
                 if not self.validate_types(compiled_target, expected_type):
-                    raise ArgumentTypeMismatch(idx, expected_type, compiled_target.type)
+                    raise ArgumentTypeMismatch(target, idx, expected_type, compiled_target.type)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target), self.source_ref)

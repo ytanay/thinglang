@@ -33,11 +33,11 @@ class ArgumentTypeMismatch(ThinglangException):
     The method was not called with the expected number of arguments
     """
 
-    def __init__(self, index, expected_type, actual_type):
-        self.index, self.expected_type, self.actual_type = index, expected_type, actual_type
+    def __init__(self, target, index, expected_type, actual_type):
+        self.target, self.index, self.expected_type, self.actual_type = target, index, expected_type, actual_type
         super(ArgumentTypeMismatch, self).__init__()
 
     @property
     def message(self):
-        return f'Argument #{self.index + 1} is of incorrect type. Expected {self.expected_type}, got {self.actual_type}'
+        return f'{self.target}: Argument #{self.index + 1} is of incorrect type. Expected {self.expected_type}, got {self.actual_type}'
 

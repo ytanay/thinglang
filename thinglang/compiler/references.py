@@ -74,6 +74,9 @@ class ElementReference(Reference):
     def kind(self) -> object:
         return self.element.kind
 
+    def __str__(self):
+        return f'EM({self.thing}.{self.element})'
+
 
 class LocalReference(Reference):
     """

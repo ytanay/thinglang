@@ -49,9 +49,9 @@ class SymbolMap(object):
 
         return templates.FOUNDATION_TYPE_DECLARATION.format(
             type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
-            constructors=templates.FOUNDATION_VALUE_CONSTRUCTOR.format(
+            constructors=templates.format_value_constructor(
                 instance_cls_name=instance_cls_name,
-                member_list=self.format_member_list()) if self.members else '',
+                member_list=self.members) if self.members else '',
             mixins=templates.FOUNDATION_MIXINS_DECLARATION if self.members else '',
             members=self.format_member_list('\n', ';'),
             methods=self.format_method_declarations(),
