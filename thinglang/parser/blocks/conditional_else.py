@@ -1,3 +1,4 @@
+from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalElse
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.blocks.conditional import Conditional
@@ -11,6 +12,13 @@ class ConditionalElse(Conditional, ElseBranchInterface):
 
     def describe(self):
         return 'else if {}'.format(self.value)
+
+    def transpile(self):
+        return templates.CONDITIONAL.format(
+            prefix='else ',
+            condition=self.value.transpile(),
+            body=self.transpile_children(indent=3)
+        )
 
     @staticmethod
     @ParserRule.mark
