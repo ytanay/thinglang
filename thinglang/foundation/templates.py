@@ -76,6 +76,7 @@ FOUNDATION_METHOD = """
 {return_type} {class_name}::{name}({arguments}) {{
 {preamble}
 {body}
+        {epilogue}
     }}
 """
 
@@ -123,7 +124,7 @@ ENUM_CASE = """
 
 
 CONDITIONAL = """
-        if({condition}) {{
+        {prefix}if({condition}) {{
 {body}
         }}
 """
@@ -148,8 +149,9 @@ ARGUMENT_INSTANTIATE_SELF = '\t\tauto self = std::static_pointer_cast<{cls}>(Thi
 RETURN_VALUE = "return {value};"
 RETURN_VALUE_INSTANTIATE = 'return Thing(new {instance_cls_name}({value}));'
 RETURN_NULL = 'return nullptr;'
+RETURN_SELF = 'return self;'
 
-FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : val(val) {{}}; // value constructor'
+FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : {initializer} {{}}; // value constructor'
 
 
 def format_internal_type_name(type):

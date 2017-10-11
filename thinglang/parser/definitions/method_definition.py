@@ -44,12 +44,14 @@ class MethodDefinition(BaseNode):
             )
 
         return templates.FOUNDATION_METHOD.format(
-            name=(self.parent.name if self.is_constructor() else self.name).transpile(),
+            name=self.name.transpile(),
             class_name=type_cls_name,
-            return_type='Thing' if not self.is_constructor() else '',
+            return_type='Thing',
             arguments='',  # Popped directly from stack
-            preamble=self.arguments.transpile(instance_cls_name, static=self.static),
-            body=self.transpile_children(2, self.children + [ReturnStatement([])])
+            preamble=self.arguments.transpile(instance_cls_name, static=self.static, constructor=self.is_constructor()),
+            body=self.transpile_children(2, self.children),
+            epilogue=templates.RETURN_SELF if self.is_constructor() else templates.RETURN_NULL
+
         )
 
     def compile(self, context: CompilationBuffer):

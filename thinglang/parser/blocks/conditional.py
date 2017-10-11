@@ -25,6 +25,7 @@ class Conditional(BaseNode):
 
     def transpile(self):
         return templates.CONDITIONAL.format(
+            prefix='',
             condition=self.value.transpile(),
             body=self.transpile_children(indent=3)
         )
