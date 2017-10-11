@@ -1,0 +1,22 @@
+/*
+{
+    "expected_output": ["Read: Hello, file!"]
+}
+*/
+
+thing Program
+    setup
+        text file_name = "__test_file__1"
+
+        File f = create File(file_name)
+
+        f.open("w")
+        f.write("Hello, file!")
+        f.close()
+
+        f.open("r")
+        text output = "Read: " + f.read()
+
+        Console.print(output)
+
+
