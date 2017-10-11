@@ -6,6 +6,8 @@
 #include <memory>
 #include <tuple>
 #include <string>
+#include <fstream>
+#include <sstream>
 
 
 class BaseThingInstance;
