@@ -99,9 +99,10 @@ def generate_enum(cls_name, values, imports=''):
 
 
 def write_if_changed(file_path, contents):
-    with open(file_path, 'r') as f:
-        if f.read() == contents:
-            return
+    if os.path.isfile(file_path):
+        with open(file_path, 'r') as f:
+            if f.read() == contents:
+                return
 
     print('Writing {}'.format(file_path))
 
