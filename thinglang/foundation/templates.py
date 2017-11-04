@@ -43,6 +43,8 @@ class {instance_cls_name} : public BaseThingInstance {{
     
     /** Members **/
     {members}
+    
+    {children}
 }};
 
 
@@ -138,21 +140,26 @@ ELSE_CLAUSE = """
 
 IMPLICIT_CONSTRUCTOR = """
 Thing {type_cls_name}::__constructor__() {{
-    return Thing(new {instance_cls_name}());
+    return Program::create<{instance_cls_name}>();
 }}
 """
 
 ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
-ARGUMENT_INSTANTIATE_SELF = '\t\tauto self = std::static_pointer_cast<{cls}>(Thing(new {cls}()));'
+ARGUMENT_INSTANTIATE_SELF = '\t\tauto self = Program::create<{cls}>();'
 
 RETURN_VALUE = "return {value};"
-RETURN_VALUE_INSTANTIATE = 'return Thing(new {instance_cls_name}({value}));'
+RETURN_VALUE_INSTANTIATE = 'return Program::create<{instance_cls_name}>({value});'
 RETURN_NULL = 'return nullptr;'
 RETURN_SELF = 'return self;'
 
 FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : {initializer} {{}}; // value constructor'
 
+FOUNDATION_CHILDREN = """
+    Things& children() override {
+        return val;
+    }
+"""
 
 def format_internal_type_name(type):
     name = type.value.capitalize()
