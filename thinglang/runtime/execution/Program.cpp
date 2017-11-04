@@ -12,8 +12,11 @@ SourceMap Program::source_map;
 Source Program::source;
 InstructionList Program::instructions;
 
+
 ThingForwardList Program::objects;
-Things Program::permanents;
+
+unsigned char Program::current_mark = 0;
+
 
 Types Program::internals = {
         nullptr,
@@ -114,7 +117,6 @@ void Program::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                auto new_thing = Thing(new ThingInstance(instruction.secondary));
                 auto new_thing = Program::create<ThingInstance>(instruction.secondary);
                 Program::frame()[0] = new_thing;
                 Program::copy_args(instruction.target, instruction.target);
@@ -185,6 +187,7 @@ void Program::execute() {
                 counter = return_stack.top();
                 return_stack.pop();
                 call_stack.pop();
+                gc_cycle();
                 continue; // Not goto handle_instruction because this may be the program end
             }
 
@@ -198,6 +201,7 @@ void Program::execute() {
 
                         if(definition.secondary == instruction.target && counter >= range.target && counter <= range.secondary){
                             counter = definition.target;
+                            gc_cycle();
                             goto handle_instruction;
                         }
                     }
@@ -247,3 +251,66 @@ void Program::execute() {
 }
 
 
+void Program::gc_cycle() {
+    /**
+     * Full mark-sweep GC cycle
+     */
+    Program::mark();
+    Program::sweep();
+}
+
+
+
+void Program::mark() {
+    /**
+     * Marks all object roots by scanning all stack frames and the program stack
+     */
+    current_mark++;
+
+    for(auto& frame : frames){
+        for(auto& elem : frame) {
+            mark(elem);
+        }
+    }
+
+    for(auto& elem : stack){
+        mark(elem);
+    }
+}
+
+void Program::mark(const Thing &thing) {
+    /**
+     * Mark an object and recursively descend into its children
+     */
+    if(!thing || thing->color == current_mark)
+        return;
+
+    thing->color = current_mark;
+    for(auto& child : thing->children())
+        mark(child);
+}
+
+void Program::sweep() {
+    /**
+     * Collect all unreferenced objects (pending deletion), finalizes them and dealloactes their memory
+     */
+    ThingForwardList pending_deletion;
+
+    for (auto it = objects.begin(), previous = objects.before_begin(); it != objects.end(); ) {
+        if((*it)->color == current_mark){
+            it++;
+            previous++;
+        } else {
+            std::cerr << "\tSweep: finalizing " << (*it)->text() << std::endl;
+            pending_deletion.push_front(*it);
+            it = objects.erase_after(previous);
+        }
+    }
+
+    for(auto item : pending_deletion){
+        delete item;
+    }
+
+
+    std::cerr << "Done!" << std::endl;
+}

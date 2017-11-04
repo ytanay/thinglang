@@ -8,7 +8,6 @@
 
 #include "../utils/TypeNames.h"
 
-
 class Program {
 public:
 
@@ -64,10 +63,17 @@ private:
 
 
 
+    /**
+     * Allocation and garbage collection components
+     */
+
+private:
     static ThingForwardList objects; // All allocated thing instances
-    static Things permanents; // Objects in the permanent generation
     static unsigned char current_mark; // The value used to mark objects in the current cycle
 
+public:
+
+    template <typename T, typename... Args>
     static T* create(Args&&... args) {
         // Create a new ThingInstance and intern into a generation
         auto thing = new T(std::forward<Args>(args)...);
@@ -80,11 +86,15 @@ private:
     static T* permanent(Args&&... args) {
         // Create a new ThingInstance into perm-gen
         auto thing = new T(std::forward<Args>(args)...);
-        permanents.push_back(thing);
         return thing;
     }
 
-    static void gc_cycle(); // Full Mark-Sweep cycle
+    static void gc_cycle(); // Full mark-sweep cycle
+    static void mark(); // Recursively descends into all roots
+    static void mark(const Thing& thing); //  Marks an instance and recursively descends into its references
+    static void sweep(); // Collects all marked instances
+
+
 };
 
 
