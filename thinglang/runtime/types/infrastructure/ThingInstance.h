@@ -3,12 +3,15 @@
 #include "../../utils/TypeNames.h"
 #include "../../errors/RuntimeError.h"
 
+
 /**
  * All thing instances derive from this empty structure
  */
 class BaseThingInstance {
 protected:
-    BaseThingInstance() = default;
+    BaseThingInstance() : color(0) {};
+
+    static Things EMPTY_LIST;
 
 public:
     virtual std::string text();
@@ -18,6 +21,13 @@ public:
     virtual Thing get(Index index);
 
     virtual void set(Index index, const Thing& thing);
+
+    virtual Things& children(){
+        return EMPTY_LIST;
+    }
+
+    unsigned char color;
+
 
 };
 
@@ -35,6 +45,10 @@ public:
 
     void set(Index index, const Thing& thing) override;
     virtual std::string text() override;
+
+    Things& children() override {
+        return members;
+    }
 };
 
 

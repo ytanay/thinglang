@@ -5,6 +5,8 @@
 #include "ThingInstance.h"
 #include "../../utils/Formatting.h"
 
+Things BaseThingInstance::EMPTY_LIST;
+
 std::string BaseThingInstance::text() {
     return "instance";
 }
