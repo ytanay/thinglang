@@ -8,6 +8,9 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <set>
+#include <list>
+#include <forward_list>
 
 
 class BaseThingInstance;
@@ -24,12 +27,12 @@ using InstructionList = std::vector<Instruction>;
 using SourceMap = std::vector<Index>;
 using Source = std::vector<std::string>;
 
-using Thing = std::shared_ptr<BaseThingInstance>;
+using Thing = BaseThingInstance*;
 using Things = std::vector<Thing>;
-using ThingStack = std::stack<Thing>;
+using ThingForwardList = std::forward_list<Thing>;
 
 using Frame = Things;
-using FrameStack = std::stack<Frame>;
+using FrameStack = std::forward_list<Frame>;
 
 typedef Thing (*InternalMethod)();
 

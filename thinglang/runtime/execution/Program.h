@@ -12,15 +12,17 @@
 class Program {
 public:
 
+
+
     template <typename T>
-    static std::shared_ptr<T> argument(){
-        return std::static_pointer_cast<T>(pop());
+    static T* argument(){
+        return static_cast<T*>(pop());
     };
 
     static Thing pop();
 
     static void push(const Thing& instance) {
-        stack.push(instance);
+        stack.push_front(instance);
     }
 
     static Thing data(Index index) {
@@ -28,15 +30,15 @@ public:
     }
 
     static void create_frame(Size size) {
-        frames.push(Frame(size));
+        frames.push_front(Frame(size));
     }
 
     static void pop_frame() {
-        frames.pop();
+        frames.pop_front();
     }
 
     static Frame &frame() {
-        return frames.top();
+        return frames.front();
     }
 
     static void execute();
@@ -51,7 +53,7 @@ public:
 private:
     Program() = default;
 
-    static ThingStack stack;
+    static ThingForwardList stack;
     static FrameStack frames;
     static Things static_data;
     static Index entry;

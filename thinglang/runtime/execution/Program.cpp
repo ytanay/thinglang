@@ -3,7 +3,7 @@
 #include "../types/InternalTypes.h"
 #include "../execution/Instruction.h"
 
-ThingStack Program::stack;
+ThingForwardList Program::stack;
 FrameStack Program::frames;
 Things Program::static_data;
 Index Program::entry = 0;
@@ -28,8 +28,8 @@ Thing Program::pop() {
     if(stack.empty())
         critical_abort(EMPTY_PROGRAM_STACK);
 
-    auto ti = static_cast<std::shared_ptr<BaseThingInstance> &&>(stack.top());
-    stack.pop();
+    auto ti = stack.front();
+    stack.pop_front();
     return ti;
 }
 
