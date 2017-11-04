@@ -12,6 +12,9 @@ SourceMap Program::source_map;
 Source Program::source;
 InstructionList Program::instructions;
 
+ThingForwardList Program::objects;
+Things Program::permanents;
+
 Types Program::internals = {
         nullptr,
         new TextType(),
@@ -112,6 +115,7 @@ void Program::execute() {
 
             case Opcode::INSTANTIATE: {
                 auto new_thing = Thing(new ThingInstance(instruction.secondary));
+                auto new_thing = Program::create<ThingInstance>(instruction.secondary);
                 Program::frame()[0] = new_thing;
                 Program::copy_args(instruction.target, instruction.target);
                 Program::push(new_thing);

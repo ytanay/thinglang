@@ -64,6 +64,27 @@ private:
 
 
 
+    static ThingForwardList objects; // All allocated thing instances
+    static Things permanents; // Objects in the permanent generation
+    static unsigned char current_mark; // The value used to mark objects in the current cycle
+
+    static T* create(Args&&... args) {
+        // Create a new ThingInstance and intern into a generation
+        auto thing = new T(std::forward<Args>(args)...);
+        objects.push_front(thing);
+        return thing;
+
+    }
+
+    template <typename T, typename... Args>
+    static T* permanent(Args&&... args) {
+        // Create a new ThingInstance into perm-gen
+        auto thing = new T(std::forward<Args>(args)...);
+        permanents.push_back(thing);
+        return thing;
+    }
+
+    static void gc_cycle(); // Full Mark-Sweep cycle
 };
 
 
