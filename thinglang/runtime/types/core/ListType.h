@@ -31,16 +31,23 @@ class ListInstance : public BaseThingInstance {
     
     /** Members **/
     std::vector<Thing> val;
+    
+    
+    Things& children() override {
+        return val;
+    }
+
 };
 
 
 class ListType : public ThingTypeInternal {
     
     public:
-    ListType() : ThingTypeInternal({ &__constructor__, &append, &contains }) {}; // constructor
+    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains }) {}; // constructor
  
 	static Thing __constructor__();
 	static Thing append();
+	static Thing pop();
 	static Thing contains();
     
 };

@@ -25,11 +25,20 @@
             "type": "list"
         },
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "pop",
+            "static": false,
+            "type": "object"
+        },
+        {
             "arguments": [
                 "object"
             ],
             "convention": "internal",
-            "index": 2,
+            "index": 3,
             "kind": "method",
             "name": "contains",
             "static": false,

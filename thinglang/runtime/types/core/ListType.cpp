@@ -27,6 +27,16 @@ Thing ListType::append() {
     }
 
 
+Thing ListType::pop() {
+		auto self = Program::argument<ListInstance>();
+
+		auto elem = self->val.back();
+		self->val.pop_back();
+		return elem;
+        return nullptr;
+    }
+
+
 Thing ListType::contains() {
 		auto item = Program::pop();
 		auto self = Program::argument<ListInstance>();
