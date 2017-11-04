@@ -28,6 +28,8 @@ class ConsoleInstance : public BaseThingInstance {
     
     /** Members **/
     
+    
+    
 };
 
 

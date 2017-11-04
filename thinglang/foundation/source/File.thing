@@ -20,4 +20,4 @@ thing File
     does read returns text
         `std::stringstream sstr;`
         `sstr << self->file.rdbuf();`
-        `return Thing(new TextInstance(sstr.str()));`
+        `return Program::create<TextInstance>(sstr.str());`

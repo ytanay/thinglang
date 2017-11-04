@@ -31,6 +31,8 @@ class NumberInstance : public BaseThingInstance {
     
     /** Members **/
     int val;
+    
+    
 };
 
 

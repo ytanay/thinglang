@@ -32,6 +32,8 @@ class FileInstance : public BaseThingInstance {
     /** Members **/
     std::string file_path;
 std::fstream file;
+    
+    
 };
 
 

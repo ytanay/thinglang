@@ -13,7 +13,7 @@ Methods of ConsoleType
 
 
 Thing ConsoleType::__constructor__() {
-    return Thing(new ConsoleInstance());
+    return Program::create<ConsoleInstance>();
 }
 
 
@@ -38,7 +38,7 @@ Thing ConsoleType::read_line() {
 
 		std::string input;
 		std::getline(std::cin, input);
-		return Thing(new TextInstance(input));
+		return Program::create<TextInstance>(input);
         return nullptr;
     }
 

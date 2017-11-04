@@ -13,7 +13,7 @@ Methods of ListType
 
 
 Thing ListType::__constructor__() {
-    return Thing(new ListInstance());
+    return Program::create<ListInstance>();
 }
 
 

@@ -117,13 +117,13 @@ Thing ProgramReader::read_data_block() {
             auto size = read_size();
             auto data = read_string(size);
             std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
-            auto instance = Thing(new TextInstance(data));
+            auto instance = Program::permanent<TextInstance>(data);
             return instance;
         }
         case InternalTypes::NUMBER: {
             auto data = read<int32_t>();
             std::cerr << "\tReading int: " << data << std::endl;
-            auto instance = Thing(new NumberInstance(data));
+            auto instance = Program::permanent<NumberInstance>(data);
             return instance;
         }
 

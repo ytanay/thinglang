@@ -31,6 +31,8 @@ class BoolInstance : public BaseThingInstance {
     
     /** Members **/
     bool val;
+    
+    
 };
 
 
