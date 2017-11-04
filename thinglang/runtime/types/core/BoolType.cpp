@@ -13,7 +13,7 @@ Methods of BoolType
 
 
 Thing BoolType::__constructor__() {
-    return Thing(new BoolInstance());
+    return Program::create<BoolInstance>();
 }
 
 

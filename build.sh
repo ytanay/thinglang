@@ -8,10 +8,13 @@ mkdir /app-src/build
 cd /app-src/build
 cmake ..
 make
-/app-src/build/thinglang --version
 
-export PATH=$PATH:/app-src/build/
+export PATH=$PATH:/app-src/build/thinglang/:/app-src/build/tests/
 export PYTHONPATH=/app-src
+
+
+thinglang --version
+ctest --verbose
 
 cd /app-src
 pytest tests/

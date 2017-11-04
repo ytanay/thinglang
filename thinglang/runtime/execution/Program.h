@@ -8,19 +8,20 @@
 
 #include "../utils/TypeNames.h"
 
-
 class Program {
 public:
 
+
+
     template <typename T>
-    static std::shared_ptr<T> argument(){
-        return std::static_pointer_cast<T>(pop());
+    static T* argument(){
+        return static_cast<T*>(pop());
     };
 
     static Thing pop();
 
     static void push(const Thing& instance) {
-        stack.push(instance);
+        stack.push_front(instance);
     }
 
     static Thing data(Index index) {
@@ -28,15 +29,15 @@ public:
     }
 
     static void create_frame(Size size) {
-        frames.push(Frame(size));
+        frames.push_front(Frame(size));
     }
 
     static void pop_frame() {
-        frames.pop();
+        frames.pop_front();
     }
 
     static Frame &frame() {
-        return frames.top();
+        return frames.front();
     }
 
     static void execute();
@@ -51,7 +52,7 @@ public:
 private:
     Program() = default;
 
-    static ThingStack stack;
+    static ThingForwardList stack;
     static FrameStack frames;
     static Things static_data;
     static Index entry;
@@ -60,6 +61,41 @@ private:
     static Source source;
     static InstructionList instructions;
 
+
+
+    /**
+     * Allocation and garbage collection components
+     */
+
+private:
+    static ThingForwardList objects; // All allocated thing instances
+    static unsigned char current_mark; // The value used to mark objects in the current cycle
+
+public:
+
+    template <typename T, typename... Args>
+    static T* create(Args&&... args) {
+        // Create a new ThingInstance and intern into a generation
+        auto thing = new T(std::forward<Args>(args)...);
+        objects.push_front(thing);
+        return thing;
+
+    }
+
+    template <typename T, typename... Args>
+    static T* permanent(Args&&... args) {
+        // Create a new ThingInstance into perm-gen
+        auto thing = new T(std::forward<Args>(args)...);
+        return thing;
+    }
+
+    static void gc_cycle(); // Full mark-sweep cycle
+    static void mark(); // Recursively descends into all roots
+    static void mark(const Thing& thing); //  Marks an instance and recursively descends into its references
+    static void sweep(); // Collects all marked instances
+    static auto object_count() { // WARNING: costs O(n)
+        return std::distance(objects.begin(), objects.end());
+    }
 
 
 };

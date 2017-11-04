@@ -14,7 +14,7 @@ Methods of FileType
 
 Thing FileType::__constructor__() {
 		auto file_path = Program::argument<TextInstance>();
-		auto self = std::static_pointer_cast<FileInstance>(Thing(new FileInstance()));
+		auto self = Program::create<FileInstance>();
 
 		self->file_path = file_path->text();
         return self;
@@ -61,7 +61,7 @@ Thing FileType::read() {
 
 		std::stringstream sstr;
 		sstr << self->file.rdbuf();
-		return Thing(new TextInstance(sstr.str()));
+		return Program::create<TextInstance>(sstr.str());
         return nullptr;
     }
 

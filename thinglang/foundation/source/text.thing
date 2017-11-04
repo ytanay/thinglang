@@ -20,4 +20,4 @@ thing text
             return false
 
     static does convert_number with text num returns number
-        `return Thing(new NumberInstance(to_number(num->val)));`
+        `return Program::create<NumberInstance>(to_number(num->val));`

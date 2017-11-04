@@ -13,7 +13,7 @@ Methods of TextType
 
 
 Thing TextType::__constructor__() {
-    return Thing(new TextInstance());
+    return Program::create<TextInstance>();
 }
 
 
@@ -21,7 +21,7 @@ Thing TextType::__addition__() {
 		auto other = Program::argument<TextInstance>();
 		auto self = Program::argument<TextInstance>();
 
-		return Thing(new TextInstance(self->val + other->val));
+		return Program::create<TextInstance>(self->val + other->val);
         return nullptr;
     }
 
@@ -66,7 +66,7 @@ Thing TextType::contains() {
 Thing TextType::convert_number() {
 		auto num = Program::argument<TextInstance>();
 
-		return Thing(new NumberInstance(to_number(num->val)));
+		return Program::create<NumberInstance>(to_number(num->val));
         return nullptr;
     }
 

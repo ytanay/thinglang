@@ -9,4 +9,4 @@ thing Console
     static does read_line returns text
         `std::string input;`
         `std::getline(std::cin, input);`
-        `return Thing(new TextInstance(input));`
+        `return Program::create<TextInstance>(input);`

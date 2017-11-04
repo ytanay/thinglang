@@ -13,7 +13,7 @@ Methods of ListType
 
 
 Thing ListType::__constructor__() {
-    return Thing(new ListInstance());
+    return Program::create<ListInstance>();
 }
 
 
@@ -23,6 +23,16 @@ Thing ListType::append() {
 
 		self->val.push_back(item);
 		return self;
+        return nullptr;
+    }
+
+
+Thing ListType::pop() {
+		auto self = Program::argument<ListInstance>();
+
+		auto elem = self->val.back();
+		self->val.pop_back();
+		return elem;
         return nullptr;
     }
 

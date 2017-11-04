@@ -55,7 +55,8 @@ class SymbolMap(object):
             mixins=templates.FOUNDATION_MIXINS_DECLARATION if self.members else '',
             members=self.format_member_list('\n', ';'),
             methods=self.format_method_declarations(),
-            method_list=self.format_method_list()
+            method_list=self.format_method_list(),
+            children=templates.FOUNDATION_CHILDREN if 'list' in self.name.value else ''
         )
 
     def format_member_list(self, separator=', ', delimeter=''):

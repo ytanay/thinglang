@@ -13,7 +13,7 @@ Methods of NumberType
 
 
 Thing NumberType::__constructor__() {
-    return Thing(new NumberInstance());
+    return Program::create<NumberInstance>();
 }
 
 
@@ -21,7 +21,7 @@ Thing NumberType::__addition__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Thing(new NumberInstance(self->val + other->val));
+		return Program::create<NumberInstance>(self->val + other->val);
         return nullptr;
     }
 
@@ -30,7 +30,7 @@ Thing NumberType::__subtraction__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Thing(new NumberInstance(self->val - other->val));
+		return Program::create<NumberInstance>(self->val - other->val);
         return nullptr;
     }
 
@@ -39,7 +39,7 @@ Thing NumberType::__multiplication__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Thing(new NumberInstance(self->val * other->val));
+		return Program::create<NumberInstance>(self->val * other->val);
         return nullptr;
     }
 
@@ -48,7 +48,7 @@ Thing NumberType::__division__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Thing(new NumberInstance(self->val / other->val));
+		return Program::create<NumberInstance>(self->val / other->val);
         return nullptr;
     }
 
