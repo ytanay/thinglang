@@ -41,11 +41,4 @@ TEST_CASE( "Full flow GC test", "[gc]" ) {
 
     REQUIRE(Program::object_count() == 1);
 
-
-
-
-
-
-
-
 }
