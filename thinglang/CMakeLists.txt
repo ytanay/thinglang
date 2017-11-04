@@ -1,0 +1,37 @@
+
+add_library(thingcore
+
+        runtime/execution/Program.cpp
+
+        runtime/types/core/TextType.cpp
+        runtime/types/core/NumberType.cpp
+        runtime/types/core/BoolType.cpp
+        runtime/types/core/ListType.cpp
+        runtime/types/core/ConsoleType.cpp
+        runtime/types/core/FileType.cpp
+
+
+
+        runtime/errors/RuntimeError.cpp
+
+        runtime/execution/Opcodes.h
+        runtime/execution/Instruction.cpp
+
+        runtime/loader/ProgramReader.cpp
+
+        runtime/types/infrastructure/ThingInstance.cpp
+        runtime/types/infrastructure/ThingType.cpp
+
+        runtime/types/InternalTypes.h
+
+        runtime/utils/Formatting.h
+        runtime/utils/TypeNames.h
+        runtime/errors/Aborts.h
+
+        include/args.h
+        runtime/execution/Globals.h)
+
+set(CMAKE_EXE_LINKER_FLAGS "-static-libstdc++ -static-libgcc")
+
+add_executable(thinglang runtime/main.cpp)
+target_link_libraries (thinglang thingcore)
