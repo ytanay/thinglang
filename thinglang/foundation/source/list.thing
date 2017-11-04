@@ -6,6 +6,11 @@ thing list
         `self->val.push_back(item);`
         `return self;`
 
+    does pop returns object
+        `auto elem = self->val.back();`
+        `self->val.pop_back();`
+        `return elem;`
+
     does contains with object item returns bool
         `auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();`
         if res
