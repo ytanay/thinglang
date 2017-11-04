@@ -31,7 +31,6 @@ add_library(thingcore
         include/args.h
         runtime/execution/Globals.h)
 
-set(CMAKE_EXE_LINKER_FLAGS "-static-libstdc++ -static-libgcc")
 
 add_executable(thinglang runtime/main.cpp)
 target_link_libraries (thinglang thingcore)

@@ -3,6 +3,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 project(thinglang)
 
+set(CMAKE_EXE_LINKER_FLAGS "-static-libstdc++ -static-libgcc")
+enable_testing()
+
 add_subdirectory(thinglang)
 add_subdirectory(tests)
-enable_testing()
