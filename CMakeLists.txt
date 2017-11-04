@@ -5,3 +5,4 @@ project(thinglang)
 
 add_subdirectory(thinglang)
 add_subdirectory(tests)
+enable_testing()
