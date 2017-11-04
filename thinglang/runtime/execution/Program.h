@@ -93,6 +93,9 @@ public:
     static void mark(); // Recursively descends into all roots
     static void mark(const Thing& thing); //  Marks an instance and recursively descends into its references
     static void sweep(); // Collects all marked instances
+    static auto object_count() {
+        return std::distance(objects.begin(), objects.end());
+    }
 
 
 };

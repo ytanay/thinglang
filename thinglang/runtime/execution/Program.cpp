@@ -255,6 +255,7 @@ void Program::gc_cycle() {
     /**
      * Full mark-sweep GC cycle
      */
+
     Program::mark();
     Program::sweep();
 }
@@ -265,6 +266,7 @@ void Program::mark() {
     /**
      * Marks all object roots by scanning all stack frames and the program stack
      */
+
     current_mark++;
 
     for(auto& frame : frames){
@@ -282,6 +284,7 @@ void Program::mark(const Thing &thing) {
     /**
      * Mark an object and recursively descend into its children
      */
+
     if(!thing || thing->color == current_mark)
         return;
 
@@ -294,6 +297,7 @@ void Program::sweep() {
     /**
      * Collect all unreferenced objects (pending deletion), finalizes them and dealloactes their memory
      */
+
     ThingForwardList pending_deletion;
 
     for (auto it = objects.begin(), previous = objects.before_begin(); it != objects.end(); ) {
@@ -311,6 +315,4 @@ void Program::sweep() {
         delete item;
     }
 
-
-    std::cerr << "Done!" << std::endl;
 }
