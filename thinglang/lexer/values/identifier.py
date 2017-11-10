@@ -1,8 +1,12 @@
 from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
+from thinglang.parser.nodes import BaseNode
+from thinglang.parser.rule import ParserRule
+from thinglang.utils.mixins import ParsingMixin
 from thinglang.utils.type_descriptors import ValueType
 
 
-class Identifier(LexicalToken, ValueType):
+class Identifier(LexicalToken, ValueType, ParsingMixin):
     """
     Identifiers can refer to local variables or as components of an Access object.
     """
@@ -23,8 +27,8 @@ class Identifier(LexicalToken, ValueType):
     def upper(self):
         return self.value.upper()
 
-    def __str__(self):
-        return '<{}>'.format(self.value)
+    def __repr__(self):
+        return '{}'.format(self.value)
 
     def __hash__(self):
         return hash(self.value)
@@ -42,3 +46,20 @@ class Identifier(LexicalToken, ValueType):
     @classmethod
     def self(cls):
         return cls("self")
+
+
+class GenericIdentifier(Identifier):
+
+    def __init__(self, name, type=None, generic=None):
+        super().__init__(name)
+        self.name, self.type, self.generic = name, type, generic
+
+    @staticmethod
+    @ParserRule.mark
+    def generic_declaration(name: Identifier, _1: LexicalLessThan, generic: Identifier, _2: LexicalGreaterThan):
+        return GenericIdentifier(name, generic=generic)
+
+    def __repr__(self):
+        if self.generic:
+            return f'{self.name}<{self.generic}>'
+        return super().__repr__()
