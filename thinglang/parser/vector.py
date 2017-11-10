@@ -2,7 +2,7 @@ from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.tokens.separator import LexicalSeparator
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.loop import Loop
@@ -26,6 +26,8 @@ from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType, TypeList, ListType
 
 PARSING_ORDER = [
+    GenericIdentifier,
+
     ThingDefinition,
     MemberDefinition,
     MethodDefinition,
