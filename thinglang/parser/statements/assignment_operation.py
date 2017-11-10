@@ -64,6 +64,9 @@ class AssignmentOperation(BaseNode):
             CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(optional)
             context.insert(cast_placeholder, optional)
 
+    def __repr__(self):
+        return f'Assignment({self.name} = {self.value})'
+
     ASSIGNMENT_TARGET = Identifier, Access
 
     @staticmethod

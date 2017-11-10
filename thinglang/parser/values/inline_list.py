@@ -19,3 +19,6 @@ class InlineList(ListInitialization):
             last_call = MethodCall(Access([last_call, Identifier("append")]), ArgumentList([value])).deriving_from(self)
 
         return last_call.compile(context)
+
+    def __repr__(self):
+        return f'{self.arguments}'
