@@ -4,7 +4,7 @@ from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, Opcode
 from thinglang.compiler.sentinels import SentinelMethodDefinition
 from thinglang.foundation import templates
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
     LexicalDeclarationStatic
 from thinglang.parser.definitions.argument_list import ArgumentList
@@ -86,6 +86,9 @@ class MethodDefinition(BaseNode):
     @property
     def return_type(self):
         if self.is_constructor():
+            if self.parent.generics:
+                assert len(self.parent.generics) == 1
+                return GenericIdentifier(self.parent.name, tuple(self.parent.generics))
             return self.parent.name
         return self._return_type
 
