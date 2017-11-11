@@ -20,11 +20,16 @@ SOURCE_PAIR = '''
 thing Pair with type T
     has T lhs
     has T rhs
+    has list<T> parts
+    has list<list<list<T>>> nested
     
     does set_values with T lhs, T rhs returns T
         self.lhs = lhs
         self.rhs = rhs
         return lhs + rhs
+        
+    does nested_param with list<T> input returns list<T>
+        return input
 
 '''
 

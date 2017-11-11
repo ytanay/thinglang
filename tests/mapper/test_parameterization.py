@@ -25,6 +25,26 @@ def test_simple_parameterization():
     assert set_values.index == 1
     assert set_values.arguments == [Identifier('number')] * 2
 
+def test_member_parameterization():
+    validate_member(get_parametrized()[Identifier('lhs')], 'number', 0)
+
+
+def test_nested_member_parameterization():
+    pair_number = get_parametrized()
+
+    validate_member(pair_number[Identifier('parts')], GenericIdentifier.wrap('list', 'number'), 2)
+    validate_member(pair_number[Identifier('nested')],
+                    GenericIdentifier.wrap('list',
+                                           GenericIdentifier.wrap('list',
+                                                                  GenericIdentifier.wrap('list', 'number'))), 3)
+
+
+def test_method_parameterization():
+    pair_number = get_parametrized()
+    validate_method(pair_number[Identifier('set_values')], 'number', ['number'] * 2, 1)
+    validate_method(pair_number[Identifier('nested_param')], GenericIdentifier.wrap('list', 'number'),
+                    [GenericIdentifier.wrap('list', 'number')], 2)
+
 
 def test_parameterization_propagation():
     symbols = get_symbols(SOURCE_FULL)
