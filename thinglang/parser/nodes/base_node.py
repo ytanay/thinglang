@@ -32,12 +32,9 @@ class BaseNode(ParsingMixin):
         separator = ('\n' if self.children else '') + ('\t' * depth)
         return '<L{}> {}({}){}{}'.format(self.source_ref.line_number if self.source_ref else "?",
                                          type(self).__name__,
-                                         self.describe(),
+                                         self,
                                          separator,
                                          separator.join(child.tree(depth=depth + 1) for child in self.children))
-
-    def describe(self):
-        return self.value if self.value is not None else ''
 
     @collection_utils.drain()
     def siblings_while(self, predicate):
