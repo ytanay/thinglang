@@ -53,6 +53,9 @@ class MethodCall(BaseNode, ValueType):
             for idx, (arg, expected_type) in enumerate(zip(self.arguments, expected_arguments)):
                 compiled_target = arg.compile(context)
 
+                if expected_type in target.thing.generics:
+                    expected_type = target.generic
+
                 if not self.validate_types(compiled_target, expected_type):
                     raise ArgumentTypeMismatch(target, idx, expected_type, compiled_target.type)
 
