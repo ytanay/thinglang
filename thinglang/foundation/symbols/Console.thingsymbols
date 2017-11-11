@@ -1,5 +1,6 @@
 {
     "extends": null,
+    "generics": [],
     "index": 5,
     "name": "Console",
     "offset": 0,

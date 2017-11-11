@@ -41,10 +41,10 @@ class TextType : public ThingTypeInternal {
     public:
     TextType() : ThingTypeInternal({ &__constructor__, &__addition__, &__equals__, &contains, &convert_number }) {}; // constructor
  
-	static Thing __constructor__();
-	static Thing __addition__();
-	static Thing __equals__();
-	static Thing contains();
-	static Thing convert_number();
+	static void __constructor__();
+	static void __addition__();
+	static void __equals__();
+	static void contains();
+	static void convert_number();
     
 };

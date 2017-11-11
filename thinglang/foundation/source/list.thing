@@ -1,17 +1,17 @@
-thing list
+thing list with type T
 
     has `std::vector<Thing>` val
 
-    does append with object item returns list
+    does append with T item returns list<T>
         `self->val.push_back(item);`
-        `return self;`
+        return `self`
 
-    does pop returns object
+    does pop returns T
         `auto elem = self->val.back();`
         `self->val.pop_back();`
-        `return elem;`
+        return `elem`
 
-    does contains with object item returns bool
+    does contains with T item returns bool
         `auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();`
         if res
             return true

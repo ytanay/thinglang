@@ -3,17 +3,18 @@ from typing import List
 from thinglang.lexer.definitions.tags import LexicalArgumentListIndicator, LexicalDeclarationReturnType
 from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
+from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
 from thinglang.parser.nodes.root_node import RootNode
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 
-from thinglang.parser.vector import TokenVector, ParenthesesVector, BracketVector, TypeVector
-
+from thinglang.parser.vector import TokenVector, ParenthesesVector, BracketVector, TypeVector, ParameterVector
 
 VECTOR_CREATION_TOKENS = {
-    LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector),
-    LexicalBracketOpen: (LexicalBracketClose, BracketVector),
-    LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector)
+    LexicalParenthesesOpen: (LexicalParenthesesClose, ParenthesesVector, True),
+    LexicalBracketOpen: (LexicalBracketClose, BracketVector, True),
+    LexicalArgumentListIndicator: ((LexicalDeclarationReturnType, LexicalGroupEnd), TypeVector, True),
+    LexicalLessThan: (LexicalGreaterThan, ParameterVector, False)
 }
 
 
@@ -69,7 +70,14 @@ def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
     for token in tokens:
 
         if type(token) in VECTOR_CREATION_TOKENS:
-            closing_token, vector_cls = VECTOR_CREATION_TOKENS[type(token)]
+            closing_token, vector_cls, strictly_vectorizing = VECTOR_CREATION_TOKENS[type(token)]
+            if not strictly_vectorizing and not any(isinstance(token, closing_token) for token in tokens):
+                # This is used to deal with angle brackets serving a dual purpose - comparison and parameter lists
+                # Those tokens are not strictly vectorizing - we only assume they are if we can find a closing token
+                # Additionally, the resulting vector can be demoted if it cannot be parsed as a ParameterVector
+                stack[-1].append(token)
+                continue
+
             stack.append(vector_cls())
             closing_tokens.append(closing_token)
         elif closing_tokens and isinstance(token, closing_tokens[-1]):

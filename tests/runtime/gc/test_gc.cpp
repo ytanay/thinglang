@@ -27,6 +27,7 @@ TEST_CASE( "Full flow GC test", "[gc]" ) {
 
     Program::push(list1);
     ListType::pop();
+    Program::pop();
 
     Program::mark();
     Program::sweep();
@@ -35,6 +36,7 @@ TEST_CASE( "Full flow GC test", "[gc]" ) {
 
     Program::push(list1);
     ListType::pop();
+    Program::pop();
 
     Program::mark();
     Program::sweep();

@@ -42,10 +42,10 @@ class FileType : public ThingTypeInternal {
     public:
     FileType() : ThingTypeInternal({ &__constructor__, &open, &close, &write, &read }) {}; // constructor
  
-	static Thing __constructor__();
-	static Thing open();
-	static Thing close();
-	static Thing write();
-	static Thing read();
+	static void __constructor__();
+	static void open();
+	static void close();
+	static void write();
+	static void read();
     
 };

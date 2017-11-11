@@ -3,8 +3,8 @@ from thinglang.parser.nodes.base_node import BaseNode
 
 class ListInitialization(BaseNode):
 
-    def __init__(self, slice=None):
-        self.values = self.normalize_input(slice)
+    def __init__(self, values=None):
+        self.values = self.normalize_input(values)
 
         super(ListInitialization, self).__init__(self.values)
 

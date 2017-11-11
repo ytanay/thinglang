@@ -92,7 +92,3 @@ class LocalReference(Reference):
         Returns the index of the local element
         """
         return self.local.index
-
-
-
-

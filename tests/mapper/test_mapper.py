@@ -1,90 +1,43 @@
-from thinglang import pipeline
-from thinglang.symbols.symbol_mapper import SymbolMapper
-from thinglang.utils.source_context import SourceContext
+from tests.mapper import SOURCE_FULL, SOURCE_PERSON, SOURCE_LOCATION, SOURCE_PAIR, get_symbols, validate_member, \
+    validate_method
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.symbols.symbol import Symbol
-
-source = """
-
-thing Location
-    has number x
-    has number y
-    
-    setup
-        self.x = 0
-        self.y = 0
-        
-    static does distance with Location a, Location b returns number
-        return math.square_root(math.square(a.x - b.x) + math.square(a.y - b.y))
-
-thing Person
-    has text name
-    has number age
-    has Location location
-    
-    setup with text name, number age
-        self.name = name
-        self.age = age
-        
-    does walk_to with Location new_location
-        self.location = new_location
-        
-    does say_hello with text message
-        Console.print("Message from " + self.name + ": " + message)
-        
-    does shout
-        Console.print("Help!")
-        
-    
-"""
 
 
-def get_symbols(code):
-    return SymbolMapper(pipeline.preprocess(SourceContext.wrap(code)))
+def symbol_map_sanity(symbols, name, members):
+    symbol_map = symbols[Identifier(name)]
+    assert all(Identifier(x) in symbol_map for x in members)
+    return symbol_map
 
 
 def test_mapper_existence():
-    symbols = get_symbols(source)
-    assert all(Identifier(x) in symbols for x in ("Location", "Person"))
+    symbols = get_symbols(SOURCE_FULL)
+    assert all(Identifier(x) in symbols for x in ('Location', 'Pair', 'Person'))
 
 
-def test_member_symbol_description():
-    symbols = get_symbols(source)
-    person = symbols[Identifier('Person')]
+def test_person_member_symbol_description():
+    symbols = get_symbols(SOURCE_PERSON)
+    person = symbol_map_sanity(symbols, 'Person', ('name', 'age', 'location', 'walk_to', 'say_hello', 'shout', 'favorite_numbers'))
 
-    assert all(Identifier(x) in person for x in ("name", "age", "location", "walk_to", "say_hello", "shout"))
+    validate_member(person[Identifier('name')], Identifier('text'), 0)
+    validate_member(person[Identifier('location')], Identifier('Location'), 2)
 
-    name_desc = person[Identifier("name")]
 
-    assert name_desc.kind is Symbol.MEMBER
-    assert name_desc.type == Identifier("text")
-    assert name_desc.visibility is Symbol.PUBLIC
-    assert not name_desc.static
-    assert name_desc.index == 0
+def test_location_member_symbol_description():
+    symbols = get_symbols(SOURCE_LOCATION)
+    symbol_map_sanity(symbols, 'Location', ('x', 'y'))
 
-    location_desc = person[Identifier("location")]
-    assert location_desc.kind is Symbol.MEMBER
-    assert location_desc.type == Identifier("Location")
-    assert location_desc.visibility is Symbol.PUBLIC
-    assert not location_desc.static
-    assert location_desc.index == 2
 
-    assert Identifier('x') in symbols[location_desc.type]
+def test_pair_symbol_description():
+    symbols = get_symbols(SOURCE_PAIR)
+    pair = symbol_map_sanity(symbols, 'Pair', ('lhs', 'rhs', 'parts', 'nested'))
+
+    assert pair.generics == [Identifier('T')]
 
 
 def test_method_symbol_description():
-    symbols = get_symbols(source)
-    person, location = symbols[Identifier('Person')], symbols[Identifier('Location')]
+    symbols = get_symbols(SOURCE_FULL)
+    person, location, pair = symbols[Identifier('Person')], symbols[Identifier('Location')], symbols[Identifier('Pair')]
 
-    walk_to = person[Identifier("walk_to")]
-    assert walk_to.kind is Symbol.METHOD
-    assert walk_to.type is None
-    assert walk_to.arguments == [Identifier("Location")]
-    assert not walk_to.static
-
-    distance = location[Identifier('distance')]
-    assert distance.kind is Symbol.METHOD
-    assert distance.type == Identifier("number")
-    assert distance.arguments == [Identifier("Location")] * 2
-    assert distance.static
-
+    validate_method(person[Identifier('walk_to')], None, ['Location'], 1)
+    validate_method(location[Identifier('distance')], 'number', ['Location'] * 2, 1, True)
+    validate_method(pair[Identifier('set_values')], 'T', ['T'] * 2, 1)

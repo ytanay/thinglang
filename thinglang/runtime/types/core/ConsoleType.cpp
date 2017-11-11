@@ -12,34 +12,34 @@ Methods of ConsoleType
 **/
 
 
-Thing ConsoleType::__constructor__() {
-    return Program::create<ConsoleInstance>();
+void ConsoleType::__constructor__() {
+    Program::push(Program::create<ConsoleInstance>());
 }
 
 
-Thing ConsoleType::write() {
+void ConsoleType::write() {
 		auto message = Program::pop();
 
 		std::cout << message->text();
-        return nullptr;
+        
     }
 
 
-Thing ConsoleType::print() {
+void ConsoleType::print() {
 		auto message = Program::pop();
 
 		std::cout << message->text() << std::endl;
-        return nullptr;
+        
     }
 
 
-Thing ConsoleType::read_line() {
+void ConsoleType::read_line() {
 
 
 		std::string input;
 		std::getline(std::cin, input);
-		return Program::create<TextInstance>(input);
-        return nullptr;
+		Program::push(Program::create<TextInstance>(input));
+        
     }
 
 

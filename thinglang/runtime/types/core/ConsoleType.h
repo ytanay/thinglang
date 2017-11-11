@@ -38,9 +38,9 @@ class ConsoleType : public ThingTypeInternal {
     public:
     ConsoleType() : ThingTypeInternal({ &__constructor__, &write, &print, &read_line }) {}; // constructor
  
-	static Thing __constructor__();
-	static Thing write();
-	static Thing print();
-	static Thing read_line();
+	static void __constructor__();
+	static void write();
+	static void print();
+	static void read_line();
     
 };

@@ -12,8 +12,8 @@ Methods of BoolType
 **/
 
 
-Thing BoolType::__constructor__() {
-    return Program::create<BoolInstance>();
+void BoolType::__constructor__() {
+    Program::push(Program::create<BoolInstance>());
 }
 
 

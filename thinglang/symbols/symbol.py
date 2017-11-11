@@ -1,4 +1,4 @@
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 
 
 class Symbol(object):
@@ -17,6 +17,15 @@ class Symbol(object):
     def update_index(self, new_index):
         self.index = new_index
         return self
+
+    def parameterize(self, parameters):
+        return Symbol(self.name,
+                      self.kind,
+                      self.type.parameterize(parameters) if self.type else None,
+                      self.static,
+                      [x.parameterize(parameters) for x in self.arguments] if self.arguments else self.arguments,
+                      self.index,
+                      self.convention)
 
     @property
     def convention(self):
@@ -45,12 +54,19 @@ class Symbol(object):
         return cls(
             name=Identifier(data['name']),
             kind=Symbol.METHOD if data['kind'] == 'method' else Symbol.MEMBER,
-            type=Identifier(data['type']),
+            type=cls.load_identifier(data['type']),
             static=data['static'],
             arguments=data['arguments'] is not None and [Identifier(x) for x in data['arguments']],
             index=data['index'],
             convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
         )
+
+    @staticmethod
+    def load_identifier(value) -> Identifier:
+        if isinstance(value, str):
+            return Identifier(value)
+        elif isinstance(value, list):
+            return GenericIdentifier(Identifier(value[0]), tuple(Identifier(x) for x in value[1]))
 
     @classmethod
     def method(cls, name, return_type, static, arguments):

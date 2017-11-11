@@ -2,7 +2,7 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
-from thinglang.lexer.definitions.tags import LexicalInheritanceTag
+from thinglang.lexer.definitions.tags import LexicalInheritanceTag, LexicalArgumentListIndicator
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.member_definition import MemberDefinition
@@ -10,12 +10,11 @@ from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
 
-
 class ThingDefinition(BaseNode):
 
-    def __init__(self, name, extends=None):
-        super(ThingDefinition, self).__init__([name, extends])
-        self.name, self.extends = name, extends
+    def __init__(self, name, extends=None, generics=None):
+        super(ThingDefinition, self).__init__([name, extends, generics])
+        self.name, self.extends, self.generics = name, extends, generics
 
     def describe(self):
         return self.name
@@ -61,17 +60,24 @@ class ThingDefinition(BaseNode):
     def slots(self, context):
         return sum(len(container.members) for container in context.symbols.inheritance(self))
 
-
-
     def format_method_list(self):
         return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
 
     @staticmethod
     @ParserRule.mark
-    def definition_with_extends(_1: LexicalDeclarationThing, name: Identifier, _2: LexicalInheritanceTag, extends: Identifier):
-        return ThingDefinition(name, extends)
+    def base_definition(_: LexicalDeclarationThing, name: Identifier):
+        return ThingDefinition(name)
 
     @staticmethod
     @ParserRule.mark
-    def simple_definition(_: LexicalDeclarationThing, name: Identifier):
-        return ThingDefinition(name)
+    def define_generic(thing: 'ThingDefinition', generics: 'TypeVector'):
+        thing.generics = generics
+        return thing
+
+    @staticmethod
+    @ParserRule.mark
+    def define_inheritance(thing: 'ThingDefinition', _: LexicalInheritanceTag, extends: Identifier):
+        thing.extends = extends
+        return thing
+
+

@@ -2,7 +2,7 @@ from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.tokens.separator import LexicalSeparator
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.loop import Loop
@@ -26,6 +26,8 @@ from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType, TypeList, ListType
 
 PARSING_ORDER = [
+    GenericIdentifier,
+
     ThingDefinition,
     MemberDefinition,
     MethodDefinition,
@@ -55,7 +57,7 @@ class TokenVector(object):
     def __init__(self, tokens=None):
         self.tokens = tokens if tokens is not None else []
 
-    def parse(self) -> BaseNode:
+    def parse(self, expect_single=True) -> BaseNode:
         """
         Iteratively parses the token vector until a single node remains, or no further rule replacements can be made.
         """
@@ -63,6 +65,9 @@ class TokenVector(object):
             pass
 
         self.process_indentation()
+
+        if not expect_single:
+            return self.tokens
 
         if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode)):
             raise VectorReductionError('Could not reduce vector: {}'.format(self.tokens))
@@ -171,6 +176,15 @@ class BracketVector(ParenthesesVector, ValueType):
         return InlineList(super().parse())
 
 
+class ParameterVector(ParenthesesVector):
+    """
+    Describes a vector of type parameters, used for generic thing definitions
+    """
+
+    def parse(self):
+        return tuple([super().parse()])
+
+
 class TypeVector(TokenVector, TypeList):
     """
     Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
@@ -179,21 +193,25 @@ class TypeVector(TokenVector, TypeList):
     def parse(self):
         output = []
 
-        if not all(isinstance(x, (Identifier, LexicalSeparator)) for x in self.tokens):
-            raise ValueError('Only types, names and separators are allowed in a type vector')
+        self.tokens = super().parse(expect_single=False)
+
+        if not all(isinstance(x, (Identifier, LexicalSeparator, ParameterVector)) for x in self.tokens):
+            raise VectorReductionError('Only types, names and separators are allowed in a type vector', self.tokens)
 
         if len(self.tokens) < 2:
-            raise ValueError('Not enough items in a type vector')
+            raise VectorReductionError('Not enough items in a type vector')
 
         for components in collection_utils.chunks(self.tokens, 3):
             if len(components) < 2 or not isinstance(components[0], Identifier) or not isinstance(components[1], Identifier):
-                raise ValueError('Invalid syntax in type vector element - must be 2 consecutive names')
+                raise VectorReductionError('Invalid syntax in type vector element - must be 2 consecutive names')
 
             if len(components) > 2 and not isinstance(components[2], LexicalSeparator):
-                raise ValueError('Expected separator, got {}'.format(components[1]))
+                raise VectorReductionError('Expected separator, got {}'.format(components[1]))
 
             components[1].type = components[0]
             output.append(components[1])
 
         return output
+
+
 

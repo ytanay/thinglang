@@ -1,6 +1,6 @@
 #include "ThingType.h"
 
 
-Thing ThingTypeInternal::call(Index idx) {
-    return methods[idx]();
+void ThingTypeInternal::call(Index idx) {
+    methods[idx]();
 }

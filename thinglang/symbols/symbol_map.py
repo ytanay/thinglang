@@ -1,3 +1,5 @@
+from typing import List
+
 from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.symbol import Symbol
@@ -5,9 +7,9 @@ from thinglang.symbols.symbol import Symbol
 
 class SymbolMap(object):
 
-    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, index: int, offset: int):
-        self.members, self.methods, self.name, self.extends, self.index, self.offset = \
-            members, methods, name, extends, index, offset
+    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, generics: List[Identifier], index: int, offset: int):
+        self.members, self.methods, self.name, self.extends, self.generics, self.index, self.offset = \
+            members, methods, name, extends, generics or [], index, offset
 
         self.lookup = {
             elem.name: elem for elem in (self.methods + self.members)
@@ -22,6 +24,7 @@ class SymbolMap(object):
         return {
             "name": self.name,
             "extends": self.extends,
+            "generics": self.generics,
             "index": self.index,
             "offset": self.offset,
             "symbols": [x.serialize() for x in self.lookup.values()]
@@ -33,7 +36,7 @@ class SymbolMap(object):
         members = [symbol for symbol in symbols if symbol.kind == Symbol.MEMBER]
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
 
-        return cls(members, methods, Identifier(data['name']), Identifier(data['extends']), data['index'], data['offset'])
+        return cls(members, methods, Identifier(data['name']), Identifier(data['extends']), [Identifier(x) for x in data['generics']], data['index'], data['offset'])
 
     @classmethod
     def from_thing(cls, thing, index, extends: 'SymbolMap'):
@@ -42,7 +45,7 @@ class SymbolMap(object):
         members = [elem.symbol().update_index(offset + index) for index, elem in enumerate(thing.members)]
         methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods)]
 
-        return cls(members, methods, thing.name, thing.extends, index, len(members) + offset)
+        return cls(members, methods, thing.name, thing.extends, thing.generics, index, len(members) + offset)
 
     def create_header(self):
         type_cls_name, instance_cls_name = templates.class_names(self.name)
@@ -59,6 +62,19 @@ class SymbolMap(object):
             children=templates.FOUNDATION_CHILDREN if 'list' in self.name.value else ''
         )
 
+    def parameterize(self, parameters):
+        assert set(parameters.keys()) == set(self.generics), 'Partial parameterization is not allowed'
+
+        return SymbolMap(
+            [x.parameterize(parameters) for x in self.members],
+            [x.parameterize(parameters) for x in self.methods],
+            Identifier('{}:<{}>'.format(self.name, parameters)),
+            self.extends,
+            [],
+            self.index,
+            self.offset
+        )
+
     def format_member_list(self, separator=', ', delimeter=''):
         return separator.join('{} {}{}'.format(x.type.transpile(), x.name.transpile(), delimeter) for x in self.members)
 
@@ -66,7 +82,7 @@ class SymbolMap(object):
         return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
 
     def format_method_declarations(self):
-        return '\n'.join('\tstatic Thing {}();'.format(x.name.transpile()) for x in self.methods)
+        return '\n'.join('\tstatic void {}();'.format(x.name.transpile()) for x in self.methods)
 
     def __getitem__(self, item: Identifier) -> Symbol:
         return self.lookup[item]

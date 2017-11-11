@@ -1,5 +1,8 @@
 {
     "extends": null,
+    "generics": [
+        "T"
+    ],
     "index": 4,
     "name": "list",
     "offset": 1,
@@ -11,18 +14,28 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "list"
+            "type": [
+                "list",
+                [
+                    "T"
+                ]
+            ]
         },
         {
             "arguments": [
-                "object"
+                "T"
             ],
             "convention": "internal",
             "index": 1,
             "kind": "method",
             "name": "append",
             "static": false,
-            "type": "list"
+            "type": [
+                "list",
+                [
+                    "T"
+                ]
+            ]
         },
         {
             "arguments": [],
@@ -31,11 +44,11 @@
             "kind": "method",
             "name": "pop",
             "static": false,
-            "type": "object"
+            "type": "T"
         },
         {
             "arguments": [
-                "object"
+                "T"
             ],
             "convention": "internal",
             "index": 3,

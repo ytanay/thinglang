@@ -37,3 +37,6 @@ class NumericValue(LexicalToken, ValueType):
         ref = context.append_static(self.serialize())
         context.append(OpcodePushStatic(ref), self.source_ref)
         return self
+
+    def __repr__(self):
+        return f'{{{self.value}}}'

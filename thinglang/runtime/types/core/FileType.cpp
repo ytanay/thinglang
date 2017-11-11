@@ -12,16 +12,17 @@ Methods of FileType
 **/
 
 
-Thing FileType::__constructor__() {
+void FileType::__constructor__() {
 		auto file_path = Program::argument<TextInstance>();
 		auto self = Program::create<FileInstance>();
 
 		self->file_path = file_path->text();
-        return self;
+		Program::push(self);
+        
     }
 
 
-Thing FileType::open() {
+void FileType::open() {
 		auto mode = Program::argument<TextInstance>();
 		auto self = Program::argument<FileInstance>();
 
@@ -35,34 +36,34 @@ Thing FileType::open() {
 			self->file.open(self->file_path, std::ios::out);
         }
 
-        return nullptr;
+        
     }
 
 
-Thing FileType::close() {
+void FileType::close() {
 		auto self = Program::argument<FileInstance>();
 
 		self->file.close();
-        return nullptr;
+        
     }
 
 
-Thing FileType::write() {
+void FileType::write() {
 		auto contents = Program::argument<TextInstance>();
 		auto self = Program::argument<FileInstance>();
 
 		self->file << contents->text();
-        return nullptr;
+        
     }
 
 
-Thing FileType::read() {
+void FileType::read() {
 		auto self = Program::argument<FileInstance>();
 
 		std::stringstream sstr;
 		sstr << self->file.rdbuf();
-		return Program::create<TextInstance>(sstr.str());
-        return nullptr;
+		Program::push(Program::create<TextInstance>(sstr.str()));
+        
     }
 
 

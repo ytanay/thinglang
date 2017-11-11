@@ -2,21 +2,11 @@ import itertools
 
 from thinglang.foundation import templates
 from thinglang.utils import collection_utils
+from thinglang.utils.mixins import ParsingMixin
 from thinglang.utils.source_context import SourceReference
 
 
-class NodeRegistration(type):
-    def __new__(mcs, name, bases, dct):
-        mcs = super(NodeRegistration, mcs).__new__(mcs, name, bases, dct)
-
-        mcs.RULES = sorted((value.__func__.parser_rule
-                            for field, value in dct.items()
-                            if hasattr(value, '__func__')
-                            and hasattr(value.__func__, 'parser_rule')), key=lambda x: x.index)
-        return mcs
-
-
-class BaseNode(object, metaclass=NodeRegistration):
+class BaseNode(ParsingMixin):
     STATIC = False
 
     def __init__(self, tokens):
@@ -42,12 +32,9 @@ class BaseNode(object, metaclass=NodeRegistration):
         separator = ('\n' if self.children else '') + ('\t' * depth)
         return '<L{}> {}({}){}{}'.format(self.source_ref.line_number if self.source_ref else "?",
                                          type(self).__name__,
-                                         self.describe(),
+                                         self,
                                          separator,
                                          separator.join(child.tree(depth=depth + 1) for child in self.children))
-
-    def describe(self):
-        return self.value if self.value is not None else ''
 
     @collection_utils.drain()
     def siblings_while(self, predicate):
@@ -76,16 +63,6 @@ class BaseNode(object, metaclass=NodeRegistration):
     def deriving_from(self, node):
         self.source_ref = node.source_ref
         return self
-
-    @classmethod
-    def propose_replacement(cls, tokens):
-        for rule in cls.RULES:
-            result = rule.matches(tokens)
-
-            if result:
-                return result
-
-        return False
 
     @property
     def container_name(self):

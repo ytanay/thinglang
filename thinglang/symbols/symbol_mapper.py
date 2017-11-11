@@ -2,7 +2,7 @@ from typing import Tuple, Union, Sequence
 
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.values.access import Access
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
@@ -75,11 +75,11 @@ class SymbolMapper(object):
         first, second, local = target[0], target[1], None
         if first.STATIC:
             container = self.maps[first.type]
-        elif first in self.maps:
-            container = self.maps[first]
+        elif first.untyped in self.maps:
+            container = self[first]
         elif first in method_locals:
             local = method_locals[first]
-            container = self.maps[local.type]
+            container = self[local.type]
         else:
             raise Exception('Cannot resolve first level access {}'.format(first))
 
@@ -123,6 +123,12 @@ class SymbolMapper(object):
         return self[Identifier('Program')].index
 
     def __getitem__(self, item) -> SymbolMap:
+        if isinstance(item, GenericIdentifier):
+            symbol_map = self.maps[item.value]
+            parameters = {parameter: replacement for parameter, replacement in zip(symbol_map.generics, item.generics)}
+            assert len(symbol_map.generics) == len(parameters)
+            return symbol_map.parameterize(parameters)
+
         return self.maps[item]
 
     def __contains__(self, item) -> bool:
