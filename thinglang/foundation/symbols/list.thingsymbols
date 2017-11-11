@@ -14,7 +14,12 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "list"
+            "type": [
+                "list",
+                [
+                    "T"
+                ]
+            ]
         },
         {
             "arguments": [
@@ -25,7 +30,12 @@
             "kind": "method",
             "name": "append",
             "static": false,
-            "type": "list"
+            "type": [
+                "list",
+                [
+                    "T"
+                ]
+            ]
         },
         {
             "arguments": [],

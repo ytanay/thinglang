@@ -54,12 +54,19 @@ class Symbol(object):
         return cls(
             name=Identifier(data['name']),
             kind=Symbol.METHOD if data['kind'] == 'method' else Symbol.MEMBER,
-            type=Identifier(data['type']),
+            type=cls.load_identifier(data['type']),
             static=data['static'],
             arguments=data['arguments'] is not None and [Identifier(x) for x in data['arguments']],
             index=data['index'],
             convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
         )
+
+    @staticmethod
+    def load_identifier(value) -> Identifier:
+        if isinstance(value, str):
+            return Identifier(value)
+        elif isinstance(value, list):
+            return GenericIdentifier(Identifier(value[0]), tuple(Identifier(x) for x in value[1]))
 
     @classmethod
     def method(cls, name, return_type, static, arguments):

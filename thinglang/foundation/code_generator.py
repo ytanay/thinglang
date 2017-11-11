@@ -9,7 +9,7 @@ from thinglang.foundation import templates, definitions
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 SOURCE_PATTERN = os.path.join(CURRENT_PATH,  'source/**/*.thing')
@@ -21,6 +21,8 @@ EXECUTION_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'execution')
 
 class JSONSerializer(json.JSONEncoder):
     def default(self, o):
+        if isinstance(o, GenericIdentifier):
+            return o.serialize()
         if isinstance(o, LexicalToken):
             return o.transpile()
         return super().default(o)
