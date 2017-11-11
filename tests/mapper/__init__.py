@@ -1,4 +1,6 @@
 from thinglang import pipeline
+from thinglang.lexer.values.identifier import Identifier
+from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
 
@@ -60,3 +62,24 @@ SOURCE_FULL = SOURCE_LOCATION + SOURCE_PERSON + SOURCE_PAIR
 
 def get_symbols(code) -> SymbolMapper:
     return SymbolMapper(pipeline.preprocess(SourceContext.wrap(code)))
+
+
+def validate_member(member: Symbol, type, index, static=False):
+    assert member.type == (Identifier(type) if isinstance(type, str) else type)
+    assert member.index == index
+    assert member.static is static
+
+    assert member.kind is Symbol.MEMBER
+    assert member.visibility is Symbol.PUBLIC
+
+
+def validate_method(method: Symbol, type, arguments, index, static=False):
+    assert method.type == (Identifier(type) if isinstance(type, str) else type), (method.type, type)
+    assert method.index == index
+    assert method.arguments == [Identifier(x) if isinstance(x, str) else x for x in arguments]
+    assert method.static is static
+
+    assert method.kind is Symbol.METHOD
+    assert method.visibility is Symbol.PUBLIC
+
+
