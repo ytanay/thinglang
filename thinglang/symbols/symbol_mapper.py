@@ -124,8 +124,8 @@ class SymbolMapper(object):
 
     def __getitem__(self, item) -> SymbolMap:
         if isinstance(item, GenericIdentifier):
-            symbol_map = self.maps[item.name]
-            parameters = {parameter: replacement for parameter, replacement in zip(symbol_map.generics, [item.generic])}
+            symbol_map = self.maps[item.value]
+            parameters = {parameter: replacement for parameter, replacement in zip(symbol_map.generics, item.generics)}
             assert len(symbol_map.generics) == len(parameters)
             return symbol_map.parameterize(parameters)
 

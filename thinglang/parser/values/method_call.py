@@ -20,8 +20,8 @@ class MethodCall(BaseNode, ValueType):
         super(MethodCall, self).__init__([target, arguments])
         self.target, self.arguments = target, (arguments if arguments is not None else ArgumentList())
 
-    def describe(self):
-        return 'target={}, args={}'.format(self.target, self.arguments)
+    def __repr__(self):
+        return 'MethodCall({}, {})'.format(self.target, self.arguments)
 
     def replace_argument(self, idx, replacement):
         self.arguments[idx] = replacement
