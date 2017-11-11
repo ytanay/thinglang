@@ -7,6 +7,7 @@ INVALID_SYNTAX_EXAMPLES = [
     'does 2 + 2',
     'setup returns',
     'does a returns b with number a',
+    'thing SmartList with type T extends BaseList',
     'a b',
     'f()',
     '2 eq',

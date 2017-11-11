@@ -1,8 +1,6 @@
 from tests.infrastructure.test_utils import parse_local
 from thinglang.lexer.values.identifier import GenericIdentifier, Identifier
-from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
-
 
 
 def test_generic_parsing():
@@ -16,10 +14,3 @@ def test_generic_parsing():
     assert node.name.type.generic == Identifier('number')
 
 
-def test_generic_class_description():
-    node = parse_local('thing SmartList with type T')
-
-    assert isinstance(node, ThingDefinition)
-    assert node.name == Identifier('SmartList')
-    print(node.generics[0].type)
-    assert node.generics[0] == Identifier('T')
