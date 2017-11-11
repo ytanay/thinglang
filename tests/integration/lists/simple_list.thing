@@ -9,7 +9,7 @@ thing Program
         list empty = create list()
         Console.print(empty)
 
-        list names = create list()
+        list<text> names = create list<text>()
         names.append("alex")
         names.append("andrew")
         names.append("aaron")
