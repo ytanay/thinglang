@@ -1,6 +1,4 @@
 from thinglang.lexer.lexical_token import LexicalToken
-from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
-from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.utils.mixins import ParsingMixin
 from thinglang.utils.type_descriptors import ValueType
@@ -23,6 +21,11 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
         if self == Identifier.constructor():
             return '__constructor__'
         return self.value
+
+    def parameterize(self, parameters):
+        if self in parameters:
+            return parameters[self]
+        return self
 
     def upper(self):
         return self.value.upper()
@@ -54,20 +57,42 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
 
 class GenericIdentifier(Identifier):
 
-    def __init__(self, name, type=None, generic=None):
+    def __init__(self, name, generics=None):
         super().__init__(name, name.source_ref)
-        self.name, self.type, self.generic = name, type, generic
+        assert isinstance(generics, tuple), type(generics)
+        self.generics = generics
 
-    @staticmethod
-    @ParserRule.mark
-    def generic_declaration(name: Identifier, _1: LexicalLessThan, generic: Identifier, _2: LexicalGreaterThan):
-        return GenericIdentifier(name, generic=generic)
+    def parameterize(self, parameters):
+        return GenericIdentifier(self.value, tuple(x.parameterize(parameters) for x in self.generics))
 
-    def __repr__(self):
-        if self.generic:
-            return f'{self.name}<{self.generic}>'
-        return super().__repr__()
+    def transpile(self):
+        if self.generics:
+            return f'{super().transpile()}<{self.generics.transpile()}>'
+        return super().transpile()
 
     @property
     def untyped(self):
-        return self.name
+        return self.value
+
+    def serialize(self):
+        return [self.value, self.generics]
+
+    @classmethod
+    def wrap(cls, name, generic):
+        return cls(Identifier(name), (Identifier(generic) if isinstance(generic, str) else generic,))
+
+    @staticmethod
+    @ParserRule.mark
+    def generic_declaration(name: Identifier, generic: 'ParameterVector'):
+        return GenericIdentifier(name, generic)
+
+    def __repr__(self):
+        if self.generics:
+            return f'{self.value}<{self.generics}>'
+        return super().__repr__()
+
+    def __eq__(self, other):
+        return type(self) is type(other) and self.value == other.value and self.generics == other.generics
+
+    def __hash__(self):
+        return hash((self.value, self.generics))
