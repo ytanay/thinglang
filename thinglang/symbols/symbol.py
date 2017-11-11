@@ -1,4 +1,4 @@
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 
 
 class Symbol(object):
@@ -21,9 +21,9 @@ class Symbol(object):
     def parameterize(self, parameters):
         return Symbol(self.name,
                       self.kind,
-                      parameters[self.type] if self.type in parameters else self.type,
+                      self.type.parameterize(parameters) if self.type else None,
                       self.static,
-                      [parameters[x] if x in parameters else x for x in self.arguments] if self.arguments else self.arguments,
+                      [x.parameterize(parameters) for x in self.arguments] if self.arguments else self.arguments,
                       self.index,
                       self.convention)
 
