@@ -10,7 +10,7 @@ def test_generic_parsing():
     assert isinstance(node.name, Identifier)
     assert isinstance(node.name.type, GenericIdentifier)
     assert node.name == Identifier('l')
-    assert node.name.type.name == Identifier('list')
-    assert node.name.type.generic == Identifier('number')
+    assert node.name.type.value == Identifier('list')
+    assert node.name.type.generics == (Identifier('number'),)
 
 

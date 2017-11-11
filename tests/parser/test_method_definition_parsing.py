@@ -53,22 +53,22 @@ def test_combined_method_definition():
 
 
 def test_method_definition_argument_invalid_syntax():
-    with pytest.raises(ValueError):
+    with pytest.raises(VectorReductionError):
         parse_local("does say_hello with text")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(VectorReductionError):
         parse_local("does say_hello with text name, number")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(VectorReductionError):
         parse_local("does say_hello with text name age")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(VectorReductionError):
         parse_local("does say_hello with text number , , age")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(VectorReductionError):
         parse_local("does say_hello with number, age")
 
-    with pytest.raises(ValueError):
+    with pytest.raises(VectorReductionError):
         parse_local("does say_hello with number 2")
 
     with pytest.raises(VectorReductionError):
