@@ -74,10 +74,6 @@ class ElementReference(Reference):
     def kind(self) -> object:
         return self.element.kind
 
-    @property
-    def generic(self):
-        return self.local.type.generic
-    
     def __str__(self):
         return f'EM({self.thing}.{self.element})'
 
@@ -96,7 +92,3 @@ class LocalReference(Reference):
         Returns the index of the local element
         """
         return self.local.index
-
-
-
-
