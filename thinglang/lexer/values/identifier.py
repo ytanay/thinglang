@@ -55,7 +55,7 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
 class GenericIdentifier(Identifier):
 
     def __init__(self, name, type=None, generic=None):
-        super().__init__(name)
+        super().__init__(name, name.source_ref)
         self.name, self.type, self.generic = name, type, generic
 
     @staticmethod
