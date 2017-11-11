@@ -18,6 +18,15 @@ class Symbol(object):
         self.index = new_index
         return self
 
+    def parameterize(self, parameters):
+        return Symbol(self.name,
+                      self.kind,
+                      parameters[self.type] if self.type in parameters else self.type,
+                      self.static,
+                      [parameters[x] if x in parameters else x for x in self.arguments] if self.arguments else self.arguments,
+                      self.index,
+                      self.convention)
+
     @property
     def convention(self):
         return self._convention

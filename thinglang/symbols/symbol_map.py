@@ -1,3 +1,5 @@
+from typing import List
+
 from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.symbol import Symbol
@@ -5,7 +7,7 @@ from thinglang.symbols.symbol import Symbol
 
 class SymbolMap(object):
 
-    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, generics: Identifier, index: int, offset: int):
+    def __init__(self, members: list, methods: list, name: Identifier, extends: Identifier, generics: List[Identifier], index: int, offset: int):
         self.members, self.methods, self.name, self.extends, self.generics, self.index, self.offset = \
             members, methods, name, extends, generics or [], index, offset
 
@@ -58,6 +60,19 @@ class SymbolMap(object):
             methods=self.format_method_declarations(),
             method_list=self.format_method_list(),
             children=templates.FOUNDATION_CHILDREN if 'list' in self.name.value else ''
+        )
+
+    def parameterize(self, parameters):
+        assert set(parameters.keys()) == set(self.generics), 'Partial parameterization is not allowed'
+
+        return SymbolMap(
+            [x.parameterize(parameters) for x in self.members],
+            [x.parameterize(parameters) for x in self.methods],
+            Identifier('{}:<{}>'.format(self.name, parameters)),
+            self.extends,
+            [],
+            self.index,
+            self.offset
         )
 
     def format_member_list(self, separator=', ', delimeter=''):
