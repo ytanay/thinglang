@@ -57,7 +57,7 @@ class TokenVector(object):
     def __init__(self, tokens=None):
         self.tokens = tokens if tokens is not None else []
 
-    def parse(self) -> BaseNode:
+    def parse(self, expect_single=True) -> BaseNode:
         """
         Iteratively parses the token vector until a single node remains, or no further rule replacements can be made.
         """
@@ -65,6 +65,9 @@ class TokenVector(object):
             pass
 
         self.process_indentation()
+
+        if not expect_single:
+            return self.tokens
 
         if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode)):
             raise VectorReductionError('Could not reduce vector: {}'.format(self.tokens))
@@ -173,6 +176,15 @@ class BracketVector(ParenthesesVector, ValueType):
         return InlineList(super().parse())
 
 
+class ParameterVector(ParenthesesVector):
+    """
+    Describes a vector of type parameters, used for generic thing definitions
+    """
+
+    def parse(self):
+        return tuple([super().parse()])
+
+
 class TypeVector(TokenVector, TypeList):
     """
     Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
@@ -181,8 +193,10 @@ class TypeVector(TokenVector, TypeList):
     def parse(self):
         output = []
 
-        if not all(isinstance(x, (Identifier, LexicalSeparator)) for x in self.tokens):
-            raise VectorReductionError('Only types, names and separators are allowed in a type vector')
+        self.tokens = super().parse(expect_single=False)
+
+        if not all(isinstance(x, (Identifier, LexicalSeparator, ParameterVector)) for x in self.tokens):
+            raise VectorReductionError('Only types, names and separators are allowed in a type vector', self.tokens)
 
         if len(self.tokens) < 2:
             raise VectorReductionError('Not enough items in a type vector')
@@ -198,4 +212,6 @@ class TypeVector(TokenVector, TypeList):
             output.append(components[1])
 
         return output
+
+
 
