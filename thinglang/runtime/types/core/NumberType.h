@@ -41,12 +41,12 @@ class NumberType : public ThingTypeInternal {
     public:
     NumberType() : ThingTypeInternal({ &__constructor__, &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__less_than__ }) {}; // constructor
  
-	static Thing __constructor__();
-	static Thing __addition__();
-	static Thing __subtraction__();
-	static Thing __multiplication__();
-	static Thing __division__();
-	static Thing __equals__();
-	static Thing __less_than__();
+	static void __constructor__();
+	static void __addition__();
+	static void __subtraction__();
+	static void __multiplication__();
+	static void __division__();
+	static void __equals__();
+	static void __less_than__();
     
 };

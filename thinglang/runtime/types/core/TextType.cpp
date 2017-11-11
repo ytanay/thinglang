@@ -12,62 +12,62 @@ Methods of TextType
 **/
 
 
-Thing TextType::__constructor__() {
-    return Program::create<TextInstance>();
+void TextType::__constructor__() {
+    Program::push(Program::create<TextInstance>());
 }
 
 
-Thing TextType::__addition__() {
+void TextType::__addition__() {
 		auto other = Program::argument<TextInstance>();
 		auto self = Program::argument<TextInstance>();
 
-		return Program::create<TextInstance>(self->val + other->val);
-        return nullptr;
+		Program::push(Program::create<TextInstance>(self->val + other->val));
+        
     }
 
 
-Thing TextType::__equals__() {
+void TextType::__equals__() {
 		auto other = Program::argument<TextInstance>();
 		auto self = Program::argument<TextInstance>();
 
 		
         if(self->val == other->val) {
-			return BOOL_TRUE;
+			Program::push(BOOL_TRUE);
         }
 
 		
         else {
-			return BOOL_FALSE;
+			Program::push(BOOL_FALSE);
     }
 
-        return nullptr;
+        
     }
 
 
-Thing TextType::contains() {
+void TextType::contains() {
 		auto substring = Program::argument<TextInstance>();
 		auto self = Program::argument<TextInstance>();
 
 		auto found = self->val.find(substring->val) != std::string::npos;
 		
         if(found) {
-			return BOOL_TRUE;
+			Program::push(BOOL_TRUE);
         }
 
 		
         else {
-			return BOOL_FALSE;
+			Program::push(BOOL_FALSE);
     }
 
-        return nullptr;
+        
     }
 
 
-Thing TextType::convert_number() {
+void TextType::convert_number() {
 		auto num = Program::argument<TextInstance>();
 
-		return Program::create<NumberInstance>(to_number(num->val));
-        return nullptr;
+		Program::push(Program::create<NumberInstance>(to_number(num->val)));
+        
     }
 
 

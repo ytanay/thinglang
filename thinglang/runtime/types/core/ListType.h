@@ -45,9 +45,9 @@ class ListType : public ThingTypeInternal {
     public:
     ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains }) {}; // constructor
  
-	static Thing __constructor__();
-	static Thing append();
-	static Thing pop();
-	static Thing contains();
+	static void __constructor__();
+	static void append();
+	static void pop();
+	static void contains();
     
 };

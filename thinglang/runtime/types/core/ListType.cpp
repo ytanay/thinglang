@@ -12,47 +12,47 @@ Methods of ListType
 **/
 
 
-Thing ListType::__constructor__() {
-    return Program::create<ListInstance>();
+void ListType::__constructor__() {
+    Program::push(Program::create<ListInstance>());
 }
 
 
-Thing ListType::append() {
+void ListType::append() {
 		auto item = Program::pop();
 		auto self = Program::argument<ListInstance>();
 
 		self->val.push_back(item);
-		return self;
-        return nullptr;
+		Program::push(self);
+        
     }
 
 
-Thing ListType::pop() {
+void ListType::pop() {
 		auto self = Program::argument<ListInstance>();
 
 		auto elem = self->val.back();
 		self->val.pop_back();
-		return elem;
-        return nullptr;
+		Program::push(elem);
+        
     }
 
 
-Thing ListType::contains() {
+void ListType::contains() {
 		auto item = Program::pop();
 		auto self = Program::argument<ListInstance>();
 
 		auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();
 		
         if(res) {
-			return BOOL_TRUE;
+			Program::push(BOOL_TRUE);
         }
 
 		
         else {
-			return BOOL_FALSE;
+			Program::push(BOOL_FALSE);
     }
 
-        return nullptr;
+        
     }
 
 

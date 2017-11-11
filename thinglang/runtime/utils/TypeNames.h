@@ -34,7 +34,7 @@ using ThingForwardList = std::forward_list<Thing>;
 using Frame = Things;
 using FrameStack = std::forward_list<Frame>;
 
-typedef Thing (*InternalMethod)();
+typedef void (*InternalMethod)();
 
 using Methods = std::vector<Method>;
 using InternalMethods = std::vector<InternalMethod>;

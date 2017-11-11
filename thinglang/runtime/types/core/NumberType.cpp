@@ -12,75 +12,80 @@ Methods of NumberType
 **/
 
 
-Thing NumberType::__constructor__() {
-    return Program::create<NumberInstance>();
+void NumberType::__constructor__() {
+    Program::push(Program::create<NumberInstance>());
 }
 
 
-Thing NumberType::__addition__() {
+void NumberType::__addition__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Program::create<NumberInstance>(self->val + other->val);
-        return nullptr;
+		Program::push(Program::create<NumberInstance>(self->val + other->val));
+        
     }
 
 
-Thing NumberType::__subtraction__() {
+void NumberType::__subtraction__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Program::create<NumberInstance>(self->val - other->val);
-        return nullptr;
+		Program::push(Program::create<NumberInstance>(self->val - other->val));
+        
     }
 
 
-Thing NumberType::__multiplication__() {
+void NumberType::__multiplication__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Program::create<NumberInstance>(self->val * other->val);
-        return nullptr;
+		Program::push(Program::create<NumberInstance>(self->val * other->val));
+        
     }
 
 
-Thing NumberType::__division__() {
+void NumberType::__division__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
-		return Program::create<NumberInstance>(self->val / other->val);
-        return nullptr;
+		Program::push(Program::create<NumberInstance>(self->val / other->val));
+        
     }
 
 
-Thing NumberType::__equals__() {
+void NumberType::__equals__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
 		
         if(self->val == other->val) {
-			return BOOL_TRUE;
+			Program::push(BOOL_TRUE);
         }
 
 		
         else {
-			return BOOL_FALSE;
+			Program::push(BOOL_FALSE);
     }
 
-        return nullptr;
+        
     }
 
 
-Thing NumberType::__less_than__() {
+void NumberType::__less_than__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
 
 		
         if(self->val < other->val) {
-			return BOOL_TRUE;
+			Program::push(BOOL_TRUE);
         }
 
-        return nullptr;
+		
+        else {
+			Program::push(BOOL_FALSE);
+    }
+
+        
     }
 
 

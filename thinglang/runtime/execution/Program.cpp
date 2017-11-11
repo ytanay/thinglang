@@ -111,8 +111,7 @@ void Program::execute() {
 
             case Opcode::CALL_INTERNAL: {
 
-                auto ret_val = Program::internals[instruction.target]->call(instruction.secondary);
-                Program::push(ret_val);
+                Program::internals[instruction.target]->call(instruction.secondary);
                 break;
             }
 

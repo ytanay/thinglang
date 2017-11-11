@@ -41,6 +41,6 @@ class BoolType : public ThingTypeInternal {
     public:
     BoolType() : ThingTypeInternal({ &__constructor__ }) {}; // constructor
  
-	static Thing __constructor__();
+	static void __constructor__();
     
 };
