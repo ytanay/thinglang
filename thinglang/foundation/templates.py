@@ -139,8 +139,8 @@ ELSE_CLAUSE = """
 """
 
 IMPLICIT_CONSTRUCTOR = """
-Thing {type_cls_name}::__constructor__() {{
-    return Program::create<{instance_cls_name}>();
+void {type_cls_name}::__constructor__() {{
+    Program::push(Program::create<{instance_cls_name}>());
 }}
 """
 
@@ -148,10 +148,10 @@ ARGUMENT_POP_TYPE = '\t\tauto {name} = Program::argument<{type}>();'
 ARGUMENT_POP_GENERIC = '\t\tauto {name} = Program::pop();'
 ARGUMENT_INSTANTIATE_SELF = '\t\tauto self = Program::create<{cls}>();'
 
-RETURN_VALUE = "return {value};"
-RETURN_VALUE_INSTANTIATE = 'return Program::create<{instance_cls_name}>({value});'
-RETURN_NULL = 'return nullptr;'
-RETURN_SELF = 'return self;'
+RETURN_VALUE = "Program::push({value});"
+RETURN_VALUE_INSTANTIATE = 'Program::push(Program::create<{instance_cls_name}>({value}));'
+RETURN_NULL = 'return;'
+RETURN_SELF = 'Program::push(self);'
 
 FOUNDATION_VALUE_CONSTRUCTOR = 'explicit {instance_cls_name}({member_list}) : {initializer} {{}}; // value constructor'
 

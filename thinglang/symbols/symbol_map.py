@@ -82,7 +82,7 @@ class SymbolMap(object):
         return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
 
     def format_method_declarations(self):
-        return '\n'.join('\tstatic Thing {}();'.format(x.name.transpile()) for x in self.methods)
+        return '\n'.join('\tstatic void {}();'.format(x.name.transpile()) for x in self.methods)
 
     def __getitem__(self, item: Identifier) -> Symbol:
         return self.lookup[item]

@@ -46,11 +46,11 @@ class MethodDefinition(BaseNode):
         return templates.FOUNDATION_METHOD.format(
             name=self.name.transpile(),
             class_name=type_cls_name,
-            return_type='Thing',
+            return_type='void',
             arguments='',  # Popped directly from stack
             preamble=self.arguments.transpile(instance_cls_name, static=self.static, constructor=self.is_constructor()),
             body=self.transpile_children(2, self.children),
-            epilogue=templates.RETURN_SELF if self.is_constructor() else templates.RETURN_NULL
+            epilogue=''
 
         )
 
