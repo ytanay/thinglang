@@ -182,17 +182,17 @@ class TypeVector(TokenVector, TypeList):
         output = []
 
         if not all(isinstance(x, (Identifier, LexicalSeparator)) for x in self.tokens):
-            raise ValueError('Only types, names and separators are allowed in a type vector')
+            raise VectorReductionError('Only types, names and separators are allowed in a type vector')
 
         if len(self.tokens) < 2:
-            raise ValueError('Not enough items in a type vector')
+            raise VectorReductionError('Not enough items in a type vector')
 
         for components in collection_utils.chunks(self.tokens, 3):
             if len(components) < 2 or not isinstance(components[0], Identifier) or not isinstance(components[1], Identifier):
-                raise ValueError('Invalid syntax in type vector element - must be 2 consecutive names')
+                raise VectorReductionError('Invalid syntax in type vector element - must be 2 consecutive names')
 
             if len(components) > 2 and not isinstance(components[2], LexicalSeparator):
-                raise ValueError('Expected separator, got {}'.format(components[1]))
+                raise VectorReductionError('Expected separator, got {}'.format(components[1]))
 
             components[1].type = components[0]
             output.append(components[1])
