@@ -23,10 +23,8 @@ class AssignmentOperation(BaseNode):
         self.intent, self.name, self.value = intent, name, value
 
         if type_name is not None:
-           self.name.type = type_name
-
-    def describe(self):
-        return '{} = {}'.format(self.name, self.value)
+            assert self.name.type is None
+            self.name.type = type_name
 
     def compile(self, context: CompilationBuffer):
 
@@ -59,10 +57,14 @@ class AssignmentOperation(BaseNode):
         else:
             raise Exception('Cannot pull up {}'.format(target))
 
-        if value_ref.type != target_ref.type:
+        if value_ref.type.untyped != target_ref.type.untyped:
             optional = context.optional()
             CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(optional)
             context.insert(cast_placeholder, optional)
+
+    @property
+    def type(self):
+        return self.name.type
 
     def __repr__(self):
         return f'Assignment({self.name} = {self.value})'
