@@ -47,6 +47,10 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def self(cls):
         return cls("self")
 
+    @property
+    def untyped(self):
+        return self
+
 
 class GenericIdentifier(Identifier):
 
@@ -63,3 +67,7 @@ class GenericIdentifier(Identifier):
         if self.generic:
             return f'{self.name}<{self.generic}>'
         return super().__repr__()
+
+    @property
+    def untyped(self):
+        return self.name

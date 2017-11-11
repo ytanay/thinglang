@@ -75,11 +75,11 @@ class SymbolMapper(object):
         first, second, local = target[0], target[1], None
         if first.STATIC:
             container = self.maps[first.type]
-        elif first in self.maps:
-            container = self.maps[first]
+        elif first.untyped in self.maps:
+            container = self.maps[first.untyped]
         elif first in method_locals:
             local = method_locals[first]
-            container = self.maps[local.type]
+            container = self.maps[local.type.untyped]
         else:
             raise Exception('Cannot resolve first level access {}'.format(first))
 
