@@ -1,7 +1,6 @@
 from collections import OrderedDict
 
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalConditional
@@ -12,6 +11,9 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class Conditional(BaseNode):
+    """
+    The base conditional class
+    """
 
     def __init__(self, value):
         super(Conditional, self).__init__([value])

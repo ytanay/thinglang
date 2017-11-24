@@ -10,8 +10,8 @@ class TryBlock(BaseNode):
     Try blocks are used to generate exception handling tables during the final steps of the compilation process
     Essentially, the block tags all the instructions emitted by it, producing a range of instructions for which
     it is responsible for handling exceptions.
-
     """
+
     def __init__(self, token=None):
         super(TryBlock, self).__init__([token])
 

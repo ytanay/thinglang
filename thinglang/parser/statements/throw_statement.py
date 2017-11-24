@@ -7,6 +7,10 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class ThrowStatement(BaseNode):
+    """
+    This statement throws an exception
+    """
+
     def __init__(self, value=None):
         super().__init__([value])
         self.value = value

@@ -4,9 +4,8 @@ from typing import Iterable, Type, Sequence
 
 def drain(predicate=lambda x: True):
     """
-    Drains a generator function into a list
+    Drains a generator function into a list, optionally filtering using predicate
     """
-
     def wrapper(func):
 
         @functools.wraps(func)

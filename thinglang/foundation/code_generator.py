@@ -29,6 +29,11 @@ class JSONSerializer(json.JSONEncoder):
 
 
 def generate_types():
+    """
+    Generates and writes the C++ code for internal thing types, such as the text and number classes
+    Additionally, writes the symbol maps for the generated types
+    """
+
     for path in glob.glob(SOURCE_PATTERN, recursive=True):
 
         name = os.path.basename(path).replace('.thing', '')
@@ -63,6 +68,9 @@ def generate_types():
 
 
 def write_type_enum():
+    """
+    Create the internal types ordering enum
+    """
     imports = '\n'.join('#include "core/{}.h"'.format(templates.class_names(name)[0]) for name in definitions.INTERNAL_TYPE_ORDERING)
 
     write_if_changed(os.path.join(TYPES_TARGET, 'InternalTypes.h'), generate_enum(
@@ -71,11 +79,19 @@ def write_type_enum():
 
 
 def write_opcode_enum():
+    """
+    Creates the opcode enum used by the runtime
+    """
     write_if_changed(os.path.join(EXECUTION_TARGET, 'Opcodes.h'), generate_enum('Opcode', Opcode.all()))
 
 
-def generate_enum(cls_name, values, imports=''):
-
+def generate_enum(cls_name, values, imports='') -> str:
+    """
+    Helper function to create C++ enum headers
+    :param cls_name: the name of the enum
+    :param values: values to include
+    :param imports: additional files to import
+    """
     code = templates.FOUNDATION_ENUM.format(
         name=cls_name,
         values=',\n'.join('    {} = {}'.format(option[0].upper(), option[1]) for option in values),
@@ -101,6 +117,9 @@ def generate_enum(cls_name, values, imports=''):
 
 
 def write_if_changed(file_path, contents):
+    """
+    Writes a file to the disk if it does not exist or if it has changed since the last write
+    """
     if os.path.isfile(file_path):
         with open(file_path, 'r') as f:
             if f.read() == contents:
@@ -113,6 +132,9 @@ def write_if_changed(file_path, contents):
 
 
 def generate_code():
+    """
+    Calls all code generating functions
+    """
     generate_types()
     write_type_enum()
     write_opcode_enum()

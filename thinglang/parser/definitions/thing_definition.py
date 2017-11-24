@@ -1,8 +1,7 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.sentinels import SentinelThingDefinition
 from thinglang.foundation import templates
-from thinglang.lexer.definitions.tags import LexicalInheritanceTag, LexicalArgumentListIndicator
+from thinglang.lexer.definitions.tags import LexicalInheritanceTag
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.member_definition import MemberDefinition
@@ -10,7 +9,11 @@ from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
 
+
 class ThingDefinition(BaseNode):
+    """
+    Defines a thing, also known as a class
+    """
 
     def __init__(self, name, extends=None, generics=None):
         super(ThingDefinition, self).__init__([name, extends, generics])

@@ -9,58 +9,51 @@
 #include "../utils/TypeNames.h"
 
 class Program {
-public:
-
-
-
-    template <typename T>
-    static T* argument(){
-        return static_cast<T*>(pop());
-    };
-
-    static Thing pop();
-
-    static void push(const Thing& instance) {
-        stack.push_front(instance);
-    }
-
-    static Thing data(Index index) {
-        return static_data[index];
-    }
-
-    static void create_frame(Size size) {
-        frames.push_front(Frame(size));
-    }
-
-    static void pop_frame() {
-        frames.pop_front();
-    }
-
-    static Frame &frame() {
-        return frames.front();
-    }
-
-    static void execute();
-    static void copy_args(Size count, Size offset);
-
-    static void load(ProgramInfo &info);
-
-    static void status(Index counter, const Instruction& instruction);
-
-    static Types internals;
 
 private:
     Program() = default;
 
+    /**
+     * Stack manipulation
+     */
+
+private:
     static ThingForwardList stack;
     static FrameStack frames;
+
+public:
+    static void push(const Thing& instance);
+    static Thing pop();
+    static void create_frame(Size size);
+    static void pop_frame();
+    static Frame &frame();
+    static void copy_args(Size count, Size offset);
+    template <typename T>
+    static T* argument(){
+        /**
+        * Pops an argument from the stack, casting it to type T*
+        */
+        return static_cast<T*>(pop());
+    }
+
+
+    /**
+    * Static data and infrastructure
+    */
+
+private:
     static Things static_data;
     static Index entry;
     static Size initial_frame_size;
     static SourceMap source_map;
     static Source source;
     static InstructionList instructions;
+    static Types internals;
 
+public:
+    static void load(ProgramInfo &info);
+    static void execute();
+    static Thing data(Index index);
 
 
     /**
@@ -72,7 +65,6 @@ private:
     static unsigned char current_mark; // The value used to mark objects in the current cycle
 
 public:
-
     template <typename T, typename... Args>
     static T* create(Args&&... args) {
         // Create a new ThingInstance and intern into a generation
@@ -97,6 +89,12 @@ public:
         return std::distance(objects.begin(), objects.end());
     }
 
+    /**
+     * Diagnostics
+     */
+public:
+
+    static void status(Index counter, const Instruction& instruction);
 
 };
 

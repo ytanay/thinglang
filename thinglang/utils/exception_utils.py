@@ -1,4 +1,7 @@
 class ThinglangException(Exception):
+    """
+    The base thinglang exception class
+    """
 
     def __init__(self, *args):
         self.args = args

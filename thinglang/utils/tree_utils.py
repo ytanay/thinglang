@@ -3,6 +3,12 @@ from thinglang.parser.definitions.thing_definition import ThingDefinition
 
 
 def inspects(*args, predicate=None, priority=0):
+    """
+    Tags a TreeTraversal inspector method
+    :param args: AST node types accepted by this inspector, if predicate is not set
+    :param predicate: a custom entrance function - overrides args
+    :param priority: the order in which this inspector will be called, relative to other inspectors
+    """
     if predicate is None:
         def predicate(node):
             return isinstance(node, args) if args else True
@@ -16,6 +22,11 @@ def inspects(*args, predicate=None, priority=0):
 
 
 class TreeTraversal(object):
+    """
+    A helper class implementing DFS passes over the AST.
+    Automatically keeps track of the current ThingDefinition and MethodDefinition being analyzed
+    """
+
     def __init__(self, ast):
         self.ast = ast
         self.results = []

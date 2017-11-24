@@ -25,7 +25,11 @@ from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType, TypeList, ListType
 
-PARSING_ORDER = [
+"""
+The primary component of the parser - describes token vectors and their reduction pipeline
+"""
+
+PARSING_ORDER = [  # Apply production rules in this order
     GenericIdentifier,
 
     ThingDefinition,
@@ -53,6 +57,9 @@ PARSING_ORDER = [
 
 
 class TokenVector(object):
+    """
+    The base token vector
+    """
 
     def __init__(self, tokens=None):
         self.tokens = tokens if tokens is not None else []
@@ -150,7 +157,7 @@ class ParenthesesVector(TokenVector, ValueType, ListType):
     signifying order-of-operations in an arithmetic operations
     """
 
-    def parse(self):
+    def parse(self, expect_single=False):
         if not self.tokens:
             return []
 
@@ -172,7 +179,7 @@ class BracketVector(ParenthesesVector, ValueType):
     Describes a vector of tokens bounded in bracket, generally for creating in line lists.
     """
 
-    def parse(self):
+    def parse(self, expect_single=False):
         return InlineList(super().parse())
 
 
@@ -181,7 +188,7 @@ class ParameterVector(ParenthesesVector):
     Describes a vector of type parameters, used for generic thing definitions
     """
 
-    def parse(self):
+    def parse(self, expect_single=False):
         return tuple([super().parse()])
 
 
@@ -190,7 +197,7 @@ class TypeVector(TokenVector, TypeList):
     Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
     """
 
-    def parse(self):
+    def parse(self, expect_single=False):
         output = []
 
         self.tokens = super().parse(expect_single=False)

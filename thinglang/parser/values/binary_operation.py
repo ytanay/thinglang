@@ -8,6 +8,10 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class BinaryOperation(BaseNode, ValueType):
+    """
+    Represents binary operations (arithmetic and logic)
+    """
+
     OPERATIONS = {
         LexicalAddition: lambda lhs, rhs: lhs + rhs,
         LexicalMultiplication: lambda lhs, rhs: lhs * rhs,

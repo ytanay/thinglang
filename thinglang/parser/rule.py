@@ -3,6 +3,10 @@ import itertools
 
 
 class ParserRule(object):
+    """
+    Describes a parser rule - that is, a production rule from the thinglang grammar
+    """
+
     COUNTER = itertools.count(0)
 
     def __init__(self, constructor, pattern, index=None):

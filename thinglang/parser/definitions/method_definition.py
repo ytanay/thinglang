@@ -1,7 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
-from thinglang.compiler.sentinels import SentinelMethodDefinition
 from thinglang.foundation import templates
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
@@ -14,11 +12,14 @@ from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.symbols.symbol import Symbol
-from thinglang.symbols.symbol_map import SymbolMap
 from thinglang.utils.type_descriptors import TypeList
 
 
 class MethodDefinition(BaseNode):
+    """
+    A method definition
+    Must be a direct child of a ThingDefinition
+    """
 
     def __init__(self, name, arguments=None, return_type=None, static=False, token=None):
         super(MethodDefinition, self).__init__([name, arguments, return_type, static, token])

@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeReturn
 from thinglang.foundation import templates
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
@@ -9,6 +8,10 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class ReturnStatement(BaseNode):
+    """
+    A return statement - can return a value or void
+    """
+
     def __init__(self, value=None, token=None):
         super().__init__([value, token])
         self.value = value

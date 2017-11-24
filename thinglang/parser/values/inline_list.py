@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.common.list_type import ListInitialization
 from thinglang.parser.definitions.argument_list import ArgumentList
@@ -8,6 +7,9 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 class InlineList(ListInitialization):
+    """
+    Describes inline list initialization
+    """
 
     def __init__(self, values):
         super().__init__(values)

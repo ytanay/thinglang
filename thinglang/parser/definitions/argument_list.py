@@ -3,6 +3,9 @@ from thinglang.parser.common.list_type import ListInitialization
 
 
 class ArgumentList(ListInitialization):
+    """
+    An argument list used for a MethodCall or MethodDefinition
+    """
 
     def transpile(self, instance_cls_name, static=False, constructor=False):
         lines = []

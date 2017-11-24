@@ -1,2 +1,4 @@
 class ElseBranchInterface(object):
-    pass
+    """
+    Implemented by conditional and unconditional "else" blocks
+    """

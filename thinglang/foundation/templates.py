@@ -1,3 +1,7 @@
+"""
+Templates used to generate C++ code for the runtime
+"""
+
 HEADER = """/**
     {file_name}
     Auto-generated code - do not modify.
@@ -160,6 +164,7 @@ FOUNDATION_CHILDREN = """
         return val;
     }
 """
+
 
 def format_internal_type_name(type):
     name = type.value.capitalize()

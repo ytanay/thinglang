@@ -4,7 +4,9 @@ const std::string ProgramReader::EXPECTED_MAGIC = "THING\xCC";
 
 
 ProgramInfo ProgramReader::process() {
-
+    /**
+     * Process a compile thinglang program
+     */
     prepare_stream();
     read_header();
 
@@ -17,6 +19,9 @@ ProgramInfo ProgramReader::process() {
 }
 
 void ProgramReader::read_header() {
+    /**
+     * Reads the program header and performs basic sanity checks
+     */
 
     auto magic = read_string(EXPECTED_MAGIC.size());
 
@@ -44,6 +49,9 @@ void ProgramReader::read_header() {
 
 
 InstructionList ProgramReader::read_code() {
+    /**
+     * Process the code section
+     */
     std::cerr << "Reading code section..." << std::endl;
     InstructionList instructions;
 
@@ -70,6 +78,9 @@ InstructionList ProgramReader::read_code() {
 
 
 Instruction ProgramReader::read_instruction(Opcode opcode) {
+    /**
+     * Reads and parses the next instruction
+     */
     auto instruction_id = instruction_counter - 1;
 
     switch (arg_count(opcode)) {
@@ -92,6 +103,9 @@ Instruction ProgramReader::read_instruction(Opcode opcode) {
 
 
 Things ProgramReader::read_data() {
+    /**
+     * Reads the static data section
+     */
     std::cerr << "Reading data section..." << std::endl;
 
     Things static_data;
@@ -105,11 +119,13 @@ Things ProgramReader::read_data() {
     std::cerr << "Data section processed successfully" << std::endl << std::endl;
 
     return static_data;
-
 }
 
 
 Thing ProgramReader::read_data_block() {
+    /**
+     * Reads the next data block
+     */
     auto type = read_data_type();
 
     switch (type) {
@@ -134,6 +150,9 @@ Thing ProgramReader::read_data_block() {
 }
 
 void ProgramReader::prepare_stream() {
+    /**
+     * Prepare the bytecode stream
+     */
 
     assert(!file.is_open());
 
@@ -146,6 +165,9 @@ void ProgramReader::prepare_stream() {
 }
 
 SourceMap ProgramReader::read_source_map() {
+    /**
+     * Reads the source map section
+     */
     auto refs = std::vector<Index>(instruction_count);
 
     for(int i = 0; i <instruction_count; i++){
@@ -156,6 +178,9 @@ SourceMap ProgramReader::read_source_map() {
 }
 
 Source ProgramReader::read_source() {
+    /**
+     * Reads the inline source
+     */
     Source lines;
     for (std::string line; std::getline(file, line); )
         lines.push_back(line);

@@ -1,12 +1,9 @@
 import collections
 import struct
 
-from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, \
-    OpcodePushMember, OpcodeCall, OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
-from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelMethodEnd, SentinelCodeEnd, SentinelDataEnd
-from thinglang.compiler.references import ElementReference, LocalReference, Reference
-from thinglang.utils import collection_utils
-from thinglang.utils.source_context import SourceReference, SourceContext
+from thinglang.compiler.opcodes import  OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
+from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelCodeEnd, SentinelDataEnd
+from thinglang.utils.source_context import SourceContext
 
 HEADER_FORMAT = '<HIIII'
 BytecodeHeader = collections.namedtuple('BytecodeHeader', [
@@ -19,7 +16,9 @@ BytecodeHeader = collections.namedtuple('BytecodeHeader', [
 
 
 class CompilationContext(object):
-
+    """
+    The CompilationContext classes manages the entire compilation pass, including serialization into bytecode
+    """
     def __init__(self, symbols, source: SourceContext, entry=None):
 
         self.symbols = symbols
@@ -31,14 +30,11 @@ class CompilationContext(object):
         self.methods = {}
 
     def add(self, method_id, method, buffer):
+        """
+        Add a compiled method buffer
+        """
+
         self.methods[method_id] = method, buffer
-
-    def epilogue(self, buffer):
-        """
-        Appends an epilogue context into the pending buffer list
-        """
-
-        self.epilogues.append(buffer.instruction_block)
 
     def buffer(self) -> 'CompilationContext':
         """

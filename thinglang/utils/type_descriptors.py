@@ -1,10 +1,16 @@
 class ValueType(object):
-    pass
+    """
+    Describes any value type - numbers, strings, variable names, etc...
+    """
 
 
 class ListType(object):
-    pass
+    """
+    Describes an iterable type, currently a list
+    """
 
 
 class TypeList(object):
-    pass
+    """
+    Describes a list of types
+    """

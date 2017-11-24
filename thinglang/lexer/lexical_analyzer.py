@@ -16,14 +16,20 @@ from thinglang.utils.source_context import SourceContext, SourceLine
 
 @collection_utils.drain()
 def lexer(source: SourceContext) -> List[List[LexicalToken]]:
+    """
+    Performs lexical analysis on every line of code in the source independently
+    """
     for line in source:
         if not line.empty:
             yield analyze_line(line)
 
 
 @collection_utils.drain(lambda x: x is not None)
-def analyze_line(line: SourceLine):
-    operator_working_set, group, entity_class, start_ref, current_ref = OPERATORS, '', None, None, None
+def analyze_line(line: SourceLine) -> List[LexicalToken]:
+    """
+    Analyze a line of source code, emitting a list of lexical tokens
+    """
+    operator_working_set, buffer, entity_class, start_ref, current_ref = OPERATORS, '', None, None, None
 
     for char, current_ref in line:
 
@@ -31,14 +37,14 @@ def analyze_line(line: SourceLine):
             start_ref = current_ref  # update the group's starting source reference
 
         if char not in operator_working_set:
-            group += char  # continue appending characters to the current group
+            buffer += char  # continue appending characters to the current group
 
         else:  # i.e. if we are on an operator
 
-            if group or (entity_class and entity_class.ALLOW_EMPTY):  # emit the collected group thus far
-                yield finalize_group(group, char, entity_class, current_ref - start_ref)
+            if buffer or (entity_class and entity_class.ALLOW_EMPTY):  # emit the collected group thus far
+                yield finalize_buffer(buffer, char, entity_class, current_ref - start_ref)
 
-            group, start_ref = '', None  # reset the group and the starting source reference
+            buffer, start_ref = '', None  # reset the group and the starting source reference
             entity_class = operator_working_set[char]
 
             if entity_class is None:  # if there is no lexical entity for this character, nothing further to do
@@ -55,38 +61,47 @@ def analyze_line(line: SourceLine):
             if entity_class.EMITTABLE:
                 yield OPERATORS[char](char, current_ref)
 
-    if group:
-        yield finalize_group(group, StopIteration, entity_class, current_ref - start_ref + 1)
+    if buffer:
+        yield finalize_buffer(buffer, StopIteration(), entity_class, current_ref - start_ref + 1)
 
     yield LexicalGroupEnd()
 
 
-def finalize_group(group, terminating_char, entity_class, source_ref):
+def finalize_buffer(buffer: str, terminating_char, entity_class, source_ref) -> LexicalToken:
+    """
+    Finalize a character buffer into a lexical token
+    :param buffer: the characters collected thus far
+    :param terminating_char: the character which caused the buffer termination (not included in buffer)
+    :param entity_class: the current entity being collected (generally, a type of quote, or none)
+    :param source_ref: a reference to the source from which these tokens were derived
+    """
+    if buffer in KEYWORDS:
+        return KEYWORDS[buffer](buffer, source_ref) if KEYWORDS[buffer].EMITTABLE else None
 
-    if group in KEYWORDS:
-        return KEYWORDS[group](group, source_ref) if KEYWORDS[group].EMITTABLE else None
-
-    if group.isdigit():
-        return NumericValue(group, source_ref)
+    if buffer.isdigit():
+        return NumericValue(buffer, source_ref)
 
     if terminating_char == '"':
         if entity_class is not LexicalQuote:
             raise ValueError("Unexpected end of string")
-        return InlineString(group, source_ref)
+        return InlineString(buffer, source_ref)
 
     if terminating_char == '`':
         if entity_class is not LexicalBacktick:
             raise ValueError("Unexpected end of inline code")
-        return InlineCode(group, source_ref)
+        return InlineCode(buffer, source_ref)
 
-    if is_identifier(group):
+    if is_identifier(buffer):
         if entity_class in (LexicalQuote, LexicalBacktick):
             raise ValueError("String was not closed")
-        return Identifier(group, source_ref)
+        return Identifier(buffer, source_ref)
 
-    if group:
-        raise ValueError('Lexer: cannot terminate group {}'.format(group))
+    if buffer:
+        raise ValueError('Lexer: cannot terminate group {}'.format(buffer))
 
 
-def is_identifier(component):
-    return bool(IDENTIFIER_STANDALONE.match(component))
+def is_identifier(buffer) -> bool:
+    """
+    Checks if the collected buffer can be interpreted as an identifier
+    """
+    return bool(IDENTIFIER_STANDALONE.match(buffer))

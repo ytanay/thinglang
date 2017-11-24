@@ -2,6 +2,9 @@ from thinglang.parser.nodes.base_node import BaseNode
 
 
 class ListInitialization(BaseNode):
+    """
+    A base type for lists (including inline lists and argument lists)
+    """
 
     def __init__(self, values=None):
         self.values = self.normalize_input(values)

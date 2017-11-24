@@ -4,6 +4,10 @@ from thinglang.parser.values.method_call import MethodCall
 
 
 class CastOperation(object):
+    """
+    Explicitly cast from one type to another
+    Expects a conversion method on the source class
+    """
 
     @staticmethod
     def create(source: Identifier, destination: Identifier) -> MethodCall:

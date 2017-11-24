@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalElse
 from thinglang.parser.blocks.common import ElseBranchInterface
@@ -8,6 +7,10 @@ from thinglang.parser.rule import ParserRule
 
 
 class UnconditionalElse(BaseNode, ElseBranchInterface):
+    """
+    An unconditional else block
+    Must be preceded by a Conditional
+    """
 
     def __init__(self, token):
         super(UnconditionalElse, self).__init__(token)

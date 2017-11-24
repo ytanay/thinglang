@@ -3,6 +3,10 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class InlineCode(LexicalToken, ValueType):
+    """
+    Represents inline C++ code
+    """
+
     STATIC = True
 
     def __init__(self, value, source_ref):

@@ -1,7 +1,6 @@
 import struct
 
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
 from thinglang.lexer.lexical_token import LexicalToken
@@ -9,7 +8,11 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.type_descriptors import ValueType
 
 
-class InlineString(LexicalToken, ValueType):  # immediate string e.g. "hello world"
+class InlineString(LexicalToken, ValueType):
+    """
+    Represents a constant inline string
+    """
+
     STATIC = True
     TYPE = Identifier("text")
     TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[Identifier("text")]

@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
@@ -13,6 +12,10 @@ from thinglang.utils.type_descriptors import ValueType, ListType
 
 
 class MethodCall(BaseNode, ValueType):
+    """
+    Represents a method call.
+    Described by a target and an argument list.
+    """
 
     STACK_ARGS = object()
 

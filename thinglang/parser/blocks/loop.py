@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
 from thinglang.lexer.blocks.loops import LexicalRepeatWhile
 from thinglang.parser.nodes.base_node import BaseNode
@@ -8,6 +7,9 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class Loop(BaseNode):
+    """
+    A simple while loop
+    """
 
     def __init__(self, value):
         super(Loop, self).__init__([value])

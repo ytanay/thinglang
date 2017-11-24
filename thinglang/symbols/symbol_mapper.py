@@ -123,6 +123,10 @@ class SymbolMapper(object):
         return self[Identifier('Program')].index
 
     def __getitem__(self, item) -> SymbolMap:
+        """
+        If given a GenericIdentifier, generates a new symbol map with the relevant generics filled in.
+        Otherwise, returns the symbol map identified by `item`
+        """
         if isinstance(item, GenericIdentifier):
             symbol_map = self.maps[item.value]
             parameters = {parameter: replacement for parameter, replacement in zip(symbol_map.generics, item.generics)}
@@ -132,4 +136,7 @@ class SymbolMapper(object):
         return self.maps[item]
 
     def __contains__(self, item) -> bool:
+        """
+        Checks if this mapper contains a specific map
+        """
         return item in self.maps

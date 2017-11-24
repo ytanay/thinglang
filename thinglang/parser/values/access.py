@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference
 from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.values.identifier import Identifier
@@ -9,6 +8,10 @@ from thinglang.utils.type_descriptors import ValueType
 
 
 class Access(BaseNode, ValueType):
+    """
+    Represents a dereferencing operation
+    """
+
     def __init__(self, target):
         super(Access, self).__init__(target)
 
@@ -23,7 +26,6 @@ class Access(BaseNode, ValueType):
             return '->'.join(x.transpile() for x in self.target)
 
     def compile(self, context: CompilationBuffer, pop_last=False, without_last=False):
-
         if without_last and not self.extensions:
             return self[0].compile(context)
 

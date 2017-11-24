@@ -11,12 +11,8 @@ Index Program::initial_frame_size = 0;
 SourceMap Program::source_map;
 Source Program::source;
 InstructionList Program::instructions;
-
-
 ThingForwardList Program::objects;
-
 unsigned char Program::current_mark = 0;
-
 
 Types Program::internals = {
         nullptr,
@@ -29,8 +25,10 @@ Types Program::internals = {
 };
 
 
-
 Thing Program::pop() {
+    /**
+     * Pop an item from the program stack and return it
+     */
     if(stack.empty())
         critical_abort(EMPTY_PROGRAM_STACK);
 
@@ -40,6 +38,9 @@ Thing Program::pop() {
 }
 
 void Program::load(ProgramInfo &info) {
+    /**
+     * Prepares bytecode for execution
+     */
     auto loaded_code = static_cast<InstructionList &&>(std::get<0>(info));
     auto loaded_data = static_cast<Things &&>(std::get<1>(info));
     auto loaded_source_map = static_cast<SourceMap &&>(std::get<4>(info));
@@ -56,6 +57,9 @@ void Program::load(ProgramInfo &info) {
 
 
 void Program::status(Index counter, const Instruction& instruction) {
+    /**
+     * Prints diagnostic information about the currently executing instruction
+     */
     auto source_idx = source_map[instruction.index];
 
     assert(source_idx < source.size());
@@ -70,12 +74,18 @@ void Program::status(Index counter, const Instruction& instruction) {
 }
 
 void inline Program::copy_args(Size count, Size offset){
+    /**
+     * Copy arguments from the stack into the current frame
+     */
     for (size_t i = 0; i < count; i++) {
         Program::frame()[offset - i] = Program::pop();
     }
 }
 
 void Program::execute() {
+    /**
+     * The primary execution loop
+     */
 
     auto counter_end = instructions.size();
 
@@ -129,7 +139,6 @@ void Program::execute() {
             }
 
             case Opcode::PUSH_LOCAL: {
-                std::cerr << "\tPushing " << Program::frame()[instruction.target]->text() << std::endl;
                 Program::push(Program::frame()[instruction.target]);
                 break;
             };
@@ -241,7 +250,6 @@ void Program::execute() {
 
         }
 
-
         counter++;
     };
 
@@ -314,4 +322,40 @@ void Program::sweep() {
         delete item;
     }
 
+}
+
+
+void Program::push(const Thing &instance) {
+    /**
+     * Push an item into the program stack
+     */
+    stack.push_front(instance);
+}
+
+Thing Program::data(Index index) {
+    /**
+     * Returns a reference to statically allocated data
+     */
+    return static_data[index];
+}
+
+void Program::create_frame(Size size) {
+    /**
+     * Creates a new stack frame
+     */
+    frames.push_front(Frame(size));
+}
+
+void Program::pop_frame() {
+    /**
+     * Pops the current stack frame
+     */
+    frames.pop_front();
+}
+
+Frame &Program::frame() {
+    /**
+     * Returns the current stack frame
+     */
+    return frames.front();
 }

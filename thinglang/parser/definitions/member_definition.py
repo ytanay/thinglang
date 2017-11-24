@@ -8,6 +8,11 @@ from thinglang.symbols.symbol import Symbol
 
 
 class MemberDefinition(BaseNode):
+    """
+    A member definition
+    Must be a direct child of a ThingDefinition
+    """
+
     def __init__(self, name, type_name):
         super(MemberDefinition, self).__init__([name, type_name])
 

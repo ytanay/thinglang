@@ -7,6 +7,9 @@ from thinglang.parser.rule import ParserRule
 
 
 class HandleBlock(BaseNode):
+    """
+    An exception handling block
+    """
 
     def __init__(self, exception_type: Identifier, exception_name: Identifier=None):
         super(HandleBlock, self).__init__([exception_type, exception_name])
