@@ -19,7 +19,13 @@ class LexicalNegation(LexicalToken):
 
 class LexicalEquals(LexicalComparison):
     """
-    Signifies the equality operators, given by "eq"
+    Signifies the equality operator, given by "eq"
+    """
+
+
+class LexicalNotEquals(LexicalComparison):
+    """
+    Specifies the inequality operator, given by "not eq"
     """
 
 
