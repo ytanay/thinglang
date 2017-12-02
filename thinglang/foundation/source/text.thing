@@ -11,7 +11,6 @@ thing text
         else
             return false
 
-
     does contains with text substring returns bool
         `auto found = self->val.find(substring->val) != std::string::npos;`
         if found
@@ -19,5 +18,10 @@ thing text
         else
             return false
 
+    does length returns number
+        return `Program::create<NumberInstance>(self->val.size())`
+
     static does convert_number with text num returns number
-        return `Program::create<NumberInstance>(to_number(num->val))``inline std::string to_string(TextInstance* val){ return val->text(); }`
+        return `Program::create<NumberInstance>(to_number(num->val))`
+
+`inline std::string to_string(TextInstance* val){ return val->text(); }`
