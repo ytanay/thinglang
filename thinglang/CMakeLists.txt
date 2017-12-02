@@ -9,8 +9,8 @@ add_library(thingcore
         runtime/types/core/ListType.cpp
         runtime/types/core/ConsoleType.cpp
         runtime/types/core/FileType.cpp
-
-
+        runtime/types/core/TimeType.cpp
+        runtime/types/core/ExceptionType.cpp
 
         runtime/errors/RuntimeError.cpp
 
@@ -34,3 +34,4 @@ add_library(thingcore
 
 add_executable(thinglang runtime/main.cpp)
 target_link_libraries (thinglang thingcore)
+
