@@ -3,6 +3,7 @@ from typing import Tuple, Union, Sequence
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.values.access import Access
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
@@ -35,7 +36,7 @@ class SymbolMapper(object):
         if not ast:
             return
 
-        for index, thing in enumerate(ast.children):
+        for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
             self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))
 
     def resolve(self, target: Union[Identifier, Access], method_locals: dict) -> Reference:
