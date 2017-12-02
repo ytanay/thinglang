@@ -1,0 +1,27 @@
+{
+    "extends": null,
+    "generics": [],
+    "index": 7,
+    "name": "Time",
+    "offset": 0,
+    "symbols": [
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "Time"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "now",
+            "static": true,
+            "type": "number"
+        }
+    ]
+}

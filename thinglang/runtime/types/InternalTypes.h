@@ -15,6 +15,8 @@
 #include "core/ListType.h"
 #include "core/ConsoleType.h"
 #include "core/FileType.h"
+#include "core/TimeType.h"
+#include "core/ExceptionType.h"
 
 enum class InternalTypes {
     TEXT = 1,
@@ -22,7 +24,9 @@ enum class InternalTypes {
     BOOL = 3,
     LIST = 4,
     CONSOLE = 5,
-    FILE = 6
+    FILE = 6,
+    TIME = 7,
+    EXCEPTION = 8
 };
 
 
@@ -46,5 +50,11 @@ inline auto describe(InternalTypes val){
 
         case InternalTypes::FILE:
             return "FILE";
+
+        case InternalTypes::TIME:
+            return "TIME";
+
+        case InternalTypes::EXCEPTION:
+            return "EXCEPTION";
     }
 }

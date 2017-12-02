@@ -21,7 +21,9 @@ Types Program::internals = {
         new BoolType(),
         new ListType(),
         new ConsoleType(),
-        new FileType()
+        new FileType(),
+        new TimeType(),
+        new ExceptionType()
 };
 
 

@@ -1,0 +1,29 @@
+{
+    "extends": null,
+    "generics": [],
+    "index": 8,
+    "name": "Exception",
+    "offset": 1,
+    "symbols": [
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "Exception"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "message",
+            "static": false,
+            "type": "TextInstance*"
+        }
+    ]
+}
