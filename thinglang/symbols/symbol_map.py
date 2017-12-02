@@ -49,8 +49,9 @@ class SymbolMap(object):
         symbols = [Symbol.load(elem) for elem in data['symbols']]
         members = [symbol for symbol in symbols if symbol.kind == Symbol.MEMBER]
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
+        extends = Identifier(data['extends']) if data['extends'] else None
 
-        return cls(members, methods, Identifier(data['name']), Identifier(data['extends']), [Identifier(x) for x in data['generics']], data['index'], data['offset'])
+        return cls(members, methods, Identifier(data['name']), extends, [Identifier(x) for x in data['generics']], data['index'], data['offset'])
 
     @classmethod
     def from_thing(cls, thing, index: int, extends: 'SymbolMap') -> 'SymbolMap':
