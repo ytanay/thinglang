@@ -10,5 +10,7 @@ INTERNAL_TYPE_ORDERING = {
     Identifier("bool"): 3,
     Identifier("list"): 4,
     Identifier("Console"): 5,
-    Identifier("File"): 6
+    Identifier("File"): 6,
+    Identifier("Time"): 7,
+    Identifier("Exception"): 8
 }
