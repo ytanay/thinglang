@@ -2,6 +2,8 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
 from thinglang.foundation import templates
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
+from thinglang.lexer.operators.binary import LexicalBinaryOperation
+from thinglang.lexer.operators.comparison import LexicalComparison
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
     LexicalDeclarationStatic
@@ -104,7 +106,7 @@ class MethodDefinition(BaseNode):
 
     # Parser rules
 
-    METHOD_NAME_TYPES = (Identifier,) + tuple(BinaryOperation.OPERATIONS.keys())
+    METHOD_NAME_TYPES = (Identifier, LexicalComparison, LexicalBinaryOperation)
 
     @staticmethod
     @ParserRule.mark
