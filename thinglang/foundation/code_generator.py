@@ -3,6 +3,7 @@ import json
 import os
 
 from thinglang import pipeline
+from thinglang.parser.values.inline_code import InlineCode
 from thinglang.utils.source_context import SourceContext
 from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
@@ -41,6 +42,8 @@ def generate_types():
         target_name = '{}Type'.format(name.capitalize())
         ast = pipeline.preprocess(SourceContext(path))
         symbols = SymbolMapper(ast)
+        inline_code = [x for x in ast.children if isinstance(x, InlineCode)]
+        ast.children = [x for x in ast.children if not isinstance(x, InlineCode)]
 
         symbol_map = symbols[name_id]
         symbol_map.override_index(definitions.INTERNAL_TYPE_ORDERING[name_id])
@@ -53,7 +56,7 @@ def generate_types():
 
         write_if_changed(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), templates.FOUNDATION_HEADER.format(
             name=name.capitalize(),
-            code=symbol_map.create_header(),
+            code=symbol_map.create_header() + '\n'.join(x.value for x in inline_code),
             file_name=target_name + '.h')
         )
 
