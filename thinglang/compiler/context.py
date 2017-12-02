@@ -86,7 +86,6 @@ class CompilationContext(object):
             data_item_count=len(data_items),
             entrypoint=offsets[(self.entry, 0)][0],
             initial_frame_size=offsets[(self.entry, 0)][1]
-
         ))
 
         return header + code + data + source_map + bytes(self.source.raw_contents, 'utf-8')
