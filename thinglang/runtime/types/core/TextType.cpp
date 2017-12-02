@@ -63,6 +63,14 @@ void TextType::contains() {
     }
 
 
+void TextType::length() {
+		auto self = Program::argument<TextInstance>();
+
+		Program::push(Program::create<NumberInstance>(self->val.size()));
+        
+    }
+
+
 void TextType::convert_number() {
 		auto num = Program::argument<TextInstance>();
 

@@ -48,11 +48,20 @@
             "type": "bool"
         },
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 4,
+            "kind": "method",
+            "name": "length",
+            "static": false,
+            "type": "number"
+        },
+        {
             "arguments": [
                 "text"
             ],
             "convention": "internal",
-            "index": 4,
+            "index": 5,
             "kind": "method",
             "name": "convert_number",
             "static": true,

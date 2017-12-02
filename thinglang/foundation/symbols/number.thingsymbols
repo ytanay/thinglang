@@ -76,9 +76,29 @@
             "convention": "internal",
             "index": 6,
             "kind": "method",
+            "name": "__not_equals__",
+            "static": false,
+            "type": "bool"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 7,
+            "kind": "method",
             "name": "__less_than__",
             "static": false,
             "type": "bool"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 8,
+            "kind": "method",
+            "name": "convert_text",
+            "static": false,
+            "type": "text"
         },
         {
             "arguments": null,

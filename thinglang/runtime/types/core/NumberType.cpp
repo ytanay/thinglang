@@ -71,6 +71,24 @@ void NumberType::__equals__() {
     }
 
 
+void NumberType::__not_equals__() {
+		auto other = Program::argument<NumberInstance>();
+		auto self = Program::argument<NumberInstance>();
+
+		
+        if(self->val == other->val) {
+			Program::push(BOOL_FALSE);
+        }
+
+		
+        else {
+			Program::push(BOOL_TRUE);
+    }
+
+        
+    }
+
+
 void NumberType::__less_than__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();
@@ -85,6 +103,14 @@ void NumberType::__less_than__() {
 			Program::push(BOOL_FALSE);
     }
 
+        
+    }
+
+
+void NumberType::convert_text() {
+		auto self = Program::argument<NumberInstance>();
+
+		Program::push(Program::create<TextInstance>(to_string(self->val)));
         
     }
 

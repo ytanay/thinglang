@@ -39,7 +39,7 @@ class NumberInstance : public BaseThingInstance {
 class NumberType : public ThingTypeInternal {
     
     public:
-    NumberType() : ThingTypeInternal({ &__constructor__, &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__less_than__ }) {}; // constructor
+    NumberType() : ThingTypeInternal({ &__constructor__, &__addition__, &__subtraction__, &__multiplication__, &__division__, &__equals__, &__not_equals__, &__less_than__, &convert_text }) {}; // constructor
  
 	static void __constructor__();
 	static void __addition__();
@@ -47,6 +47,8 @@ class NumberType : public ThingTypeInternal {
 	static void __multiplication__();
 	static void __division__();
 	static void __equals__();
+	static void __not_equals__();
 	static void __less_than__();
+	static void convert_text();
     
 };
