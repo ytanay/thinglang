@@ -1,7 +1,7 @@
 thing number
-    
+
     has int val
-    
+
     does + with number other returns number
         return self.val + other.val
 
@@ -20,8 +20,17 @@ thing number
         else
             return false
 
+    does not eq with number other returns bool
+        if self.val eq other.val
+            return false
+        else
+            return true
+
     does < with number other returns bool
         if self.val < other.val
             return true
         else
             return false
+
+    does convert_text returns text
+        return `Program::create<TextInstance>(to_string(self->val))`
