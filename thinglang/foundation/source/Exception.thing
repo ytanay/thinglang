@@ -1,0 +1,6 @@
+thing Exception
+
+    has `TextInstance*` message
+
+    setup with text message
+        `self->message = message;`
