@@ -14,6 +14,12 @@ thing number
     does / with number other returns number
         return self.val / other.val
 
+    does % with number other returns number
+        return self.val % other.val
+
+    does ^ with number other returns number
+        return self.val ^ other.val
+
     does eq with number other returns bool
         if self.val eq other.val
             return true
