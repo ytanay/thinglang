@@ -2,11 +2,13 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
 from thinglang.lexer.operators.assignment import LexicalAssignment
+from thinglang.lexer.operators.binary import LexicalBinaryOperation
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.access import Access
+from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.utils.type_descriptors import ValueType
 
 
@@ -80,3 +82,8 @@ class AssignmentOperation(BaseNode):
     @ParserRule.mark
     def assignment_reassignment(name: ASSIGNMENT_TARGET, _: LexicalAssignment, value: ValueType):
         return AssignmentOperation(AssignmentOperation.REASSIGNMENT, name, value)
+
+    @staticmethod
+    @ParserRule.mark
+    def in_place_modifier(name: ASSIGNMENT_TARGET, operator: LexicalBinaryOperation, _: LexicalAssignment, val: ValueType):
+        return AssignmentOperation(AssignmentOperation.DECELERATION, name, BinaryOperation(operator, name, val))
