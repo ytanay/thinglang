@@ -1,0 +1,49 @@
+/*
+{
+    "expected_output": ["[187, 243, 22, 232, 217, 64, 175, 10, 211]"]
+}
+*/
+
+
+thing ARC4
+
+    has list<number> state
+
+    setup with text key
+        list<number> key_array = key.to_bytes()
+        self.state = list.range(0, 256)
+
+        number i = 0
+        number j = 0
+
+        while i < 256
+            j = (j + self.state.get(i) + key_array.get(i % key_array.length())) % 256
+            self.state.swap(i, j)
+            i += 1
+
+    does encrypt with text plaintext returns list<number>
+        list<number> plaintext_array = plaintext.to_bytes()
+        list<number> ciphertext = create list<number>()
+
+        number i = 0
+        number j = 0
+        number idx = 0
+
+        while idx < plaintext.length()
+            i = (i + 1) % 256
+            j = (j + self.state.get(i)) % 256
+            self.state.swap(i, j)
+            number xor_byte = self.state.get((self.state.get(i) + self.state.get(j)) % 256)
+            ciphertext.append(plaintext_array.get(idx) ^ xor_byte)
+            idx += 1
+
+         return ciphertext
+
+
+thing Program
+
+    setup
+        ARC4 arc4 = create ARC4("Key")
+        list<number> encrypted = arc4.encrypt("Plaintext")
+        Console.print(encrypted)
+        arc4 = create ARC4("Key")
