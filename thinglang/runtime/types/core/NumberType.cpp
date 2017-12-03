@@ -53,6 +53,24 @@ void NumberType::__division__() {
     }
 
 
+void NumberType::__modulus__() {
+		auto other = Program::argument<NumberInstance>();
+		auto self = Program::argument<NumberInstance>();
+
+		Program::push(Program::create<NumberInstance>(self->val % other->val));
+        
+    }
+
+
+void NumberType::__xor__() {
+		auto other = Program::argument<NumberInstance>();
+		auto self = Program::argument<NumberInstance>();
+
+		Program::push(Program::create<NumberInstance>(self->val ^ other->val));
+        
+    }
+
+
 void NumberType::__equals__() {
 		auto other = Program::argument<NumberInstance>();
 		auto self = Program::argument<NumberInstance>();

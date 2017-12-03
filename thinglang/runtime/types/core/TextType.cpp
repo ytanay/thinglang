@@ -71,6 +71,17 @@ void TextType::length() {
     }
 
 
+void TextType::to_bytes() {
+		auto self = Program::argument<TextInstance>();
+
+		auto byte_array = Program::create<ListInstance>();
+		byte_array->val.resize(self->val.size());
+		for(auto i = 0; i < self->val.size(); i++) byte_array->val[i] = Program::create<NumberInstance>(self->val[i]);
+		Program::push(byte_array);
+        
+    }
+
+
 void TextType::convert_number() {
 		auto num = Program::argument<TextInstance>();
 

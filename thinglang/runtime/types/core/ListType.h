@@ -43,11 +43,15 @@ class ListInstance : public BaseThingInstance {
 class ListType : public ThingTypeInternal {
     
     public:
-    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains }) {}; // constructor
+    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains, &get, &length, &swap, &range }) {}; // constructor
  
 	static void __constructor__();
 	static void append();
 	static void pop();
 	static void contains();
+	static void get();
+	static void length();
+	static void swap();
+	static void range();
     
 };
