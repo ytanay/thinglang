@@ -65,6 +65,28 @@
             "convention": "internal",
             "index": 5,
             "kind": "method",
+            "name": "__modulus__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 6,
+            "kind": "method",
+            "name": "__xor__",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 7,
+            "kind": "method",
             "name": "__equals__",
             "static": false,
             "type": "bool"
@@ -74,7 +96,7 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 6,
+            "index": 8,
             "kind": "method",
             "name": "__not_equals__",
             "static": false,
@@ -85,7 +107,7 @@
                 "number"
             ],
             "convention": "internal",
-            "index": 7,
+            "index": 9,
             "kind": "method",
             "name": "__less_than__",
             "static": false,
@@ -94,7 +116,7 @@
         {
             "arguments": [],
             "convention": "internal",
-            "index": 8,
+            "index": 10,
             "kind": "method",
             "name": "convert_text",
             "static": false,

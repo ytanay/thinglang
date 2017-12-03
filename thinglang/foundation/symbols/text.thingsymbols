@@ -57,11 +57,25 @@
             "type": "number"
         },
         {
+            "arguments": [],
+            "convention": "internal",
+            "index": 5,
+            "kind": "method",
+            "name": "to_bytes",
+            "static": false,
+            "type": [
+                "list",
+                [
+                    "number"
+                ]
+            ]
+        },
+        {
             "arguments": [
                 "text"
             ],
             "convention": "internal",
-            "index": 5,
+            "index": 6,
             "kind": "method",
             "name": "convert_number",
             "static": true,

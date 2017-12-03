@@ -58,6 +58,55 @@
             "type": "bool"
         },
         {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 4,
+            "kind": "method",
+            "name": "get",
+            "static": false,
+            "type": "T"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 5,
+            "kind": "method",
+            "name": "length",
+            "static": false,
+            "type": "number"
+        },
+        {
+            "arguments": [
+                "number",
+                "number"
+            ],
+            "convention": "internal",
+            "index": 6,
+            "kind": "method",
+            "name": "swap",
+            "static": false,
+            "type": null
+        },
+        {
+            "arguments": [
+                "number",
+                "number"
+            ],
+            "convention": "internal",
+            "index": 7,
+            "kind": "method",
+            "name": "range",
+            "static": true,
+            "type": [
+                "list",
+                [
+                    "number"
+                ]
+            ]
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "index": 0,
