@@ -48,3 +48,15 @@ class LexicalDivision(SecondOrderLexicalBinaryOperation):
     """"
     Division, using /
     """
+
+
+class LexicalModulus(SecondOrderLexicalBinaryOperation):
+    """
+    Modulus, using %
+    """
+
+
+class LexicalXOR(SecondOrderLexicalBinaryOperation):
+    """
+    Exclusive-Or (XOR), using ^
+    """
