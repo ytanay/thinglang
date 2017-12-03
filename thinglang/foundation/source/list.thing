@@ -17,3 +17,14 @@ thing list with type T
             return true
         else
             return false
+    does get with number index returns T
+        return `self->val[index->val]`
+
+    does length returns number
+        return `Program::create<NumberInstance>(self->val.size())`
+
+    does swap with number index1, number index2
+        `auto i = index1->val, j = index2->val;`
+        `auto temp = self->val[i];`
+        `self->val[i] = self->val[j];`
+        `self->val[j] = temp;`
