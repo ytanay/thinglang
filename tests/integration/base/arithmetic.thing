@@ -1,6 +1,6 @@
 /*
 {
-    "expected_output": ["10", "15", "25", "40"]
+    "expected_output": ["10", "15", "25", "16", "47"]
 }
 */
 
@@ -15,5 +15,8 @@ thing Program
         number c = a + b
         Console.print(c)
 
-        number d = a + 10 * 3
+        number d = (a + 10 * 3) % 24
+        Console.print(d)
+        d += 10
+        d ^= 53
         Console.print(d)
