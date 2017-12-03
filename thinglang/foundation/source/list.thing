@@ -17,6 +17,7 @@ thing list with type T
             return true
         else
             return false
+
     does get with number index returns T
         return `self->val[index->val]`
 
@@ -28,3 +29,9 @@ thing list with type T
         `auto temp = self->val[i];`
         `self->val[i] = self->val[j];`
         `self->val[j] = temp;`
+
+    static does range with number start, number end returns list<number>
+        `auto lst = Program::create<ListInstance>();`
+        `lst->val.resize(static_cast<unsigned int>(end->val - start->val));`
+        `for(auto idx = start->val, val = 0; idx < end->val; idx++, val++) lst->val[idx] = Program::create<NumberInstance>(val);`
+        return `lst`
