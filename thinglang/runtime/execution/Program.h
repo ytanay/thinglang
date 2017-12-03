@@ -7,6 +7,7 @@
 
 
 #include "../utils/TypeNames.h"
+#include "../errors/Aborts.h"
 
 class Program {
 
@@ -33,7 +34,11 @@ public:
         /**
         * Pops an argument from the stack, casting it to type T*
         */
-        return static_cast<T*>(pop());
+        auto value = pop();
+        if(value == nullptr)
+            critical_abort(AbortReason::NULL_POINTER);
+        else
+            return static_cast<T*>(value);
     }
 
 
