@@ -8,7 +8,7 @@ from thinglang.utils import collection_utils
 from thinglang.utils.logging_utils import camelcase_to_underscore
 from thinglang.utils.source_context import SourceReference
 
-STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = TYPE_ID = METHOD_ID = TARGET = ID = object()
+STATIC_ID = LOCAL_ID = MEMBER_ID = SOURCE = FRAME_SIZE = ARGUMENTS = MEMBERS = METHODS = TYPE_ID = METHOD_ID = TARGET = ID = INDEX = object()
 INSTRUCTION_INDEX = object()
 
 OpcodeDescription = collections.namedtuple('OpcodeDescription', ['name', 'opcode', 'arg_count'])
@@ -193,6 +193,19 @@ class OpcodePushStatic(Opcode):
     def update_offset(self, method_offset: int, data_offset: int, relative: bool=False):
         self.args = self.args[0] + data_offset,
         return self
+
+
+class OpcodePushIndex(Opcode):
+    """
+    Pop an index and value from the stack and push the value at the index provided
+    """
+
+
+class OpcodePushIndexImmediate(Opcode):
+    """
+    Pop a value from the stack and push the value at the immediate index provided
+    """
+    ARGS = INDEX,
 
 
 # Stack pop operations
