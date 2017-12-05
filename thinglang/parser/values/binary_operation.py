@@ -24,20 +24,17 @@ class BinaryOperation(BaseNode, ValueType):
 
     def __init__(self, operator, lhs, rhs):
         super(BinaryOperation, self).__init__([operator, lhs, rhs])
-        self.arguments = [lhs, rhs]
+        self.lhs, self.rhs = lhs, rhs
         self.operator = type(operator)
 
-    def __getitem__(self, item):
-        return self.arguments[item]
-
     def evaluate(self):
-        return self.OPERATIONS[self.operator](self[0].evaluate(), self[1].evaluate())
+        return self.OPERATIONS[self.operator](self.lhs.evaluate(), self.rhs.evaluate())
 
     def describe(self):
-        return '|{} {} {}|'.format(self[0], self.operator, self[1])
+        return '|{} {} {}|'.format(self.lhs, self.operator, self.rhs)
 
     def transpile(self):
-        return '{} {} {}'.format(self.arguments[0].transpile(), REVERSE_OPERATORS[self.operator], self.arguments[1].transpile())
+        return '{} {} {}'.format(self.lhs.transpile(), REVERSE_OPERATORS[self.operator], self.rhs.transpile())
 
     @staticmethod
     @ParserRule.mark

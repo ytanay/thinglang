@@ -49,7 +49,7 @@ class Simplifier(TreeTraversal):
         """
         Converts an arithmetic (binary) operation into a method call on the relevant type, recursively.
         """
-        lhs, rhs = node.arguments
+        lhs, rhs = node.lhs, node.rhs
 
         if isinstance(lhs, BinaryOperation):
             lhs = self.convert_arithmetic_operations(lhs)
