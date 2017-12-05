@@ -35,10 +35,11 @@ public:
         * Pops an argument from the stack, casting it to type T*
         */
         auto value = pop();
+
         if(value == nullptr)
             critical_abort(AbortReason::NULL_POINTER);
-        else
-            return static_cast<T*>(value);
+
+        return static_cast<T*>(value);
     }
 
 
