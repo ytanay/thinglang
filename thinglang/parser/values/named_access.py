@@ -69,3 +69,10 @@ class NamedAccess(BaseNode, ValueType):
     def append(self, other):
         self.target.append(other)
         return self
+
+    @classmethod
+    def extend(cls, base, extension: Identifier) -> 'NamedAccess':
+        if isinstance(base, NamedAccess):
+            return NamedAccess(base.target + [extension])
+
+        return NamedAccess([base, extension])
