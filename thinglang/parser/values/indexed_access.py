@@ -1,5 +1,6 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference
+from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference, OpcodePushIndexImmediate, \
+    OpcodePushIndex
 from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
@@ -30,21 +31,17 @@ class IndexedAccess(BaseNode, ValueType):
     def transpile(self):
         return '{}[{}]'.format(self.target.transpile(), self.index.transpile())
 
-    def compile(self, context: CompilationBuffer, pop_last=False, without_last=False):
-        if without_last and not self.extensions:
-            return self[0].compile(context)
+    def compile(self, context: CompilationBuffer):
+        ctx = self.target.compile(context)
+        resolved_type = context.symbols[ctx.type][Identifier('get')]
 
-        ref = context.push_ref(context.resolve(self.root), self.source_ref)
+        if isinstance(self.index, NumericValue):
+            context.append(OpcodePushIndexImmediate(self.index.value), self.source_ref)
+        else:
+            self.index.compile(context)
+            context.append(OpcodePushIndex(), self.source_ref)
 
-        for ext, last in self.extensions:
-            if last and without_last:
-                break
-
-            ref = context.symbols.resolve_partial(ref, ext)
-            cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
-            context.append(cls(ref.element_index), self.source_ref)
-
-        return ref
+        return resolved_type
 
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target and self.index == other.index
