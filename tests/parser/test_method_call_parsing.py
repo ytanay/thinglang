@@ -1,14 +1,14 @@
 from tests.infrastructure.test_utils import validate_types, parse_local
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.parser.values.access import Access
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.method_call import MethodCall
 
 
 def validate_method_call(node, target, argument_types):
     assert isinstance(node, MethodCall)
-    assert node.target == Access([Identifier(t) for t in target])
+    assert node.target == NamedAccess([Identifier(t) for t in target])
     validate_types(node.arguments, argument_types, MethodCall, lambda x: x.arguments)
 
 
@@ -45,6 +45,6 @@ def test_nested_method_calls():
 
 def test_constructing_call():
     method = parse_local('create Empty(1)')
-    assert method.target == Access([Identifier('Empty'), Identifier.constructor()])
+    assert method.target == NamedAccess([Identifier('Empty'), Identifier.constructor()])
     validate_types(method.arguments, [NumericValue], MethodCall, lambda x: x.arguments)
     assert method.constructing_call

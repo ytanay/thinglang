@@ -6,29 +6,29 @@ from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.errors import InvalidIndexedAccess
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 
-class IndexedAccess(BaseNode, ValueType):
+class NamedAccess(BaseNode, ValueType):
     """
-    Represents an indexed dereference.
-
+    Represents a named dereference operation.
     Examples:
-        lst[0]
-        hobbies[2]
-     """
+        person.walk
+        person.info.age
+    """
 
-    def __init__(self, target, index):
-        super(IndexedAccess, self).__init__([target, index])
+    def __init__(self, target):
+        super(NamedAccess, self).__init__(target)
 
-        self.target, self.index = target, index
+        self.target = target
+        self.type = None
+        self.arguments = []
 
     def __repr__(self):
-        return '{}[{}]'.format(self.target, self.index)
+        return '{}'.format('.'.join(str(x) for x in self.target))
 
     def transpile(self):
-        return '{}[{}]'.format(self.target.transpile(), self.index.transpile())
+        return '->'.join(x.transpile() for x in self.target)
 
     def compile(self, context: CompilationBuffer, pop_last=False, without_last=False):
         if without_last and not self.extensions:
@@ -46,5 +46,26 @@ class IndexedAccess(BaseNode, ValueType):
 
         return ref
 
+    @property
+    def root(self):
+        return NamedAccess(self.target[:2])
+
+    @property
+    def extensions(self):
+        last = self.target[-1]
+        return [(x, x is last) for x in self.target[2:]]
+
+    def __getitem__(self, item):
+        return self.target[item]
+
     def __eq__(self, other):
-        return type(self) == type(other) and self.target == other.target and self.index == other.index
+        return type(self) == type(other) and self.target == other.target
+
+    def __len__(self):
+        size = len(self.target)
+        assert size >= 2
+        return size
+
+    def append(self, other):
+        self.target.append(other)
+        return self

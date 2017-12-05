@@ -5,7 +5,7 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
-from thinglang.parser.values.access import Access
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.utils.type_descriptors import ValueType
 
@@ -14,14 +14,14 @@ class IterationLoop(Loop):
 
     def __init__(self, target: Identifier, target_type: Identifier, collection: ValueType):
         self.target, self.target_type, self.collection = target, target_type, collection
-        self.iterator = MethodCall(Access([collection, "iterator"]))
-        super().__init__(MethodCall(Access([self.iterator, 'has_next']), stack_target=True))
+        self.iterator = MethodCall(NamedAccess([collection, "iterator"]))
+        super().__init__(MethodCall(NamedAccess([self.iterator, 'has_next']), stack_target=True))
 
     def finalize(self):
         self.children.insert(0, AssignmentOperation(
             AssignmentOperation.REASSIGNMENT,
             self.target,
-            MethodCall(Access([self.iterator, 'next']), stack_target=True),
+            MethodCall(NamedAccess([self.iterator, 'next']), stack_target=True),
             self.target_type
         ).deriving_from(self))
 

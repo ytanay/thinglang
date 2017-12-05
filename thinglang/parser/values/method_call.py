@@ -6,7 +6,7 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.access import Access
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import ValueType, ListType
 
@@ -35,9 +35,9 @@ class MethodCall(BaseNode, ValueType):
     def compile(self, context: CompilationBuffer):
         if isinstance(self.target[0], MethodCall):
             inner_target = self.target[0].compile(context)
-            target = context.resolve(Access([inner_target.type, self.target[1]]))
+            target = context.resolve(NamedAccess([inner_target.type, self.target[1]]))
         else:
-            assert isinstance(self.target, Access)
+            assert isinstance(self.target, NamedAccess)
             target = context.resolve(self.target.root)
 
             for ext, _ in self.target.extensions:
@@ -93,11 +93,11 @@ class MethodCall(BaseNode, ValueType):
 
     @staticmethod
     @ParserRule.mark
-    def parse_method_call(target: Access, arguments: 'ParenthesesVector'):
+    def parse_method_call(target: NamedAccess, arguments: 'ParenthesesVector'):
         return MethodCall(target, ArgumentList(arguments))
 
     # TODO: remove this syntax
     @staticmethod
     @ParserRule.mark
     def parse_instantiating_call(_: LexicalThingInstantiation, type_name: Identifier, arguments: 'ParenthesesVector'):
-        return MethodCall(Access([type_name, Identifier.constructor()]), ArgumentList(arguments))
+        return MethodCall(NamedAccess([type_name, Identifier.constructor()]), ArgumentList(arguments))

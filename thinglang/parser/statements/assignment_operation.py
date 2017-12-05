@@ -7,7 +7,7 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.access import Access
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.utils.type_descriptors import ValueType
 
@@ -50,7 +50,7 @@ class AssignmentOperation(BaseNode):
         if isinstance(target, Identifier):
             target_ref = context.resolve(target)
             context.append(OpcodePopLocal.from_reference(target_ref), self.source_ref)
-        elif isinstance(target, Access):
+        elif isinstance(target, NamedAccess):
             if target.extensions:
                 target_ref = target.compile(context, pop_last=True)
             else:
@@ -71,7 +71,7 @@ class AssignmentOperation(BaseNode):
     def __repr__(self):
         return f'Assignment({self.name} = {self.value})'
 
-    ASSIGNMENT_TARGET = Identifier, Access
+    ASSIGNMENT_TARGET = Identifier, NamedAccess
 
     @staticmethod
     @ParserRule.mark

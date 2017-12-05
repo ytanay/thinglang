@@ -4,7 +4,7 @@ from thinglang.compiler.references import ElementReference, LocalReference, Refe
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.definitions.thing_definition import ThingDefinition
-from thinglang.parser.values.access import Access
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
 
@@ -39,7 +39,7 @@ class SymbolMapper(object):
         for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
             self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))
 
-    def resolve(self, target: Union[Identifier, Access], method_locals: dict) -> Reference:
+    def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict) -> Reference:
         """
         Resolve a reference into a Reference object
         :param target: the reference being resolved (can be either an identifier or access object)
@@ -50,7 +50,7 @@ class SymbolMapper(object):
 
         if isinstance(target, Identifier):
             return LocalReference(method_locals[target])
-        elif isinstance(target, Access):
+        elif isinstance(target, NamedAccess):
             return self.resolve_access(target, method_locals)
 
         raise Exception("Unknown reference type {}".format(target))

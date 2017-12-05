@@ -4,7 +4,7 @@ from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
-from thinglang.parser.values.access import Access
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
@@ -61,7 +61,7 @@ class Simplifier(TreeTraversal):
         elif isinstance(rhs, Simplifier.MULTI_ARG_CONSTRUCTS):
             self.simplify_multi_arg_constructs(rhs)
 
-        if isinstance(lhs, Access):
+        if isinstance(lhs, NamedAccess):
             return MethodCall(lhs.append(Identifier(node.operator.transpile())), ArgumentList([rhs]))
         else:
-            return MethodCall(Access([lhs, Identifier(node.operator.transpile())]), ArgumentList([rhs]))
+            return MethodCall(NamedAccess([lhs, Identifier(node.operator.transpile())]), ArgumentList([rhs]))
