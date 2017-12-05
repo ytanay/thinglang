@@ -17,7 +17,7 @@ thing ARC4
         number j = 0
 
         while i < 256
-            j = (j + self.state.get(i) + key_array.get(i % key_array.length())) % 256
+            j = (j + self.state[i] + key_array[i % key_array.length()]) % 256
             self.state.swap(i, j)
             i += 1
 
@@ -31,10 +31,10 @@ thing ARC4
 
         while idx < plaintext.length()
             i = (i + 1) % 256
-            j = (j + self.state.get(i)) % 256
+            j = (j + self.state[i]) % 256
             self.state.swap(i, j)
-            number xor_byte = self.state.get((self.state.get(i) + self.state.get(j)) % 256)
-            ciphertext.append(plaintext_array.get(idx) ^ xor_byte)
+            number xor_byte = self.state[(self.state[i] + self.state[j]) % 256]
+            ciphertext.append(plaintext_array[idx] ^ xor_byte)
             idx += 1
 
          return ciphertext
