@@ -98,12 +98,13 @@ void Program::execute() {
     call_stack.push(entry);
 
     Program::create_frame(initial_frame_size);
+    Instruction instruction(static_cast<Index>(-1), Opcode::INVALID);
 
     std::cerr << "Starting execution (upper boundary " << counter_end << ")" << std::endl;
     for (Index counter = entry; counter < counter_end;) {
         handle_instruction:
 
-        auto instruction = instructions[counter];
+        instruction = instructions[counter];
 
         Program::status(counter, instruction);
 
@@ -155,6 +156,20 @@ void Program::execute() {
                 break;
             }
 
+            case Opcode::PUSH_INDEX: { // TODO: this handler (and the immediate equivalent) are missing a number of type validity checks
+                auto index = dynamic_cast<NumberInstance*>(Program::pop());
+                auto target = dynamic_cast<ListInstance*>(Program::pop());
+
+                Program::push(target->val[(static_cast<Index>(index->val))]);
+                break;
+            }
+
+            case Opcode::PUSH_INDEX_IMMEDIATE: {
+                auto target = dynamic_cast<ListInstance*>(Program::pop());
+                Program::push(target->val[instruction.target]);
+                break;
+            };
+
             case Opcode::PUSH_NULL: {
                 Program::push(nullptr);
                 break;
@@ -173,6 +188,10 @@ void Program::execute() {
             case Opcode::ASSIGN_STATIC: {
                 Program::frame()[instruction.target] = Program::data(instruction.secondary);
                 break;
+            }
+
+            case Opcode::ASSIGN_LOCAL: {
+                Program::frame()[instruction.target] = Program::frame()[instruction.secondary];
             }
 
             case Opcode::POP_MEMBER: {
@@ -250,6 +269,7 @@ void Program::execute() {
                         std::string("Cannot handle instruction ") + describe(instruction.opcode) + " (" + std::to_string((int) instruction.opcode) +
                         ")");
 
+
         }
 
         counter++;
@@ -314,7 +334,6 @@ void Program::sweep() {
             it++;
             previous++;
         } else {
-            std::cerr << "\tSweep: finalizing " << (*it)->text() << std::endl;
             pending_deletion.push_front(*it);
             it = objects.erase_after(previous);
         }
