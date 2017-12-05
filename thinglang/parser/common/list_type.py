@@ -23,6 +23,9 @@ class ListInitialization(BaseNode):
     def __setitem__(self, key, value):
         self.values[key] = value
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.values == other.values
+
     def describe(self):
         return self.values
 

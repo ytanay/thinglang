@@ -30,3 +30,6 @@ class ArgumentList(ListInitialization):
             ))
 
         return '\n'.join(lines) + '\n'
+
+    def __repr__(self):
+        return 'ArgList({})'.format(self.arguments)
