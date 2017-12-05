@@ -44,3 +44,11 @@ def test_arithmetic_operation_value_type():
     assignment = parse_local('number a = 2 * (4 + 2) * (3 + 2)')
     validate_assignment(assignment, 'number', 'a', BinaryOperation)
     assert assignment.value.evaluate() == 60
+
+
+def test_in_place_modifier():
+    reassignment = parse_local('a += 2 * 8')
+    validate_assignment(reassignment, None, 'a', BinaryOperation)
+    assert reassignment.value.lhs == Identifier('a')
+    assert isinstance(reassignment.value.rhs, BinaryOperation)
+    assert reassignment.value.rhs.evaluate() == 16
