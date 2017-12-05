@@ -4,6 +4,8 @@ import random
 import string
 
 from thinglang.lexer.lexical_analyzer import analyze_line
+from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser import parser
 from thinglang.utils.source_context import SourceLine
 
@@ -29,6 +31,18 @@ def validate_types(elements, types: list, descend_cls=None, descend_key=lambda x
         else:
             assert isinstance(elem, expected_type)
 
+
+def normalize_id(param):
+    if isinstance(param, str):
+        return Identifier(param)
+
+    if isinstance(param, int):
+        return NumericValue(param)
+
+    if isinstance(param, (tuple, list)):
+        return [normalize_id(x) for x in param]
+
+    return param
 
 def generate_test_case_structure(dct):
     lst = []
