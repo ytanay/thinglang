@@ -4,6 +4,7 @@ from thinglang.compiler.references import ElementReference, LocalReference, Refe
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.definitions.thing_definition import ThingDefinition
+from thinglang.parser.values.indexed_access import IndexedAccess
 from thinglang.parser.values.named_access import NamedAccess
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
@@ -17,6 +18,7 @@ class SymbolMapper(object):
     """
 
     FOUNDATION = {symbol_map.name: symbol_map for symbol_map in serializer.read_foundation_symbols()}
+    INDEX_GETTER_NAME = Identifier('get')
 
     def __init__(self, ast=None, include_foundation=True, override=None):
         """
@@ -51,7 +53,7 @@ class SymbolMapper(object):
         if isinstance(target, Identifier):
             return LocalReference(method_locals[target])
         elif isinstance(target, NamedAccess):
-            return self.resolve_access(target, method_locals)
+            return self.resolve_named(target, method_locals)
 
         raise Exception("Unknown reference type {}".format(target))
 
@@ -62,9 +64,9 @@ class SymbolMapper(object):
         :param child: the new field to resolve
         :return: new ElementReference
         """
-        return self.resolve_access([target.type, child])
+        return self.resolve_named([target.type, child])
 
-    def resolve_access(self, target: Sequence, method_locals=()) -> ElementReference:
+    def resolve_named(self, target: Sequence, method_locals=()) -> ElementReference:
         """
         Resolves an identifier pair (a.b) into an element reference
         :param target: the Access object to resolve
@@ -74,8 +76,11 @@ class SymbolMapper(object):
         assert len(target) == 2
 
         first, second, local = target[0], target[1], None
+
         if first.STATIC:
             container = self.maps[first.type]
+        elif isinstance(first, IndexedAccess):
+            container = self.resolve_indexed(first, method_locals)
         elif first.untyped in self.maps:
             container = self[first]
         elif first in method_locals:
@@ -87,6 +92,16 @@ class SymbolMapper(object):
         container, element = self.pull(container, second)
 
         return ElementReference(container, element, local)
+
+    def resolve_indexed(self, access: IndexedAccess, method_locals=()) -> SymbolMap:
+        """
+        Resolves an IndexedAccess object into a symbol map describing the type of the indexed property.
+        Assumes the getter method is called "get"
+        """
+        target, index = access.target, access.index
+        resolved = self.resolve(target, method_locals)
+        getter = self[resolved.type][self.INDEX_GETTER_NAME]
+        return self[getter.type]
 
     def pull(self, start: SymbolMap, item: Identifier) -> Tuple[SymbolMap, Symbol]:
         """
