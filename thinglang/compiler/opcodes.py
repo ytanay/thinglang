@@ -103,7 +103,10 @@ class Opcode(object, metaclass=OpcodeRegistration):
         return type(self) == type(other) and self.args == other.args
 
     def __str__(self) -> str:
-        return '{}({})'.format(type(self).__name__, self.args)
+        return '{}({})'.format(type(self).__name__, ', '.join(str(x) for x in self.args))
+
+    def __repr__(self) -> str:
+        return str(self)
 
 
 class ElementReferenced(Opcode):
