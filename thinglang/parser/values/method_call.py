@@ -24,7 +24,7 @@ class MethodCall(BaseNode, ValueType):
         self.target, self.arguments = target, (arguments if arguments is not None else ArgumentList())
 
     def __repr__(self):
-        return 'MethodCall({}, {})'.format(self.target, self.arguments)
+        return '{}({})'.format(self.target, self.arguments)
 
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target and self.arguments == other.arguments

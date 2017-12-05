@@ -31,6 +31,9 @@ class LexicalToken(object):
     def __hash__(self):
         return hash((type(self), self.value))
 
+    def __repr__(self):
+        return type(self).__name__
+
     @classmethod
     def format_name(cls):
         return '__{}__'.format(camelcase_to_underscore(cls.__name__.replace('Lexical', '')))
