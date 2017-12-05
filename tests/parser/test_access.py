@@ -1,5 +1,3 @@
-import pytest
-
 from tests.infrastructure.test_utils import parse_local, normalize_id
 from tests.parser.test_method_call_parsing import validate_method_call
 from thinglang.lexer.values.identifier import Identifier
@@ -78,14 +76,14 @@ def test_complex_mixed_access():
     ])
 
 
-@pytest.mark.skip
 def test_complex_mixed_access_ambiguity():
-    node = parse_local('person.hobbies.generate([selection.index].effects[selection.effect()])')
+    node = parse_local('person.hobbies.generate(123, [selection.index].effects[selection.effect()])')
 
     assert isinstance(node, MethodCall)
     assert node.target == Access([Identifier('person'), Identifier('hobbies'), Identifier('generate')])
-    assert len(node.arguments) == 1
-    assert node.arguments[0] == IndexedAccess(
+    assert len(node.arguments) == 2
+    assert node.arguments[0] == NumericValue(123)
+    assert node.arguments[1] == IndexedAccess(
         Access([
             InlineList(Access([Identifier('selection'), Identifier('index')])),
             Identifier('effects')]),
