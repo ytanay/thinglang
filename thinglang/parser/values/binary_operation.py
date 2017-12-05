@@ -36,6 +36,10 @@ class BinaryOperation(BaseNode, ValueType):
     def transpile(self):
         return '{} {} {}'.format(self.lhs.transpile(), REVERSE_OPERATORS[self.operator], self.rhs.transpile())
 
+    @property
+    def arguments(self):
+        return self.lhs, self.rhs
+
     @staticmethod
     @ParserRule.mark
     def parse_second_order_operation(lhs: ValueType, operator: SecondOrderLexicalBinaryOperation, rhs: ValueType):
