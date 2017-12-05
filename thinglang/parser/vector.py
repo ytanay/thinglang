@@ -21,7 +21,9 @@ from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.statements.throw_statement import ThrowStatement
 from thinglang.parser.values.access import Access
+from thinglang.parser.values.access_universal import UniversalAccess
 from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.indexed_access import IndexedAccess
 
 from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
@@ -39,9 +41,10 @@ PARSING_ORDER = [  # Apply production rules in this order
     MemberDefinition,
     MethodDefinition,
 
-    Access,
-
     MethodCall,
+    UniversalAccess,
+
+
     BinaryOperation,
 
     NegatedOperation,
