@@ -2,6 +2,8 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference
 from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.numeric import NumericValue
+from thinglang.parser.errors import InvalidIndexedAccess
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.utils.type_descriptors import ValueType
@@ -9,7 +11,10 @@ from thinglang.utils.type_descriptors import ValueType
 
 class Access(BaseNode, ValueType):
     """
-    Represents a dereferencing operation
+    Represents a named dereference operation.
+    Examples:
+        person.walk
+        person.info.age
     """
 
     def __init__(self, target):
@@ -64,14 +69,3 @@ class Access(BaseNode, ValueType):
     def append(self, other):
         self.target.append(other)
         return self
-
-    @staticmethod
-    @ParserRule.mark
-    def parse_access_chain(root: 'Access', _: LexicalAccess, extension: Identifier):
-        return Access(root.target + [extension])
-
-    @staticmethod
-    @ParserRule.mark
-    def parse_access_start(left: Identifier, _: LexicalAccess, right: Identifier):
-        return Access([left, right])
-
