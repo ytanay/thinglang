@@ -3,7 +3,6 @@ from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.indexer import Indexer
 from thinglang.lexer.lexical_analyzer import lexer
 from thinglang.parser.nodes.root_node import RootNode
-from thinglang.parser.simplifier import Simplifier
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils import logging_utils
 from thinglang.utils.source_context import SourceContext
@@ -32,7 +31,6 @@ def compile(entrypoint: SourceContext, executable: bool=True) -> CompilationCont
 
     symbols = SymbolMapper(ast)
 
-    Simplifier(ast).run()
     Indexer(ast).run()
 
     logging_utils.print_header("Final AST", ast.tree())
