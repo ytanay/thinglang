@@ -26,6 +26,9 @@ class MethodCall(BaseNode, ValueType):
     def __repr__(self):
         return 'MethodCall({}, {})'.format(self.target, self.arguments)
 
+    def __eq__(self, other):
+        return type(self) == type(other) and self.target == other.target and self.arguments == other.arguments
+
     def replace_argument(self, idx, replacement):
         self.arguments[idx] = replacement
 
@@ -90,11 +93,11 @@ class MethodCall(BaseNode, ValueType):
 
     @staticmethod
     @ParserRule.mark
-    def parse_method_call(target: Access, arguments: ListType):
+    def parse_method_call(target: Access, arguments: 'ParenthesesVector'):
         return MethodCall(target, ArgumentList(arguments))
 
     # TODO: remove this syntax
     @staticmethod
     @ParserRule.mark
-    def parse_instantiating_call(_: LexicalThingInstantiation, type_name: Identifier, arguments: ListType):
+    def parse_instantiating_call(_: LexicalThingInstantiation, type_name: Identifier, arguments: 'ParenthesesVector'):
         return MethodCall(Access([type_name, Identifier.constructor()]), ArgumentList(arguments))
