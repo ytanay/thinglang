@@ -8,10 +8,10 @@ from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.named_access import NamedAccess
 from thinglang.symbols.symbol import Symbol
-from thinglang.utils.type_descriptors import ValueType, ListType
+from thinglang.utils.type_descriptors import ValueType, CallSite
 
 
-class MethodCall(BaseNode, ValueType):
+class MethodCall(BaseNode, ValueType, CallSite):
     """
     Represents a method call.
     Described by a target and an argument list.

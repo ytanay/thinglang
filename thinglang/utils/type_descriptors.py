@@ -14,3 +14,9 @@ class TypeList(object):
     """
     Describes a list of types
     """
+
+
+class CallSite(object):
+    """
+    Describes a call site (method call or binary operation)
+    """
