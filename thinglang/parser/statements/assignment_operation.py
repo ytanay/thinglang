@@ -86,4 +86,4 @@ class AssignmentOperation(BaseNode):
     @staticmethod
     @ParserRule.mark
     def in_place_modifier(name: ASSIGNMENT_TARGET, operator: LexicalBinaryOperation, _: LexicalAssignment, val: ValueType):
-        return AssignmentOperation(AssignmentOperation.DECELERATION, name, BinaryOperation(operator, name, val))
+        return AssignmentOperation(AssignmentOperation.REASSIGNMENT, name, BinaryOperation(operator, name, val))
