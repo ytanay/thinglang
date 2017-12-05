@@ -33,11 +33,11 @@ class MethodCall(BaseNode, ValueType, CallSite):
         self.arguments[idx] = replacement
 
     def compile(self, context: CompilationBuffer):
-        if isinstance(self.target[0], MethodCall):
+        assert isinstance(self.target, NamedAccess)
+        if isinstance(self.target[0], CallSite):
             inner_target = self.target[0].compile(context)
             target = context.resolve(NamedAccess([inner_target.type, self.target[1]]))
         else:
-            assert isinstance(self.target, NamedAccess)
             target = context.resolve(self.target.root)
 
             for ext, _ in self.target.extensions:
