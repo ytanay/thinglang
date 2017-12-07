@@ -69,6 +69,7 @@ KEYWORDS = {
     'setup': LexicalDeclarationConstructor,
     'returns': LexicalDeclarationReturnType,
     'extends': LexicalInheritanceTag,
+    'private': LexicalPrivateTag,
 
     'create': LexicalThingInstantiation,
 

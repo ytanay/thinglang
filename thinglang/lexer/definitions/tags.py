@@ -43,3 +43,9 @@ class LexicalInheritanceTag(LexicalToken):
     """
     Tags a thing definition's parent type.
     """
+
+
+class LexicalPrivateTag(LexicalToken):
+    """
+    Tags a method or member as private
+    """
