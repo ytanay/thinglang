@@ -1,0 +1,11 @@
+/*
+{
+    "expected_output": ["0", "1", "2", "3", "4"]
+}
+*/
+
+thing Program
+    setup
+        list<number> numbers = [0, 1, 2, 3, 4]
+        for number n in numbers
+            Console.print(n)
