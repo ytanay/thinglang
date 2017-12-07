@@ -17,6 +17,7 @@
 #include "core/FileType.h"
 #include "core/TimeType.h"
 #include "core/ExceptionType.h"
+#include "core/IteratorType.h"
 
 enum class InternalTypes {
     TEXT = 1,
@@ -26,7 +27,8 @@ enum class InternalTypes {
     CONSOLE = 5,
     FILE = 6,
     TIME = 7,
-    EXCEPTION = 8
+    EXCEPTION = 8,
+    ITERATOR = 9
 };
 
 
@@ -56,5 +58,8 @@ inline auto describe(InternalTypes val){
 
         case InternalTypes::EXCEPTION:
             return "EXCEPTION";
+
+        case InternalTypes::ITERATOR:
+            return "ITERATOR";
     }
 }

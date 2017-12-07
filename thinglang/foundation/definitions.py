@@ -12,5 +12,6 @@ INTERNAL_TYPE_ORDERING = {
     Identifier("Console"): 5,
     Identifier("File"): 6,
     Identifier("Time"): 7,
-    Identifier("Exception"): 8
+    Identifier("Exception"): 8,
+    Identifier('iterator'): 9
 }

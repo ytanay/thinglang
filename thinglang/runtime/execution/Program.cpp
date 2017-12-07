@@ -14,7 +14,7 @@ InstructionList Program::instructions;
 ThingForwardList Program::objects;
 unsigned char Program::current_mark = 0;
 
-Types Program::internals = {
+Types Program::internals = { // TODO: auto generate this
         nullptr,
         new TextType(),
         new NumberType(),
@@ -23,7 +23,8 @@ Types Program::internals = {
         new ConsoleType(),
         new FileType(),
         new TimeType(),
-        new ExceptionType()
+        new ExceptionType(),
+        new IteratorType()
 };
 
 
