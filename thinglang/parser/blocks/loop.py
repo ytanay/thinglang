@@ -11,8 +11,8 @@ class Loop(BaseNode):
     A simple while loop
     """
 
-    def __init__(self, value):
-        super(Loop, self).__init__([value])
+    def __init__(self, value, original_tokens=()):
+        super(Loop, self).__init__((value,) + original_tokens)
         self.value = value
 
     def describe(self):
