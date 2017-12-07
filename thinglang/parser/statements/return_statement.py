@@ -16,6 +16,9 @@ class ReturnStatement(BaseNode):
         super().__init__([value, token])
         self.value = value
 
+    def __repr__(self):
+        return f'return {self.value}'
+
     def transpile(self):
         if not self.value:
             return templates.RETURN_NULL
@@ -25,7 +28,7 @@ class ReturnStatement(BaseNode):
         else:
             return templates.RETURN_VALUE_INSTANTIATE.format(
                 value=self.value.transpile(),
-                instance_cls_name=self.container_name[1]
+                instance_cls_name=templates.class_names(self.enclosing_method.return_type)[1]
             )
 
     def compile(self, context: CompilationBuffer):
