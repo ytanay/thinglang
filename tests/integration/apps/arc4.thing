@@ -16,26 +16,22 @@ thing ARC4
         number i = 0
         number j = 0
 
-        while i < 256
+        for number i in list.range(0, 256)
             j = (j + self.state[i] + key_array[i % key_array.length()]) % 256
             self.state.swap(i, j)
-            i += 1
 
     does encrypt with text plaintext returns list<number>
-        list<number> plaintext_array = plaintext.to_bytes()
         list<number> ciphertext = create list<number>()
 
         number i = 0
         number j = 0
-        number idx = 0
 
-        while idx < plaintext.length()
+        for number plaintext_byte in plaintext.to_bytes()
             i = (i + 1) % 256
             j = (j + self.state[i]) % 256
             self.state.swap(i, j)
             number xor_byte = self.state[(self.state[i] + self.state[j]) % 256]
-            ciphertext.append(plaintext_array[idx] ^ xor_byte)
-            idx += 1
+            ciphertext.append(plaintext_byte ^ xor_byte)
 
          return ciphertext
 
