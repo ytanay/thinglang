@@ -1,0 +1,66 @@
+{
+    "extends": null,
+    "generics": [
+        "T"
+    ],
+    "index": 9,
+    "name": "iterator",
+    "offset": 2,
+    "symbols": [
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": [
+                "iterator",
+                [
+                    "T"
+                ]
+            ],
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "has_next",
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "next",
+            "static": false,
+            "type": "T",
+            "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "current",
+            "static": false,
+            "type": "std::vector<Thing>::iterator",
+            "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 1,
+            "kind": "member",
+            "name": "end",
+            "static": false,
+            "type": "std::vector<Thing>::iterator",
+            "visibility": "public"
+        }
+    ]
+}

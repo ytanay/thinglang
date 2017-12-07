@@ -14,7 +14,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "File"
+            "type": "File",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -25,7 +26,8 @@
             "kind": "method",
             "name": "open",
             "static": false,
-            "type": null
+            "type": null,
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -34,7 +36,8 @@
             "kind": "method",
             "name": "close",
             "static": false,
-            "type": null
+            "type": null,
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -45,7 +48,8 @@
             "kind": "method",
             "name": "write",
             "static": false,
-            "type": null
+            "type": null,
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -54,7 +58,8 @@
             "kind": "method",
             "name": "read",
             "static": false,
-            "type": "text"
+            "type": "text",
+            "visibility": "public"
         },
         {
             "arguments": null,
@@ -63,7 +68,8 @@
             "kind": "member",
             "name": "file_path",
             "static": false,
-            "type": "std::string"
+            "type": "std::string",
+            "visibility": "public"
         },
         {
             "arguments": null,
@@ -72,7 +78,8 @@
             "kind": "member",
             "name": "file",
             "static": false,
-            "type": "std::fstream"
+            "type": "std::fstream",
+            "visibility": "private"
         }
     ]
 }

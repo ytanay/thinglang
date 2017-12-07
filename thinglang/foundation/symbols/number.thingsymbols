@@ -12,7 +12,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -23,7 +24,8 @@
             "kind": "method",
             "name": "__addition__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -34,7 +36,8 @@
             "kind": "method",
             "name": "__subtraction__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -45,7 +48,8 @@
             "kind": "method",
             "name": "__multiplication__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -56,7 +60,8 @@
             "kind": "method",
             "name": "__division__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -67,7 +72,8 @@
             "kind": "method",
             "name": "__modulus__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -78,7 +84,8 @@
             "kind": "method",
             "name": "__xor__",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -89,7 +96,8 @@
             "kind": "method",
             "name": "__equals__",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -100,7 +108,8 @@
             "kind": "method",
             "name": "__not_equals__",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -111,7 +120,8 @@
             "kind": "method",
             "name": "__less_than__",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -120,7 +130,8 @@
             "kind": "method",
             "name": "convert_text",
             "static": false,
-            "type": "text"
+            "type": "text",
+            "visibility": "public"
         },
         {
             "arguments": null,
@@ -129,7 +140,8 @@
             "kind": "member",
             "name": "val",
             "static": false,
-            "type": "int"
+            "type": "int",
+            "visibility": "public"
         }
     ]
 }

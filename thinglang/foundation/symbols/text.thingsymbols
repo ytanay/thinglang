@@ -12,7 +12,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "text"
+            "type": "text",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -23,7 +24,8 @@
             "kind": "method",
             "name": "__addition__",
             "static": false,
-            "type": "text"
+            "type": "text",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -34,7 +36,8 @@
             "kind": "method",
             "name": "__equals__",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -45,7 +48,8 @@
             "kind": "method",
             "name": "contains",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -54,7 +58,8 @@
             "kind": "method",
             "name": "length",
             "static": false,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -68,7 +73,8 @@
                 [
                     "number"
                 ]
-            ]
+            ],
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -79,7 +85,8 @@
             "kind": "method",
             "name": "convert_number",
             "static": true,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         },
         {
             "arguments": null,
@@ -88,7 +95,8 @@
             "kind": "member",
             "name": "val",
             "static": false,
-            "type": "std::string"
+            "type": "std::string",
+            "visibility": "public"
         }
     ]
 }

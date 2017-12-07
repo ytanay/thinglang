@@ -12,7 +12,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "Time"
+            "type": "Time",
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -21,7 +22,8 @@
             "kind": "method",
             "name": "now",
             "static": true,
-            "type": "number"
+            "type": "number",
+            "visibility": "public"
         }
     ]
 }

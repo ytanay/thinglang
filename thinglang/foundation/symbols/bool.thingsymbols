@@ -12,7 +12,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         },
         {
             "arguments": null,
@@ -21,7 +22,8 @@
             "kind": "member",
             "name": "val",
             "static": false,
-            "type": "bool"
+            "type": "bool",
+            "visibility": "public"
         }
     ]
 }

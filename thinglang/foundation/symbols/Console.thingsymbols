@@ -12,7 +12,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "Console"
+            "type": "Console",
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -23,7 +24,8 @@
             "kind": "method",
             "name": "write",
             "static": true,
-            "type": null
+            "type": null,
+            "visibility": "public"
         },
         {
             "arguments": [
@@ -34,7 +36,8 @@
             "kind": "method",
             "name": "print",
             "static": true,
-            "type": null
+            "type": null,
+            "visibility": "public"
         },
         {
             "arguments": [],
@@ -43,7 +46,8 @@
             "kind": "method",
             "name": "read_line",
             "static": true,
-            "type": "text"
+            "type": "text",
+            "visibility": "public"
         }
     ]
 }

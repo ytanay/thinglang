@@ -14,7 +14,8 @@
             "kind": "method",
             "name": "__constructor__",
             "static": false,
-            "type": "Exception"
+            "type": "Exception",
+            "visibility": "public"
         },
         {
             "arguments": null,
@@ -23,7 +24,8 @@
             "kind": "member",
             "name": "message",
             "static": false,
-            "type": "TextInstance*"
+            "type": "TextInstance*",
+            "visibility": "public"
         }
     ]
 }
