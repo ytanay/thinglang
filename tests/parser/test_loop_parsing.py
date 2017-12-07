@@ -1,6 +1,7 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.parser.blocks.iteration_loop import IterationLoop
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.method_call import MethodCall
@@ -22,3 +23,13 @@ def test_simple_loop_conditionals():
 
 def test_method_call_loop_conditionals():
     validate_loop(parse_local('while i < Threshold.current(1, 5)'), [Identifier, [NumericValue, NumericValue]])
+
+
+def test_iteration_loop_parsing():
+    loop = parse_local('for number n in numbers')
+
+    assert isinstance(loop, IterationLoop)
+    assert loop.target == Identifier('n')
+    assert loop.target_type == Identifier('number')
+    assert loop.collection == Identifier('numbers')
+ 
