@@ -25,7 +25,7 @@ class AssignmentOperation(BaseNode):
         self.intent, self.name, self.value = intent, name, value
 
         if type_name is not None:
-            assert self.name.type is None
+            assert self.name.type is None or self.name.type == type_name, f'Overriding {self.name.type} -> {type_name}'
             self.name.type = type_name
 
     def compile(self, context: CompilationBuffer):

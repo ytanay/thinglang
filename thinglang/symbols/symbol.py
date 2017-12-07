@@ -109,7 +109,6 @@ class Symbol(object):
         """
         Helper method to create a new member symbol
         """
-        print('Creating {} {}'.format(name, visibility is Symbol.PRIVATE))
         return cls(name, cls.MEMBER, type, False, visibility)
 
     def __str__(self):
