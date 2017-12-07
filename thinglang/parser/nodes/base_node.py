@@ -82,25 +82,39 @@ class BaseNode(ParsingMixin):
         self.source_ref = node.source_ref
         return self
 
+    def walk_up(self, predicate):
+        """
+        Walk up the AST until predicate returns True, returning the first matching node, or None if no matches
+        are found.
+        """
+        node = self
+
+        while node and not predicate(node):
+            node = node.parent
+
+        if node and predicate(node):
+            return node
+
     @property
     def container_name(self):
         """
-        Walk up the AST to find the enclosing ThingDefinition for this node
+        Walk up the AST to find the class names for the enclosing ThingDefinition of this node
         """
         from thinglang.parser.definitions.thing_definition import ThingDefinition
-        node = self
+        thing_definition = self.walk_up(lambda x: isinstance(x, ThingDefinition))
+        return templates.class_names(thing_definition.name)
 
-        while node and not isinstance(node, ThingDefinition):
-            node = node.parent
-
-        if node and isinstance(node, ThingDefinition):
-            return templates.class_names(node.name)
-
-        raise Exception('Could not find parent container')
+    @property
+    def enclosing_method(self):
+        """
+        Walk up the AST to find the enclosing MethodDefinition for this node
+        """
+        from thinglang.parser.definitions.method_definition import MethodDefinition
+        return self.walk_up(lambda x: isinstance(x, MethodDefinition))
 
     def tree(self, depth=1):
         """
-        Prints this node and its children in a tree-like form
+        Prints this node and its children in a tree-like format
         """
         separator = ('\n' if self.children else '') + ('\t' * depth)
         return '<L{}> {}({}){}{}'.format(self.source_ref.line_number if self.source_ref else "?",
