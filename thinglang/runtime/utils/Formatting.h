@@ -37,6 +37,10 @@ inline std::string to_string(bool val){
     return val ? "true" : "false";
 }
 
+inline std::string to_string(const std::vector<Thing>::iterator& val){
+    return "Iterator<vector>";
+}
+
 template <typename T>
 inline bool to_boolean(T val){
     return val != 0;
@@ -44,6 +48,10 @@ inline bool to_boolean(T val){
 
 inline bool to_boolean(const std::string &val){
     return val.length() > 0;
+}
+
+inline bool to_boolean(const std::vector<Thing>::iterator& val){
+    return true; // TODO: fix this to has_next
 }
 
 template <typename T>

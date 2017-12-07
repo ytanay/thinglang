@@ -56,6 +56,14 @@ void ListType::contains() {
     }
 
 
+void ListType::iterator() {
+		auto self = Program::argument<ListInstance>();
+
+		Program::push(Program::create<IteratorInstance>(self->val.begin(), self->val.end()));
+        
+    }
+
+
 void ListType::get() {
 		auto index = Program::argument<NumberInstance>();
 		auto self = Program::argument<ListInstance>();

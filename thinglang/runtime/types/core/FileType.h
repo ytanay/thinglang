@@ -21,12 +21,12 @@ class FileInstance : public BaseThingInstance {
     public:
     explicit FileInstance() = default; // empty constructor
     
-    explicit FileInstance(std::string file_path, std::fstream file) : file_path(file_path) {}; // value constructor
+    explicit FileInstance(std::string file_path) : file_path(file_path) {}; // value constructor
     
     /** Mixins **/
     
-    virtual std::string text() override;
-    virtual bool boolean() override;
+    std::string text() override;
+    bool boolean() override;
 
     
     /** Members **/

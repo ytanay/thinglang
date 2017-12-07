@@ -25,8 +25,8 @@ class ListInstance : public BaseThingInstance {
     
     /** Mixins **/
     
-    virtual std::string text() override;
-    virtual bool boolean() override;
+    std::string text() override;
+    bool boolean() override;
 
     
     /** Members **/
@@ -43,12 +43,13 @@ class ListInstance : public BaseThingInstance {
 class ListType : public ThingTypeInternal {
     
     public:
-    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains, &get, &length, &swap, &range }) {}; // constructor
+    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains, &iterator, &get, &length, &swap, &range }) {}; // constructor
  
 	static void __constructor__();
 	static void append();
 	static void pop();
 	static void contains();
+	static void iterator();
 	static void get();
 	static void length();
 	static void swap();

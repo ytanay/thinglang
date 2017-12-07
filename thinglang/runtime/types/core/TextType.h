@@ -25,8 +25,8 @@ class TextInstance : public BaseThingInstance {
     
     /** Mixins **/
     
-    virtual std::string text() override;
-    virtual bool boolean() override;
+    std::string text() override;
+    bool boolean() override;
 
     
     /** Members **/
