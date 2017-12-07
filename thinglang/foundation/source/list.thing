@@ -18,6 +18,9 @@ thing list with type T
         else
             return false
 
+    does iterator returns iterator<T>
+        return `Program::create<IteratorInstance>(self->val.begin(), self->val.end())`
+
     does get with number index returns T
         return `self->val[index->val]`
 
