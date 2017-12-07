@@ -1,6 +1,6 @@
 thing File
     has `std::string` file_path
-    has `std::fstream` file
+    private has `std::fstream` file
 
     setup with text file_path
         `self->file_path = file_path->text();`

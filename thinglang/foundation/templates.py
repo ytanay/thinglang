@@ -1,6 +1,7 @@
 """
 Templates used to generate C++ code for the runtime
 """
+from thinglang.symbols.symbol import Symbol
 
 HEADER = """/**
     {file_name}
@@ -87,8 +88,8 @@ FOUNDATION_METHOD = """
 """
 
 FOUNDATION_MIXINS_DECLARATION = """
-    virtual std::string text() override;
-    virtual bool boolean() override;
+    std::string text() override;
+    bool boolean() override;
 """
 
 FOUNDATION_MIXINS_DEFINITION = """
@@ -177,12 +178,14 @@ def class_names(name):
 
 
 def format_member_list(members):
-    return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in members)
+    return ', '.join('{} {}'.format(x.type.transpile(), x.name.transpile()) for x in members if x.visibility is Symbol.PUBLIC)
 
 
 def format_value_constructor(instance_cls_name, member_list):
-    return FOUNDATION_VALUE_CONSTRUCTOR.format(
+    a = FOUNDATION_VALUE_CONSTRUCTOR.format(
         instance_cls_name=instance_cls_name,
         member_list=format_member_list(member_list),
-        initializer=', '.join('{name}({name})'.format(name=name.name.transpile()) for name in member_list[:1])
+        initializer=', '.join('{name}({name})'.format(name=member.name.transpile()) for member in member_list if member.visibility is Symbol.PUBLIC)
     )
+    print(a)
+    return a
