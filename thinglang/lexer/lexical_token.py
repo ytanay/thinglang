@@ -24,6 +24,10 @@ class LexicalToken(object):
     def transpile(self):
         return self.value
 
+    def deriving_from(self, node):
+        self.source_ref = node.source_ref
+        return self
+
     def __eq__(self, other):
         return type(self) is type(other) and \
                self.value == other.value

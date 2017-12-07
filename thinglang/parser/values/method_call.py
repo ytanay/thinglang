@@ -73,6 +73,10 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
         return target
 
+    def deriving_from(self, node):
+        self.target.deriving_from(node)
+        return super().deriving_from(node)
+
     @property
     def is_captured(self):
         """

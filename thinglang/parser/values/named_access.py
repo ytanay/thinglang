@@ -70,6 +70,12 @@ class NamedAccess(BaseNode, ValueType):
         self.target.append(other)
         return self
 
+    def deriving_from(self, node):
+        for arg in self.target:
+            arg.deriving_from(node)
+
+        return super().deriving_from(node)
+
     @classmethod
     def extend(cls, base, extension: Identifier) -> 'NamedAccess':
         if isinstance(base, NamedAccess):
