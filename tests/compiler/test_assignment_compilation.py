@@ -1,11 +1,12 @@
-from tests.compiler import compile_local, A_ID, B_ID, SELF_ID, VAL1_ID, VAL2_ID, INST_ID, INNER_ID, INNER1_ID, INNER2_ID
+from tests.compiler import compile_local, A_ID, B_ID, SELF_ID, VAL1_ID, VAL2_ID, INST_ID, INNER_ID, INNER1_ID, \
+    INNER2_ID, STATIC_START
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePushMember, OpcodePopLocal, \
     OpcodeDereference
 
 
 def test_static_to_local():
-    assert compile_local('a = 5') == [OpcodeAssignStatic(A_ID, 0)]
-    assert compile_local('a = "hello"') == [OpcodeAssignStatic(A_ID, 0)]
+    assert compile_local('a = 5') == [OpcodeAssignStatic(A_ID, STATIC_START)]
+    assert compile_local('a = "hello"') == [OpcodeAssignStatic(A_ID, STATIC_START)]
 
 
 def test_local_to_local():
