@@ -9,14 +9,13 @@ class Symbol(object):
 
     METHOD, MEMBER = object(), object()
     INTERNAL, BYTECODE = object(), object()  # The calling convention used, if this symbol is a method
-    PUBLIC = object()  # The visibility of this symbol
+    PUBLIC, PRIVATE = object(), object()  # The visibility of this symbol
 
-    def __init__(self, name: Identifier, kind, type: Identifier, static: bool, arguments=None, index=None, convention=BYTECODE):
+    def __init__(self, name: Identifier, kind, type: Identifier, static: bool, visibility=PUBLIC, arguments=None, index=None, convention=BYTECODE):
         super(Symbol, self).__init__()
 
-        self.name, self.kind, self.type, self.static, self.arguments, self.index, self._convention = \
-            name, kind, type, static, arguments, index, convention
-        self.visibility = Symbol.PUBLIC
+        self.name, self.kind, self.type, self.static, self.visibility, self.arguments, self.index, self._convention = \
+            name, kind, type, static, visibility, arguments, index, convention
 
     def update_index(self, new_index: int):
         """
@@ -34,6 +33,7 @@ class Symbol(object):
                       self.kind,
                       self.type.parameterize(parameters) if self.type else None,
                       self.static,
+                      self.visibility,
                       [x.parameterize(parameters) for x in self.arguments] if self.arguments else self.arguments,
                       self.index,
                       self.convention)
@@ -64,6 +64,7 @@ class Symbol(object):
             "type": self.type,
             "static": self.static,
             "arguments": self.arguments,
+            "visibility": "public" if self.visibility is Symbol.PUBLIC else "private",
             "convention": "bytecode" if self.convention is Symbol.BYTECODE else "internal"
         }
 
@@ -80,6 +81,7 @@ class Symbol(object):
             kind=Symbol.METHOD if data['kind'] == 'method' else Symbol.MEMBER,
             type=cls.load_identifier(data['type']),
             static=data['static'],
+            visibility=Symbol.PUBLIC if data['visibility'] == 'public' else Symbol.PRIVATE,
             arguments=data['arguments'] is not None and [Identifier(x) for x in data['arguments']],
             index=data['index'],
             convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
@@ -100,14 +102,15 @@ class Symbol(object):
         """
         Helper method to create a new method symbol
         """
-        return cls(name, cls.METHOD, return_type, static, [x.type for x in arguments])
+        return cls(name, cls.METHOD, return_type, static, Symbol.PUBLIC, [x.type for x in arguments])
 
     @classmethod
-    def member(cls, name: Identifier, type: Identifier) -> 'Symbol':
+    def member(cls, name: Identifier, type: Identifier, visibility) -> 'Symbol':
         """
         Helper method to create a new member symbol
         """
-        return cls(name, cls.MEMBER, type, False)
+        print('Creating {} {}'.format(name, visibility is Symbol.PRIVATE))
+        return cls(name, cls.MEMBER, type, False, visibility)
 
     def __str__(self):
         return f'Symbol({self.name})'
