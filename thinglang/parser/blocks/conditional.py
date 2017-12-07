@@ -22,7 +22,7 @@ class Conditional(BaseNode):
         if isinstance(self.value, Conditional):
             self.value = self.value.value
 
-    def describe(self):
+    def __repr__(self):
         return 'if {}'.format(self.value)
 
     def transpile(self):

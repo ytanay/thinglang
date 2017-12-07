@@ -19,8 +19,8 @@ class ThingDefinition(BaseNode):
         super(ThingDefinition, self).__init__([name, extends, generics])
         self.name, self.extends, self.generics = name, extends, generics
 
-    def describe(self):
-        return self.name
+    def __repr__(self):
+        return f'thing {self.name}'
 
     def compile(self, context: CompilationContext):
         symbol_map = context.symbols[self.name]

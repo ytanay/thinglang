@@ -19,7 +19,7 @@ class MemberDefinition(BaseNode):
 
         self.type, self.name, self.visibility = type_name, name, visibility
 
-    def describe(self):
+    def __repr__(self):
         return 'has {} {}'.format(self.type, self.name)
 
     def transpile(self):

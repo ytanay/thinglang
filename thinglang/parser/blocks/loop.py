@@ -15,7 +15,7 @@ class Loop(BaseNode):
         super(Loop, self).__init__((value,) + original_tokens)
         self.value = value
 
-    def describe(self):
+    def __repr__(self):
         return str(self.value)
 
     def compile(self, context: CompilationBuffer):

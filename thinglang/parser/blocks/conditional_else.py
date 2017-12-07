@@ -13,7 +13,7 @@ class ConditionalElse(Conditional, ElseBranchInterface):
     def __init__(self, conditional: Conditional):
         super(ConditionalElse, self).__init__(conditional.value)
 
-    def describe(self):
+    def __repr__(self):
         return 'else if {}'.format(self.value)
 
     def transpile(self):

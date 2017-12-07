@@ -23,7 +23,7 @@ class NumericValue(LexicalToken, ValueType):
     def evaluate(self, _=None):
         return self.value
 
-    def describe(self):
+    def __repr__(self):
         return self.value
 
     def serialize(self):

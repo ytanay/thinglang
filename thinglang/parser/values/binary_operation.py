@@ -28,21 +28,20 @@ class BinaryOperation(BaseNode, ValueType, CallSite):
 
     def __init__(self, operator, lhs, rhs):
         super(BinaryOperation, self).__init__([operator, lhs, rhs])
-        self.lhs, self.rhs = lhs, rhs
-        self.operator = type(operator)
+        self.operator, self.lhs, self.rhs = operator, lhs, rhs
 
     def compile(self, context: CompilationBuffer):
         method_call = MethodCall(NamedAccess.extend(self.lhs, Identifier(self.operator.transpile())), [self.rhs])
         return method_call.compile(context)
 
     def evaluate(self):
-        return self.OPERATIONS[self.operator](self.lhs.evaluate(), self.rhs.evaluate())
+        return self.OPERATIONS[type(self.operator)](self.lhs.evaluate(), self.rhs.evaluate())
 
-    def describe(self):
-        return '|{} {} {}|'.format(self.lhs, self.operator, self.rhs)
+    def __repr__(self):
+        return '{} {} {}'.format(self.lhs, self.operator, self.rhs)
 
     def transpile(self):
-        return '{} {} {}'.format(self.lhs.transpile(), REVERSE_OPERATORS[self.operator], self.rhs.transpile())
+        return '{} {} {}'.format(self.lhs.transpile(), REVERSE_OPERATORS[type(self.operator)], self.rhs.transpile())
 
     @property
     def arguments(self):

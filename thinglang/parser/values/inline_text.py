@@ -30,7 +30,7 @@ class InlineString(LexicalToken, ValueType):
     def type(self):
         return self.TYPE
 
-    def describe(self):
+    def __repr__(self):
         return '"{}"'.format(self.value)
 
     def compile(self, context: CompilationBuffer):

@@ -31,11 +31,11 @@ class MethodDefinition(BaseNode):
         self.index = None
         self.locals = None
 
+    def __repr__(self):
+        return 'does {}{}'.format(self.name, f' with {self.arguments}' if self.arguments else '')
+
     def is_constructor(self):
         return self.name == Identifier.constructor()
-
-    def describe(self):
-        return '{}, args={}'.format(self.name, self.arguments)
 
     def transpile(self):
         type_cls_name, instance_cls_name = self.container_name

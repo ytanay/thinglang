@@ -15,6 +15,9 @@ class UnconditionalElse(BaseNode, ElseBranchInterface):
     def __init__(self, token):
         super(UnconditionalElse, self).__init__(token)
 
+    def __repr__(self):
+        return 'else'
+
     def compile(self, context: CompilationBuffer):
         super(UnconditionalElse, self).compile(context)
         context.update_conditional_jumps()

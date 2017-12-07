@@ -26,7 +26,7 @@ class ListInitialization(BaseNode):
     def __eq__(self, other):
         return type(self) == type(other) and self.values == other.values
 
-    def describe(self):
+    def __repr__(self):
         return self.values
 
     @property
