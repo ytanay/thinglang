@@ -34,11 +34,7 @@ class ThingDefinition(BaseNode):
 
         return templates.FOUNDATION_TYPE_DEFINITION.format(
             type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
-            member_list=templates.format_member_list(self.members),
-            method_list=self.format_method_list(),
-            constructors=templates.format_value_constructor(instance_cls_name, self.members) if self.members else '',
             mixins=templates.FOUNDATION_MIXINS_DEFINITION.format(instance_cls_name=instance_cls_name, first_member=self.members[0].name.transpile()) if self.members else '',
-            members=self.transpile_children(indent=0, children_override=self.members),
             methods=self.transpile_children(indent=0, children_override=self.methods)
         )
 
