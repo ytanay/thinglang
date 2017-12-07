@@ -2,6 +2,7 @@ import collections
 from collections import OrderedDict
 
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.parser.blocks.iteration_loop import IterationLoop
 from thinglang.parser.blocks.try_block import TryBlock
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.definitions.thing_definition import ThingDefinition
@@ -40,6 +41,11 @@ class Indexer(TreeTraversal):
     def index_local_variable(self, node: AssignmentOperation):
         if node.intent == node.DECELERATION:
             self.context.append(node.name, node.name.type)
+
+    @inspects(IterationLoop)
+    def index_iteration_loop(self, node: IterationLoop):
+        self.context.append(*node.iterator_container_name)
+        self.context.append(node.target, node.target_type)
 
     @inspects(TryBlock)
     def index_handle_block(self, node: TryBlock):
