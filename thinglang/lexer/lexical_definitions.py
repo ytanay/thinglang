@@ -6,7 +6,7 @@ from thinglang.lexer.blocks.loops import LexicalRepeatFor, LexicalRepeatWhile
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationMethod
 from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationStatic, \
-    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag
+    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag, LexicalPrivateTag
 from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
 from thinglang.lexer.grouping.quote import LexicalQuote
@@ -16,7 +16,7 @@ from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction
     LexicalDivision, LexicalModulus, LexicalXOR
 from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.operators.comparison import LexicalEquals, LexicalNegation, LexicalGreaterThan, \
-    LexicalLessThan
+    LexicalLessThan, LexicalNotEquals
 from thinglang.lexer.operators.membership import LexicalIn
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
@@ -101,5 +101,6 @@ REVERSE_OPERATORS = {
 }
 
 REVERSE_OPERATORS.update({
-    LexicalEquals: "=="
+    LexicalEquals: "==",
+    LexicalNotEquals: "!="
 })
