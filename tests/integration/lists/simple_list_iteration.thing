@@ -1,0 +1,17 @@
+/*
+{
+    "expected_output": ["true", "1", "true", "2", "true", "3", "false"]
+}
+*/
+
+thing Program
+    setup
+        list<number> numbers = [1, 2, 3]
+        iterator<number> it = numbers.iterator()
+        Console.print(it.has_next())
+        Console.print(it.next())
+        Console.print(it.has_next())
+        Console.print(it.next())
+        Console.print(it.has_next())
+        Console.print(it.next())
+        Console.print(it.has_next())
