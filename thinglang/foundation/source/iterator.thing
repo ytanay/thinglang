@@ -1,0 +1,12 @@
+thing iterator with type T
+
+    has `std::vector<Thing>::iterator` current
+    has `std::vector<Thing>::iterator` end
+
+
+    does has_next returns bool
+        return self.current not eq self.end
+
+    does next returns T # TODO: check if has_next
+        `auto item = *self->current++;`
+        return `item`
