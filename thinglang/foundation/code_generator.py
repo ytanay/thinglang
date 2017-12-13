@@ -39,26 +39,9 @@ def generate_types():
 
         name = os.path.basename(path).replace('.thing', '')
         name_id = Identifier(name)
-        target_name = '{}Type'.format(name.capitalize())
         ast = pipeline.preprocess(SourceContext(path))
-        symbols = SymbolMapper(ast)
-        inline_code = [x for x in ast.children if isinstance(x, InlineCode)]
-        ast.children = [x for x in ast.children if not isinstance(x, InlineCode)]
-
-        symbol_map = symbols[name_id]
+        symbol_map = SymbolMapper(ast)[name_id]
         symbol_map.override_index(definitions.INTERNAL_TYPE_ORDERING[name_id])
-
-        write_if_changed(os.path.join(CORE_TYPES_TARGET, target_name + '.cpp'), templates.FOUNDATION_SOURCE.format(
-            name=name.capitalize(),
-            code=ast.transpile(),
-            file_name=target_name + '.cpp')
-        )
-
-        write_if_changed(os.path.join(CORE_TYPES_TARGET, target_name + '.h'), templates.FOUNDATION_HEADER.format(
-            name=name.capitalize(),
-            code=symbol_map.create_header() + '\n'.join(x.value for x in inline_code),
-            file_name=target_name + '.h')
-        )
 
         for symbol in symbol_map:
             symbol.convention = Symbol.INTERNAL
