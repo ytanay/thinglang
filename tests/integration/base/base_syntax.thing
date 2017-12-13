@@ -1,12 +1,14 @@
 /*
 {
-    "expected_output": ["Operators + in strings", "Yotam"]
+    "expected_output": ["Operators + in strings", "Concatenation with the number 10", "Yotam"]
 }
 */
 
 thing Program
     setup
         Console.print("Operators + in strings") # inline comments
+        Console.print("Concatenation with the number " + 10)
+
         text name = "Yotam" # Local variables
         number i = 10
         Console.print(name)
