@@ -1,4 +1,5 @@
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.symbols.argument_selector import ArgumentSelector
 
 
 class Symbol(object):
@@ -38,6 +39,9 @@ class Symbol(object):
                       self.index,
                       self.convention)
 
+    def selector(self):
+        return ArgumentSelector([self])
+
     @property
     def convention(self):
         """
@@ -74,7 +78,7 @@ class Symbol(object):
         Loads a serialized symbol
         """
         assert data['kind'] in ('member', 'method')
-        assert data['convention'] in ('user', 'internal')
+        assert data['convention'] in ('bytecode', 'internal')
 
         return cls(
             name=Identifier(data['name']),
@@ -82,7 +86,7 @@ class Symbol(object):
             type=cls.load_identifier(data['type']),
             static=data['static'],
             visibility=Symbol.PUBLIC if data['visibility'] == 'public' else Symbol.PRIVATE,
-            arguments=data['arguments'] is not None and [Identifier(x) for x in data['arguments']],
+            arguments=data['arguments'] is not None and [cls.load_identifier(x) for x in data['arguments']],
             index=data['index'],
             convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
         )
@@ -111,5 +115,5 @@ class Symbol(object):
         """
         return cls(name, cls.MEMBER, type, False, visibility)
 
-    def __str__(self):
+    def __repr__(self):
         return f'Symbol({self.name})'
