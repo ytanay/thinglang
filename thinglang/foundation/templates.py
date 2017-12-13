@@ -182,10 +182,8 @@ def format_member_list(members):
 
 
 def format_value_constructor(instance_cls_name, member_list):
-    a = FOUNDATION_VALUE_CONSTRUCTOR.format(
+    return FOUNDATION_VALUE_CONSTRUCTOR.format(
         instance_cls_name=instance_cls_name,
         member_list=format_member_list(member_list),
         initializer=', '.join('{name}({name})'.format(name=member.name.transpile()) for member in member_list if member.visibility is Symbol.PUBLIC)
     )
-    print(a)
-    return a

@@ -6,7 +6,6 @@ from thinglang.lexer.values.identifier import Identifier
 
 
 def test_access_in_method_args():
-    print(compile_local('for number a in lst'))
     assert compile_local('for number x in lst') == [
         OpcodePushLocal(LST_ID),
         OpcodeCallInternal(INTERNAL_TYPE_ORDERING[Identifier("list")], 4),  # Create iterator

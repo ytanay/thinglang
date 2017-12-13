@@ -1,13 +1,8 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference, OpcodePushIndexImmediate, \
-    OpcodePushIndex
-from thinglang.lexer.tokens.access import LexicalAccess
+from thinglang.compiler.opcodes import OpcodePushIndexImmediate, OpcodePushIndex
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
-from thinglang.parser.errors import InvalidIndexedAccess
 from thinglang.parser.nodes.base_node import BaseNode
-from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 
@@ -17,7 +12,6 @@ class IndexedAccess(BaseNode, ValueType):
 
     Examples:
         lst[0]
-        hobbies[2]
      """
 
     def __init__(self, target, index):

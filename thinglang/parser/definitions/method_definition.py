@@ -122,7 +122,9 @@ class MethodDefinition(BaseNode):
     @ParserRule.mark
     def add_return_type(method: 'MethodDefinition', _2: LexicalDeclarationReturnType, return_type: Identifier):
         if method._return_type is not None:
-            raise VectorReductionError('Duplicate return type declaration')
+            raise VectorReductionError('Duplicate return type declaration', [method, return_type])
+        if method.is_constructor():
+            raise VectorReductionError('Constructors cannot have a return type', [method, return_type])
         method._return_type = return_type
         return method
 
@@ -130,7 +132,7 @@ class MethodDefinition(BaseNode):
     @ParserRule.mark
     def add_arguments(method: 'MethodDefinition', arguments: TypeList):
         if method._return_type is not None:
-            raise VectorReductionError('Argument list must come before return type')
+            raise VectorReductionError('Argument list must come before return type', [method, arguments])
         method.arguments = ArgumentList(arguments)
         return method
 

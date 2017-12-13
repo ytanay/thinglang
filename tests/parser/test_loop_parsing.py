@@ -32,4 +32,4 @@ def test_iteration_loop_parsing():
     assert loop.target == Identifier('n')
     assert loop.target_type == Identifier('number')
     assert loop.collection == Identifier('numbers')
- 
+

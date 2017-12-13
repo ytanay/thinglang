@@ -52,28 +52,20 @@ def test_combined_method_definition():
     validate_method_definition(method, 'say_hello', [('message', 'text'), ('count', 'number')], Identifier('text'))
 
 
-def test_method_definition_argument_invalid_syntax():
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello with text")
+INVALID_SYNTAX_EXAMPLES = [
+    "does say_hello with text",
+    "does say_hello with text name, number",
+    "does say_hello with text name age",
+    "does say_hello with text number , , age",
+    "does say_hello with number, age",
+    "does say_hello with number 2",
+    "does say_hello returns number returns text",
+    "does say_hello returns number with number a",
+    "setup returns number"
+]
 
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello with text name, number")
 
+@pytest.mark.parametrize('source', INVALID_SYNTAX_EXAMPLES)
+def test_method_definition_argument_invalid_syntax(source):
     with pytest.raises(VectorReductionError):
-        parse_local("does say_hello with text name age")
-
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello with text number , , age")
-
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello with number, age")
-
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello with number 2")
-
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello returns number returns text")
-
-    with pytest.raises(VectorReductionError):
-        parse_local("does say_hello returns number with number a")
-
+        parse_local(source)

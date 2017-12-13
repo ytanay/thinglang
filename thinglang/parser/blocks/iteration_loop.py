@@ -44,7 +44,7 @@ class IterationLoop(Loop):
 
     def finalize(self):
         self.children.insert(0, AssignmentOperation(
-            AssignmentOperation.REASSIGNMENT,
+            AssignmentOperation.DECELERATION,
             self.target,
             self.continuation_next,
             self.target_type
