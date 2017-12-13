@@ -74,7 +74,7 @@ class TokenVector(object):
     def __init__(self, tokens=None):
         self.tokens = tokens if tokens is not None else []
 
-    def parse(self, expect_single=True) -> BaseNode:
+    def parse(self, expect_single=True):
         """
         Iteratively parses the token vector until a single node remains, or no further rule replacements can be made.
         """
@@ -87,7 +87,7 @@ class TokenVector(object):
             return self.tokens
 
         if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode)):
-            raise VectorReductionError('Could not reduce vector: {}'.format(self.tokens))
+            raise VectorReductionError('Invalid syntax', self.tokens)
 
         if isinstance(self.tokens[0], TokenVector):
             return self.tokens[0].parse()
@@ -216,14 +216,14 @@ class TypeVector(TokenVector, TypeList):
             raise VectorReductionError('Only types, names and separators are allowed in a type vector', self.tokens)
 
         if len(self.tokens) < 2:
-            raise VectorReductionError('Not enough items in a type vector')
+            raise VectorReductionError('Not enough items in a type vector', self.tokens)
 
         for components in collection_utils.chunks(self.tokens, 3):
             if len(components) < 2 or not isinstance(components[0], Identifier) or not isinstance(components[1], Identifier):
-                raise VectorReductionError('Invalid syntax in type vector element - must be 2 consecutive names')
+                raise VectorReductionError('Invalid syntax in type vector element - must be 2 consecutive names', self.tokens)
 
             if len(components) > 2 and not isinstance(components[2], LexicalSeparator):
-                raise VectorReductionError('Expected separator, got {}'.format(components[1]))
+                raise VectorReductionError('Expected separator, got {}'.format(components[1]), self.tokens)
 
             components[1].type = components[0]
             output.append(components[1])
