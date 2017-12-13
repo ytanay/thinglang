@@ -31,8 +31,7 @@ class TextInstance : public BaseThingInstance {
     
     /** Members **/
     std::string val;
-    
-    
+
 };
 
 

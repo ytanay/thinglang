@@ -14,14 +14,11 @@
 #include "../../execution/Program.h"
 
 
-
-
 class IteratorInstance : public BaseThingInstance {
     
     public:
-    explicit IteratorInstance() = default; // empty constructor
-    
-    explicit IteratorInstance(std::vector<Thing>::iterator current, std::vector<Thing>::iterator end) : current(current), end(end) {}; // value constructor
+
+    explicit IteratorInstance(ListInstance& base) : base(base), current(base.val.begin()), end(base.val.end()) {}; // value constructor
     
     /** Mixins **/
     
@@ -30,8 +27,13 @@ class IteratorInstance : public BaseThingInstance {
 
     
     /** Members **/
-    std::vector<Thing>::iterator current;
-std::vector<Thing>::iterator end;
+    ListInstance& base;
+    Things::const_iterator current;
+    Things::const_iterator end;
+
+	Things children() override {
+        return {dynamic_cast<Thing>(&base)};
+	}
     
     
 };

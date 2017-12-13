@@ -13,7 +13,7 @@ Methods of BoolType
 
 
 void BoolType::__constructor__() {
-    Program::push(Program::create<BoolInstance>());
+    Program::push(Program::create<BoolInstance>()); // TODO: is this necessary?
 }
 
 
@@ -22,10 +22,10 @@ Mixins of BoolInstance
 **/
 
 std::string BoolInstance::text() {
-    return to_string(val);
+    return val ? "true" : "false";
 }
 
 bool BoolInstance::boolean() {
-    return to_boolean(val);
+    return val;
 }
 

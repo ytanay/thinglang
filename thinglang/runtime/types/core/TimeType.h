@@ -20,16 +20,7 @@ class TimeInstance : public BaseThingInstance {
     
     public:
     explicit TimeInstance() = default; // empty constructor
-    
-    
-    
-    /** Mixins **/
-    
-    
-    /** Members **/
-    
-    
-    
+
 };
 
 

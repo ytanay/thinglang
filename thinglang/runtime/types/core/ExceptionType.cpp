@@ -13,12 +13,11 @@ Methods of ExceptionType
 
 
 void ExceptionType::__constructor__() {
-		auto message = Program::argument<TextInstance>();
-		auto self = Program::create<ExceptionInstance>();
+    auto message = Program::argument<TextInstance>();
+    auto self = Program::create<ExceptionInstance>();
 
-		self->message = message;
-        
-    }
+    self->message = message;
+}
 
 
 /**
@@ -26,10 +25,10 @@ Mixins of ExceptionInstance
 **/
 
 std::string ExceptionInstance::text() {
-    return to_string(message);
+    return message->text();
 }
 
 bool ExceptionInstance::boolean() {
-    return to_boolean(message);
+    return true;
 }
 

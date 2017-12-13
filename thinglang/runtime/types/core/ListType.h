@@ -6,6 +6,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "../../utils/TypeNames.h"
 #include "../../execution/Globals.h"
 #include "../../utils/Formatting.h"
@@ -21,7 +23,7 @@ class ListInstance : public BaseThingInstance {
     public:
     explicit ListInstance() = default; // empty constructor
     
-    explicit ListInstance(std::vector<Thing> val) : val(val) {}; // value constructor
+    explicit ListInstance(std::vector<Thing> val) : val(std::move(val)) {}; // value constructor
     
     /** Mixins **/
     
@@ -30,10 +32,10 @@ class ListInstance : public BaseThingInstance {
 
     
     /** Members **/
-    std::vector<Thing> val;
+    Things val;
     
     
-    Things& children() override {
+    Things children() override {
         return val;
     }
 

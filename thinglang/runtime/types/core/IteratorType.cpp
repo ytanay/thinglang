@@ -13,25 +13,23 @@ Methods of IteratorType
 
 
 void IteratorType::__constructor__() {
-    Program::push(Program::create<IteratorInstance>());
+    throw RuntimeError("Cannot instantiate Iterator directly");
 }
 
 
 void IteratorType::has_next() {
-		auto self = Program::argument<IteratorInstance>();
+	auto self = Program::argument<IteratorInstance>();
 
-		Program::push(Program::create<BoolInstance>(self->current != self->end));
-        
-    }
+	Program::push(self->current != self->end ? BOOL_TRUE : BOOL_FALSE);
+}
 
 
 void IteratorType::next() {
-		auto self = Program::argument<IteratorInstance>();
+	auto self = Program::argument<IteratorInstance>();
 
-		auto item = *self->current++;
-		Program::push(item);
-        
-    }
+	auto item = *self->current++;
+	Program::push(item);
+}
 
 
 /**
@@ -39,10 +37,10 @@ Mixins of IteratorInstance
 **/
 
 std::string IteratorInstance::text() {
-    return to_string(current);
+    return "Iterator<ListType>";
 }
 
 bool IteratorInstance::boolean() {
-    return to_boolean(current);
+    return current != end;
 }
 

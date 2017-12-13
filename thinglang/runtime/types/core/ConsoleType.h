@@ -14,33 +14,16 @@
 #include "../../execution/Program.h"
 
 
-
-
-class ConsoleInstance : public BaseThingInstance {
-    
-    public:
-    explicit ConsoleInstance() = default; // empty constructor
-    
-    
-    
-    /** Mixins **/
-    
-    
-    /** Members **/
-    
-    
-    
-};
-
-
 class ConsoleType : public ThingTypeInternal {
-    
+
+	// TODO: make sure constructor cannot be called
+
     public:
-    ConsoleType() : ThingTypeInternal({ &__constructor__, &write, &print, &read_line }) {}; // constructor
- 
-	static void __constructor__();
+    ConsoleType() : ThingTypeInternal({ nullptr, &write, &print, &print_format, &read_line }) {}; // constructor
+
 	static void write();
 	static void print();
+    static void print_format();
 	static void read_line();
     
 };

@@ -30,7 +30,7 @@ class ExceptionInstance : public BaseThingInstance {
 
     
     /** Members **/
-    TextInstance* message;
+    TextInstance* message{};
     
     
 };

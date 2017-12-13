@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <utility>
 #include "../../utils/TypeNames.h"
 #include "../../execution/Globals.h"
 #include "../../utils/Formatting.h"
@@ -15,13 +16,12 @@
 
 
 
-
 class FileInstance : public BaseThingInstance {
     
     public:
     explicit FileInstance() = default; // empty constructor
     
-    explicit FileInstance(std::string file_path) : file_path(file_path) {}; // value constructor
+    explicit FileInstance(std::string file_path) : file_path(std::move(file_path)) {}; // value constructor
     
     /** Mixins **/
     
@@ -31,7 +31,7 @@ class FileInstance : public BaseThingInstance {
     
     /** Members **/
     std::string file_path;
-std::fstream file;
+	std::fstream file;
     
     
 };
