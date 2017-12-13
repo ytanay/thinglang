@@ -50,6 +50,10 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def self(cls):
         return cls("self")
 
+    @classmethod
+    def object(cls):
+        return cls("object")
+
     @property
     def untyped(self):
         return self
@@ -92,7 +96,9 @@ class GenericIdentifier(Identifier):
         return super().__repr__()
 
     def __eq__(self, other):
-        return type(self) is type(other) and self.value == other.value and self.generics == other.generics
+        return type(self) is type(other) and \
+               self.value == other.value and \
+               (self.generics == other.generics or self.generics == (Identifier.object(),) or other.generics == (Identifier.object(),))
 
     def __hash__(self):
         return hash((self.value, self.generics))
