@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.opcodes import OpcodeAssignStatic, OpcodeAssignLocal, OpcodePopLocal, OpcodePopMember
 from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.operators.binary import LexicalBinaryOperation
@@ -27,6 +26,9 @@ class AssignmentOperation(BaseNode):
         if type_name is not None:
             assert self.name.type is None or self.name.type == type_name, f'Overriding {self.name.type} -> {type_name}'
             self.name.type = type_name
+
+    def __repr__(self):
+        return f'Assignment({self.name} = {self.value})'
 
     def compile(self, context: CompilationBuffer):
 
@@ -61,15 +63,15 @@ class AssignmentOperation(BaseNode):
 
         if value_ref.type.untyped != target_ref.type.untyped:
             optional = context.optional()
-            CastOperation.create(source=value_ref.type, destination=target_ref.type).deriving_from(self).compile(optional)
+            CastOperation.create(source=value_ref, destination_type=target_ref.type)\
+                .deriving_from(self)\
+                .compile(optional)
+
             context.insert(cast_placeholder, optional)
 
     @property
     def type(self):
         return self.name.type
-
-    def __repr__(self):
-        return f'Assignment({self.name} = {self.value})'
 
     ASSIGNMENT_TARGET = Identifier, NamedAccess
 

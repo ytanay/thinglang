@@ -1,3 +1,4 @@
+from thinglang.compiler.references import Reference
 from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.nodes import BaseNode
@@ -14,8 +15,8 @@ class CastOperation(BaseNode):
     """
 
     @staticmethod
-    def create(source: Identifier, destination: Identifier) -> MethodCall:
-        return MethodCall(NamedAccess([source, Identifier('convert_') + destination]), MethodCall.STACK_ARGS)
+    def create(source: Reference, destination_type: Identifier) -> MethodCall:
+        return MethodCall(NamedAccess([source.type, Identifier('convert_') + destination_type]), [source], stack_args=True)
 
     @staticmethod
     @ParserRule.mark
