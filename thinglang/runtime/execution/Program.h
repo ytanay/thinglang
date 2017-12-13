@@ -24,6 +24,7 @@ private:
 
 public:
     static void push(const Thing& instance);
+    static void push(bool instance);
     static Thing pop();
     static void create_frame(Size size);
     static void pop_frame();

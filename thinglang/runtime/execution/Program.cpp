@@ -69,6 +69,9 @@ void Program::status(Index counter, const Instruction& instruction) {
 
     std::cerr << "[" << counter << "] Executing instruction " << describe(instruction.opcode) << ": " << instruction.target << ", "
               << instruction.secondary << " -> [";
+    std::for_each(Program::stack.begin(), Program::stack.end(),
+                  [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
+    std::cerr << "] -> [";
     if(!Program::frames.empty())
         std::for_each(Program::frame().begin(), Program::frame().end(),
                       [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
@@ -341,6 +344,7 @@ void Program::sweep() {
     }
 
     for(auto item : pending_deletion){
+        std::cerr << "Sweeping " << item->text() << std::endl;
         delete item;
     }
 
@@ -353,6 +357,14 @@ void Program::push(const Thing &instance) {
      */
     stack.push_front(instance);
 }
+
+void Program::push(bool value) {
+    /**
+     * Push an boolean value into the program stack
+     */
+    stack.push_front(value ? BOOL_TRUE : BOOL_FALSE);
+}
+
 
 Thing Program::data(Index index) {
     /**
