@@ -22,7 +22,7 @@ public:
 
     virtual void set(Index index, const Thing& thing);
 
-    virtual Things& children(){
+    virtual Things children() {
         return EMPTY_LIST;
     }
 
@@ -44,9 +44,10 @@ public:
     Thing get(Index index) override;
 
     void set(Index index, const Thing& thing) override;
-    virtual std::string text() override;
 
-    Things& children() override {
+    std::string text() override;
+
+    Things children() override {
         return members;
     }
 };
