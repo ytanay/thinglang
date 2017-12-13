@@ -1,8 +1,11 @@
+import collections
 from typing import List
 
 from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.symbols.merged_symbol import MergedSymbol
 from thinglang.symbols.symbol import Symbol
+from thinglang.utils import collection_utils
 
 
 class SymbolMap(object):
@@ -13,10 +16,10 @@ class SymbolMap(object):
 
     def __init__(self, members: List[Symbol], methods: List[Symbol], name: Identifier, extends: Identifier, generics: List[Identifier], index: int, offset: int):
         self.members, self.methods, self.name, self.extends, self.generics, self.index, self.offset = \
-            members, methods, name, extends, generics or [], index, offset
+            members, self.merge_method_symbols(methods), name, extends, generics or [], index, offset
 
         self.lookup = {
-            elem.name: elem for elem in (self.methods + self.members)
+            symbol.name: symbol for symbol in self.members + self.methods
         }
 
         assert len(self.methods) + len(self.members) == len(self.lookup), 'Thing definition contains colliding elements'
@@ -37,7 +40,7 @@ class SymbolMap(object):
             "generics": self.generics,
             "index": self.index,
             "offset": self.offset,
-            "symbols": [x.serialize() for x in self.lookup.values()]
+            "symbols": collection_utils.flatten([x.serialize() for x in self.lookup.values()])
         }
 
     @classmethod
@@ -144,4 +147,13 @@ class SymbolMap(object):
     def __repr__(self):
         return f'SymbolMap({self.name})'
 
+    @staticmethod
+    @collection_utils.drain()
+    def merge_method_symbols(methods):
+        method_symbols = collections.defaultdict(list)
 
+        for method_symbol in methods:
+            method_symbols[method_symbol.name].append(method_symbol)
+
+        for symbol_name, symbols in method_symbols.items():
+            yield symbols[0] if len(symbols) == 1 else MergedSymbol(symbols)
