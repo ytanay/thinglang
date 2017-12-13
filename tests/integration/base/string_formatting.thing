@@ -1,0 +1,9 @@
+/*
+{
+    "expected_output": "Simple formatting with a string and another string"
+}
+*/
+
+thing Program
+    setup
+        Console.print("Simple formatting with {} and {}", ["a string", "another string"])
