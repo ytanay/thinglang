@@ -1,40 +1,11 @@
 thing list with type T
 
-    has `std::vector<Thing>` val
-
     does append with T item returns list<T>
-        `self->val.push_back(item);`
-        return `self`
-
     does pop returns T
-        `auto elem = self->val.back();`
-        `self->val.pop_back();`
-        return `elem`
-
     does contains with T item returns bool
-        `auto res = std::find(self->val.begin(), self->val.end(), item) != self->val.end();`
-        if res
-            return true
-        else
-            return false
-
     does iterator returns iterator<T>
-        return `Program::create<IteratorInstance>(self->val.begin(), self->val.end())`
-
     does get with number index returns T
-        return `self->val[index->val]`
-
     does length returns number
-        return `Program::create<NumberInstance>(self->val.size())`
-
     does swap with number index1, number index2
-        `auto i = index1->val, j = index2->val;`
-        `auto temp = self->val[i];`
-        `self->val[i] = self->val[j];`
-        `self->val[j] = temp;`
 
     static does range with number start, number end returns list<number>
-        `auto lst = Program::create<ListInstance>();`
-        `lst->val.resize(static_cast<unsigned int>(end->val - start->val));`
-        `for(auto idx = start->val, val = 0; idx < end->val; idx++, val++) lst->val[idx] = Program::create<NumberInstance>(val);`
-        return `lst`

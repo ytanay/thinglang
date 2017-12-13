@@ -1,34 +1,8 @@
 thing text
 
-    has `std::string` val
-
-    does + with text other returns text
-        return self.val + other.val
-
+    does + with object other returns text
     does eq with text other returns bool
-        if self.val eq other.val
-            return true
-        else
-            return false
-
     does contains with text substring returns bool
-        `auto found = self->val.find(substring->val) != std::string::npos;`
-        if found
-            return true
-        else
-            return false
-
     does length returns number
-        return `Program::create<NumberInstance>(self->val.size())`
-
     does to_bytes returns list<number>
-        `auto byte_array = Program::create<ListInstance>();`
-        `byte_array->val.resize(self->val.size());`
-        `for(auto i = 0; i < self->val.size(); i++) byte_array->val[i] = Program::create<NumberInstance>(self->val[i]);`
-        return `byte_array`
-
     static does convert_number with text num returns number
-        return `Program::create<NumberInstance>(to_number(num->val))`
-
-
-`inline std::string to_string(TextInstance* val){ return val->text(); }`

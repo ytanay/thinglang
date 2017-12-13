@@ -1,4 +1,3 @@
 thing Time
 
     static does now returns number
-        return `Program::create<NumberInstance>(std::chrono::system_clock::now().time_since_epoch().count())`

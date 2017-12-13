@@ -1,12 +1,6 @@
 thing Console
 
     static does write with object message
-        `std::cout << message->text();`
-
     static does print with object message
-        `std::cout << message->text() << std::endl;`
-
+    static does print with object message, list<object> params
     static does read_line returns text
-        `std::string input;`
-        `std::getline(std::cin, input);`
-        return `Program::create<TextInstance>(input)`
