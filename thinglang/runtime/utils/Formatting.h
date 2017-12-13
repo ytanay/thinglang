@@ -29,34 +29,9 @@ inline std::string to_string(std::vector<T> lst){
 }
 
 
-inline std::string to_string(std::string val){
-    return val;
-}
-
-inline std::string to_string(bool val){
-    return val ? "true" : "false";
-}
-
-inline std::string to_string(const std::vector<Thing>::iterator& val){
-    return "Iterator<vector>";
-}
-
 template <typename T>
 inline bool to_boolean(T val){
     return val != 0;
-}
-
-inline bool to_boolean(const std::string &val){
-    return val.length() > 0;
-}
-
-inline bool to_boolean(const std::vector<Thing>::iterator& val){
-    return true; // TODO: fix this to has_next
-}
-
-template <typename T>
-inline bool to_boolean(std::vector<T> lst){
-    return lst.size() > 0;
 }
 
 inline std::string trim(std::string str){
@@ -72,6 +47,6 @@ inline std::ostream &operator<<(std::ostream &os, const Thing& thing){
     return os << thing->text();
 }
 
-inline int to_number(std::string str){
-    return atoi(str.c_str());
+inline int to_number(const std::string &str){
+    return atoi(str.c_str()); // TODO: verify format
 }

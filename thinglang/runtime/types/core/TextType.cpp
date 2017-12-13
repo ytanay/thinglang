@@ -72,10 +72,10 @@ Mixins of TextInstance
 **/
 
 std::string TextInstance::text() {
-    return to_string(val);
+    return val;
 }
 
 bool TextInstance::boolean() {
-    return to_boolean(val);
+    return val.size() != 0;
 }
 
