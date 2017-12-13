@@ -1,6 +1,7 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch, CapturedVoidMethod
+from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
+from thinglang.compiler.references import Reference
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
@@ -19,9 +20,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     STACK_ARGS = object()
 
-    def __init__(self, target, arguments=None):
+    def __init__(self, target, arguments=None, stack_args=False):
         super(MethodCall, self).__init__([target, arguments])
-        self.target, self.arguments = target, (arguments if arguments is not None else ArgumentList())
+        self.target, self.arguments, self.stack_args = target, (arguments if arguments is not None else ArgumentList()), stack_args
 
     def __repr__(self):
         return '{}({})'.format(self.target, self.arguments)
@@ -49,18 +50,13 @@ class MethodCall(BaseNode, ValueType, CallSite):
             if not target.static and not self.constructing_call:
                 self.target.compile(context, without_last=True)
 
-        expected_arguments = target.element.arguments
+        argument_selector = target.element.selector()
 
-        if self.arguments is not MethodCall.STACK_ARGS:
+        for idx, arg in enumerate(self.arguments):
+            compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(context)  # Deals with implicit casts
+            argument_selector.constraint(compiled_target)
 
-            if len(expected_arguments) != len(self.arguments):
-                raise ArgumentCountMismatch(len(expected_arguments), len(self.arguments))
-
-            for idx, (arg, expected_type) in enumerate(zip(self.arguments, expected_arguments)):
-                compiled_target = arg.compile(context)
-
-                if not self.validate_types(compiled_target, expected_type):
-                    raise ArgumentTypeMismatch(target, idx, expected_type, compiled_target.type)
+        target.element = argument_selector.disambiguate()
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target), self.source_ref)
@@ -83,13 +79,6 @@ class MethodCall(BaseNode, ValueType, CallSite):
         Is the return value of this method call being used?
         """
         return self.parent is None  # Check if this method call is directly in the AST
-
-    @staticmethod
-    def validate_types(compiled_target, expected_type):
-        if expected_type == Identifier('object'):
-            return True
-
-        return compiled_target.type == expected_type
 
     @property
     def constructing_call(self):
