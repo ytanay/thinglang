@@ -5,7 +5,7 @@
     ],
     "index": 9,
     "name": "iterator",
-    "offset": 2,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [],
@@ -40,26 +40,6 @@
             "name": "next",
             "static": false,
             "type": "T",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "current",
-            "static": false,
-            "type": "std::vector<Thing>::iterator",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 1,
-            "kind": "member",
-            "name": "end",
-            "static": false,
-            "type": "std::vector<Thing>::iterator",
             "visibility": "public"
         }
     ]

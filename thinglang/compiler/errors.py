@@ -14,30 +14,16 @@ class CapturedVoidMethod(ThinglangException):
     """
 
 
-class ArgumentCountMismatch(ThinglangException):
+class NoMatchingOverload(ThinglangException):
     """
     The method was not called with the expected number of arguments
     """
 
-    def __init__(self, expected_count, actual_count):
-        self.expected_count, self.actual_count = expected_count, actual_count
-        super(ArgumentCountMismatch, self).__init__()
+    def __init__(self, methods, arguments):
+        super().__init__()
+        self.methods, self.arguments = methods, arguments
 
-    @property
-    def message(self):
-        return f'Wrong number of argument received. Expected {self.expected_count}, got {self.actual_count}'
-
-
-class ArgumentTypeMismatch(ThinglangException):
-    """
-    The method was not called with the expected number of arguments
-    """
-
-    def __init__(self, target, index, expected_type, actual_type):
-        self.target, self.index, self.expected_type, self.actual_type = target, index, expected_type, actual_type
-        super(ArgumentTypeMismatch, self).__init__()
-
-    @property
-    def message(self):
-        return f'{self.target}: Argument #{self.index + 1} is of incorrect type. Expected {self.expected_type}, got {self.actual_type}'
+    def __str__(self):
+        return f'No matching overload for {self.methods[0].name} using arguments {self.arguments} was found.\n' + \
+               f'Allowable overloads: {method.arguments for method in self.methods}.'
 

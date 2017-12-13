@@ -3,7 +3,7 @@
     "generics": [],
     "index": 1,
     "name": "text",
-    "offset": 1,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [],
@@ -17,7 +17,7 @@
         },
         {
             "arguments": [
-                "text"
+                "object"
             ],
             "convention": "internal",
             "index": 1,
@@ -86,16 +86,6 @@
             "name": "convert_number",
             "static": true,
             "type": "number",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "val",
-            "static": false,
-            "type": "std::string",
             "visibility": "public"
         }
     ]

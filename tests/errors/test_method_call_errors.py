@@ -1,8 +1,10 @@
 import pytest
 
 from thinglang import pipeline
-from thinglang.compiler.errors import TargetNotCallable, ArgumentCountMismatch, ArgumentTypeMismatch
+from thinglang.compiler.errors import TargetNotCallable, NoMatchingOverload
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.numeric import NumericValue
+from thinglang.parser.values.inline_text import InlineString
 from thinglang.utils.source_context import SourceContext
 
 BASE = """
@@ -25,25 +27,25 @@ def test_method_call_on_non_method_target():
 
 
 def test_argument_count_mismatch():
-    with pytest.raises(ArgumentCountMismatch) as e:
+    with pytest.raises(NoMatchingOverload) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code="self.no_args(1)")))
 
-    assert e.value.expected_count == 0 and e.value.actual_count == 1
+    assert e.value.methods[0].name == Identifier('no_args') and e.value.arguments == [NumericValue(1)]
 
-    with pytest.raises(ArgumentCountMismatch) as e:
+    with pytest.raises(NoMatchingOverload) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code="self.two_args(1)")))
 
-    assert e.value.expected_count == 2 and e.value.actual_count == 1
+    assert e.value.methods[0].name == Identifier('two_args') and e.value.arguments == [NumericValue(1)]
 
 
 def test_argument_type_mismatch():
-    with pytest.raises(ArgumentTypeMismatch) as e:
+    with pytest.raises(NoMatchingOverload) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args("hello", 3)')))
 
-    assert e.value.index == 0 and e.value.expected_type == Identifier("number") and e.value.actual_type == Identifier("text")
+    assert e.value.methods[0].name == Identifier('two_args') and e.value.arguments == [InlineString("hello")]
 
-    with pytest.raises(ArgumentTypeMismatch) as e:
+    with pytest.raises(NoMatchingOverload) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args(3, 3)')))
 
-    assert e.value.index == 1 and e.value.actual_type == Identifier("number") and e.value.expected_type == Identifier("text")
+    assert e.value.methods[0].name == Identifier('two_args') and e.value.arguments == [NumericValue(3)] * 2
 

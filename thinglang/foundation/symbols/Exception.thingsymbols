@@ -3,7 +3,7 @@
     "generics": [],
     "index": 8,
     "name": "Exception",
-    "offset": 1,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [
@@ -15,16 +15,6 @@
             "name": "__constructor__",
             "static": false,
             "type": "Exception",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "message",
-            "static": false,
-            "type": "TextInstance*",
             "visibility": "public"
         }
     ]

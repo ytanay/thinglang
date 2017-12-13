@@ -5,7 +5,7 @@
     ],
     "index": 4,
     "name": "list",
-    "offset": 1,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [],
@@ -127,16 +127,6 @@
                     "number"
                 ]
             ],
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "val",
-            "static": false,
-            "type": "std::vector<Thing>",
             "visibility": "public"
         }
     ]

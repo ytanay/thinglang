@@ -3,7 +3,7 @@
     "generics": [],
     "index": 2,
     "name": "number",
-    "offset": 1,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [],
@@ -124,23 +124,25 @@
             "visibility": "public"
         },
         {
-            "arguments": [],
+            "arguments": [
+                "number"
+            ],
             "convention": "internal",
             "index": 10,
+            "kind": "method",
+            "name": "__greater_than__",
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 11,
             "kind": "method",
             "name": "convert_text",
             "static": false,
             "type": "text",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "val",
-            "static": false,
-            "type": "int",
             "visibility": "public"
         }
     ]

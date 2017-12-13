@@ -3,7 +3,7 @@
     "generics": [],
     "index": 6,
     "name": "File",
-    "offset": 2,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [
@@ -60,26 +60,6 @@
             "static": false,
             "type": "text",
             "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "file_path",
-            "static": false,
-            "type": "std::string",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 1,
-            "kind": "member",
-            "name": "file",
-            "static": false,
-            "type": "std::fstream",
-            "visibility": "private"
         }
     ]
 }

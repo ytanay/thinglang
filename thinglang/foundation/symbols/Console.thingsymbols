@@ -40,9 +40,27 @@
             "visibility": "public"
         },
         {
-            "arguments": [],
+            "arguments": [
+                "object",
+                [
+                    "list",
+                    [
+                        "object"
+                    ]
+                ]
+            ],
             "convention": "internal",
             "index": 3,
+            "kind": "method",
+            "name": "print",
+            "static": true,
+            "type": null,
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 4,
             "kind": "method",
             "name": "read_line",
             "static": true,

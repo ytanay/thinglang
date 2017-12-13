@@ -3,7 +3,7 @@
     "generics": [],
     "index": 3,
     "name": "bool",
-    "offset": 1,
+    "offset": 0,
     "symbols": [
         {
             "arguments": [],
@@ -11,16 +11,6 @@
             "index": 0,
             "kind": "method",
             "name": "__constructor__",
-            "static": false,
-            "type": "bool",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "index": 0,
-            "kind": "member",
-            "name": "val",
             "static": false,
             "type": "bool",
             "visibility": "public"
