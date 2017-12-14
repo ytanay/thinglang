@@ -74,7 +74,7 @@ thinglang supports the usual OOP suspects (inheritance, polymorphism, field visi
 
 ```python
 thing LRUContainer with type K, type V extends map<K, LRUEntry<V>>
-    has number expirey_seconds
+    has private number expirey_seconds
     
     setup with number expirey_seconds
         self.expirey_seconds = expirey_seconds
@@ -86,6 +86,9 @@ thing LRUContainer with type K, type V extends map<K, LRUEntry<V>>
             return null
         else
             return entry.value
+            
+     does set with K key, V value
+         self[K] = LRUEntry(value)
 
 thing LRUEntry with type V
     has V value
