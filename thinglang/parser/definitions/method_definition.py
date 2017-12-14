@@ -1,6 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
-from thinglang.foundation import templates
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.operators.binary import LexicalBinaryOperation
 from thinglang.lexer.operators.comparison import LexicalComparison
@@ -12,7 +11,6 @@ from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.return_statement import ReturnStatement
-from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import TypeList
 
@@ -70,7 +68,6 @@ class MethodDefinition(BaseNode):
     def return_type(self):
         if self.is_constructor():
             if self.parent.generics:
-                assert len(self.parent.generics) == 1
                 return GenericIdentifier(self.parent.name, tuple(self.parent.generics))
             return self.parent.name
         return self._return_type

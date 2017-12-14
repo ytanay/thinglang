@@ -198,7 +198,7 @@ class ParameterVector(ParenthesesVector):
     """
 
     def parse(self, expect_single=False):
-        return tuple([super().parse()])
+        return tuple(collection_utils.flatten([super().parse()]))
 
 
 class TypeVector(TokenVector, TypeList):
