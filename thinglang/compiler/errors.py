@@ -25,5 +25,5 @@ class NoMatchingOverload(ThinglangException):
 
     def __str__(self):
         return f'No matching overload for {self.methods[0].name} using arguments {self.arguments} was found.\n' + \
-               f'Allowable overloads: {method.arguments for method in self.methods}.'
+               f'Allowable overloads: {", ".join(str(method.arguments) for method in self.methods)}.'
 
