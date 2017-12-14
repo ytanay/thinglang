@@ -21,13 +21,13 @@ thing InnerContainer
         return 15
 
     does make_inner
-        self.nested = create InnerContainer()
+        self.nested = InnerContainer()
 
 thing Container
     has InnerContainer inner
 
     setup
-        self.inner = create InnerContainer()
+        self.inner = InnerContainer()
         self.inner.val1 = 1
         self.inner.val2 = 2
 
@@ -42,7 +42,7 @@ thing Container
 
 thing Program
     setup
-        Container c = create Container()
+        Container c = Container()
 
         c.print()
 

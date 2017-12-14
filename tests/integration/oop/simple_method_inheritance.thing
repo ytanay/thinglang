@@ -22,10 +22,10 @@ thing Child extends Base
 
 thing Program
     setup
-        Base b = create Base()
+        Base b = Base()
         b.say_hello()
 
-        Child c = create Child()
+        Child c = Child()
         c.walk()
 
         c.say_hello()

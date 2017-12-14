@@ -44,7 +44,7 @@ def test_nested_method_calls():
 
 
 def test_constructing_call():
-    method = parse_local('create Empty(1)')
+    method = parse_local('Empty(1)')
     assert method.target == NamedAccess([Identifier('Empty'), Identifier.constructor()])
     validate_types(method.arguments, [NumericValue], MethodCall, lambda x: x.arguments)
     assert method.constructing_call

@@ -6,10 +6,10 @@
 
 thing Program
     setup
-        list empty = create list()
+        list empty = list()
         Console.print(empty)
 
-        list<text> names = create list<text>()
+        list<text> names = list<text>()
         names.append("alex")
         names.append("andrew")
         names.append("aaron")
@@ -18,7 +18,7 @@ thing Program
         Console.print(last_name)
         Console.print(names)
 
-        list<number> numbers = create list<number>()
+        list<number> numbers = list<number>()
         numbers.append(41)
         numbers.append(1)
         Console.print(numbers.pop() + numbers.pop())

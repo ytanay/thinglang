@@ -20,7 +20,7 @@ thing MyException
 thing Program
     setup
         try
-            throw create MyException("Something went wrong")
+            throw MyException("Something went wrong")
         handle MyException exc
             Console.print("Caught exception")
             Console.print(exc.reason)

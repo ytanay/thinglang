@@ -15,7 +15,7 @@ thing Container
 
 thing Program
     setup
-        Container c = create Container()
+        Container c = Container()
 
         Console.print(c.name)
         c.name = "Still a container"

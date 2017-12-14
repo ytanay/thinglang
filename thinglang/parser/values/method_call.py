@@ -30,9 +30,6 @@ class MethodCall(BaseNode, ValueType, CallSite):
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target and self.arguments == other.arguments
 
-    def replace_argument(self, idx, replacement):
-        self.arguments[idx] = replacement
-
     def compile(self, context: CompilationBuffer):
         assert isinstance(self.target, NamedAccess)
         if isinstance(self.target[0], CallSite):
@@ -89,8 +86,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
     def parse_method_call(target: NamedAccess, arguments: 'ParenthesesVector'):
         return MethodCall(target, ArgumentList(arguments))
 
-    # TODO: remove this syntax
     @staticmethod
     @ParserRule.mark
-    def parse_instantiating_call(_: LexicalThingInstantiation, type_name: Identifier, arguments: 'ParenthesesVector'):
-        return MethodCall(NamedAccess([type_name, Identifier.constructor()]), ArgumentList(arguments))
+    def parse_instantiating_call(target: Identifier, arguments: 'ParenthesesVector'):
+        return MethodCall(NamedAccess.extend(target, Identifier.constructor()), ArgumentList(arguments))

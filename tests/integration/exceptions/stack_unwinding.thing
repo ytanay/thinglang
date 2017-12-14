@@ -45,8 +45,8 @@ thing Program
 
     does c
         if self.count eq 1
-            throw create Exception1()
+            throw Exception1()
         else if self.count eq 2
-            throw create Exception2()
+            throw Exception2()
         else if self.count eq 3
-            throw create Exception3()
+            throw Exception3()
