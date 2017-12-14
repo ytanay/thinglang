@@ -5,6 +5,9 @@ thing number
     does * with number other returns number
     does / with number other returns number
     does % with number other returns number
+
+    does & with number other returns number
+    does | with number other returns number
     does ^ with number other returns number
 
     does eq with number other returns bool

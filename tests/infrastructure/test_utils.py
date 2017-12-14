@@ -1,7 +1,5 @@
 import json
 import os
-import random
-import string
 
 from thinglang.lexer.lexical_analyzer import analyze_line
 from thinglang.lexer.values.identifier import Identifier
@@ -43,20 +41,6 @@ def normalize_id(param):
         return [normalize_id(x) for x in param]
 
     return param
-
-def generate_test_case_structure(dct):
-    lst = []
-    for name, groups in list(dct.items()):
-        for idx, group in enumerate(groups):
-            lst.append(('{} #{}'.format(name, idx + 1), group[0], group[1]))
-    return lst
-
-
-def random_string():
-    def get_string():
-        return ''.join(random.choices(string.ascii_uppercase + string.digits, k=random.randint(2, 50)))
-
-    return [get_string() for _ in range(random.randint(3, 8))]
 
 
 class ProgramTestCase(object):

@@ -4,7 +4,6 @@
     thinglang C++ transpiler, 0.0.0
 **/
 
-
 #pragma once
 
 #include <string>
@@ -13,35 +12,33 @@
 
 enum class Opcode {
     PUSH_MEMBER = 4,
-    POP_MEMBER = 10,
-    POP_DEREFERENCED = 11,
-    CALL = 16,
-    CALL_INTERNAL = 17,
+    POP_MEMBER = 8,
+    POP_DEREFERENCED = 9,
+    CALL = 14,
+    CALL_INTERNAL = 15,
     PUSH_LOCAL = 3,
-    POP_LOCAL = 9,
-    ASSIGN_STATIC = 13,
-    ASSIGN_LOCAL = 14,
+    POP_LOCAL = 7,
+    ASSIGN_STATIC = 11,
+    ASSIGN_LOCAL = 12,
     INVALID = 0,
     PASS = 1,
     PUSH_NULL = 2,
     PUSH_STATIC = 5,
-    PUSH_INDEX = 6,
-    PUSH_INDEX_IMMEDIATE = 7,
-    POP = 8,
-    ARG_COPY = 12,
-    DEREFERENCE = 15,
-    RETURN = 18,
-    THROW = 19,
-    INSTANTIATE = 20,
-    JUMP_CONDITIONAL = 22,
-    JUMP = 21,
-    HANDLER_DESCRIPTION = 23,
-    HANDLER_RANGE_DEFINITION = 24,
-    SENTINEL_THING_DEFINITION = 25,
-    SENTINEL_METHOD_DEFINITION = 26,
-    SENTINEL_METHOD_END = 27,
-    SENTINEL_CODE_END = 28,
-    SENTINEL_DATA_END = 29
+    POP = 6,
+    ARG_COPY = 10,
+    DEREFERENCE = 13,
+    RETURN = 16,
+    THROW = 17,
+    INSTANTIATE = 18,
+    JUMP_CONDITIONAL = 20,
+    JUMP = 19,
+    HANDLER_DESCRIPTION = 21,
+    HANDLER_RANGE_DEFINITION = 22,
+    SENTINEL_THING_DEFINITION = 23,
+    SENTINEL_METHOD_DEFINITION = 24,
+    SENTINEL_METHOD_END = 25,
+    SENTINEL_CODE_END = 26,
+    SENTINEL_DATA_END = 27
 };
 
 
@@ -86,12 +83,6 @@ inline auto describe(Opcode val){
 
         case Opcode::PUSH_STATIC:
             return "PUSH_STATIC";
-
-        case Opcode::PUSH_INDEX:
-            return "PUSH_INDEX";
-
-        case Opcode::PUSH_INDEX_IMMEDIATE:
-            return "PUSH_INDEX_IMMEDIATE";
 
         case Opcode::POP:
             return "POP";
@@ -180,12 +171,6 @@ inline auto arg_count(Opcode val){
             return 0;
 
         case Opcode::PUSH_STATIC:
-            return 1;
-
-        case Opcode::PUSH_INDEX:
-            return 0;
-
-        case Opcode::PUSH_INDEX_IMMEDIATE:
             return 1;
 
         case Opcode::POP:

@@ -2,7 +2,6 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.compiler.references import Reference
-from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
@@ -20,18 +19,15 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     STACK_ARGS = object()
 
-    def __init__(self, target, arguments=None, stack_args=False):
+    def __init__(self, target, arguments=None, stack_args=False, is_captured=None):
         super(MethodCall, self).__init__([target, arguments])
-        self.target, self.arguments, self.stack_args = target, (arguments if arguments is not None else ArgumentList()), stack_args
+        self.target, self.arguments, self.stack_args, self._is_captured = target, (arguments if arguments is not None else ArgumentList()), stack_args, is_captured
 
     def __repr__(self):
         return '{}({})'.format(self.target, self.arguments)
 
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target and self.arguments == other.arguments
-
-    def replace_argument(self, idx, replacement):
-        self.arguments[idx] = replacement
 
     def compile(self, context: CompilationBuffer):
         assert isinstance(self.target, NamedAccess)
@@ -78,7 +74,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
         """
         Is the return value of this method call being used?
         """
-        return self.parent is None  # Check if this method call is directly in the AST
+        return self._is_captured if self._is_captured is not None else self.parent is None  # Check if this method call is directly in the AST
 
     @property
     def constructing_call(self):
@@ -89,8 +85,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
     def parse_method_call(target: NamedAccess, arguments: 'ParenthesesVector'):
         return MethodCall(target, ArgumentList(arguments))
 
-    # TODO: remove this syntax
     @staticmethod
     @ParserRule.mark
-    def parse_instantiating_call(_: LexicalThingInstantiation, type_name: Identifier, arguments: 'ParenthesesVector'):
-        return MethodCall(NamedAccess([type_name, Identifier.constructor()]), ArgumentList(arguments))
+    def parse_instantiating_call(target: Identifier, arguments: 'ParenthesesVector'):
+        return MethodCall(NamedAccess.extend(target, Identifier.constructor()), ArgumentList(arguments))

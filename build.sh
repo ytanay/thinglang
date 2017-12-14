@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 python3.6 -m venv thinglang-env
 source thinglang-env/bin/activate
 pip install -r requirements.txt

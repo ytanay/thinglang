@@ -6,8 +6,9 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.indexed_access import IndexedAccess
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 
@@ -32,9 +33,10 @@ class AssignmentOperation(BaseNode):
 
     def compile(self, context: CompilationBuffer):
 
-        is_local = isinstance(self.name, Identifier)
+        if isinstance(self.name, IndexedAccess):
+            return self.name.assignment(self.value).compile(context)
 
-        if is_local:
+        if isinstance(self.name, Identifier):
             target = context.resolve(self.name)
 
             if self.value.STATIC:
@@ -58,6 +60,7 @@ class AssignmentOperation(BaseNode):
             else:
                 target_ref = context.resolve(target)
                 context.append(OpcodePopMember.from_reference(target_ref), self.source_ref)
+
         else:
             raise Exception('Cannot pull up {}'.format(target))
 
@@ -73,7 +76,7 @@ class AssignmentOperation(BaseNode):
     def type(self):
         return self.name.type
 
-    ASSIGNMENT_TARGET = Identifier, NamedAccess
+    ASSIGNMENT_TARGET = Identifier, NamedAccess, IndexedAccess
 
     @staticmethod
     @ParserRule.mark

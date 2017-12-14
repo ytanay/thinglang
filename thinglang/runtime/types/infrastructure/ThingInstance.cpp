@@ -19,6 +19,14 @@ void BaseThingInstance::set(const Index index, const Thing &thing) {
     throw RuntimeError("Cannot set on base thing instance");
 }
 
+bool BaseThingInstance::operator==(const BaseThingInstance &other) const {
+    return false;
+}
+
+size_t BaseThingInstance::hash() const {
+    return 0;
+}
+
 void ThingInstance::set(const Index index, const Thing &thing) {
     std::cerr << "Setting " << index << ": " << thing->text() << std::endl;
     members[index] = thing;

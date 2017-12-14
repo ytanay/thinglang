@@ -24,10 +24,35 @@
         },
         {
             "arguments": [
-                "T"
+                "number"
             ],
             "convention": "internal",
             "index": 1,
+            "kind": "method",
+            "name": "get",
+            "static": false,
+            "type": "T",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "number",
+                "T"
+            ],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "set",
+            "static": false,
+            "type": null,
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "T"
+            ],
+            "convention": "internal",
+            "index": 3,
             "kind": "method",
             "name": "append",
             "static": false,
@@ -42,7 +67,7 @@
         {
             "arguments": [],
             "convention": "internal",
-            "index": 2,
+            "index": 4,
             "kind": "method",
             "name": "pop",
             "static": false,
@@ -51,10 +76,23 @@
         },
         {
             "arguments": [
+                "number",
+                "number"
+            ],
+            "convention": "internal",
+            "index": 5,
+            "kind": "method",
+            "name": "swap",
+            "static": false,
+            "type": null,
+            "visibility": "public"
+        },
+        {
+            "arguments": [
                 "T"
             ],
             "convention": "internal",
-            "index": 3,
+            "index": 6,
             "kind": "method",
             "name": "contains",
             "static": false,
@@ -64,7 +102,17 @@
         {
             "arguments": [],
             "convention": "internal",
-            "index": 4,
+            "index": 7,
+            "kind": "method",
+            "name": "length",
+            "static": false,
+            "type": "number",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 8,
             "kind": "method",
             "name": "iterator",
             "static": false,
@@ -78,46 +126,11 @@
         },
         {
             "arguments": [
-                "number"
-            ],
-            "convention": "internal",
-            "index": 5,
-            "kind": "method",
-            "name": "get",
-            "static": false,
-            "type": "T",
-            "visibility": "public"
-        },
-        {
-            "arguments": [],
-            "convention": "internal",
-            "index": 6,
-            "kind": "method",
-            "name": "length",
-            "static": false,
-            "type": "number",
-            "visibility": "public"
-        },
-        {
-            "arguments": [
                 "number",
                 "number"
             ],
             "convention": "internal",
-            "index": 7,
-            "kind": "method",
-            "name": "swap",
-            "static": false,
-            "type": null,
-            "visibility": "public"
-        },
-        {
-            "arguments": [
-                "number",
-                "number"
-            ],
-            "convention": "internal",
-            "index": 8,
+            "index": 9,
             "kind": "method",
             "name": "range",
             "static": true,

@@ -1,5 +1,5 @@
-from thinglang.compiler.opcodes import Opcode
 from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS
+from thinglang.compiler.opcodes import Opcode
 
 
 class SentinelThingDefinition(Opcode):

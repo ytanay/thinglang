@@ -56,7 +56,19 @@ class LexicalModulus(SecondOrderLexicalBinaryOperation):
     """
 
 
-class LexicalXOR(SecondOrderLexicalBinaryOperation):
+class LexicalBinaryAnd(SecondOrderLexicalBinaryOperation):
     """
-    Exclusive-Or (XOR), using ^
+    AND, using &
+    """
+
+
+class LexicalBinaryOr(SecondOrderLexicalBinaryOperation):
+    """
+    OR, using |
+    """
+
+
+class LexicalBinaryXOR(SecondOrderLexicalBinaryOperation):
+    """
+    Exclusive-OR (XOR), using ^
     """

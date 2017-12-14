@@ -24,9 +24,11 @@ class BoolInstance : public BaseThingInstance {
     explicit BoolInstance(bool val) : val(val) {}; // value constructor
     
     /** Mixins **/
-    
+
     std::string text() override;
     bool boolean() override;
+    size_t hash() const override;
+    bool operator==(const BaseThingInstance &other) const override;
 
     
     /** Members **/

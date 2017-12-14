@@ -15,7 +15,7 @@ thing Program
         Console.print("Running program")
         try
             Console.print("Entered try block")
-            throw create MyException()
+            throw MyException()
             Console.print("About to exit try block")
 
         handle MyException

@@ -5,10 +5,10 @@ from thinglang.lexer.tokens.separator import LexicalSeparator
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
+from thinglang.parser.blocks.handle_block import HandleBlock
 from thinglang.parser.blocks.iteration_loop import IterationLoop
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.blocks.try_block import TryBlock
-from thinglang.parser.blocks.handle_block import HandleBlock
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.constructs.negated_operator import NegatedOperation
@@ -20,13 +20,11 @@ from thinglang.parser.nodes import BaseNode
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.statements.throw_statement import ThrowStatement
-from thinglang.parser.values.named_access import NamedAccess
-from thinglang.parser.values.access import Access
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.indexed_access import IndexedAccess
-
 from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils import collection_utils
 from thinglang.utils.type_descriptors import ValueType, TypeList, ListType
 
@@ -41,9 +39,9 @@ PARSING_ORDER = [  # Apply production rules in this order
     MemberDefinition,
     MethodDefinition,
 
+    NamedAccess,
     MethodCall,
-    Access,
-
+    IndexedAccess,
 
     BinaryOperation,
 
@@ -199,7 +197,7 @@ class ParameterVector(ParenthesesVector):
     """
 
     def parse(self, expect_single=False):
-        return tuple([super().parse()])
+        return tuple(collection_utils.flatten([super().parse()]))
 
 
 class TypeVector(TokenVector, TypeList):

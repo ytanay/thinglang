@@ -13,5 +13,5 @@ thing Empty
 
 thing Program
     setup
-        Empty e = create Empty()
+        Empty e = Empty()
         e.say_hello()

@@ -18,5 +18,5 @@ thing Container
 
 thing Program
     setup
-        Container c = create Container()
+        Container c = Container()
         c.describe()

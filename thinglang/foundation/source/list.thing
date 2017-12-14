@@ -1,11 +1,16 @@
-thing list with type T
+thing list with type T # TODO: bounds checking
+
+
+    does get with number index returns T
+    does set with number index, T value
 
     does append with T item returns list<T>
     does pop returns T
-    does contains with T item returns bool
-    does iterator returns iterator<T>
-    does get with number index returns T
-    does length returns number
     does swap with number index1, number index2
+
+    does contains with T item returns bool
+    does length returns number
+
+    does iterator returns iterator<T>
 
     static does range with number start, number end returns list<number>

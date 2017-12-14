@@ -1,5 +1,4 @@
 #include "Program.h"
-#include "../errors/Aborts.h"
 #include "../types/InternalTypes.h"
 #include "../execution/Instruction.h"
 
@@ -20,11 +19,12 @@ Types Program::internals = { // TODO: auto generate this
         new NumberType(),
         new BoolType(),
         new ListType(),
+        new MapType(),
+        new IteratorType(),
         new ConsoleType(),
         new FileType(),
         new TimeType(),
-        new ExceptionType(),
-        new IteratorType()
+        new ExceptionType()
 };
 
 
@@ -159,20 +159,6 @@ void Program::execute() {
                 Program::push(Program::frame()[instruction.target]->get(instruction.secondary));
                 break;
             }
-
-            case Opcode::PUSH_INDEX: { // TODO: this handler (and the immediate equivalent) are missing a number of type validity checks
-                auto index = dynamic_cast<NumberInstance*>(Program::pop());
-                auto target = dynamic_cast<ListInstance*>(Program::pop());
-
-                Program::push(target->val[(static_cast<Index>(index->val))]);
-                break;
-            }
-
-            case Opcode::PUSH_INDEX_IMMEDIATE: {
-                auto target = dynamic_cast<ListInstance*>(Program::pop());
-                Program::push(target->val[instruction.target]);
-                break;
-            };
 
             case Opcode::PUSH_NULL: {
                 Program::push(nullptr);

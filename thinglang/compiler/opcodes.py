@@ -102,11 +102,8 @@ class Opcode(object, metaclass=OpcodeRegistration):
     def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.args == other.args
 
-    def __str__(self) -> str:
-        return '{}({})'.format(type(self).__name__, ', '.join(str(x) for x in self.args))
-
     def __repr__(self) -> str:
-        return str(self)
+        return '{}({})'.format(type(self).__name__, ', '.join(str(x) for x in self.args))
 
 
 class ElementReferenced(Opcode):
@@ -196,19 +193,6 @@ class OpcodePushStatic(Opcode):
     def update_offset(self, method_offset: int, data_offset: int, relative: bool=False):
         self.args = self.args[0] + data_offset,
         return self
-
-
-class OpcodePushIndex(Opcode):
-    """
-    Pop an index and value from the stack and push the value at the index provided
-    """
-
-
-class OpcodePushIndexImmediate(Opcode):
-    """
-    Pop a value from the stack and push the value at the immediate index provided
-    """
-    ARGS = INDEX,
 
 
 # Stack pop operations

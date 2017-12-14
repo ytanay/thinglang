@@ -2,6 +2,7 @@
 
 #include "../../utils/TypeNames.h"
 #include "../../errors/RuntimeError.h"
+#include "../../utils/Containers.h"
 
 
 /**
@@ -14,13 +15,14 @@ protected:
     static Things EMPTY_LIST;
 
 public:
-    virtual std::string text();
-
-    virtual bool boolean();
 
     virtual Thing get(Index index);
-
     virtual void set(Index index, const Thing& thing);
+    virtual std::string text();
+    virtual bool boolean();
+    virtual size_t hash() const;
+    virtual bool operator==(const BaseThingInstance &other) const;
+
 
     virtual Things children() {
         return EMPTY_LIST;

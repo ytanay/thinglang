@@ -1,6 +1,6 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
-from thinglang.lexer.values.numeric import NumericValue
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.blocks.iteration_loop import IterationLoop
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.values.binary_operation import BinaryOperation

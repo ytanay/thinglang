@@ -1,14 +1,13 @@
 from typing import List
 
-from thinglang.lexer.grouping.quote import LexicalQuote
 from thinglang.lexer.grouping.backtick import LexicalBacktick
+from thinglang.lexer.grouping.quote import LexicalQuote
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
-from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
-from thinglang.parser.values.inline_code import InlineCode
 from thinglang.parser.values.inline_text import InlineString
 from thinglang.utils import collection_utils
 from thinglang.utils.source_context import SourceContext, SourceLine
@@ -89,7 +88,7 @@ def finalize_buffer(buffer: str, terminating_char, entity_class, source_ref) -> 
     if terminating_char == '`':
         if entity_class is not LexicalBacktick:
             raise ValueError("Unexpected end of inline code")
-        return InlineCode(buffer, source_ref)
+        return InlineString(buffer, source_ref)
 
     if is_identifier(buffer):
         if entity_class in (LexicalQuote, LexicalBacktick):

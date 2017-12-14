@@ -21,7 +21,7 @@ thing ARC4
             self.state.swap(i, j)
 
     does encrypt with text plaintext returns list<number>
-        list<number> ciphertext = create list<number>()
+        list<number> ciphertext = list<number>()
 
         number i = 0
         number j = 0
@@ -39,7 +39,6 @@ thing ARC4
 thing Program
 
     setup
-        ARC4 arc4 = create ARC4("Key")
+        ARC4 arc4 = ARC4("Key")
         list<number> encrypted = arc4.encrypt("Plaintext")
         Console.print(encrypted)
-        arc4 = create ARC4("Key")

@@ -9,7 +9,6 @@ INVALID_SYNTAX_EXAMPLES = [
     'does a returns b with number a',
     'thing SmartList with type T extends BaseList',
     'a b',
-    'f()',
     '2 eq',
     'for',
     'number if = 1'
@@ -19,6 +18,7 @@ VALID_SYNTAX_EXAMPLES = [
     '2 + 2',
     'does walk',
     'a.b()',
+    'f()',
     'if a'
 ]
 

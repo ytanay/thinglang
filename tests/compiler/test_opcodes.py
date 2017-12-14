@@ -2,7 +2,6 @@ import pytest
 
 from thinglang.compiler.opcodes import OpcodePass, OpcodePushMember
 
-
 ARGUMENT_COUNT = (ValueError, OpcodePushMember()), (ValueError, OpcodePass(1, 2))
 TYPE_MISMATCH = (TypeError, OpcodePushMember('a', 2)),
 

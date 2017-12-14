@@ -1,7 +1,6 @@
 import collections
 from typing import List
 
-from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.merged_symbol import MergedSymbol
 from thinglang.symbols.symbol import Symbol
@@ -71,24 +70,6 @@ class SymbolMap(object):
 
         return cls(members, methods, thing.name, thing.extends, thing.generics, index, len(members) + offset)
 
-    def create_header(self) -> str:
-        """
-        Creates a C++ header file from this symbol map
-        """
-        type_cls_name, instance_cls_name = templates.class_names(self.name)
-
-        return templates.FOUNDATION_TYPE_DECLARATION.format(
-            type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
-            constructors=templates.format_value_constructor(
-                instance_cls_name=instance_cls_name,
-                member_list=self.members) if self.members else '',
-            mixins=templates.FOUNDATION_MIXINS_DECLARATION if self.members else '',
-            members=self.format_member_list('\n', ';'),
-            methods=self.format_method_declarations(),
-            method_list=self.format_method_list(),
-            children=templates.FOUNDATION_CHILDREN if 'list' in self.name.value else ''
-        )
-
     def parameterize(self, parameters: dict) -> 'SymbolMap':
         """
         Creates a new SymbolMap, replacing the generic parameters in this SymbolMap with determined values
@@ -105,26 +86,6 @@ class SymbolMap(object):
             self.index,
             self.offset
         )
-
-    def format_member_list(self, separator=', ', delimeter='') -> str:
-        """
-        Returns a string describing the members of this symbol map
-        """
-        return separator.join('{} {}{}'.format(x.type.transpile(), x.name.transpile(), delimeter) for x in self.members)
-
-    def format_method_list(self) -> str:
-        """
-        Returns a string describing the methods of this symbol map
-        :return:
-        """
-        return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
-
-    def format_method_declarations(self) -> str:
-        """
-        Returns a string with a C++ static void method
-        :return:
-        """
-        return '\n'.join('\tstatic void {}();'.format(x.name.transpile()) for x in self.methods)
 
     def __getitem__(self, item: Identifier) -> Symbol:
         """

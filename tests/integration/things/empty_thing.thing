@@ -10,5 +10,5 @@ thing Empty
 
 thing Program
     setup
-        Empty e = create Empty()
-        create Empty()
+        Empty e = Empty()
+        Empty()

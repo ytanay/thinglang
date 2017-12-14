@@ -1,8 +1,6 @@
 from thinglang import pipeline
-from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.indexer import LocalMember
-from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
-from thinglang.symbols.symbol_map import SymbolMap
+from thinglang.compiler.opcodes import OpcodeCallInternal
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
 
@@ -10,7 +8,6 @@ SELF_ID, A_ID, B_ID, INST_ID, LST_ID, IMPLICIT_ITERATOR_ID, IMPLICIT_ITERATION_I
 VAL1_ID, VAL2_ID, INNER_ID = 0, 1, 2
 INNER1_ID, INNER2_ID = 0, 1
 STATIC_START = 5
-
 
 TEMPLATE = """
 thing Program
@@ -21,7 +18,7 @@ thing Program
     setup
         number a = 0
         number b = 0
-        Program inst = create Program()
+        Program inst = Program()
         list<number> lst = [0, 1, 2]
         
         {}
@@ -48,3 +45,7 @@ TRIM_START = len(compile_base('')) - 1
 def compile_local(code):
     return compile_base(code)[TRIM_START:-1]  # Pop off boilerplate and the return instruction
 
+
+def internal_call(target):
+    symbols = SymbolMapper()
+    return OpcodeCallInternal.from_reference(symbols.resolve_named([Identifier(x) for x in target.split('.')]))

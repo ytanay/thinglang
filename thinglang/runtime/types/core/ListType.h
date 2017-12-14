@@ -9,16 +9,11 @@
 #include <utility>
 
 #include "../../utils/TypeNames.h"
-#include "../../execution/Globals.h"
-#include "../../utils/Formatting.h"
+#include "../interfaces/IndexedInterface.h"
 #include "../infrastructure/ThingType.h"
-#include "../infrastructure/ThingInstance.h"
-#include "../../execution/Program.h"
 
 
-
-
-class ListInstance : public BaseThingInstance {
+class ListInstance : public IndexedInterface {
     
     public:
     explicit ListInstance() = default; // empty constructor
@@ -26,9 +21,11 @@ class ListInstance : public BaseThingInstance {
     explicit ListInstance(std::vector<Thing> val) : val(std::move(val)) {}; // value constructor
     
     /** Mixins **/
-    
-    std::string text() override;
-    bool boolean() override;
+
+	std::string text() override;
+	bool boolean() override;
+	size_t hash() const override;
+	bool operator==(const BaseThingInstance &other) const override;
 
     
     /** Members **/
@@ -45,16 +42,33 @@ class ListInstance : public BaseThingInstance {
 class ListType : public ThingTypeInternal {
     
     public:
-    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains, &iterator, &get, &length, &swap, &range }) {}; // constructor
+    ListType() : ThingTypeInternal({
+                                           &__constructor__,
+                                           &get,
+                                           &set,
+                                           append,
+                                           &pop,
+                                           &swap,
+                                           &contains,
+                                           &length,
+                                           &iterator,
+                                           &range
+                                   }) {};
  
 	static void __constructor__();
+
+    static void get();
+    static void set();
+
 	static void append();
 	static void pop();
+    static void swap();
+
 	static void contains();
+    static void length();
+
 	static void iterator();
-	static void get();
-	static void length();
-	static void swap();
+
 	static void range();
     
 };

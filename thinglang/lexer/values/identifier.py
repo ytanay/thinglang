@@ -69,11 +69,6 @@ class GenericIdentifier(Identifier):
     def parameterize(self, parameters):
         return GenericIdentifier(self.value, tuple(x.parameterize(parameters) for x in self.generics))
 
-    def transpile(self):
-        if self.generics:
-            return f'{super().transpile()}<{self.generics.transpile()}>'
-        return super().transpile()
-
     @property
     def untyped(self):
         return self.value

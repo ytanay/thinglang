@@ -1,8 +1,8 @@
-import os
-import pytest
 import glob
+import os
 import subprocess
 
+import pytest
 
 from tests.infrastructure.test_utils import ProgramTestCase
 from thinglang import pipeline

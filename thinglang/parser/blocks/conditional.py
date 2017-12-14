@@ -2,7 +2,6 @@ from collections import OrderedDict
 
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
-from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalConditional
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.nodes.base_node import BaseNode
@@ -24,13 +23,6 @@ class Conditional(BaseNode):
 
     def __repr__(self):
         return 'if {}'.format(self.value)
-
-    def transpile(self):
-        return templates.CONDITIONAL.format(
-            prefix='',
-            condition=self.value.transpile(),
-            body=self.transpile_children(indent=3)
-        )
 
     def compile(self, context: CompilationBuffer):
         if not context.conditional_groups or self not in context.conditional_groups[-1]:

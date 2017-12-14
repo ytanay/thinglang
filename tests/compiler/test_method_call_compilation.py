@@ -1,13 +1,13 @@
-from tests.compiler import compile_local, SELF_ID, LST_ID, VAL1_ID
-from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushIndexImmediate, OpcodePushMember, \
-    OpcodePushIndex, OpcodeCall
+from tests.compiler import compile_local, SELF_ID, LST_ID, VAL1_ID, internal_call
+from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushMember, OpcodeCall, OpcodePushStatic
 
 
 def test_access_in_method_args():
     assert compile_local('self.action(lst[123])') == [
         OpcodePushLocal(SELF_ID),
         OpcodePushLocal(LST_ID),
-        OpcodePushIndexImmediate(123),
+        OpcodePushStatic(5),
+        internal_call('list.get'),
         OpcodeCall(0, 1)
     ]
 
@@ -15,6 +15,6 @@ def test_access_in_method_args():
         OpcodePushLocal(SELF_ID),
         OpcodePushLocal(LST_ID),
         OpcodePushMember(SELF_ID, VAL1_ID),
-        OpcodePushIndex(),
+        internal_call('list.get'),
         OpcodeCall(0, 1)
     ]

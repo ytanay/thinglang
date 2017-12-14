@@ -1,6 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeReturn
-from thinglang.foundation import templates
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
@@ -18,18 +17,6 @@ class ReturnStatement(BaseNode):
 
     def __repr__(self):
         return f'return {self.value}'
-
-    def transpile(self):
-        if not self.value:
-            return templates.RETURN_NULL
-
-        elif self.value.STATIC:
-            return templates.RETURN_VALUE.format(value=self.value.transpile())
-        else:
-            return templates.RETURN_VALUE_INSTANTIATE.format(
-                value=self.value.transpile(),
-                instance_cls_name=templates.class_names(self.enclosing_method.return_type)[1]
-            )
 
     def compile(self, context: CompilationBuffer):
         if self.value is not None:

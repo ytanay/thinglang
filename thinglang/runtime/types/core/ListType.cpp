@@ -58,6 +58,16 @@ void ListType::get() {
 }
 
 
+void ListType::set() {
+    auto value = Program::pop();
+    auto index = Program::argument<NumberInstance>();
+    auto self = Program::argument<ListInstance>();
+
+    self->val[index->val] = value;
+}
+
+
+
 void ListType::length() {
 	auto self = Program::argument<ListInstance>();
 
@@ -88,6 +98,7 @@ void ListType::range() {
 }
 
 
+
 /**
 Mixins of ListInstance
 **/
@@ -97,6 +108,16 @@ std::string ListInstance::text() {
 }
 
 bool ListInstance::boolean() {
-	return val.size() != 0;
+	return !val.empty();
 }
+
+bool ListInstance::operator==(const BaseThingInstance &other) const {
+    auto other_list = dynamic_cast<const ListInstance*>(&other);
+    return other_list && this->val == other_list->val;
+}
+
+size_t ListInstance::hash() const {
+    throw RuntimeError("List is a mutable object and cannot be hashed"); // TODO: throw user mode exception
+}
+
 

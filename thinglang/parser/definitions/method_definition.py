@@ -1,18 +1,16 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
-from thinglang.foundation import templates
+from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
+    LexicalDeclarationStatic
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.operators.binary import LexicalBinaryOperation
 from thinglang.lexer.operators.comparison import LexicalComparison
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
-from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
-    LexicalDeclarationStatic
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.return_statement import ReturnStatement
-from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import TypeList
 
@@ -36,26 +34,6 @@ class MethodDefinition(BaseNode):
 
     def is_constructor(self):
         return self.name == Identifier.constructor()
-
-    def transpile(self):
-        type_cls_name, instance_cls_name = self.container_name
-
-        if self.is_constructor() and not self.children:
-            return templates.IMPLICIT_CONSTRUCTOR.format(
-                type_cls_name=type_cls_name,
-                instance_cls_name=instance_cls_name
-            )
-
-        return templates.FOUNDATION_METHOD.format(
-            name=self.name.transpile(),
-            class_name=type_cls_name,
-            return_type='void',
-            arguments='',  # Popped directly from stack
-            preamble=self.arguments.transpile(instance_cls_name, static=self.static, constructor=self.is_constructor()),
-            body=self.transpile_children(2, self.children),
-            epilogue=''
-
-        )
 
     def compile(self, context: CompilationBuffer):
 
@@ -90,7 +68,6 @@ class MethodDefinition(BaseNode):
     def return_type(self):
         if self.is_constructor():
             if self.parent.generics:
-                assert len(self.parent.generics) == 1
                 return GenericIdentifier(self.parent.name, tuple(self.parent.generics))
             return self.parent.name
         return self._return_type

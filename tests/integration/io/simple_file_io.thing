@@ -8,7 +8,7 @@ thing Program
     setup
         text file_name = "__test_file__1"
 
-        File f = create File(file_name)
+        File f = File(file_name)
 
         f.open("w")
         f.write("Hello, file!")
