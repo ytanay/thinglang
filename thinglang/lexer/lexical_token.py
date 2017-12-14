@@ -22,7 +22,7 @@ class LexicalToken(object):
         return current
 
     def transpile(self):
-        return self.value
+        raise NotImplementedError('Cannot transpile token')
 
     def deriving_from(self, node):
         self.source_ref = node.source_ref

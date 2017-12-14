@@ -73,10 +73,6 @@ class SourceReference(object):
         return cls(SourceLine('', -1, '<invalid>'), -1, -1)
 
     @classmethod
-    def generated(cls, reason):
-        return cls(SourceLine('', -1, '<generated:{}>'.format(reason)), -1, -1)
-
-    @classmethod
     def combine(cls, tokens):
         refs = [x.source_ref for x in tokens if hasattr(x, 'source_ref') and x.source_ref]
 

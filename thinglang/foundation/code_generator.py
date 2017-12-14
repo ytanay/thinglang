@@ -3,7 +3,6 @@ import json
 import os
 
 from thinglang import pipeline
-from thinglang.parser.values.inline_code import InlineCode
 from thinglang.utils.source_context import SourceContext
 from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
@@ -110,8 +109,6 @@ def write_if_changed(file_path, contents):
         with open(file_path, 'r') as f:
             if f.read() == contents:
                 return
-
-    print('Writing {}'.format(file_path))
 
     with open(file_path, 'w') as f:
         f.write(contents)

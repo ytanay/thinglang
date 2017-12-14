@@ -4,7 +4,6 @@
     thinglang C++ transpiler, 0.0.0
 **/
 
-
 #pragma once
 
 #include <string>

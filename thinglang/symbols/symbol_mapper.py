@@ -20,23 +20,16 @@ class SymbolMapper(object):
     FOUNDATION = {symbol_map.name: symbol_map for symbol_map in serializer.read_foundation_symbols()}
     INDEX_GETTER_NAME = Identifier('get')
 
-    def __init__(self, ast=None, include_foundation=True, override=None):
+    def __init__(self, ast=None, include_foundation=True):
         """
         Creates a new symbol map (generally from a source AST)
         :param ast: the AST being compiled
         :param include_foundation: should foundation classes (base types) be merged into the symbol mapper?
-        :param override: add additional symbol maps explicitly
         """
         self.maps = {}
 
         if include_foundation:
             self.maps.update(SymbolMapper.FOUNDATION)
-
-        if override:
-            self.maps.update({symbol_map.name: symbol_map for symbol_map in override})
-
-        if not ast:
-            return
 
         for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
             self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))

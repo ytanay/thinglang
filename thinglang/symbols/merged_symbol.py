@@ -13,9 +13,6 @@ class MergedSymbol(object):
     def __init__(self, symbols):
         self.symbols = symbols
 
-    def __iter__(self):
-        return iter(self.symbols)
-
     def serialize(self):
         return [symbol.serialize() for symbol in self.symbols]
 

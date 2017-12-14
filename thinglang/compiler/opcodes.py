@@ -102,11 +102,8 @@ class Opcode(object, metaclass=OpcodeRegistration):
     def __eq__(self, other) -> bool:
         return type(self) == type(other) and self.args == other.args
 
-    def __str__(self) -> str:
-        return '{}({})'.format(type(self).__name__, ', '.join(str(x) for x in self.args))
-
     def __repr__(self) -> str:
-        return str(self)
+        return '{}({})'.format(type(self).__name__, ', '.join(str(x) for x in self.args))
 
 
 class ElementReferenced(Opcode):
