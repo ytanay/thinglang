@@ -1,15 +1,15 @@
 from thinglang import pipeline
-from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.indexer import LocalMember
-from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
-from thinglang.symbols.symbol_map import SymbolMap
-from thinglang.symbols.symbol_mapper import SymbolMapper
+from thinglang.compiler.opcodes import OpcodeCallInternal
+from thinglang.foundation.definitions import INTERNAL_TYPE_ORDERING
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.source_context import SourceContext
 
 SELF_ID, A_ID, B_ID, INST_ID, LST_ID, IMPLICIT_ITERATOR_ID, IMPLICIT_ITERATION_ID = 0, 1, 2, 3, 4, 5, 6
 VAL1_ID, VAL2_ID, INNER_ID = 0, 1, 2
 INNER1_ID, INNER2_ID = 0, 1
 STATIC_START = 5
+
+LIST_GET = OpcodeCallInternal(INTERNAL_TYPE_ORDERING[Identifier("list")], 5)
 
 
 TEMPLATE = """
