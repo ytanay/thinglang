@@ -13,7 +13,7 @@ from thinglang.lexer.grouping.quote import LexicalQuote
 from thinglang.lexer.grouping.backtick import LexicalBacktick
 from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction, LexicalMultiplication, \
-    LexicalDivision, LexicalModulus, LexicalXOR
+    LexicalDivision, LexicalModulus, LexicalBinaryXOR, LexicalBinaryOr, LexicalBinaryAnd
 from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.operators.comparison import LexicalEquals, LexicalNegation, LexicalGreaterThan, \
     LexicalLessThan, LexicalNotEquals
@@ -52,7 +52,10 @@ OPERATORS = {
     '/': LexicalDivision,
     '*': LexicalMultiplication,
     '%': LexicalModulus,
-    '^': LexicalXOR,
+
+    '&': LexicalBinaryAnd,
+    '|': LexicalBinaryOr,
+    '^': LexicalBinaryXOR,
 
     '>': LexicalGreaterThan,
     '<': LexicalLessThan,

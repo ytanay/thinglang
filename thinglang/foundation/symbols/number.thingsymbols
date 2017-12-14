@@ -82,7 +82,7 @@
             "convention": "internal",
             "index": 6,
             "kind": "method",
-            "name": "__xor__",
+            "name": "__binary_and__",
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -94,9 +94,9 @@
             "convention": "internal",
             "index": 7,
             "kind": "method",
-            "name": "__equals__",
+            "name": "__binary_or__",
             "static": false,
-            "type": "bool",
+            "type": "number",
             "visibility": "public"
         },
         {
@@ -106,9 +106,9 @@
             "convention": "internal",
             "index": 8,
             "kind": "method",
-            "name": "__not_equals__",
+            "name": "__binary_xor__",
             "static": false,
-            "type": "bool",
+            "type": "number",
             "visibility": "public"
         },
         {
@@ -118,7 +118,7 @@
             "convention": "internal",
             "index": 9,
             "kind": "method",
-            "name": "__less_than__",
+            "name": "__equals__",
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -130,6 +130,30 @@
             "convention": "internal",
             "index": 10,
             "kind": "method",
+            "name": "__not_equals__",
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 11,
+            "kind": "method",
+            "name": "__less_than__",
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "index": 12,
+            "kind": "method",
             "name": "__greater_than__",
             "static": false,
             "type": "bool",
@@ -138,7 +162,7 @@
         {
             "arguments": [],
             "convention": "internal",
-            "index": 11,
+            "index": 13,
             "kind": "method",
             "name": "convert_text",
             "static": false,

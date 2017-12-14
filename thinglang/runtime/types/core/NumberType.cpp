@@ -56,8 +56,22 @@ void NumberType::__modulus__() {
 	Program::push(Program::create<NumberInstance>(self->val % other->val));
 }
 
+void NumberType::__binary_and__() {
+	auto other = Program::argument<NumberInstance>();
+	auto self = Program::argument<NumberInstance>();
 
-void NumberType::__xor__() {
+	Program::push(Program::create<NumberInstance>(self->val & other->val));
+}
+
+void NumberType::__binary_or__() {
+	auto other = Program::argument<NumberInstance>();
+	auto self = Program::argument<NumberInstance>();
+
+	Program::push(Program::create<NumberInstance>(self->val | other->val));
+}
+
+
+void NumberType::__binary_xor__() {
 	auto other = Program::argument<NumberInstance>();
 	auto self = Program::argument<NumberInstance>();
 
