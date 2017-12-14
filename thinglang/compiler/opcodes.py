@@ -195,19 +195,6 @@ class OpcodePushStatic(Opcode):
         return self
 
 
-class OpcodePushIndex(Opcode):
-    """
-    Pop an index and value from the stack and push the value at the index provided
-    """
-
-
-class OpcodePushIndexImmediate(Opcode):
-    """
-    Pop a value from the stack and push the value at the immediate index provided
-    """
-    ARGS = INDEX,
-
-
 # Stack pop operations
 
 class OpcodePop(Opcode):

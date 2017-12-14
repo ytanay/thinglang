@@ -1,10 +1,11 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.opcodes import OpcodePushIndexImmediate, OpcodePushIndex
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.lexer.values.numeric import NumericValue
+from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.errors import InvalidIndexedAccess
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
+from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 
@@ -25,16 +26,9 @@ class IndexedAccess(BaseNode, ValueType):
         return '{}[{}]'.format(self.target, self.index)
 
     def compile(self, context: CompilationBuffer):
-        ctx = self.target.compile(context)
-        resolved_type = context.symbols[ctx.type][Identifier('get')]
-
-        if isinstance(self.index, NumericValue):
-            context.append(OpcodePushIndexImmediate(self.index.value), self.source_ref)
-        else:
-            self.index.compile(context)
-            context.append(OpcodePushIndex(), self.source_ref)
-
-        return resolved_type
+        return MethodCall(NamedAccess.extend(self.target, Identifier('get')), ArgumentList(self.index))\
+            .deriving_from(self)\
+            .compile(context)
 
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target and self.index == other.index
