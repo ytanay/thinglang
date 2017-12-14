@@ -3,128 +3,110 @@
 
 thinglang is a Python-inspired programming language, originally conceived as an educational project.
 
-The syntax attempts to extract the core concepts of OOP into familiar terms and structures (i.e. meant to be explainable to an elementary school student reasonably easily). Put alternatively, the language as a whole is meant to motivate a clean  and consistent style of OOP. First things first, however - Hello World looks like this:
-```cs
+The syntax attempts to extract the core concepts of OOP into familiar terms and structures (i.e. meant to be explainable to an elementary school student reasonably easily). In a senetence, the primary aim of thinglang is to be as powerful (in the software engineering sense) and performant as Java/C#, but retain as much of the pleasent syntax of Python as possible. 
+
+First things first, however - Hello World looks like this:
+```python
 thing Program
     setup
-        Console.print("hello world")
+        Console.print("Hello, world!")
 ```
 
-## Examples
-An example of method calls:
-```cs
+## Introduction
+At its heart, thinglang closely follows the principles of classic strictly typed programming languages - namely, Java and C# - but attempts to expose a more "Pythonic" syntax on the surface.
+
+Every thinglang program starts its execution at a thing class named `Program`. When the program starts, this class is instantiated, meaning that the first line of code that runs will be that of the `Program` constructor. In thinglang constructors are marked by the word `setup`.
+
+```python
 thing Program
-    setup 
-        text name = "Andy"
-        self.say_hello(name, 10)
-
-    does say_hello with name, age
-        Console.print("Hello from", age, "year old", name) # prints "Hello from 10 year old Andy"
+    setup
+        # This is the constructor of the Program class
+        Console.print("Hello, world!")
 ```
 
-Classes, methods, members and all that jazz:
-```cs
+As would be expected, almost everything in thinglang is an object, and consequently every line of code resides in a method, which is contained in a class. Let's look at a more comprehensive example:
+
+```python
 thing Person
+    # Each of the following is a member of the Person class
+    
     has text name
     has number age
-
-    setup with text name
+    has Location current_location
+    has list<Hobby> hobbies       # Defines a list of Hobby instances
+    has map<text, Person> friends # Defines a map of text -> Person
+    
+    # This constructor takes 2 arguments, and sets the members of the Person class
+    setup with text name, number age  
         self.name = name
-
-    does say_hello with number repeat_count
-        for number i in 0..repeat_count
-            Console.print("Hello number", i, "from", self.name, "who's", self.age, "years old and is always excited to get some coding done.")
-            
-
-thing Program
-    setup
-        Person person = create Person(Input.get_line("What is your name?"))
-        number age = Console.read_line("What is your age?") as number
+        self.age = age
+        self.current_location = Location() # Creates a new instance of the Location class
+        self.hobbies = list<Hobby>()       # Creates a new, empty list
+        self.friends = map<text, Person>() # Creates a new, empty map
     
-        if age not eq 0
-            person.age = age
+    # This defines a method that take no arguments and returns nothing
+    does say_hello 
+        Console.print("Hello from {}", [self.name])
     
-        person.say_hello(Input.get_line("How excited are you?") as number)
+    # This method takes no arguments and returns a boolean value    
+    does is_home returns bool
+        return self.current_location.name eq "home"
+    
+    # This method takes one argument of type string
+    does add_hobby with text hobby_name 
+        self.hobbies.append(Hobby(hobby_name)) # We construct a new hobby object from the text object 
+    
+    # This method shares the same name as the one above, but takes different arguments (i.e. is overloaded)
+    does add_hobby with Hobby hobby
+        self.hobbies.append(hobby)
+        
+    does perform_hobbies
+        for Hobby hobby in self.hobbies: # A simple iteration loop
+            Console.print("Performing: {}", [self.name, hobby])
+            try:
+                hobby.perform()
+            handle HobbyException exc
+                Console.print("Failed to perform hobby: {}", [exc])
 ```
 
-## General Overview
-The original implementation of thinglang was written in pure Python as an exercise to learn about the components that make up a high level programming language and its runtime: lexical analysis, parsing, static analysis, compilation and execution. 
+### OOP constructs
+thinglang supports the usual OOP suspects (inheritance, polymorphism, field visibility and generics). Here's a possible implementation for a generic LRU container type:
 
-Since then, the runtime has been rewritten in C++, and the process now resembles that of the classic strictly typed languages, specifically Java/C#. Outlined below is the thinglang compilation pipeline. 
+```python
+thing LRUContainer with type K, type V extends map<K, LRUEntry<V>>
+    has number expirey_seconds
+    
+    setup with number expirey_seconds
+        self.expirey_seconds = expirey_seconds
+        
+    does get with K key returns V
+        LRUEntry<V> entry = self[K]
+        if Time.now() - value.ts > self.expirey_seconds
+            self.remove(K)
+            return null
+        else
+            return entry.value
 
-### Lexical Analysis + Parsing
-The first stage is a line-by-line lexical tokenization process. Each time stream (one per line) is transformed using multiple rounds of pattern replacements. Consider the line `if self.average([1, 2, 3]) eq 2`. The tokenizer will emit the following stream for this line: 
+thing LRUEntry with type V
+    has V value
+    has Time ts
+    
+    setup with V value
+        self.value = value
+        self.ts = Time.now()
 ```
-[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN L_BRACKET_OPEN NUMERIC(1) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
-```
 
-What follows is the likely pattern transformation the stream will undergo:
+## Language Reference
+thinglang's syntax is mostly complete, but it is still lacking a reasonable standard library (which is being slowly developed).
 
-```
-[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1)]) SEP NUMERIC(2) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
-[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1), NUMERIC(2)]) SEP NUMERIC(3) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
-[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInitPartial([NUMERIC(1), NUMERIC(2), NUMERIC(3)]) L_BRACKET_CLOSE L_PAREN_CLOSE L_EQ NUMERIC(2)]
-[L_IF L_SELF ACCESS ID(average) L_PAREN_OPEN ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)]) L_PAREN_CLOSE L_EQ NUMERIC(2)]
-[L_IF L_SELF ACCESS ID(average) ArgListPartial([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_PAREN_CLOSE L_EQ NUMERIC(2)]
-[L_IF L_SELF ACCESS ID(average) ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_EQ NUMERIC(2)]
-[L_IF Access([L_SELF, ID(average)]) ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_EQ NUMERIC(2)]
-[L_IF MethodCall(target=[L_SELF, ID(average)], args=ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]) L_EQ NUMERIC(2)]
-[L_IF LogicalOperation(lhs=MethodCall(target=[L_SELF, ID(average)], args=ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]), rhs=NUMERIC(2), type=EQ))]
-[Conditional(LogicalOperation(lhs=MethodCall(target=[L_SELF, ID(average)], args=ArgList([ListInit([NUMERIC(1), NUMERIC(2), NUMERIC(3)])]), rhs=NUMERIC(2), type=EQ)))]
-```
+The current core types are as follows (each link points to the thinglang stub for the type):
+- [`text`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/text.thing): the string type.
+- [`number`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/number.thing): the integer type.
+- [`list`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/list.thing): a generic, mutable random-access list.
+- [`map`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/map.thing): a generic key to value container.
+- [`iterator`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/iterator.thing): which is constructed from lists and maps.
+- [`Exception`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/Exception.thing): the base exception classs.
+- [`Console`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/Console.thing): for terminal based IO.
+- [`File`](https://github.com/ytanay/thinglang/blob/master/thinglang/foundation/source/File.thing): read/write create files.
 
-The object of this process is to reduce the token stream of a line to a single compound AST node. If at any point no transformations can be applied, and there is more than one element remaining from the original stream, the parser fails on the line. 
-
-The output of the parser is an AST of compound nodes. Examples of nodes include method calls, assignments, conditionals, and so on. 
-
-### Static Analysis
-The AST undergoes two processes during SA: indexing and reduction. 
-
-**Indexing** is a process which inspects declarations, usages and assignments of variables, instances, methods, and members.  Each entity is given an appropriate slot in its containing structure.
-
-
-**Reduction** is a process in which compound nodes containing certain nested operations (e.g. nested method calls) are simplified into a series of non-compound nodes. This simplifies the logic required during compilation for certain constructs. 
-
-### Symbol Generation 
-A symbol map is generated from the AST, and its dependencies are inspected and loaded. If needed, additional source files go through the pipeline as described, otherwise, existing symbol maps are loaded. Processing continues once all dependencies are resolved. 
-
-### Compilation 
-The AST is traversed in DFS, each node in turn producing appropriate bytecode instructions. Since this process resolves and binds references, it is also catches certain non-syntactic errors. Additionally, static data is collected and debugging maps are generated for the final executable if applicable. 
-
-### Runtime 
-With an executable in hand, we switch to the C++ runtime. After loading and processing the bytecode and its dependencies, it begins an execution loop and performs its expected runtime duties (allocating memory, interacting with the system, catching errors, and so on). 
-
-### The Archives 
-
-This is a description of the old Python-based execution model - it's slow, but still pretty nifty. 
-
-Execution can begin after a bounded-reduced AST is created (see above)
-
-The initialization sequence for any program goes roughly like this:
-1. A program-global "heap" space is created, and first-order built-ins are initialized inside it (currently, this means the `Input` and `Output` objects).
-2. The *targets array* is created. The program is said to be executing as long as there are targets in the array. The program thus exits when there are no more targets, or when an error that the program cannot handle occurs.
-3. The AST is scanned for a ThingDefinition with `name=Program` and an instance of it (`Thing<Program>`) is created. This instance is initially stored in an temporary (unreachable) location.
-4. A root level stack frame is created, and contains a reference to the newly created `Thing<Program>` instance.
-5. Every direct child of `MethodDefinition<constructor>` of `Thing<Program>` is copied into the *targets array*, and execution begins.
-
-#### Pipeline
-Every iteration of the execution pipeline beings by popping of a target from the beginning of the *targets array*. Examples of execution targets include instances of `AssignmentOperation`, `MethodCall`, `Conditional`, `Loop`, and even `ReturnStatement`s.
-
-While a target is processed it can (and frequently does) affect the *targets array*. For example, a `Conditional` will copy its direct children in the positive branch to the *targets array* if its condition is evaluated as `true`, or the its direct children in the negative (i.e. "else") branch if its condition is evaluated as `false`. A `Loop` will copy its direct children **and itself** to the *targets array* if its condition evaluates as true (this is what makes it loop).
-
-We'll look at a few examples of more intricate execution targets below.
-
-#### Method calls
-Method calls involve a bit of extra hand-holding. Described below is the general procedure for executing most method calls (the procedure for instance construction - i.e. creating a new `Thing` instance - is a bit different, and will be described separately):
-
-1. The target instance is looked up, first on the stack, then on the heap.
-2. The method is looked up on the target instance.
-3. A new stack frame is generated, and contains a reference to the target instance.
-4. Arguments passed as part of the method call are copied (by reference, generally) into the new stack frame.
-5. A stack frame terminator is generated, and optionally, contains the ID of the variable to which the result of the method call should be assigned (if the method call was caused by an `AssignmentOperation`).
-6. The direct children of the method and the stack frame terminator are copied to the beginning of the *targets array*.
-7. Execution proceeds normally, except;
-    1. If a return statement is encountered, the return value is attached to the method's stack frame, and every target in the *targets array* until the stack frame terminator is removed.
-8. When the stack frame terminator is encountered again, the called method's stack frame is popped off the stack.
-    1. If the called method's stack frame contains a return value, it is assigned to the variable indicated by the terminator.
-9. Execution proceeds normally.
+For more, see the various notes in the [docs](https://github.com/ytanay/thinglang/tree/master/docs) directory.
