@@ -26,9 +26,13 @@ class IndexedAccess(BaseNode, ValueType):
         return '{}[{}]'.format(self.target, self.index)
 
     def compile(self, context: CompilationBuffer):
-        return MethodCall(NamedAccess.extend(self.target, Identifier('get')), ArgumentList(self.index))\
+        return MethodCall(NamedAccess.extend(self.target, Identifier('get')), ArgumentList([self.index]))\
             .deriving_from(self)\
             .compile(context)
+
+    def assignment(self, value):
+        return MethodCall(NamedAccess.extend(self.target, Identifier('set')), ArgumentList([self.index, value]), is_captured=False) \
+            .deriving_from(self)
 
     def __eq__(self, other):
         return type(self) == type(other) and self.target == other.target and self.index == other.index

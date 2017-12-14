@@ -19,9 +19,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     STACK_ARGS = object()
 
-    def __init__(self, target, arguments=None, stack_args=False):
+    def __init__(self, target, arguments=None, stack_args=False, is_captured=None):
         super(MethodCall, self).__init__([target, arguments])
-        self.target, self.arguments, self.stack_args = target, (arguments if arguments is not None else ArgumentList()), stack_args
+        self.target, self.arguments, self.stack_args, self._is_captured = target, (arguments if arguments is not None else ArgumentList()), stack_args, is_captured
 
     def __repr__(self):
         return '{}({})'.format(self.target, self.arguments)
@@ -74,7 +74,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
         """
         Is the return value of this method call being used?
         """
-        return self.parent is None  # Check if this method call is directly in the AST
+        return self._is_captured if self._is_captured is not None else self.parent is None  # Check if this method call is directly in the AST
 
     @property
     def constructing_call(self):
