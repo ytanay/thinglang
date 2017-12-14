@@ -21,4 +21,4 @@ class CastOperation(BaseNode):
     @staticmethod
     @ParserRule.mark
     def parse_inline_cast_op(value: ValueType, _: LexicalCast, target_type: Identifier):
-        return MethodCall(NamedAccess([value, Identifier('convert_') + target_type]), [])
+        return MethodCall(NamedAccess.extend(value, Identifier('convert_') + target_type), [])
