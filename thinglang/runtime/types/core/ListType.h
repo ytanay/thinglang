@@ -10,6 +10,7 @@
 
 #include "../../utils/TypeNames.h"
 #include "../interfaces/IndexedInterface.h"
+#include "../infrastructure/ThingType.h"
 
 
 class ListInstance : public IndexedInterface {
