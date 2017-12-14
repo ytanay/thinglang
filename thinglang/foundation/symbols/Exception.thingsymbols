@@ -1,7 +1,7 @@
 {
     "extends": null,
     "generics": [],
-    "index": 8,
+    "index": 10,
     "name": "Exception",
     "offset": 0,
     "symbols": [
