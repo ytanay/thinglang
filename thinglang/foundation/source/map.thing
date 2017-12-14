@@ -1,0 +1,4 @@
+thing map with type K, type V
+
+    does get with K key returns V
+    does set with K key, V value

@@ -12,6 +12,7 @@
 #include <list>
 #include <forward_list>
 #include <chrono>
+#include <unordered_map>
 
 
 class BaseThingInstance;
@@ -29,11 +30,6 @@ using SourceMap = std::vector<Index>;
 using Source = std::vector<std::string>;
 
 using Thing = BaseThingInstance*;
-using Things = std::vector<Thing>;
-using ThingForwardList = std::forward_list<Thing>;
-
-using Frame = Things;
-using FrameStack = std::forward_list<Frame>;
 
 typedef void (*InternalMethod)();
 
@@ -43,5 +39,4 @@ using InternalMethods = std::vector<InternalMethod>;
 using Type = ThingType*;
 using Types = std::vector<Type>;
 
-using ProgramInfo = std::tuple<InstructionList, Things, Index, Size, SourceMap, Source>;
 

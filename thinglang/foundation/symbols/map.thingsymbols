@@ -1,0 +1,53 @@
+{
+    "extends": null,
+    "generics": [
+        "K",
+        "V"
+    ],
+    "index": 5,
+    "name": "map",
+    "offset": 0,
+    "symbols": [
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": [
+                "map",
+                [
+                    "K",
+                    "V"
+                ]
+            ],
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "K"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "get",
+            "static": false,
+            "type": "V",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "K",
+                "V"
+            ],
+            "convention": "internal",
+            "index": 2,
+            "kind": "method",
+            "name": "set",
+            "static": false,
+            "type": null,
+            "visibility": "public"
+        }
+    ]
+}
