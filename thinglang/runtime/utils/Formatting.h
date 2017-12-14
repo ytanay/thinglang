@@ -28,6 +28,24 @@ inline std::string to_string(std::vector<T> lst){
     return "[" + result + "]";
 }
 
+template <typename K, typename V, typename X, typename Y>
+inline std::string to_string(std::unordered_map<K, V, X, Y> map){
+    if(map.size() == 0)
+        return "{}";
+
+    std::stringstream stream;
+
+    for(const auto& pair : map){
+        stream << pair.first << ": " << pair.second << ", ";
+    }
+
+    auto result = stream.str();
+
+    result.erase(result.size() - 2);
+
+    return "{" + result + "}";
+}
+
 
 template <typename T>
 inline bool to_boolean(T val){
