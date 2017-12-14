@@ -22,9 +22,6 @@ class UnconditionalElse(BaseNode, ElseBranchInterface):
         super(UnconditionalElse, self).compile(context)
         context.update_conditional_jumps()
 
-    def transpile(self):
-        return templates.ELSE_CLAUSE.format(body=self.transpile_children(indent=3))
-
     @staticmethod
     @ParserRule.mark
     def parse_unconditional_else(_: LexicalElse):

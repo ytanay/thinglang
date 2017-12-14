@@ -22,13 +22,9 @@ class NamedAccess(BaseNode, ValueType):
 
         self.target = target
         self.type = None
-        self.arguments = []
 
     def __repr__(self):
         return '{}'.format('.'.join(str(x) for x in self.target))
-
-    def transpile(self):
-        return '->'.join(x.transpile() for x in self.target)
 
     def compile(self, context: CompilationBuffer, pop_last=False, without_last=False):
         if without_last and not self.extensions:

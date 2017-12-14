@@ -1,6 +1,5 @@
 import itertools
 
-from thinglang.foundation import templates
 from thinglang.utils import collection_utils
 from thinglang.utils.mixins import ParsingMixin
 from thinglang.utils.source_context import SourceReference
@@ -50,14 +49,6 @@ class BaseNode(ParsingMixin):
         """
         return itertools.takewhile(predicate, self.next_siblings())
 
-    def transpile_children(self, indent=0, children_override=None):
-        """
-        Calls the transpile method on this node and its siblings
-        """
-        sep = '\t' * indent
-        return sep + ('\n' + sep).join(
-            x.transpile() for x in (children_override if children_override is not None else self.children))
-
     def finalize(self):
         """
         Calls the finalize method on this nodes siblings
@@ -81,36 +72,6 @@ class BaseNode(ParsingMixin):
         """
         self.source_ref = node.source_ref
         return self
-
-    def walk_up(self, predicate):
-        """
-        Walk up the AST until predicate returns True, returning the first matching node, or None if no matches
-        are found.
-        """
-        node = self
-
-        while node and not predicate(node):
-            node = node.parent
-
-        if node and predicate(node):
-            return node
-
-    @property
-    def container_name(self):
-        """
-        Walk up the AST to find the class names for the enclosing ThingDefinition of this node
-        """
-        from thinglang.parser.definitions.thing_definition import ThingDefinition
-        thing_definition = self.walk_up(lambda x: isinstance(x, ThingDefinition))
-        return templates.class_names(thing_definition.name)
-
-    @property
-    def enclosing_method(self):
-        """
-        Walk up the AST to find the enclosing MethodDefinition for this node
-        """
-        from thinglang.parser.definitions.method_definition import MethodDefinition
-        return self.walk_up(lambda x: isinstance(x, MethodDefinition))
 
     def tree(self, depth=1):
         """

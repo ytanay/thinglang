@@ -23,9 +23,6 @@ class InlineString(LexicalToken, ValueType):
     def serialize(self):
         return struct.pack('<iI', self.TYPE_IDX, len(self.value)) + bytes(self.value, 'utf-8')
 
-    def transpile(self):
-        return f'"{self.value}"'
-
     @property
     def type(self):
         return self.TYPE

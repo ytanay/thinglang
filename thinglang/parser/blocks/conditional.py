@@ -25,13 +25,6 @@ class Conditional(BaseNode):
     def __repr__(self):
         return 'if {}'.format(self.value)
 
-    def transpile(self):
-        return templates.CONDITIONAL.format(
-            prefix='',
-            condition=self.value.transpile(),
-            body=self.transpile_children(indent=3)
-        )
-
     def compile(self, context: CompilationBuffer):
         if not context.conditional_groups or self not in context.conditional_groups[-1]:
             elements = [self] + list(self.siblings_while(lambda x: isinstance(x, ElseBranchInterface)))

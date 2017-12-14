@@ -37,26 +37,6 @@ class MethodDefinition(BaseNode):
     def is_constructor(self):
         return self.name == Identifier.constructor()
 
-    def transpile(self):
-        type_cls_name, instance_cls_name = self.container_name
-
-        if self.is_constructor() and not self.children:
-            return templates.IMPLICIT_CONSTRUCTOR.format(
-                type_cls_name=type_cls_name,
-                instance_cls_name=instance_cls_name
-            )
-
-        return templates.FOUNDATION_METHOD.format(
-            name=self.name.transpile(),
-            class_name=type_cls_name,
-            return_type='void',
-            arguments='',  # Popped directly from stack
-            preamble=self.arguments.transpile(instance_cls_name, static=self.static, constructor=self.is_constructor()),
-            body=self.transpile_children(2, self.children),
-            epilogue=''
-
-        )
-
     def compile(self, context: CompilationBuffer):
 
         if self.is_constructor():

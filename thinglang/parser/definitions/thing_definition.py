@@ -29,15 +29,6 @@ class ThingDefinition(BaseNode):
             method.compile(buffer)
             context.add((symbol_map.index, symbol_map[method.name].index), method, buffer)
 
-    def transpile(self):
-        type_cls_name, instance_cls_name = self.container_name
-
-        return templates.FOUNDATION_TYPE_DEFINITION.format(
-            type_cls_name=type_cls_name, instance_cls_name=instance_cls_name,
-            mixins=templates.FOUNDATION_MIXINS_DEFINITION.format(instance_cls_name=instance_cls_name, first_member=self.members[0].name.transpile()) if self.members else '',
-            methods=self.transpile_children(indent=0, children_override=self.methods)
-        )
-
     def finalize(self):
         super().finalize()
 
@@ -58,9 +49,6 @@ class ThingDefinition(BaseNode):
 
     def slots(self, context):
         return sum(len(container.members) for container in context.symbols.inheritance(self))
-
-    def format_method_list(self):
-        return ', '.join(['&{}'.format(x.name.transpile()) for x in self.methods])
 
     @staticmethod
     @ParserRule.mark

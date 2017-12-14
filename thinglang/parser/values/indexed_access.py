@@ -22,9 +22,6 @@ class IndexedAccess(BaseNode, ValueType):
     def __repr__(self):
         return '{}[{}]'.format(self.target, self.index)
 
-    def transpile(self):
-        return '{}[{}]'.format(self.target.transpile(), self.index.transpile())
-
     def compile(self, context: CompilationBuffer):
         ctx = self.target.compile(context)
         resolved_type = context.symbols[ctx.type][Identifier('get')]

@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
 from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction, LexicalMultiplication, \
     LexicalDivision, SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation
 from thinglang.lexer.operators.comparison import LexicalEquals, LexicalGreaterThan, LexicalLessThan, LexicalComparison
@@ -39,9 +38,6 @@ class BinaryOperation(BaseNode, ValueType, CallSite):
 
     def __repr__(self):
         return '{} {} {}'.format(self.lhs, self.operator, self.rhs)
-
-    def transpile(self):
-        return '{} {} {}'.format(self.lhs.transpile(), REVERSE_OPERATORS[type(self.operator)], self.rhs.transpile())
 
     @property
     def arguments(self):

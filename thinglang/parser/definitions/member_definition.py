@@ -4,7 +4,6 @@ from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMembe
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.inline_code import InlineCode
 from thinglang.symbols.symbol import Symbol
 
 
@@ -22,16 +21,10 @@ class MemberDefinition(BaseNode):
     def __repr__(self):
         return 'has {} {}'.format(self.type, self.name)
 
-    def transpile(self):
-        return '{} {};'.format(self.type.transpile(), self.name.transpile())
-
     def symbol(self):
         return Symbol.member(self.name, self.type, self.visibility)
 
-    def compile(self, context: CompilationContext):
-        return
-
-    MEMBER_NAME_TYPES = Identifier, InlineCode
+    MEMBER_NAME_TYPES = Identifier
 
     @staticmethod
     @ParserRule.mark

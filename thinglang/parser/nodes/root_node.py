@@ -12,6 +12,3 @@ class RootNode(BaseNode):
     def compile(self, context):
         super(RootNode, self).compile(context)
         return context
-
-    def transpile(self):
-        return self.transpile_children()

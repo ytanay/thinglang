@@ -16,13 +16,6 @@ class ConditionalElse(Conditional, ElseBranchInterface):
     def __repr__(self):
         return 'else if {}'.format(self.value)
 
-    def transpile(self):
-        return templates.CONDITIONAL.format(
-            prefix='else ',
-            condition=self.value.transpile(),
-            body=self.transpile_children(indent=3)
-        )
-
     @staticmethod
     @ParserRule.mark
     def parse_conditional_else(_: LexicalElse, conditional: Conditional):
