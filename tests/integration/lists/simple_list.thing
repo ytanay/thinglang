@@ -1,12 +1,12 @@
 /*
 {
-    "expected_output": ["[]", "[alex, andrew, aaron]", "aaron", "[alex, andrew]", "42"]
+    "expected_output": ["[]", "[alex, andrew, aaron]", "aaron", "[alex, andrew]", "[ryan, andrew]", "42"]
 }
 */
 
 thing Program
     setup
-        list empty = list()
+        list empty = list() # TODO: why is this allowed?
         Console.print(empty)
 
         list<text> names = list<text>()
@@ -14,8 +14,12 @@ thing Program
         names.append("andrew")
         names.append("aaron")
         Console.print(names)
+
         text last_name = names.pop()
         Console.print(last_name)
+        Console.print(names)
+
+        names[0] = "ryan"
         Console.print(names)
 
         list<number> numbers = list<number>()
