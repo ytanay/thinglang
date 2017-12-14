@@ -2,11 +2,8 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference
 from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.lexer.values.numeric import NumericValue
-from thinglang.parser.errors import InvalidIndexedAccess
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.indexed_access import IndexedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 
