@@ -9,11 +9,6 @@
 #include <utility>
 
 #include "../../utils/TypeNames.h"
-#include "../../execution/Globals.h"
-#include "../../utils/Formatting.h"
-#include "../infrastructure/ThingType.h"
-#include "../infrastructure/ThingInstance.h"
-#include "../../execution/Program.h"
 #include "../interfaces/IndexedInterface.h"
 
 
@@ -25,9 +20,11 @@ class ListInstance : public IndexedInterface {
     explicit ListInstance(std::vector<Thing> val) : val(std::move(val)) {}; // value constructor
     
     /** Mixins **/
-    
-    std::string text() override;
-    bool boolean() override;
+
+	std::string text() override;
+	bool boolean() override;
+	size_t hash() const override;
+	bool operator==(const BaseThingInstance &other) const override;
 
     
     /** Members **/

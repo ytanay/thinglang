@@ -76,6 +76,15 @@ std::string TextInstance::text() {
 }
 
 bool TextInstance::boolean() {
-    return val.size() != 0;
+    return !val.empty();
+}
+
+bool TextInstance::operator==(const BaseThingInstance &other) const {
+    auto other_text = dynamic_cast<const TextInstance*>(&other);
+    return other_text && this->val == other_text->val;
+}
+
+size_t TextInstance::hash() const {
+    return std::hash<std::string>{}(this->val);
 }
 

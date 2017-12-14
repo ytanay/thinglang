@@ -127,6 +127,16 @@ std::string NumberInstance::text() {
 }
 
 bool NumberInstance::boolean() {
-    return to_boolean(val);
+    return val != 0;
 }
+
+bool NumberInstance::operator==(const BaseThingInstance &other) const {
+    auto other_number = dynamic_cast<const NumberInstance*>(&other);
+    return other_number && this->val == other_number->val;
+}
+
+size_t NumberInstance::hash() const {
+    return std::hash<int>{}(this->val);
+}
+
 

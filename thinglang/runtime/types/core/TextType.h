@@ -17,8 +17,8 @@
 
 
 class TextInstance : public BaseThingInstance {
-    
-    public:
+
+public:
     explicit TextInstance() = default; // empty constructor
     
     explicit TextInstance(std::string val) : val(val) {}; // value constructor
@@ -27,8 +27,11 @@ class TextInstance : public BaseThingInstance {
     
     std::string text() override;
     bool boolean() override;
+    size_t hash() const override;
+    bool operator==(const BaseThingInstance &other) const override;
 
-    
+
+
     /** Members **/
     std::string val;
 
@@ -49,4 +52,3 @@ class TextType : public ThingTypeInternal {
 	static void convert_number();
     
 };
-inline std::string to_string(TextInstance* val){ return val->text(); }
