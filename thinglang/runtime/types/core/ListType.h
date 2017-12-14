@@ -14,11 +14,10 @@
 #include "../infrastructure/ThingType.h"
 #include "../infrastructure/ThingInstance.h"
 #include "../../execution/Program.h"
+#include "../interfaces/IndexedInterface.h"
 
 
-
-
-class ListInstance : public BaseThingInstance {
+class ListInstance : public IndexedInterface {
     
     public:
     explicit ListInstance() = default; // empty constructor
