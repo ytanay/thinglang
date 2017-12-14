@@ -31,8 +31,9 @@ class SymbolMapper(object):
         if include_foundation:
             self.maps.update(SymbolMapper.FOUNDATION)
 
-        for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
-            self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))
+        if ast:
+            for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
+                self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))
 
     def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict) -> Reference:
         """

@@ -1,4 +1,4 @@
-from tests.compiler import compile_local, SELF_ID, LST_ID, VAL1_ID, LIST_GET
+from tests.compiler import compile_local, SELF_ID, LST_ID, VAL1_ID, internal_call
 from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushMember, OpcodeCall, OpcodePushStatic
 
 
@@ -7,7 +7,7 @@ def test_access_in_method_args():
         OpcodePushLocal(SELF_ID),
         OpcodePushLocal(LST_ID),
         OpcodePushStatic(5),
-        LIST_GET,
+        internal_call('list.get'),
         OpcodeCall(0, 1)
     ]
 
@@ -15,6 +15,6 @@ def test_access_in_method_args():
         OpcodePushLocal(SELF_ID),
         OpcodePushLocal(LST_ID),
         OpcodePushMember(SELF_ID, VAL1_ID),
-        LIST_GET,
+        internal_call('list.get'),
         OpcodeCall(0, 1)
     ]
