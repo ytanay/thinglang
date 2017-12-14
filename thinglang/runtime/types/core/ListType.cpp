@@ -58,6 +58,16 @@ void ListType::get() {
 }
 
 
+void ListType::set() {
+    auto value = Program::pop();
+    auto index = Program::argument<NumberInstance>();
+    auto self = Program::argument<ListInstance>();
+
+    self->val[index->val] = value;
+}
+
+
+
 void ListType::length() {
 	auto self = Program::argument<ListInstance>();
 
@@ -86,6 +96,7 @@ void ListType::range() {
 	for(auto idx = start->val, val = 0; idx < end->val; idx++, val++) lst->val[idx] = Program::create<NumberInstance>(val);
 	Program::push(lst);
 }
+
 
 
 /**

@@ -41,16 +41,33 @@ class ListInstance : public IndexedInterface {
 class ListType : public ThingTypeInternal {
     
     public:
-    ListType() : ThingTypeInternal({ &__constructor__, &append, &pop, &contains, &iterator, &get, &length, &swap, &range }) {}; // constructor
+    ListType() : ThingTypeInternal({
+                                           &__constructor__,
+                                           &get,
+                                           &set,
+                                           append,
+                                           &pop,
+                                           &swap,
+                                           &contains,
+                                           &length,
+                                           &iterator,
+                                           &range
+                                   }) {};
  
 	static void __constructor__();
+
+    static void get();
+    static void set();
+
 	static void append();
 	static void pop();
+    static void swap();
+
 	static void contains();
+    static void length();
+
 	static void iterator();
-	static void get();
-	static void length();
-	static void swap();
+
 	static void range();
     
 };
