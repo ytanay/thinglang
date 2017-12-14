@@ -7,8 +7,8 @@ from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.blocks.loop import Loop
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 

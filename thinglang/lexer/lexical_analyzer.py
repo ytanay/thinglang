@@ -1,10 +1,10 @@
 from typing import List
 
-from thinglang.lexer.grouping.quote import LexicalQuote
 from thinglang.lexer.grouping.backtick import LexicalBacktick
+from thinglang.lexer.grouping.quote import LexicalQuote
 from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
-from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue

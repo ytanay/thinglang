@@ -1,7 +1,7 @@
 import collections
 import struct
 
-from thinglang.compiler.opcodes import  OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
+from thinglang.compiler.opcodes import OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
 from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelCodeEnd, SentinelDataEnd
 from thinglang.utils.source_context import SourceContext
 

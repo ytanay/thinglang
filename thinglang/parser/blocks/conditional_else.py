@@ -1,4 +1,3 @@
-from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalElse
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.blocks.conditional import Conditional

@@ -1,9 +1,9 @@
 from tests.infrastructure.test_utils import validate_types, parse_local
-from thinglang.lexer.values.numeric import NumericValue
 from thinglang.lexer.values.identifier import Identifier
-from thinglang.parser.values.named_access import NamedAccess
+from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.values.binary_operation import BinaryOperation
 from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 
 
 def validate_method_call(node, target, argument_types):

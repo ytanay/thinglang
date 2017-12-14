@@ -1,4 +1,3 @@
-from thinglang.compiler.context import CompilationContext
 from thinglang.lexer.definitions.tags import LexicalPrivateTag
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMember
 from thinglang.lexer.values.identifier import Identifier

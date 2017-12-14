@@ -1,7 +1,5 @@
 import json
 import os
-import random
-import string
 
 from thinglang.lexer.lexical_analyzer import analyze_line
 from thinglang.lexer.values.identifier import Identifier

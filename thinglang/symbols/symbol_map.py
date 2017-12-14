@@ -1,7 +1,6 @@
 import collections
 from typing import List
 
-from thinglang.foundation import templates
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.symbols.merged_symbol import MergedSymbol
 from thinglang.symbols.symbol import Symbol

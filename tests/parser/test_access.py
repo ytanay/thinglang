@@ -2,10 +2,10 @@ from tests.infrastructure.test_utils import parse_local, normalize_id
 from tests.parser.test_method_call_parsing import validate_method_call
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.indexed_access import IndexedAccess
 from thinglang.parser.values.inline_list import InlineList
 from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 
 
 def validate_indexed_access(node, target, index):

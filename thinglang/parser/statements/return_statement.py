@@ -1,6 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeReturn
-from thinglang.foundation import templates
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule

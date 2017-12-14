@@ -2,8 +2,8 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.common.list_type import ListInitialization
 from thinglang.parser.definitions.argument_list import ArgumentList
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 
 
 class InlineList(ListInitialization):

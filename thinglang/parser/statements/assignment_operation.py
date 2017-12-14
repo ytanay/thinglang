@@ -6,8 +6,8 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
-from thinglang.parser.values.named_access import NamedAccess
 from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.utils.type_descriptors import ValueType
 
 

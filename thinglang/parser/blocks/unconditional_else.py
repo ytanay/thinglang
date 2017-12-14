@@ -1,5 +1,4 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.foundation import templates
 from thinglang.lexer.blocks.conditionals import LexicalElse
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.nodes.base_node import BaseNode

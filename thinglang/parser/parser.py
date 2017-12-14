@@ -3,11 +3,10 @@ from typing import List
 from thinglang.lexer.definitions.tags import LexicalArgumentListIndicator, LexicalDeclarationReturnType
 from thinglang.lexer.grouping.brackets import LexicalBracketOpen, LexicalBracketClose
 from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, LexicalParenthesesClose
-from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
-from thinglang.parser.nodes.root_node import RootNode
 from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
-
+from thinglang.parser.nodes.root_node import RootNode
 from thinglang.parser.vector import TokenVector, ParenthesesVector, BracketVector, TypeVector, ParameterVector
 
 VECTOR_CREATION_TOKENS = {

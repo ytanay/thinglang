@@ -1,11 +1,11 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
+from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
+    LexicalDeclarationStatic
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.operators.binary import LexicalBinaryOperation
 from thinglang.lexer.operators.comparison import LexicalComparison
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
-from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
-    LexicalDeclarationStatic
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes.base_node import BaseNode

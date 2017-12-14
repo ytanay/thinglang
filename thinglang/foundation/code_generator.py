@@ -3,13 +3,13 @@ import json
 import os
 
 from thinglang import pipeline
-from thinglang.utils.source_context import SourceContext
 from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
 from thinglang.lexer.lexical_token import LexicalToken
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
-from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.utils.source_context import SourceContext
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
 SOURCE_PATTERN = os.path.join(CURRENT_PATH,  'source/**/*.thing')

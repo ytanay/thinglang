@@ -4,7 +4,6 @@ from thinglang import pipeline
 from thinglang.compiler.errors import DuplicateHandlerError
 from thinglang.utils.source_context import SourceContext
 
-
 DUPLICATE_EXCEPTION = """
 thing Program
     

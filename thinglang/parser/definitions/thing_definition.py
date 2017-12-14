@@ -1,6 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
-from thinglang.foundation import templates
 from thinglang.lexer.definitions.tags import LexicalInheritanceTag
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing
 from thinglang.lexer.values.identifier import Identifier
