@@ -1,9 +1,12 @@
 /*
 {
-    "expected_output": "Simple formatting with a string and another string"
+    "expected_output": ["Simple formatting with a string and another string", "123 456"]
 }
 */
 
 thing Program
+    has number val
     setup
+        self.val = 456
         Console.print("Simple formatting with {} and {}", ["a string", "another string"])
+        Console.print("{} {}", [123 as text, self.val as text])
