@@ -9,6 +9,7 @@
 #include "../utils/TypeNames.h"
 #include "../errors/Aborts.h"
 #include "../utils/Containers.h"
+#include "../errors/RuntimeError.h"
 
 class Program {
 
@@ -41,7 +42,12 @@ public:
         if(value == nullptr)
             critical_abort(AbortReason::NULL_POINTER);
 
-        return static_cast<T*>(value);
+        auto casted = dynamic_cast<T*>(value);
+
+        if(casted == nullptr)
+            throw RuntimeError("Cannot cast target"); // TODO: make user-mode exception
+
+        return casted;
     }
 
 
