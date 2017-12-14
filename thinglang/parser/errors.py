@@ -14,7 +14,7 @@ class VectorReductionError(ThinglangException):
         super().__init__(str(self))
 
     def __str__(self):
-        return f'{self.reason}: {self.tokens[0].source_ref}'
+        return f'{self.reason}: {self.tokens[0].source_ref}: {self.tokens}'
 
 
 class InvalidIndexedAccess(ThinglangException):

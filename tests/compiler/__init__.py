@@ -21,7 +21,7 @@ thing Program
     setup
         number a = 0
         number b = 0
-        Program inst = create Program()
+        Program inst = Program()
         list<number> lst = [0, 1, 2]
         
         {}
