@@ -1,18 +1,24 @@
 /*
 {
-    "expected_output": ["{}", "{Yotam Tanay: 19}", "{Ryan Dillian: 42, Yotam Tanay: 19}", "19", "19", "42"]
+    "expected_output": ["{}", "{Yotam Tanay: 19}", "{Ryan Dillian: 42, Yotam Tanay: 19}", "{Ryan Dillian: 42, Yotam Tanay: 20}", "{Ryan Dillian: 43, Yotam Tanay: 20}", "20", "20", "43"]
 }
 */
 
 thing Program
     setup
-        map<text, number> people = map<text, number>()
+        map<text, number> people = map<text, number>() # TODO: add tests for type compatibility
         Console.print(people)
 
         people.set("Yotam Tanay", 19)
         Console.print(people)
 
         people.set("Ryan Dillian", 42)
+        Console.print(people)
+
+        people.set("Yotam Tanay", 20)
+        Console.print(people)
+
+        people["Ryan Dillian"] = 43
         Console.print(people)
 
         Console.print(people.get("Yotam Tanay"))
