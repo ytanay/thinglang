@@ -1,4 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
+from thinglang.compiler.errors import DuplicateHandlerError
 from thinglang.lexer.blocks.exceptions import LexicalTry
 from thinglang.parser.blocks.handle_block import HandleBlock
 from thinglang.parser.nodes import BaseNode
@@ -21,7 +22,10 @@ class TryBlock(BaseNode):
         super().finalize()
         self.handlers = self.siblings_while(lambda x: isinstance(x, HandleBlock))
 
-        for handler in self.handlers:  # TODO: check for type uniqueness
+        if len({handler.exception_type for handler in self.handlers}) != len(self.handlers):
+            raise DuplicateHandlerError([handler.exception_type for handler in self.handlers])
+
+        for handler in self.handlers:
             handler.remove()
 
     def compile(self, context: CompilationBuffer):
