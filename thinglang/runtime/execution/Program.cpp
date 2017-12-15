@@ -344,6 +344,11 @@ void Program::push(const Thing &instance) {
     stack.push_front(instance);
 }
 
+void Program::push(Size value) {
+    stack.push_front(Program::create<NumberInstance>(value));
+}
+
+
 void Program::push(bool value) {
     /**
      * Push an boolean value into the program stack
