@@ -32,6 +32,23 @@ void MapType::set() {
     self->container[key] = value;
 }
 
+void MapType::remove() {
+    auto key = Program::pop();
+    auto self = Program::argument<MapInstance>();
+
+    auto value = self->container.at(key);
+
+    self->container.erase(key);
+
+    Program::push(value);
+}
+
+void MapType::size() {
+    auto self = Program::argument<MapInstance>();
+
+    Program::push(self->container.size());
+}
+
 
 /**
 Mixins of MapType

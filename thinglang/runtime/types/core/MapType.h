@@ -46,10 +46,12 @@ public:
 class MapType : public ThingTypeInternal {
     
     public:
-    MapType() : ThingTypeInternal({ &__constructor__, &get, &set }) {}; // constructor
+    MapType() : ThingTypeInternal({ &__constructor__, &get, &set, &remove, &size }) {}; // constructor
 
     static void __constructor__();
 	static void get();
     static void set();
+    static void remove();
+    static void size();
 
 };

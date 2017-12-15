@@ -48,6 +48,28 @@
             "static": false,
             "type": null,
             "visibility": "public"
+        },
+        {
+            "arguments": [
+                "K"
+            ],
+            "convention": "internal",
+            "index": 3,
+            "kind": "method",
+            "name": "remove",
+            "static": false,
+            "type": "V",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 4,
+            "kind": "method",
+            "name": "size",
+            "static": false,
+            "type": "number",
+            "visibility": "public"
         }
     ]
 }
