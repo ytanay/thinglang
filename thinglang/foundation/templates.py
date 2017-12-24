@@ -34,6 +34,24 @@ ENUM_CASE = """
             return {value};"""
 
 
+TYPE_INSTANTIATION = HEADER + """
+{imports}
+
+enum PrimitiveType {{
+    {primitives}
+}};
+
+inline Type create_type(const std::string& type_name){{
+    {conditions}
+    
+    throw RuntimeError("Unknown type name: " + type_name);  
+}}
+"""
+
+
+TYPE_CONDITIONAL = """if(type_name == "{name}") return new {cls_name}();"""
+
+
 def class_names(name):
     name = name.transpile().capitalize()
     return '{}Type'.format(name), '{}Instance'.format(name)

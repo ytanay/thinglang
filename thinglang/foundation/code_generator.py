@@ -12,7 +12,6 @@ from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-SOURCE_PATTERN = os.path.join(CURRENT_PATH,  'source/**/*.thing')
 SYMBOLS_TARGET = os.path.join(CURRENT_PATH, 'symbols')
 TYPES_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'types')
 CORE_TYPES_TARGET = os.path.join(TYPES_TARGET, 'core')
@@ -34,18 +33,15 @@ def generate_types():
     Additionally, writes the symbol maps for the generated types
     """
 
-    for path in glob.glob(SOURCE_PATTERN, recursive=True):
-
-        name = os.path.basename(path).replace('.thing', '')
-        name_id = Identifier(name)
+    for name, path in definitions.INTERNAL_SOURCES.items():
         ast = pipeline.preprocess(SourceContext(path))
-        symbol_map = SymbolMapper(ast)[name_id]
-        symbol_map.override_index(definitions.INTERNAL_TYPE_ORDERING[name_id])
+        symbol_map = SymbolMapper(ast)[name]
+        symbol_map.convention = Symbol.INTERNAL
 
         for symbol in symbol_map:
             symbol.convention = Symbol.INTERNAL
 
-        write_if_changed(os.path.join(SYMBOLS_TARGET, name + '.thingsymbols'), json.dumps(
+        write_if_changed(os.path.join(SYMBOLS_TARGET, f'{name}.thingsymbols'), json.dumps(
             symbol_map.serialize(),
             cls=JSONSerializer,
             indent=4, sort_keys=True)
@@ -56,11 +52,15 @@ def write_type_enum():
     """
     Create the internal types ordering enum
     """
-    imports = '\n'.join('#include "core/{}.h"'.format(templates.class_names(name)[0]) for name in definitions.INTERNAL_TYPE_ORDERING)
+    internal_types = {name: templates.class_names(name)[0] for name, path in definitions.INTERNAL_SOURCES.items()}
+    imports = '\n'.join('#include "core/{}.h"'.format(cls_name) for name, cls_name in internal_types.items())
 
-    write_if_changed(os.path.join(TYPES_TARGET, 'InternalTypes.h'), generate_enum(
-        'InternalTypes', list(definitions.INTERNAL_TYPE_ORDERING.items()), imports)
-    )
+    write_if_changed(os.path.join(TYPES_TARGET, 'InternalTypes.h'), templates.TYPE_INSTANTIATION.format(
+        file_name='InternalTypes.h',
+        imports=imports,
+        primitives=', '.join(x.upper() for x in definitions.PRIMITIVE_TYPES),
+        conditions='\n    '.join(templates.TYPE_CONDITIONAL.format(name=name, cls_name=cls_name) for name, cls_name in internal_types.items())
+    ))
 
 
 def write_opcode_enum():
