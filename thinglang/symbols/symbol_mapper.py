@@ -1,5 +1,6 @@
 from typing import Tuple, Union, Sequence
 
+from thinglang.compiler.errors import InvalidReference
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
@@ -45,7 +46,7 @@ class SymbolMapper(object):
         assert not target.STATIC
 
         if isinstance(target, Identifier):
-            return LocalReference(method_locals[target])
+            return LocalReference(method_locals[target], target)
         elif isinstance(target, NamedAccess):
             return self.resolve_named(target, method_locals)
 
@@ -81,7 +82,7 @@ class SymbolMapper(object):
             local = method_locals[first]
             container = self[local.type]
         else:
-            raise Exception('Cannot resolve first level access {}'.format(first))
+            raise Exception('Cannot resolve first level access {} (on {}) from {}'.format(first, first.source_ref, method_locals))
 
         container, element = self.pull(container, second)
 
@@ -110,7 +111,7 @@ class SymbolMapper(object):
             if container.extends:
                 container = self[container.extends]
             else:
-                raise Exception('Could not find {} in {} or its parents'.format(item, start))
+                raise InvalidReference(item, start)
 
         return container, container[item]
 
