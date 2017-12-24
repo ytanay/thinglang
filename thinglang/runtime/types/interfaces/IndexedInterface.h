@@ -4,5 +4,6 @@
 
 class IndexedInterface : public BaseThingInstance {
 
-    ~IndexedInterface() override {};
+public:
+    ~IndexedInterface() override = default;
 };
