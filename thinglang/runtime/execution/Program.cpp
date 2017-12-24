@@ -15,20 +15,7 @@ InstructionList Program::instructions;
 ThingForwardList Program::objects;
 unsigned char Program::current_mark = 0;
 
-Types Program::internals = { // TODO: auto generate this
-        nullptr,
-        new TextType(),
-        new NumberType(),
-        new BoolType(),
-        new ListType(),
-        new MapType(),
-        new IteratorType(),
-        new ConsoleType(),
-        new FileType(),
-        new DirectoryType(),
-        new TimeType(),
-        new ExceptionType()
-};
+Types Program::internal_types = {};
 
 
 Thing Program::pop() {
@@ -49,16 +36,18 @@ void Program::load(ProgramInfo &info) {
      */
     auto loaded_code = static_cast<InstructionList &&>(std::get<0>(info));
     auto loaded_data = static_cast<Things &&>(std::get<1>(info));
-    auto loaded_source_map = static_cast<SourceMap &&>(std::get<4>(info));
-    auto loaded_source = static_cast<Source &&>(std::get<5>(info));
+    auto loaded_imports = static_cast<Types>(std::get<2>(info));
+    auto loaded_source_map = static_cast<SourceMap &&>(std::get<5>(info));
+    auto loaded_source = static_cast<Source &&>(std::get<6>(info));
 
-    entry = std::get<2>(info);
-    initial_frame_size = std::get<3>(info);
+    entry = std::get<3>(info);
+    initial_frame_size = std::get<4>(info);
 
     static_data.insert(static_data.end(), loaded_data.begin(), loaded_data.end());
     instructions.insert(instructions.end(), loaded_code.begin(), loaded_code.end());
     source_map.insert(source_map.end(), loaded_source_map.begin(), loaded_source_map.end());
     source.insert(source.end(), loaded_source.begin(), loaded_source.end());
+    internal_types.insert(internal_types.end(), loaded_imports.begin(), loaded_imports.end());
 }
 
 
@@ -132,7 +121,7 @@ void Program::execute() {
 
             case Opcode::CALL_INTERNAL: {
 
-                Program::internals[instruction.target]->call(instruction.secondary);
+                Program::internal_types[instruction.target]->call(instruction.secondary);
                 break;
             }
 

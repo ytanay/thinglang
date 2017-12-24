@@ -10,4 +10,4 @@ using ThingMap = std::unordered_map<Thing, Thing, ThingHash, ThingEquality>;
 using Frame = Things;
 using FrameStack = std::forward_list<Frame>;
 
-using ProgramInfo = std::tuple<InstructionList, Things, Index, Size, SourceMap, Source>;
+using ProgramInfo = std::tuple<InstructionList, Things, Types, Index, Size, SourceMap, Source>;

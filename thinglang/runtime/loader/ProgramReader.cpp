@@ -13,12 +13,13 @@ ProgramInfo ProgramReader::process() {
     prepare_stream();
     read_header();
 
+    auto imports = read_imports();
     auto code = read_code();
     auto data = read_data();
     auto source_map = read_source_map();
     auto source = read_source();
 
-    return ProgramInfo(code, data, entry, initial_frame_size, source_map, source);
+    return ProgramInfo(code, data, imports, entry, initial_frame_size, source_map, source);
 }
 
 void ProgramReader::read_header() {
@@ -51,12 +52,31 @@ void ProgramReader::read_header() {
 }
 
 
+Types ProgramReader::read_imports() {
+    std::cerr << "Reading import table..." << std::endl;
+    Types type_list;
+
+    while(read_opcode() == Opcode::SENTINEL_IMPORT_TABLE_ENTRY) {
+        auto size = read_size();
+        auto data = read_string(size);
+        std::cerr << "Read " << data << std::endl;
+        type_list.push_back(create_type(data));
+    }
+
+    assert(last_opcode == Opcode::SENTINEL_IMPORT_TABLE_END);
+
+    return type_list;
+}
+
+
 InstructionList ProgramReader::read_code() {
     /**
      * Process the code section
      */
     std::cerr << "Reading code section..." << std::endl;
     InstructionList instructions;
+
+    instruction_counter = 0;
 
     for(Opcode opcode = read_opcode(); opcode != Opcode::SENTINEL_CODE_END; opcode = read_opcode()) {
         auto instruction = read_instruction(opcode);
@@ -71,7 +91,7 @@ InstructionList ProgramReader::read_code() {
 
     if (instruction_counter != instruction_count) {
         throw RuntimeError(
-                std::string("Index mismatch " + std::to_string(instruction_counter) + ", " + std::to_string(program_size)));
+                std::string("Index mismatch " + std::to_string(instruction_counter) + ", " + std::to_string(instruction_count)));
     } else {
         std::cerr << "Code section processed successfully" << std::endl << std::endl;
     }
@@ -132,14 +152,14 @@ Thing ProgramReader::read_data_block() {
     auto type = read_data_type();
 
     switch (type) {
-        case InternalTypes::TEXT: {
+        case PrimitiveType::TEXT: {
             auto size = read_size();
             auto data = read_string(size);
             std::cerr << "\tReading text (" << size << " bytes): " << data << std::endl;
             auto instance = Program::permanent<TextInstance>(data);
             return instance;
         }
-        case InternalTypes::NUMBER: {
+        case PrimitiveType::NUMBER: {
             auto data = read<int32_t>();
             std::cerr << "\tReading int: " << data << std::endl;
             auto instance = Program::permanent<NumberInstance>(data);
@@ -191,3 +211,4 @@ Source ProgramReader::read_source() {
     return lines;
 
 }
+

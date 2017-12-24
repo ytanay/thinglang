@@ -23,6 +23,7 @@ public:
 
     void read_header();
 
+    Types read_imports();
     InstructionList read_code();
     Instruction read_instruction(Opcode opcode);
 
@@ -52,8 +53,8 @@ public:
         return last_opcode;
     }
 
-    InternalTypes read_data_type(){
-        return static_cast<InternalTypes>(read<int32_t>());
+    PrimitiveType read_data_type(){
+        return static_cast<PrimitiveType>(read<int32_t>());
     }
 
 
