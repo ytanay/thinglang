@@ -42,6 +42,9 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def __add__(self, other):
         return Identifier(self.value + other.value)
 
+    def __len__(self):
+        return len(self.value)
+
     @classmethod
     def constructor(cls):
         return cls("__constructor__")

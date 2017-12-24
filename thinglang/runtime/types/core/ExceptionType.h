@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "TextType.h"
 
 
 class ExceptionInstance : public BaseThingInstance {

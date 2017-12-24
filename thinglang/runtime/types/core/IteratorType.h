@@ -7,6 +7,7 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
+#include "ListType.h"
 
 
 class IteratorInstance : public BaseThingInstance {
