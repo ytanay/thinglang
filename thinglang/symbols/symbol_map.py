@@ -75,7 +75,7 @@ class SymbolMap(object):
         return SymbolMap(
             [x.parameterize(parameters) for x in self.members],
             [x.parameterize(parameters) for x in self.methods],
-            Identifier('{}:<{}>'.format(self.name, parameters)),
+            GenericIdentifier(self.name, tuple([parameters[x] for x in self.generics])),
             self.extends,
             [],
             self.offset,

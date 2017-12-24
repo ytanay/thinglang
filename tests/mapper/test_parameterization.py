@@ -35,4 +35,4 @@ def test_parameterization_propagation():
     symbols = get_symbols(SOURCE_FULL)
     generic_type = symbols[Identifier('Person')][Identifier('favorite_numbers')].type
     parametrized_type = symbols[generic_type]
-    assert parametrized_type.name == Identifier('Pair:<{T: number}>')
+    assert parametrized_type.name == GenericIdentifier(Identifier('Pair'), (Identifier('number'),))
