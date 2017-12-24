@@ -10,7 +10,10 @@ from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
+from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
+from thinglang.parser.values.method_call import MethodCall
+from thinglang.parser.values.named_access import NamedAccess
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import TypeList
 
@@ -52,6 +55,20 @@ class MethodDefinition(BaseNode):
             context.append(OpcodeReturn(), self.source_ref)
 
         return context
+
+    def finalize(self):
+        if not self.is_constructor():
+            return super().finalize()
+
+        for descendant in self.descendants:
+            if isinstance(descendant, MethodCall) and descendant.target[0] == Identifier.super():
+                descendant.replace(AssignmentOperation(
+                    AssignmentOperation.REASSIGNMENT,
+                    NamedAccess([Identifier.self(), Identifier.super()]),
+                    MethodCall(NamedAccess([self.parent.extends, Identifier.constructor()]), descendant.arguments, is_captured=True).deriving_from(self)
+                ).deriving_from(descendant))
+
+        super().finalize()
 
     def symbol(self):
         return Symbol.method(self.name, self.return_type, self.static, self.arguments)
