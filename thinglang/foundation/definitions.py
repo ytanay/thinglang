@@ -19,6 +19,7 @@ INTERNAL_TYPE_ORDERING = {
     Identifier("iterator"): next(INTERNAL_TYPE_COUNTER),
     Identifier("Console"): next(INTERNAL_TYPE_COUNTER),
     Identifier("File"): next(INTERNAL_TYPE_COUNTER),
+    Identifier("Directory"): next(INTERNAL_TYPE_COUNTER),
     Identifier("Time"): next(INTERNAL_TYPE_COUNTER),
     Identifier("Exception"): next(INTERNAL_TYPE_COUNTER)
 }

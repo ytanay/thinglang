@@ -10,6 +10,7 @@ add_library(thingcore
         runtime/types/core/MapType.cpp
         runtime/types/core/ConsoleType.cpp
         runtime/types/core/FileType.cpp
+        runtime/types/core/DirectoryType.cpp
         runtime/types/core/TimeType.cpp
         runtime/types/core/ExceptionType.cpp
         runtime/types/core/IteratorType.cpp
