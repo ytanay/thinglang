@@ -21,7 +21,7 @@ class InlineString(LexicalToken, ValueType):
         super().__init__(value, source_ref)
 
     def serialize(self):
-        return struct.pack('<iI', self.TYPE_IDX, len(self.value)) + bytes(self.value, 'utf-8')
+        return struct.pack('<iI', InlineString.PRIMITIVE_ID) + serializer.auto(self.value)
 
     @property
     def type(self):
