@@ -27,6 +27,7 @@ class DirectoryEntryInstance : public BaseThingInstance {
         return to_string(type);
     }
 
+    Thing get(Index index) override;
 
     TextInstance* path{};
     TextInstance* type{};

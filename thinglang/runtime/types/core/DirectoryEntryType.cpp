@@ -33,3 +33,14 @@ Things DirectoryEntryInstance::children() {
     return {this->path, this->type};
 }
 
+Thing DirectoryEntryInstance::get(Index index) {
+    switch(index){
+        case 0:
+            return this->path;
+        case 1:
+            return this->type;
+        default:
+            throw RuntimeError("Cannot get " + to_string(index) + " on DirectoryEntry");
+    }
+}
+
