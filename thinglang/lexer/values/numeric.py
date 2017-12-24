@@ -14,7 +14,7 @@ class NumericValue(LexicalToken, ValueType):
 
     STATIC = True
     TYPE = Identifier("number")
-    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[Identifier("number")]
+    PRIMITIVE_ID = definitions.PRIMITIVE_TYPES.index('number')
 
     def __init__(self, value, source_ref=None):
         super(NumericValue, self).__init__(value, source_ref)
@@ -27,7 +27,7 @@ class NumericValue(LexicalToken, ValueType):
         return self.value
 
     def serialize(self):
-        return struct.pack('<ii', self.TYPE_IDX, self.value)
+        return struct.pack('<ii', NumericValue.PRIMITIVE_ID, self.value)
 
     @property
     def type(self):

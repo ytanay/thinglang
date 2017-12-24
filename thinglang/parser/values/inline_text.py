@@ -1,5 +1,6 @@
 import struct
 
+from thinglang.compiler import serializer
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodePushStatic
 from thinglang.foundation import definitions
@@ -14,8 +15,8 @@ class InlineString(LexicalToken, ValueType):
     """
 
     STATIC = True
-    TYPE = Identifier("text")
-    TYPE_IDX = definitions.INTERNAL_TYPE_ORDERING[Identifier("text")]
+    TYPE = Identifier('text')
+    PRIMITIVE_ID = definitions.PRIMITIVE_TYPES.index('text')
 
     def __init__(self, value, source_ref=None):
         super().__init__(value, source_ref)
