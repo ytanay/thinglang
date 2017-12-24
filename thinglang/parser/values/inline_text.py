@@ -22,7 +22,7 @@ class InlineString(LexicalToken, ValueType):
         super().__init__(value, source_ref)
 
     def serialize(self):
-        return struct.pack('<iI', InlineString.PRIMITIVE_ID) + serializer.auto(self.value)
+        return struct.pack('<i', InlineString.PRIMITIVE_ID) + serializer.auto(self.value)
 
     @property
     def type(self):
