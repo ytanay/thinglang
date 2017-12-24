@@ -16,6 +16,7 @@
 #include "core/IteratorType.h"
 #include "core/ConsoleType.h"
 #include "core/FileType.h"
+#include "core/DirectoryType.h"
 #include "core/TimeType.h"
 #include "core/ExceptionType.h"
 
@@ -28,8 +29,9 @@ enum class InternalTypes {
     ITERATOR = 6,
     CONSOLE = 7,
     FILE = 8,
-    TIME = 9,
-    EXCEPTION = 10
+    DIRECTORY = 9,
+    TIME = 10,
+    EXCEPTION = 11
 };
 
 
@@ -59,6 +61,9 @@ inline auto describe(InternalTypes val){
 
         case InternalTypes::FILE:
             return "FILE";
+
+        case InternalTypes::DIRECTORY:
+            return "DIRECTORY";
 
         case InternalTypes::TIME:
             return "TIME";
