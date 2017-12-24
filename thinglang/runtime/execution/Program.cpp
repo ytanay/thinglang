@@ -323,7 +323,6 @@ void Program::sweep() {
     }
 
     for(auto item : pending_deletion){
-        std::cerr << "Sweeping " << item->text() << std::endl;
         delete item;
     }
 
