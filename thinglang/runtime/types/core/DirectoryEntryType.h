@@ -8,7 +8,6 @@
 
 #include "../../utils/TypeNames.h"
 #include "TextType.h"
-#include "../../utils/Formatting.h"
 #include "../../execution/Program.h"
 
 
@@ -23,9 +22,7 @@ class DirectoryEntryInstance : public BaseThingInstance {
     std::string text() override;
     bool boolean() override;
 
-    static std::string parse_type(unsigned int type){
-        return to_string(type);
-    }
+    static std::string parse_type(unsigned int type);
 
     Thing get(Index index) override;
 

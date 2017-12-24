@@ -4,8 +4,9 @@
     thinglang C++ transpiler, 0.0.0
 **/
 
-
+#include <dirent.h>
 #include "../InternalTypes.h"
+#include "../../utils/Formatting.h"
 
 
 void DirectoryEntryType::__constructor__() {
@@ -41,6 +42,17 @@ Thing DirectoryEntryInstance::get(Index index) {
             return this->type;
         default:
             throw RuntimeError("Cannot get " + to_string(index) + " on DirectoryEntry");
+    }
+}
+
+std::string DirectoryEntryInstance::parse_type(unsigned int type) {
+    switch(type){
+        case DT_DIR:
+            return "directory";
+        case DT_REG:
+            return "file";
+        default:
+            return "unknown";
     }
 }
 
