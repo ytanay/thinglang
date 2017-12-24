@@ -1,5 +1,7 @@
 from typing import Tuple, Union, Sequence
 
+import itertools
+
 from thinglang.compiler.errors import InvalidReference
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
@@ -28,13 +30,17 @@ class SymbolMapper(object):
         :param include_foundation: should foundation classes (base types) be merged into the symbol mapper?
         """
         self.maps = {}
+        self.indexer = itertools.count()
+        self.internal_indexing = {}
+        self.user_indexing = {}
 
         if include_foundation:
             self.maps.update(SymbolMapper.FOUNDATION)
 
         if ast:
             for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
-                self.maps[thing.name] = SymbolMap.from_thing(thing, index, self.maps.get(thing.extends))
+                self.maps[thing.name] = SymbolMap.from_thing(thing, self.maps.get(thing.extends))
+                self.user_indexing[thing.name] = index
 
     def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict) -> Reference:
         """
@@ -73,7 +79,7 @@ class SymbolMapper(object):
         first, second, local = target[0], target[1], None
 
         if first.STATIC:
-            container = self.maps[first.type]
+            container = self[first.type]
         elif isinstance(first, IndexedAccess):
             container = self.resolve_indexed(first, method_locals)
         elif first.untyped in self.maps:
@@ -86,7 +92,7 @@ class SymbolMapper(object):
 
         container, element = self.pull(container, second)
 
-        return ElementReference(container, element, local)
+        return ElementReference(self.index(container), element, local)
 
     def resolve_indexed(self, access: IndexedAccess, method_locals=()) -> SymbolMap:
         """
@@ -131,7 +137,21 @@ class SymbolMapper(object):
         """
         Get the index of the program's entry point
         """
-        return self[Identifier('Program')].index
+        return self.user_indexing[Identifier('Program')]
+
+    @property
+    def indexed(self):
+        """
+        Returns a sorted list of the indexed symbol maps in this mapper
+        """
+        return sorted(((name, index) for name, index in self.internal_indexing.items() if self.maps[name].convention is Symbol.INTERNAL),
+                      key=lambda x: x[1])
+
+    def index(self, symbol_map):
+        if symbol_map.convention == Symbol.INTERNAL:
+            return self.internal_indexing[symbol_map.name.untyped]
+        else:
+            return self.user_indexing[symbol_map.name.untyped]
 
     def __getitem__(self, item) -> SymbolMap:
         """
@@ -139,12 +159,17 @@ class SymbolMapper(object):
         Otherwise, returns the symbol map identified by `item`
         """
         if isinstance(item, GenericIdentifier):
-            symbol_map = self.maps[item.value]
+            symbol_map = self[item.value]
             parameters = {parameter: replacement for parameter, replacement in zip(symbol_map.generics, item.generics)}
             assert len(symbol_map.generics) == len(parameters)
             return symbol_map.parameterize(parameters)
 
-        return self.maps[item]
+        symbol_map = self.maps[item]
+
+        if item not in self.user_indexing and item not in self.internal_indexing:
+            self.internal_indexing[item] = next(self.indexer)
+
+        return symbol_map
 
     def __contains__(self, item) -> bool:
         """
