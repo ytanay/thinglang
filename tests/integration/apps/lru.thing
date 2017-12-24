@@ -1,0 +1,40 @@
+/*
+{
+    "expected_output": ["value"]
+}
+*/
+
+# TODO: actually test LRU components
+
+thing LRUContainer extends map<K, LRUEntry<V>> with type K, type V
+    private number expirey_seconds
+
+    setup with number expirey_seconds
+        super()
+        self.expirey_seconds = expirey_seconds
+
+    does get with K key returns V
+        LRUEntry<V> entry = self.super[key]
+
+        if Time.now() - entry.ts > self.expirey_seconds
+            return self.remove(key)
+        else
+            return entry.value
+
+     does set with K key, V value
+         self.super[key] = LRUEntry<V>(value)
+
+thing LRUEntry with type V
+    has V value
+    has number ts
+
+    setup with V value
+        self.value = value
+        self.ts = Time.now()
+
+
+thing Program
+    setup
+        LRUContainer<text, text> lru = LRUContainer<text, text>(1)
+        lru.set("entry", "value")
+        Console.print(lru["entry"])
