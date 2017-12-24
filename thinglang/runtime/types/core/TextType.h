@@ -35,6 +35,7 @@ public:
     /** Members **/
     std::string val;
 
+	~TextInstance() override = default;
 };
 
 

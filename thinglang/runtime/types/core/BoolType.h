@@ -35,6 +35,7 @@ class BoolInstance : public BaseThingInstance {
     bool val;
     
     
+    ~BoolInstance() override = default;
 };
 
 

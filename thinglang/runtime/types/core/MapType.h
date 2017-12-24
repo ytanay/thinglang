@@ -40,6 +40,7 @@ public:
         return children;
     }
 
+    ~MapInstance() override = default;
 };
 
 

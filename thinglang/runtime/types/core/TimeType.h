@@ -21,6 +21,7 @@ class TimeInstance : public BaseThingInstance {
     public:
     explicit TimeInstance() = default; // empty constructor
 
+	~TimeInstance() override = default;
 };
 
 

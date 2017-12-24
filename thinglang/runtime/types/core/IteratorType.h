@@ -34,6 +34,7 @@ class IteratorInstance : public BaseThingInstance {
 	Things children() override {
         return {dynamic_cast<Thing>(&base)};
 	}
+    ~IteratorInstance() override = default;
     
     
 };

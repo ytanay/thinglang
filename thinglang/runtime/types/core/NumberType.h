@@ -35,6 +35,7 @@ class NumberInstance : public BaseThingInstance {
     int val{};
     
     
+	~NumberInstance() override = default;
 };
 
 

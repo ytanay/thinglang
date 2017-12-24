@@ -4,5 +4,5 @@
 
 class IndexedInterface : public BaseThingInstance {
 
-
+    ~IndexedInterface() override {};
 };

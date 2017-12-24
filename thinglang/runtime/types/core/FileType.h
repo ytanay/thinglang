@@ -34,6 +34,7 @@ class FileInstance : public BaseThingInstance {
 	std::fstream file;
     
     
+	~FileInstance() override = default;
 };
 
 

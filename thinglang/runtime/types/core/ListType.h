@@ -36,6 +36,7 @@ class ListInstance : public IndexedInterface {
         return val;
     }
 
+	~ListInstance() override = default;
 };
 
 

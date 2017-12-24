@@ -30,6 +30,8 @@ public:
 
     unsigned char color;
 
+    virtual ~BaseThingInstance() = default;
+
 
 };
 

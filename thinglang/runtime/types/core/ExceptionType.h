@@ -33,6 +33,7 @@ class ExceptionInstance : public BaseThingInstance {
     TextInstance* message{};
     
     
+    ~ExceptionInstance() override = default;
 };
 
 
