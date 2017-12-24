@@ -34,6 +34,11 @@ class BaseNode(ParsingMixin):
         self.parent.children.remove(self)
         self.parent = None
 
+    def replace(self, node):
+        node.parent = self.parent
+        siblings = self.parent.children
+        siblings[siblings.index(self)] = node
+
     def next_siblings(self):
         """
         Returns this node's siblings, starting after this node
@@ -83,3 +88,9 @@ class BaseNode(ParsingMixin):
                                          self,
                                          separator,
                                          separator.join(child.tree(depth=depth + 1) for child in self.children))
+
+    @property
+    def descendants(self):
+        for child in self.children:
+            yield child
+            yield from child.descendants
