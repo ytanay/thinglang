@@ -1,0 +1,36 @@
+{
+    "extends": null,
+    "generics": [],
+    "index": 9,
+    "name": "Directory",
+    "offset": 0,
+    "symbols": [
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "Directory",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "index": 1,
+            "kind": "method",
+            "name": "contents",
+            "static": false,
+            "type": [
+                "list",
+                [
+                    "text"
+                ]
+            ],
+            "visibility": "public"
+        }
+    ]
+}

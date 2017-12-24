@@ -23,6 +23,7 @@ Types Program::internals = { // TODO: auto generate this
         new IteratorType(),
         new ConsoleType(),
         new FileType(),
+        new DirectoryType(),
         new TimeType(),
         new ExceptionType()
 };

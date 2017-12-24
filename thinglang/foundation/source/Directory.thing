@@ -1,0 +1,6 @@
+thing Directory
+
+
+    setup with text file_path
+
+    does contents returns list<text>
