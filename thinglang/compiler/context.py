@@ -1,8 +1,10 @@
 import collections
 import struct
 
+from thinglang.compiler import serializer
 from thinglang.compiler.opcodes import OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
-from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelCodeEnd, SentinelDataEnd
+from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelCodeEnd, SentinelDataEnd, \
+    SentinelImportTableEntry, SentinelImportTableEnd
 from thinglang.utils.source_context import SourceContext
 
 HEADER_FORMAT = '<HIIII'
@@ -76,6 +78,7 @@ class CompilationContext(object):
         if not all(x.source_ref is not None for x in instructions):
             raise Exception('Not all instructions could be mapped to their source: {}'.format([x for x in instructions if x.source_ref is None]))
 
+        imports = bytes().join(SentinelImportTableEntry().serialize() + serializer.auto(name) for name, symbol_map in self.symbols.indexed) + SentinelImportTableEnd().serialize()
         code = bytes().join(x.serialize() for x in instructions)
         data = bytes().join(x for x in data_items) + SentinelDataEnd().serialize()
         source_map = bytes().join(x.source_ref.serialize() for x in instructions)
@@ -88,6 +91,6 @@ class CompilationContext(object):
             initial_frame_size=offsets[(self.entry, 0)][1]
         ))
 
-        return header + code + data + source_map + bytes(self.source.raw_contents, 'utf-8')
+        return header + imports + code + data + source_map + bytes(self.source.raw_contents, 'utf-8')
 
 
