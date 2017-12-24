@@ -50,9 +50,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
         for idx, arg in enumerate(self.arguments):
             compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(context)  # Deals with implicit casts
-            argument_selector.constraint(compiled_target)
+            argument_selector.constraint(compiled_target, self.source_ref)
 
-        target.element = argument_selector.disambiguate()
+        target.element = argument_selector.disambiguate(self.source_ref)
 
         instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
         context.append(instruction.type_reference(target), self.source_ref)

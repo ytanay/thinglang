@@ -19,7 +19,7 @@ class ArgumentSelector(object):
         self.collected_arguments = []
         self.options = [SymbolOption(symbol, copy.deepcopy(symbol.arguments)) for symbol in symbols]
 
-    def constraint(self, resolved):
+    def constraint(self, resolved, source_ref):
         """
         Filters out option groups that do not expect to see the resolved type as their next argument
         """
@@ -34,16 +34,16 @@ class ArgumentSelector(object):
         self.options = new_options
 
         if not self.options:
-            raise NoMatchingOverload(self.symbols, self.collected_arguments)
+            raise NoMatchingOverload(self.symbols, self.collected_arguments, source_ref)
 
-    def disambiguate(self):
+    def disambiguate(self, source_ref):
         """
         Selects the best matching overload
         """
         option_group = [option for option in self.options if not option.remaining_arguments]
 
         if len(option_group) != 1:
-            raise NoMatchingOverload(self.symbols, self.collected_arguments)
+            raise NoMatchingOverload(self.symbols, self.collected_arguments, source_ref)
 
         return option_group[0].symbol
 
