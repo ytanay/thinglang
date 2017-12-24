@@ -7,6 +7,7 @@
 #include "core/BoolType.h"
 #include "core/ConsoleType.h"
 #include "core/DirectoryType.h"
+#include "core/DirectoryEntryType.h"
 #include "core/ExceptionType.h"
 #include "core/FileType.h"
 #include "core/IteratorType.h"
@@ -24,6 +25,7 @@ inline Type create_type(const std::string& type_name){
     if(type_name == "bool") return new BoolType();
     if(type_name == "Console") return new ConsoleType();
     if(type_name == "Directory") return new DirectoryType();
+    if(type_name == "DirectoryEntry") return new DirectoryEntryType();
     if(type_name == "Exception") return new ExceptionType();
     if(type_name == "File") return new FileType();
     if(type_name == "iterator") return new IteratorType();
