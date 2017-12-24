@@ -76,6 +76,11 @@ class MethodCall(BaseNode, ValueType, CallSite):
         """
         return self._is_captured if self._is_captured is not None else self.parent is None  # Check if this method call is directly in the AST
 
+    @is_captured.setter
+    def is_captured(self, value):
+        self._is_captured = value
+
+
     @property
     def constructing_call(self):
         return self.target[-1] == Identifier.constructor()
@@ -89,3 +94,4 @@ class MethodCall(BaseNode, ValueType, CallSite):
     @ParserRule.mark
     def parse_instantiating_call(target: Identifier, arguments: 'ParenthesesVector'):
         return MethodCall(NamedAccess.extend(target, Identifier.constructor()), ArgumentList(arguments))
+
