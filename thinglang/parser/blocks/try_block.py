@@ -36,7 +36,7 @@ class TryBlock(BaseNode):
         for handler in self.handlers:
             handler_idx = handler.compile(context)
             exception_type = context.symbols[handler.exception_type]
-            context.add_entry(exception_type.index, handler_idx, start_index, end_index)
+            context.add_entry(context.symbols.index(exception_type), handler_idx, start_index, end_index)
 
     @staticmethod
     @ParserRule.mark
