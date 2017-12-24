@@ -1,7 +1,7 @@
 {
+    "convention": "internal",
     "extends": null,
     "generics": [],
-    "index": 7,
     "name": "Console",
     "offset": 0,
     "symbols": [

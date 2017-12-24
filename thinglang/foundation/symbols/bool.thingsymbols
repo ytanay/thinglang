@@ -1,7 +1,7 @@
 {
+    "convention": "internal",
     "extends": null,
     "generics": [],
-    "index": 3,
     "name": "bool",
     "offset": 0,
     "symbols": [

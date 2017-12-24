@@ -1,10 +1,10 @@
 {
+    "convention": "internal",
     "extends": null,
     "generics": [
         "K",
         "V"
     ],
-    "index": 5,
     "name": "map",
     "offset": 0,
     "symbols": [

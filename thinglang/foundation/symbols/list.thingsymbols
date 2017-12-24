@@ -1,9 +1,9 @@
 {
+    "convention": "internal",
     "extends": null,
     "generics": [
         "T"
     ],
-    "index": 4,
     "name": "list",
     "offset": 0,
     "symbols": [
