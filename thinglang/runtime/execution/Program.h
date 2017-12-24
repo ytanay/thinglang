@@ -1,14 +1,8 @@
 #pragma once
 
-#include <vector>
-#include <stack>
-#include <cassert>
-#include <algorithm>
-
-
 #include "../utils/TypeNames.h"
-#include "../errors/Aborts.h"
 #include "../utils/Containers.h"
+#include "../errors/Aborts.h"
 #include "../errors/RuntimeError.h"
 
 class Program {

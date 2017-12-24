@@ -6,6 +6,8 @@
 
 
 #include "../InternalTypes.h"
+#include "../../execution/Program.h"
+#include "../../execution/Globals.h"
 
 /**
 Methods of IteratorType
@@ -20,7 +22,7 @@ void IteratorType::__constructor__() {
 void IteratorType::has_next() {
 	auto self = Program::argument<IteratorInstance>();
 
-	Program::push(self->current != self->end ? BOOL_TRUE : BOOL_FALSE);
+	Program::push(self->current != self->end);
 }
 
 

@@ -7,13 +7,8 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
-#include "../../execution/Globals.h"
-#include "../../utils/Formatting.h"
 #include "../infrastructure/ThingType.h"
 #include "../infrastructure/ThingInstance.h"
-#include "../../execution/Program.h"
-
-
 
 
 class TextInstance : public BaseThingInstance {
@@ -21,7 +16,7 @@ class TextInstance : public BaseThingInstance {
 public:
     explicit TextInstance() = default; // empty constructor
     
-    explicit TextInstance(std::string val) : val(val) {}; // value constructor
+    explicit TextInstance(std::string val) : val(std::move(val)) {}; // value constructor
     
     /** Mixins **/
     
@@ -36,6 +31,7 @@ public:
     std::string val;
 
 	~TextInstance() override = default;
+
 };
 
 

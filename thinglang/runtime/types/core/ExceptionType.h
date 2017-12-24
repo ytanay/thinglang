@@ -7,13 +7,6 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
-#include "../../execution/Globals.h"
-#include "../../utils/Formatting.h"
-#include "../infrastructure/ThingType.h"
-#include "../infrastructure/ThingInstance.h"
-#include "../../execution/Program.h"
-
-
 
 
 class ExceptionInstance : public BaseThingInstance {
@@ -31,8 +24,7 @@ class ExceptionInstance : public BaseThingInstance {
     
     /** Members **/
     TextInstance* message{};
-    
-    
+
     ~ExceptionInstance() override = default;
 };
 

@@ -1,4 +1,7 @@
+#include <cassert>
 #include "ProgramReader.h"
+#include "../utils/Formatting.h"
+#include "../execution/Program.h"
 
 const std::string ProgramReader::EXPECTED_MAGIC = "THING\xCC";
 

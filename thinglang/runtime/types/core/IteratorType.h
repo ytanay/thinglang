@@ -7,11 +7,6 @@
 #pragma once
 
 #include "../../utils/TypeNames.h"
-#include "../../execution/Globals.h"
-#include "../../utils/Formatting.h"
-#include "../infrastructure/ThingType.h"
-#include "../infrastructure/ThingInstance.h"
-#include "../../execution/Program.h"
 
 
 class IteratorInstance : public BaseThingInstance {
@@ -34,6 +29,7 @@ class IteratorInstance : public BaseThingInstance {
 	Things children() override {
         return {dynamic_cast<Thing>(&base)};
 	}
+
     ~IteratorInstance() override = default;
     
     

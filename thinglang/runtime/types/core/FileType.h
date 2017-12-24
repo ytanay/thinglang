@@ -6,14 +6,7 @@
 
 #pragma once
 
-#include <utility>
 #include "../../utils/TypeNames.h"
-#include "../../execution/Globals.h"
-#include "../../utils/Formatting.h"
-#include "../infrastructure/ThingType.h"
-#include "../infrastructure/ThingInstance.h"
-#include "../../execution/Program.h"
-
 
 
 class FileInstance : public BaseThingInstance {
@@ -32,9 +25,9 @@ class FileInstance : public BaseThingInstance {
     /** Members **/
     std::string file_path;
 	std::fstream file;
-    
-    
+
 	~FileInstance() override = default;
+
 };
 
 

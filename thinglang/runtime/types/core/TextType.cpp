@@ -6,6 +6,8 @@
 
 
 #include "../InternalTypes.h"
+#include "../../execution/Program.h"
+#include "../../utils/Formatting.h"
 
 /**
 Methods of TextType

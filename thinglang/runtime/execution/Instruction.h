@@ -1,9 +1,7 @@
 #pragma once
 
-#include <memory>
-
-#include "../utils/TypeNames.h"
 #include "Opcodes.h"
+#include "../utils/TypeNames.h"
 
 class Instruction {
 

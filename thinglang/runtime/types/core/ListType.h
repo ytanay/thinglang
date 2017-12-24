@@ -6,11 +6,8 @@
 
 #pragma once
 
-#include <utility>
-
 #include "../../utils/TypeNames.h"
 #include "../interfaces/IndexedInterface.h"
-#include "../infrastructure/ThingType.h"
 
 
 class ListInstance : public IndexedInterface {
@@ -37,6 +34,7 @@ class ListInstance : public IndexedInterface {
     }
 
 	~ListInstance() override = default;
+
 };
 
 

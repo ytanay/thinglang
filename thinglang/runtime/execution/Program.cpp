@@ -1,6 +1,8 @@
 #include "Program.h"
 #include "../types/InternalTypes.h"
 #include "../execution/Instruction.h"
+#include "../utils/Formatting.h"
+#include "Globals.h"
 
 ThingForwardList Program::stack;
 FrameStack Program::frames;
@@ -66,7 +68,8 @@ void Program::status(Index counter, const Instruction& instruction) {
      */
     auto source_idx = source_map[instruction.index];
 
-    assert(source_idx < source.size());
+    if(source_idx >= source.size())
+        throw RuntimeError("Invalid source reference");
 
     std::cerr << "[" << counter << "] Executing instruction " << describe(instruction.opcode) << ": " << instruction.target << ", "
               << instruction.secondary << " -> [";
