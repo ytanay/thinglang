@@ -1,5 +1,6 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.context import CompilationContext
+from thinglang.foundation.definitions import INTERNAL_TYPE_ORDERING
 from thinglang.lexer.definitions.tags import LexicalInheritanceTag
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing
 from thinglang.lexer.values.identifier import Identifier
@@ -33,6 +34,9 @@ class ThingDefinition(BaseNode):
 
         if Identifier.constructor() not in self.names:  # Add implicit constructor
             self.children.insert(0, MethodDefinition.empty_constructor(self))
+
+        if self.extends and self.extends.untyped in INTERNAL_TYPE_ORDERING:
+            self.children.insert(0, MemberDefinition(Identifier.super(), self.extends).deriving_from(self))
 
     @property
     def members(self):

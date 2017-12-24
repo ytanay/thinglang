@@ -54,6 +54,10 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def object(cls):
         return cls("object")
 
+    @classmethod
+    def super(cls):
+        return cls("super")
+
     @property
     def untyped(self):
         return self
