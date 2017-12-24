@@ -27,7 +27,7 @@
             "type": [
                 "list",
                 [
-                    "text"
+                    "DirectoryEntry"
                 ]
             ],
             "visibility": "public"

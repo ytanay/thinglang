@@ -1,5 +1,3 @@
 thing DirectoryEntry
-    has text file_path
+    has text name
     has text type
-    
-    setup with text file_path

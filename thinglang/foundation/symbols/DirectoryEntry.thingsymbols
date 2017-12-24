@@ -10,7 +10,7 @@
             "convention": "internal",
             "index": 0,
             "kind": "member",
-            "name": "file_path",
+            "name": "name",
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -26,9 +26,7 @@
             "visibility": "public"
         },
         {
-            "arguments": [
-                "text"
-            ],
+            "arguments": [],
             "convention": "internal",
             "index": 0,
             "kind": "method",
