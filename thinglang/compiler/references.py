@@ -74,7 +74,7 @@ class ElementReference(Reference):
     def kind(self) -> object:
         return self.element.kind
 
-    def __str__(self):
+    def __repr__(self):
         return f'EM({self.thing}.{self.element})'
 
 
@@ -82,9 +82,10 @@ class LocalReference(Reference):
     """
     Describes a reference to a local entity on a method's stack frame
     """
-    def __init__(self, local):
+    def __init__(self, local, name):
         super(LocalReference, self).__init__(local.type)
         self.local = local
+        self.name = name
 
     @property
     def local_index(self) -> int:
@@ -92,3 +93,6 @@ class LocalReference(Reference):
         Returns the index of the local element
         """
         return self.local.index
+
+    def __repr__(self):
+        return f'LR({self.type} {self.name})'
