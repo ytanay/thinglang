@@ -376,3 +376,8 @@ Frame &Program::frame() {
      */
     return frames.front();
 }
+
+Thing Program::intern(Thing instance) {
+    objects.push_front(instance);
+    return instance;
+}

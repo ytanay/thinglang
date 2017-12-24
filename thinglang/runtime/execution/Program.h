@@ -105,6 +105,7 @@ public:
 
     static void status(Index counter, const Instruction& instruction);
 
+    static Thing intern(Thing instance);
 };
 
 
