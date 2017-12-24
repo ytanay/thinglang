@@ -348,7 +348,7 @@ void Program::push(const Thing &instance) {
     stack.push_front(instance);
 }
 
-void Program::push(Size value) {
+void Program::push(int64_t value) {
     stack.push_front(Program::create<NumberInstance>(value));
 }
 

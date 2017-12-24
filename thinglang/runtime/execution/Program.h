@@ -20,7 +20,7 @@ private:
 
 public:
     static void push(const Thing& instance);
-    static void push(Size value);
+    static void push(int64_t value);
     static void push(bool value);
     static Thing pop();
     static void create_frame(Size size);
