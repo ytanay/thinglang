@@ -7,7 +7,6 @@
 
 #include <dirent.h>
 #include "../InternalTypes.h"
-#include "../../execution/Program.h"
 
 /**
 Methods of Directory
@@ -31,7 +30,7 @@ void DirectoryType::contents() {
 
     if (directory != nullptr) { // TODO: Throw exception
         while(auto entry = readdir(directory)) {
-            contents->val.push_back(Program::create<TextInstance>(entry->d_name));
+            contents->val.push_back(Program::intern(new DirectoryEntryInstance(std::string(entry->d_name), entry->d_type)));
         }
     }
 
