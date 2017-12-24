@@ -19,6 +19,6 @@ void TimeType::__constructor__() {
 
 
 void TimeType::now() {
-    Program::push(Program::create<NumberInstance>(std::chrono::system_clock::now().time_since_epoch().count()));
+    Program::push(Program::create<NumberInstance>(time(nullptr)));
 }
 
