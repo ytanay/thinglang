@@ -48,7 +48,7 @@ void MapType::remove() {
 void MapType::size() {
     auto self = Program::argument<MapInstance>();
 
-    Program::push(self->container.size());
+    Program::push(static_cast<int64_t>(self->container.size()));
 }
 
 
