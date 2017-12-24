@@ -53,5 +53,6 @@ TYPE_CONDITIONAL = """if(type_name == "{name}") return new {cls_name}();"""
 
 
 def class_names(name):
-    name = name.transpile().capitalize()
-    return '{}Type'.format(name), '{}Instance'.format(name)
+    name = name.transpile()
+    formatted_name = name[0].upper() + name[1:]
+    return '{}Type'.format(formatted_name), '{}Instance'.format(formatted_name)
