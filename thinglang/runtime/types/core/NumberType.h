@@ -25,7 +25,7 @@ class NumberInstance : public BaseThingInstance {
 
     
     /** Members **/
-    int val{};
+    long long val{};
     
     
 	~NumberInstance() override = default;
