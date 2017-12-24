@@ -1,0 +1,41 @@
+{
+    "convention": "internal",
+    "extends": null,
+    "generics": [],
+    "name": "DirectoryEntry",
+    "offset": 2,
+    "symbols": [
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 0,
+            "kind": "member",
+            "name": "file_path",
+            "static": false,
+            "type": "text",
+            "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": 1,
+            "kind": "member",
+            "name": "type",
+            "static": false,
+            "type": "text",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "index": 0,
+            "kind": "method",
+            "name": "__constructor__",
+            "static": false,
+            "type": "DirectoryEntry",
+            "visibility": "public"
+        }
+    ]
+}
