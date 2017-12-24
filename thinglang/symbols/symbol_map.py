@@ -1,7 +1,8 @@
 import collections
+import struct
 from typing import List
 
-from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.symbols.merged_symbol import MergedSymbol
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils import collection_utils
@@ -13,21 +14,15 @@ class SymbolMap(object):
     Each SymbolMap also has an index number, by which it is known to the runtime.
     """
 
-    def __init__(self, members: List[Symbol], methods: List[Symbol], name: Identifier, extends: Identifier, generics: List[Identifier], index: int, offset: int):
-        self.members, self.methods, self.name, self.extends, self.generics, self.index, self.offset = \
-            members, self.merge_method_symbols(methods), name, extends, generics or [], index, offset
+    def __init__(self, members: List[Symbol], methods: List[Symbol], name: Identifier, extends: Identifier, generics: List[Identifier], offset: int, convention):
+        self.members, self.methods, self.name, self.extends, self.generics, self.offset, self.convention = \
+            members, self.merge_method_symbols(methods), name, extends, generics or [], offset, convention
 
         self.lookup = {
             symbol.name: symbol for symbol in self.members + self.methods
         }
 
         assert len(self.methods) + len(self.members) == len(self.lookup), 'Thing definition contains colliding elements'
-
-    def override_index(self, new_index):
-        """
-        Sets a new index for this SymbolMap
-        """
-        self.index = new_index
 
     def serialize(self) -> dict:
         """
@@ -37,8 +32,8 @@ class SymbolMap(object):
             "name": self.name,
             "extends": self.extends,
             "generics": self.generics,
-            "index": self.index,
             "offset": self.offset,
+            "convention": Symbol.serialize_convention(self.convention),
             "symbols": collection_utils.flatten([x.serialize() for x in self.lookup.values()])
         }
 
@@ -53,10 +48,10 @@ class SymbolMap(object):
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
         extends = Identifier(data['extends']) if data['extends'] else None
 
-        return cls(members, methods, Identifier(data['name']), extends, [Identifier(x) for x in data['generics']], data['index'], data['offset'])
+        return cls(members, methods, Identifier(data['name']), extends, [Identifier(x) for x in data['generics']], data['offset'], Symbol.serialize_convention(data['convention']))
 
     @classmethod
-    def from_thing(cls, thing, index: int, extends: 'SymbolMap') -> 'SymbolMap':
+    def from_thing(cls, thing, extends: 'SymbolMap') -> 'SymbolMap':
         """
         Creates a new Symbol map from a ThingDefinition
         :param thing: the source ThingDefinition
@@ -68,7 +63,7 @@ class SymbolMap(object):
         members = [elem.symbol().update_index(offset + index) for index, elem in enumerate(thing.members)]
         methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods)]
 
-        return cls(members, methods, thing.name, thing.extends, thing.generics, index, len(members) + offset)
+        return cls(members, methods, thing.name, thing.extends, thing.generics, len(members) + offset, Symbol.BYTECODE)
 
     def parameterize(self, parameters: dict) -> 'SymbolMap':
         """
@@ -83,8 +78,8 @@ class SymbolMap(object):
             Identifier('{}:<{}>'.format(self.name, parameters)),
             self.extends,
             [],
-            self.index,
-            self.offset
+            self.offset,
+            self.convention
         )
 
     def __getitem__(self, item: Identifier) -> Symbol:

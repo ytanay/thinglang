@@ -69,7 +69,7 @@ class Symbol(object):
             "static": self.static,
             "arguments": self.arguments,
             "visibility": "public" if self.visibility is Symbol.PUBLIC else "private",
-            "convention": "bytecode" if self.convention is Symbol.BYTECODE else "internal"
+            "convention": self.serialize_convention(self.convention)
         }
 
     @classmethod
@@ -88,7 +88,7 @@ class Symbol(object):
             visibility=Symbol.PUBLIC if data['visibility'] == 'public' else Symbol.PRIVATE,
             arguments=data['arguments'] is not None and [cls.load_identifier(x) for x in data['arguments']],
             index=data['index'],
-            convention=Symbol.BYTECODE if data['convention'] == 'bytecode' else Symbol.INTERNAL
+            convention=cls.serialize_convention(data['convention'])
         )
 
     @staticmethod
@@ -117,3 +117,10 @@ class Symbol(object):
 
     def __repr__(self):
         return f'Symbol({self.name})'
+
+    @classmethod
+    def serialize_convention(cls, param):
+        if isinstance(param, str):
+            return Symbol.BYTECODE if param == 'bytecode' else Symbol.INTERNAL
+        else:
+            return "bytecode" if param is Symbol.BYTECODE else "internal"
