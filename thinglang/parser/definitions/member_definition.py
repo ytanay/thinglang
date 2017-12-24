@@ -27,11 +27,5 @@ class MemberDefinition(BaseNode):
 
     @staticmethod
     @ParserRule.mark
-    def parse_member_definition(_: LexicalDeclarationMember, type_name: MEMBER_NAME_TYPES, name: Identifier):
+    def parse_member_definition(_: (LexicalDeclarationMember, LexicalPrivateTag), type_name: MEMBER_NAME_TYPES, name: Identifier):
         return MemberDefinition(name, type_name)
-
-    @staticmethod
-    @ParserRule.mark
-    def tag_member_definition(_: LexicalPrivateTag, member: 'MemberDefinition'):
-        member.visibility = Symbol.PRIVATE
-        return member
