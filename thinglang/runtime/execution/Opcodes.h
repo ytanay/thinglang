@@ -34,11 +34,13 @@ enum class Opcode {
     JUMP = 19,
     HANDLER_DESCRIPTION = 21,
     HANDLER_RANGE_DEFINITION = 22,
-    SENTINEL_THING_DEFINITION = 23,
-    SENTINEL_METHOD_DEFINITION = 24,
-    SENTINEL_METHOD_END = 25,
-    SENTINEL_CODE_END = 26,
-    SENTINEL_DATA_END = 27
+    SENTINEL_IMPORT_TABLE_ENTRY = 23,
+    SENTINEL_IMPORT_TABLE_END = 24,
+    SENTINEL_THING_DEFINITION = 25,
+    SENTINEL_METHOD_DEFINITION = 26,
+    SENTINEL_METHOD_END = 27,
+    SENTINEL_CODE_END = 28,
+    SENTINEL_DATA_END = 29
 };
 
 
@@ -113,6 +115,12 @@ inline auto describe(Opcode val){
 
         case Opcode::HANDLER_RANGE_DEFINITION:
             return "HANDLER_RANGE_DEFINITION";
+
+        case Opcode::SENTINEL_IMPORT_TABLE_ENTRY:
+            return "SENTINEL_IMPORT_TABLE_ENTRY";
+
+        case Opcode::SENTINEL_IMPORT_TABLE_END:
+            return "SENTINEL_IMPORT_TABLE_END";
 
         case Opcode::SENTINEL_THING_DEFINITION:
             return "SENTINEL_THING_DEFINITION";
@@ -202,6 +210,12 @@ inline auto arg_count(Opcode val){
 
         case Opcode::HANDLER_RANGE_DEFINITION:
             return 2;
+
+        case Opcode::SENTINEL_IMPORT_TABLE_ENTRY:
+            return 0;
+
+        case Opcode::SENTINEL_IMPORT_TABLE_END:
+            return 0;
 
         case Opcode::SENTINEL_THING_DEFINITION:
             return 2;
