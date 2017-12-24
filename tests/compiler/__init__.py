@@ -13,6 +13,8 @@ STATIC_START = 6
 
 PROGRAM, CONTAINER, A_THING, B_THING, C_THING = range(5)
 
+SYMBOL_MAPPER = SymbolMapper()
+
 TEMPLATE = """
 thing Program
     has number val1
@@ -71,5 +73,4 @@ def compile_snippet(code):
 
 
 def internal_call(target):
-    symbols = SymbolMapper()
-    return OpcodeCallInternal.from_reference(symbols.resolve_named([Identifier(x) for x in target.split('.')]))
+    return OpcodeCallInternal.from_reference(SYMBOL_MAPPER.resolve_named([Identifier(x) for x in target.split('.')]))
