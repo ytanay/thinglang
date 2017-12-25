@@ -17,10 +17,12 @@ void DirectoryType::contents() {
     auto contents = Program::create<ListInstance>();
     auto directory = opendir(self->file_path.c_str());
 
-    if (directory != nullptr) { // TODO: Throw exception
-        while(auto entry = readdir(directory)) {
-            contents->val.push_back(Program::intern(new DirectoryEntryInstance(std::string(entry->d_name), entry->d_type)));
-        }
+    if (directory == nullptr) {
+        throw ExceptionInstance(Program::create<TextInstance>("Cannot read directory contents"));
+    }
+
+    while(auto entry = readdir(directory)) {
+        contents->val.push_back(Program::intern(new DirectoryEntryInstance(std::string(entry->d_name), entry->d_type)));
     }
 
     Program::push(contents);
