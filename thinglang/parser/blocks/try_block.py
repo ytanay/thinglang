@@ -1,9 +1,13 @@
+import collections
+
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.errors import DuplicateHandlerError
+from thinglang.compiler.errors import DuplicateHandlerError, ExceptionSpecificityError
 from thinglang.lexer.blocks.exceptions import LexicalTry
 from thinglang.parser.blocks.handle_block import HandleBlock
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
+
+ExceptionEntry = collections.namedtuple('ExceptionEntry', ['exception_type', 'handler', 'range_start', 'range_end'])
 
 
 class TryBlock(BaseNode):
@@ -33,10 +37,24 @@ class TryBlock(BaseNode):
         super(TryBlock, self).compile(context)
         end_index = context.current_index
 
+        # We always execute the first handler which can accepts the given exception
+
+        entries = []
+
         for handler in self.handlers:
             handler_idx = handler.compile(context)
-            exception_type = context.symbols[handler.exception_type]
-            context.add_entry(context.symbols.index(exception_type), handler_idx, start_index, end_index)
+            specified_exception = context.symbols[handler.exception_type]
+
+            # Verify this entry is less specific than all previously compiled entries
+            for entry in entries:
+                if specified_exception in context.symbols.descendants(entry.exception_type):
+                    raise ExceptionSpecificityError(specified_exception, entry.exception_type)
+
+            for exception_type in context.symbols.descendants(specified_exception):
+                if exception_type not in [entry.exception_type for entry in entries]:  # Is this check redundant?
+                    entries.append(ExceptionEntry(exception_type, handler_idx, start_index, end_index))
+
+        context.add_entries(entries)
 
     @staticmethod
     @ParserRule.mark

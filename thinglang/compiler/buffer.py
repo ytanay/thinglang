@@ -50,11 +50,11 @@ class CompilationBuffer(object):
         self.data.append(data)
         return len(self.data) - 1
 
-    def add_entry(self, exception, handler, start_index, end_index):
+    def add_entries(self, entries):
         """
-        Add an entry to the exception handling table.
+        Add a list of entries to the exception handling table.
         """
-        self.exception_table.append((exception, handler, start_index, end_index))
+        self.exception_table.extend(reversed(entries))
 
     def epilogue(self, buffer: 'CompilationBuffer'):
         initial = len(self.epilogues)
