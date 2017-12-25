@@ -204,31 +204,8 @@ void Program::execute() {
             }
 
             case Opcode::THROW: {
-
-                while(!call_stack.empty()){
-
-                    // Look for an exception handler which matches the exception we are throwing.
-                    for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
-                        auto range = instructions[i], definition = instructions[i - 1];
-
-                        if(definition.secondary == instruction.target && counter >= range.target && counter <= range.secondary){
-                            counter = definition.target;
-                            gc_cycle();
-                            goto handle_instruction;
-                        }
-                    }
-
-                    // If we couldn't find any, walk up the call stack
-                    counter = return_stack.top() - 1;
-
-                    Program::pop_frame();
-                    call_stack.pop();
-                    return_stack.pop();
-
-                }
-
-                critical_abort(UNHANDLED_EXCEPTION);
-
+                counter = Program::exception(counter, instruction.target, call_stack, return_stack);
+                goto handle_instruction;
             }
 
             case Opcode::JUMP: {
@@ -380,4 +357,29 @@ Frame &Program::frame() {
 Thing Program::intern(Thing instance) {
     objects.push_front(instance);
     return instance;
+}
+
+Index Program::exception(Index counter, Index exception_type, std::stack<Index> &call_stack, std::stack<Index> &return_stack) {
+    while(!call_stack.empty()){
+
+        // Look for an exception handler which matches the exception we are throwing.
+        for(Index i = call_stack.top() - 1; instructions[i].opcode != Opcode::SENTINEL_METHOD_DEFINITION; i -= 2){
+            auto range = instructions[i], definition = instructions[i - 1];
+
+            if(definition.secondary == exception_type && counter >= range.target && counter <= range.secondary){
+                gc_cycle();
+                return definition.target; // Return the jump target
+            }
+        }
+
+        // If we couldn't find any, walk up the call stack
+        counter = return_stack.top() - 1;
+
+        Program::pop_frame();
+        call_stack.pop();
+        return_stack.pop();
+
+    }
+
+    critical_abort(UNHANDLED_EXCEPTION); // TODO: Obviously, we don't want a critical abort here
 }
