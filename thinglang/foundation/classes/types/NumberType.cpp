@@ -70,10 +70,10 @@ void NumberType::__binary_xor__() {
 
 
 void NumberType::__equals__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+	auto other = Program::optional<NumberInstance>();
+	auto self = Program::optional<NumberInstance>();
 
-    Program::push(self->val == other->val);
+    Program::push(other && self && self->val == other->val);
 }
 
 

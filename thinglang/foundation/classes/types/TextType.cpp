@@ -18,10 +18,10 @@ void TextType::__addition__() {
 
 
 void TextType::__equals__() {
-	auto other = Program::argument<TextInstance>();
-	auto self = Program::argument<TextInstance>();
+	auto other = Program::optional<TextInstance>();
+	auto self = Program::optional<TextInstance>();
 
-	Program::push(self->val == other->val);
+	Program::push(self && other && self->val == other->val);
 }
 
 
