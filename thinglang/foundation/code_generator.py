@@ -6,7 +6,7 @@ from thinglang import pipeline
 from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
 from thinglang.lexer.lexical_token import LexicalToken
-from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.lexer.values.identifier import GenericIdentifier
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
@@ -52,14 +52,16 @@ def write_type_enum():
     """
     Create the internal types ordering enum
     """
-    internal_types = {name: templates.class_names(name)[0] for name, path in definitions.INTERNAL_SOURCES.items()}
-    imports = '\n'.join('#include "core/{}.h"'.format(cls_name) for name, cls_name in internal_types.items())
+    target_file = os.path.abspath(os.path.join(TYPES_TARGET, 'InternalTypes.h'))
 
-    write_if_changed(os.path.join(TYPES_TARGET, 'InternalTypes.h'), templates.TYPE_INSTANTIATION.format(
+    internal_types = {name: (path, templates.class_names(name)[0]) for name, path in definitions.INTERNAL_SOURCES.items()}
+    imports = '\n'.join('#include "{}"'.format(relative_path(target_file, path, cls_name + '.h')) for name, (path, cls_name) in internal_types.items())
+
+    write_if_changed(target_file, templates.TYPE_INSTANTIATION.format(
         file_name='InternalTypes.h',
         imports=imports,
         primitives=', '.join(x.upper() for x in definitions.PRIMITIVE_TYPES),
-        conditions='\n    '.join(templates.TYPE_CONDITIONAL.format(name=name, cls_name=cls_name) for name, cls_name in internal_types.items())
+        conditions='\n    '.join(templates.TYPE_CONDITIONAL.format(name=name, cls_name=cls_name) for name, (path, cls_name) in internal_types.items())
     ))
 
 
@@ -122,6 +124,10 @@ def generate_code():
     write_type_enum()
     write_opcode_enum()
 
+
+def relative_path(source, destination, file_name):
+    relative = os.path.relpath(os.path.dirname(destination), os.path.dirname(source))
+    return os.path.join(relative, file_name)
 
 if __name__ == "__main__":
     generate_code()

@@ -9,13 +9,12 @@ The internal ordering of core types used by the compiler and runtime
 """
 
 CURRENT_PATH = os.path.dirname(os.path.abspath(__file__))
-SOURCE_PATTERN = os.path.join(CURRENT_PATH,  'source/**/*.thing')
+SOURCE_PATTERN = os.path.join(CURRENT_PATH,  'classes/**/*.thing')
 
 
 def list_types():
     for path in glob.glob(SOURCE_PATTERN, recursive=True):
-        name = os.path.basename(path).replace('.thing', '')
-        yield name, path
+        yield os.path.basename(path).replace('.thing', ''), path
 
 
 PRIMITIVE_TYPES = [
