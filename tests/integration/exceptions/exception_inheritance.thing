@@ -1,0 +1,31 @@
+/*
+{
+    "expected_output": [
+        "B1 Exception1",
+        "B2 Exception",
+        "Method end"
+    ]
+}
+*/
+
+thing Exception1 extends Exception
+thing Exception2 extends Exception1
+
+
+thing Program
+    setup
+
+
+        try
+            throw Exception2()
+        handle Exception1 exc
+            Console.print("B1 Exception1")
+        handle Exception exc
+            Console.print("B1 Exception")
+
+        try
+            throw Exception2()
+        handle Exception exc
+            Console.print("B2 Exception")
+
+        Console.print("Method end")
