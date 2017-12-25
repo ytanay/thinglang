@@ -55,7 +55,7 @@ class SourceReference(object):
         self.source_line, self.column_start, self.column_end = source_line, column_start, column_end
 
     def __repr__(self):
-        return f'{self.source_line.source} (at {self.filename}:{self.line_number}:{self.column_start}-{self.column_end})'
+        return f'{self.source_line.source.strip()} (at {self.filename}:{self.line_number}:{self.column_start}-{self.column_end})'
 
     def __sub__(self, other):
         assert self.filename == other.filename and self.line_number == other.line_number and self.column_start >= other.column_start
