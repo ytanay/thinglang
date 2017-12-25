@@ -1,5 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.opcodes import OpcodeJump, OpcodePopLocal
+from thinglang.compiler.opcodes import OpcodeJump, OpcodePopLocal, OpcodePop
 from thinglang.lexer.blocks.exceptions import LexicalHandle
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.nodes import BaseNode
@@ -22,6 +22,8 @@ class HandleBlock(BaseNode):
 
         if self.exception_name is not None:
             buffer.append(OpcodePopLocal.from_reference(context.resolve(self.exception_name)), self.source_ref)
+        else:
+            buffer.append(OpcodePop(), self.source_ref)
 
         super(HandleBlock, self).compile(buffer)
         buffer.append(OpcodeJump(context.next_index, absolute=True), self.source_ref)
