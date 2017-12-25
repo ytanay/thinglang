@@ -67,6 +67,7 @@ class ThingDefinition(BaseNode):
     @staticmethod
     @ParserRule.mark
     def define_inheritance(thing: 'ThingDefinition', _: LexicalInheritanceTag, extends: Identifier):
+        assert extends != thing.name, 'Class cannot extend itself'
         thing.extends = extends
         return thing
 
