@@ -6,16 +6,17 @@
 
 ThingForwardList Program::stack;
 FrameStack Program::frames;
-Things Program::static_data;
-Index Program::entry = 0;
-Index Program::initial_frame_size = 0;
-SourceMap Program::source_map;
-Source Program::source;
-InstructionList Program::instructions;
 ThingForwardList Program::objects;
 unsigned char Program::current_mark = 0;
 
-Types Program::internal_types = {};
+InstructionList Program::instructions;
+Things Program::static_data;
+TypeList Program::internal_types;
+TypeMap Program::internal_type_map;
+Index Program::entry = static_cast<Index>(-1);
+Index Program::initial_frame_size = static_cast<Index>(-1);
+SourceMap Program::source_map;
+Source Program::source;
 
 
 Thing Program::pop() {

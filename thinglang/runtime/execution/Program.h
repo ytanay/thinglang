@@ -59,7 +59,8 @@ private:
     static SourceMap source_map;
     static Source source;
     static InstructionList instructions;
-    static Types internal_types;
+    static TypeList internal_types;
+    static TypeMap internal_type_map;
 
 public:
     static void load(ProgramInfo &info);
