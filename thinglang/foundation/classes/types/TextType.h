@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../utils/TypeNames.h"
-#include "../infrastructure/ThingType.h"
-#include "../infrastructure/ThingInstance.h"
+#include "../../../runtime/utils/TypeNames.h"
+#include "../../../runtime/types/infrastructure/ThingType.h"
+#include "../../../runtime/types/infrastructure/ThingInstance.h"
 
 
 class TextInstance : public BaseThingInstance {

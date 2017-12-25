@@ -1,5 +1,4 @@
-#include "../InternalTypes.h"
-#include "../../execution/Program.h"
+#include "../../../runtime/types/InternalTypes.h"
 
 
 void TimeType::__constructor__() {

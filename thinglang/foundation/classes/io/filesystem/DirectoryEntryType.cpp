@@ -1,6 +1,6 @@
 #include <dirent.h>
-#include "../InternalTypes.h"
-#include "../../utils/Formatting.h"
+#include "../../../../runtime/types/InternalTypes.h"
+#include "../../../../runtime/utils/Formatting.h"
 
 
 void DirectoryEntryType::__constructor__() {

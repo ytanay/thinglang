@@ -1,4 +1,4 @@
-#include "../InternalTypes.h"
+#include "../../../../runtime/types/InternalTypes.h"
 
 void ConsoleType::write() {
 	auto message = Program::pop();

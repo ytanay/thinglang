@@ -1,5 +1,5 @@
-#include "../InternalTypes.h"
-
+#include "IteratorType.h"
+#include "../../../runtime/execution/Program.h"
 
 void IteratorType::__constructor__() {
     throw RuntimeError("Cannot instantiate Iterator directly");

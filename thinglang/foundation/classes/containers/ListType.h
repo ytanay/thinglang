@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../utils/TypeNames.h"
-#include "../interfaces/IndexedInterface.h"
 
+#include "../../../runtime/types/interfaces/IndexedInterface.h"
+#include "../../../runtime/types/infrastructure/ThingType.h"
 
 class ListInstance : public IndexedInterface {
     

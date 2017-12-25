@@ -1,6 +1,6 @@
-#include "../InternalTypes.h"
-#include "../../execution/Program.h"
-#include "../../utils/Formatting.h"
+#include "../../../runtime/types/InternalTypes.h"
+#include "../../../runtime/execution/Program.h"
+#include "../../../runtime/utils/Formatting.h"
 
 
 void TextType::__constructor__() {

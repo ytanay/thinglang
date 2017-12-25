@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../utils/TypeNames.h"
+#include "../../../../runtime/utils/TypeNames.h"
 
 
 class DirectoryInstance : public BaseThingInstance {

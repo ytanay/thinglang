@@ -1,7 +1,6 @@
-#include "../InternalTypes.h"
-#include "../../execution/Program.h"
-#include "../../utils/Formatting.h"
-
+#include "MapType.h"
+#include "../../../runtime/execution/Program.h"
+#include "../../../runtime/utils/Formatting.h"
 
 void MapType::__constructor__() {
     Program::push(Program::create<MapInstance>());

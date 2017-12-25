@@ -1,5 +1,5 @@
 #include <dirent.h>
-#include "../InternalTypes.h"
+#include "../../../../runtime/types/InternalTypes.h"
 
 
 void DirectoryType::__constructor__() {

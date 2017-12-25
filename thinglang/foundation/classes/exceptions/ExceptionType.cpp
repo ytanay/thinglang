@@ -1,4 +1,4 @@
-#include "../InternalTypes.h"
+#include "../../../runtime/types/InternalTypes.h"
 
 
 void ExceptionType::__constructor__() {

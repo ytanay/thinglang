@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../utils/TypeNames.h"
-#include "../types/core/BoolType.h"
+#include "../../foundation/classes/types/BoolType.h"
 #include "Program.h"
 
 const Thing BOOL_FALSE = Program::permanent<BoolInstance>(false);

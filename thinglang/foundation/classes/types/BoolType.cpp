@@ -1,4 +1,4 @@
-#include "../InternalTypes.h"
+#include "../../../runtime/types/InternalTypes.h"
 
 void BoolType::__constructor__() {
     throw RuntimeError("Cannot create bool instance");

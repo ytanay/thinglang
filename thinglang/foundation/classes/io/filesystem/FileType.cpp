@@ -1,5 +1,5 @@
-#include "../InternalTypes.h"
-#include "../../execution/Program.h"
+#include "../../../../runtime/types/InternalTypes.h"
+#include "../../../../runtime/execution/Program.h"
 
 void FileType::__constructor__() {
 	auto file_path = Program::argument<TextInstance>();

@@ -3,18 +3,18 @@ add_library(thingcore
 
         runtime/execution/Program.cpp
 
-        runtime/types/core/TextType.cpp
-        runtime/types/core/NumberType.cpp
-        runtime/types/core/BoolType.cpp
-        runtime/types/core/ListType.cpp
-        runtime/types/core/MapType.cpp
-        runtime/types/core/ConsoleType.cpp
-        runtime/types/core/FileType.cpp
-        runtime/types/core/DirectoryType.cpp
-        runtime/types/core/DirectoryEntryType.cpp
-        runtime/types/core/TimeType.cpp
-        runtime/types/core/ExceptionType.cpp
-        runtime/types/core/IteratorType.cpp
+        foundation/classes/types/TextType.cpp
+        foundation/classes/types/NumberType.cpp
+        foundation/classes/types/BoolType.cpp
+        foundation/classes/containers/ListType.cpp
+        foundation/classes/containers/MapType.cpp
+        foundation/classes/io/console/ConsoleType.cpp
+        foundation/classes/io/filesystem/FileType.cpp
+        foundation/classes/io/filesystem/DirectoryType.cpp
+        foundation/classes/io/filesystem/DirectoryEntryType.cpp
+        foundation/classes/utilities/TimeType.cpp
+        foundation/classes/exceptions/ExceptionType.cpp
+        foundation/classes/containers/IteratorType.cpp
 
         runtime/types/interfaces/IndexedInterface.h
 

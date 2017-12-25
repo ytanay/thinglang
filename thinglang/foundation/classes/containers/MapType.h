@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../../utils/TypeNames.h"
-#include "../../utils/Containers.h"
-
+#include "../../../runtime/types/interfaces/IndexedInterface.h"
+#include "../../../runtime/types/infrastructure/ThingType.h"
 
 class MapInstance : public IndexedInterface {
 

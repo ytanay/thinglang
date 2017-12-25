@@ -1,6 +1,5 @@
-#include "../InternalTypes.h"
-#include "../../execution/Program.h"
-#include "../../utils/Formatting.h"
+#include "../../../runtime/types/InternalTypes.h"
+#include "../../../runtime/utils/Formatting.h"
 
 void ListType::__constructor__() {
     Program::push(Program::create<ListInstance>());

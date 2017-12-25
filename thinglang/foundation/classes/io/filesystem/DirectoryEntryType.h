@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../utils/TypeNames.h"
-#include "TextType.h"
-#include "../../execution/Program.h"
+#include "../../../../runtime/utils/TypeNames.h"
+#include "../../types/TextType.h"
+#include "../../../../runtime/execution/Program.h"
 
 
 class DirectoryEntryInstance : public BaseThingInstance {
