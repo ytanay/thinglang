@@ -61,8 +61,11 @@ class CompilationContext(object):
 
             # First, we write the exception table for this method
             for exception, handler, start_index, end_index in buffer.exception_table:
-                instructions.append(OpcodeHandlerDescription(method_offset + len(buffer.instructions) + handler, exception))
-                instructions.append(OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset))
+                exception_type = self.symbols.index(exception)
+                instructions.extend([
+                    OpcodeHandlerDescription(method_offset + len(buffer.instructions) + handler, exception_type),
+                    OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset)
+                ])
 
             offsets[method_idx] = method_offset, method.frame_size
             instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.instructions)
