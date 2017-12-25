@@ -1,5 +1,4 @@
 #include "../InternalTypes.h"
-#include "../../execution/Program.h"
 
 
 void ExceptionType::__constructor__() {
@@ -11,7 +10,7 @@ void ExceptionType::__constructor__() {
 
 
 std::string ExceptionInstance::text() {
-    return message->text();
+    return "Exception: " + message->text();
 }
 
 bool ExceptionInstance::boolean() {
@@ -20,5 +19,9 @@ bool ExceptionInstance::boolean() {
 
 Type ExceptionInstance::type() const {
     return singleton<ExceptionType>();
+}
+
+Things ExceptionInstance::children() {
+    return {message};
 }
 

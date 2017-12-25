@@ -17,7 +17,9 @@ class ExceptionInstance : public BaseThingInstance {
 
 	Type type() const override;
 
-	TextInstance* message{};
+    Things children() override;
+
+    TextInstance* message{};
 
     ~ExceptionInstance() override = default;
 };
