@@ -11,3 +11,9 @@ using Frame = Things;
 using FrameStack = std::forward_list<Frame>;
 
 using ProgramInfo = std::tuple<InstructionList, Things, Types, Index, Size, SourceMap, Source>;
+template <class T>
+T* singleton()
+{
+    static T x;
+    return &x;
+}

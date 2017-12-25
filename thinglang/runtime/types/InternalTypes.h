@@ -21,19 +21,19 @@ enum PrimitiveType {
     TEXT, NUMBER
 };
 
-inline Type create_type(const std::string& type_name){
-    if(type_name == "bool") return new BoolType();
-    if(type_name == "Console") return new ConsoleType();
-    if(type_name == "Directory") return new DirectoryType();
-    if(type_name == "DirectoryEntry") return new DirectoryEntryType();
-    if(type_name == "Exception") return new ExceptionType();
-    if(type_name == "File") return new FileType();
-    if(type_name == "iterator") return new IteratorType();
-    if(type_name == "list") return new ListType();
-    if(type_name == "map") return new MapType();
-    if(type_name == "number") return new NumberType();
-    if(type_name == "text") return new TextType();
-    if(type_name == "Time") return new TimeType();
+inline Type get_type(const std::string& type_name){
+    if(type_name == "bool") return singleton<BoolType>();
+    if(type_name == "Console") return singleton<ConsoleType>();
+    if(type_name == "Directory") return singleton<DirectoryType>();
+    if(type_name == "DirectoryEntry") return singleton<DirectoryEntryType>();
+    if(type_name == "Exception") return singleton<ExceptionType>();
+    if(type_name == "File") return singleton<FileType>();
+    if(type_name == "iterator") return singleton<IteratorType>();
+    if(type_name == "list") return singleton<ListType>();
+    if(type_name == "map") return singleton<MapType>();
+    if(type_name == "number") return singleton<NumberType>();
+    if(type_name == "text") return singleton<TextType>();
+    if(type_name == "Time") return singleton<TimeType>();
     
     throw RuntimeError("Unknown type name: " + type_name);  
 }

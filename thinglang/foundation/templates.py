@@ -41,7 +41,7 @@ enum PrimitiveType {{
     {primitives}
 }};
 
-inline Type create_type(const std::string& type_name){{
+inline Type get_type(const std::string& type_name){{
     {conditions}
     
     throw RuntimeError("Unknown type name: " + type_name);  
@@ -49,7 +49,7 @@ inline Type create_type(const std::string& type_name){{
 """
 
 
-TYPE_CONDITIONAL = """if(type_name == "{name}") return new {cls_name}();"""
+TYPE_CONDITIONAL = """if(type_name == "{name}") return singleton<{cls_name}>();"""
 
 
 def class_names(name):
