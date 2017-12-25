@@ -37,6 +37,5 @@ using Methods = std::vector<Method>;
 using InternalMethods = std::vector<InternalMethod>;
 
 using Type = ThingType*;
-using Types = std::vector<Type>;
-
-
+using TypeList = std::vector<Type>;
+using TypeMap = std::unordered_map<Type, Index>;
