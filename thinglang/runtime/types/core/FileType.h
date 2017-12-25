@@ -1,9 +1,3 @@
-/**
-    FileType.h
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
 #pragma once
 
 #include "../../utils/TypeNames.h"
@@ -16,13 +10,10 @@ class FileInstance : public BaseThingInstance {
     
     explicit FileInstance(std::string file_path) : file_path(std::move(file_path)) {}; // value constructor
     
-    /** Mixins **/
-    
     std::string text() override;
     bool boolean() override;
 
-    
-    /** Members **/
+
     std::string file_path;
 	std::fstream file;
 

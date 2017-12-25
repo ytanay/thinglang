@@ -1,16 +1,5 @@
-/**
-    FileType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include <dirent.h>
 #include "../InternalTypes.h"
-
-/**
-Methods of Directory
-**/
 
 
 void DirectoryType::__constructor__() {
@@ -37,11 +26,6 @@ void DirectoryType::contents() {
     Program::push(contents);
 }
 
-
-
-/**
-Mixins of Directory
-**/
 
 std::string DirectoryInstance::text() {
 	return "Directory(" + this->file_path + ")";

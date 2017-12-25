@@ -1,9 +1,3 @@
-/**
-    ExceptionType.h
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
 #pragma once
 
 #include "../../utils/TypeNames.h"
@@ -16,14 +10,12 @@ class ExceptionInstance : public BaseThingInstance {
     explicit ExceptionInstance() = default; // empty constructor
     
     explicit ExceptionInstance(TextInstance* message) : message(message) {}; // value constructor
-    
-    /** Mixins **/
+
     
     std::string text() override;
     bool boolean() override;
 
-    
-    /** Members **/
+
     TextInstance* message{};
 
     ~ExceptionInstance() override = default;

@@ -1,9 +1,3 @@
-/**
-    TextType.h
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
 #pragma once
 
 #include "../../utils/TypeNames.h"

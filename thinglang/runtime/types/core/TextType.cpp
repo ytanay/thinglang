@@ -1,17 +1,6 @@
-/**
-    TextType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
 #include "../../execution/Program.h"
 #include "../../utils/Formatting.h"
-
-/**
-Methods of TextType
-**/
 
 
 void TextType::__constructor__() {
@@ -68,10 +57,6 @@ void TextType::convert_number() {
 	Program::push(Program::create<NumberInstance>(to_number(num->val)));
 }
 
-
-/**
-Mixins of TextInstance
-**/
 
 std::string TextInstance::text() {
     return val;

@@ -1,17 +1,6 @@
-/**
-    NumberType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
 #include "../../execution/Program.h"
 #include "../../utils/Formatting.h"
-
-/**
-Methods of NumberType
-**/
 
 
 void NumberType::__constructor__() {
@@ -118,11 +107,6 @@ void NumberType::convert_text() {
 
 	Program::push(Program::create<TextInstance>(to_string(self->val)));
 }
-
-
-/**
-Mixins of NumberInstance
-**/
 
 std::string NumberInstance::text() {
     return to_string(val);

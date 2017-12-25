@@ -1,18 +1,6 @@
-/**
-    ListType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
 #include "../../execution/Program.h"
 #include "../../utils/Formatting.h"
-
-/**
-Methods of ListType
-**/
-
 
 void ListType::__constructor__() {
     Program::push(Program::create<ListInstance>());
@@ -99,11 +87,6 @@ void ListType::range() {
 	Program::push(lst);
 }
 
-
-
-/**
-Mixins of ListInstance
-**/
 
 std::string ListInstance::text() {
 	return to_string(val);

@@ -1,9 +1,3 @@
-/**
-    FileType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
 #include <dirent.h>
 #include "../InternalTypes.h"
 #include "../../utils/Formatting.h"

@@ -1,17 +1,4 @@
-/**
-    IteratorType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
-#include "../../execution/Program.h"
-#include "../../execution/Globals.h"
-
-/**
-Methods of IteratorType
-**/
 
 
 void IteratorType::__constructor__() {
@@ -33,10 +20,6 @@ void IteratorType::next() {
 	Program::push(item);
 }
 
-
-/**
-Mixins of IteratorInstance
-**/
 
 std::string IteratorInstance::text() {
     return "Iterator<ListType>";

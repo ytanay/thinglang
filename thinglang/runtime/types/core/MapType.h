@@ -1,9 +1,3 @@
-/**
-    MapType.h
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
 #pragma once
 
 #include "../../utils/TypeNames.h"
@@ -16,16 +10,12 @@ public:
     explicit MapInstance() = default; // empty constructor
     
     explicit MapInstance(ThingMap container) : container(std::move(container)) {}; // value constructor
-    
-    /** Mixins **/
 
     std::string text() override;
     bool boolean() override;
     size_t hash() const override;
     bool operator==(const BaseThingInstance &other) const override;
 
-    
-    /** Members **/
     ThingMap container;
     
     

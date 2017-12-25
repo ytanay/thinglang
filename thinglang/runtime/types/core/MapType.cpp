@@ -1,17 +1,6 @@
-/**
-    MapType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
 #include "../../execution/Program.h"
 #include "../../utils/Formatting.h"
-
-/**
-Methods of MapType
-**/
 
 
 void MapType::__constructor__() {
@@ -50,11 +39,6 @@ void MapType::size() {
 
     Program::push(static_cast<int64_t>(self->container.size()));
 }
-
-
-/**
-Mixins of MapType
-**/
 
 std::string MapInstance::text() {
 	return to_string(container);

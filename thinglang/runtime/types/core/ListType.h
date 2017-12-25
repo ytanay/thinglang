@@ -1,9 +1,3 @@
-/**
-    ListType.h
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
 #pragma once
 
 #include "../../utils/TypeNames.h"
@@ -16,16 +10,13 @@ class ListInstance : public IndexedInterface {
     explicit ListInstance() = default; // empty constructor
     
     explicit ListInstance(std::vector<Thing> val) : val(std::move(val)) {}; // value constructor
-    
-    /** Mixins **/
+
 
 	std::string text() override;
 	bool boolean() override;
 	size_t hash() const override;
 	bool operator==(const BaseThingInstance &other) const override;
 
-    
-    /** Members **/
     Things val;
     
     

@@ -1,16 +1,5 @@
-/**
-    ExceptionType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
 #include "../../execution/Program.h"
-
-/**
-Methods of ExceptionType
-**/
 
 
 void ExceptionType::__constructor__() {
@@ -20,10 +9,6 @@ void ExceptionType::__constructor__() {
     self->message = message;
 }
 
-
-/**
-Mixins of ExceptionInstance
-**/
 
 std::string ExceptionInstance::text() {
     return message->text();

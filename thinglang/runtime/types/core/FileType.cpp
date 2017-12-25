@@ -1,17 +1,5 @@
-/**
-    FileType.cpp
-    Auto-generated code - do not modify.
-    thinglang C++ transpiler, 0.0.0
-**/
-
-
 #include "../InternalTypes.h"
 #include "../../execution/Program.h"
-
-/**
-Methods of FileType
-**/
-
 
 void FileType::__constructor__() {
 	auto file_path = Program::argument<TextInstance>();
@@ -59,10 +47,6 @@ void FileType::read() {
 	Program::push(Program::create<TextInstance>(sstr.str()));
 }
 
-
-/**
-Mixins of FileInstance
-**/
 
 std::string FileInstance::text() {
 	return "File(" + this->file_path + ")";
