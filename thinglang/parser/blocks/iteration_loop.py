@@ -43,6 +43,7 @@ class IterationLoop(Loop):
         super().compile(context)
 
     def finalize(self):
+        super().finalize()
         self.children.insert(0, AssignmentOperation(
             AssignmentOperation.DECELERATION,
             self.target,
