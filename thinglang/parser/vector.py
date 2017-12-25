@@ -1,3 +1,5 @@
+import itertools
+
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
@@ -76,6 +78,9 @@ class TokenVector(object):
         """
         Iteratively parses the token vector until a single node remains, or no further rule replacements can be made.
         """
+
+        self.normalize_tokens()
+
         while self.perform_replacements():
             pass
 
@@ -157,6 +162,15 @@ class TokenVector(object):
 
     def __getitem__(self, item):
         return self.tokens[item]
+
+    def normalize_tokens(self):
+        iterable = iter(self.tokens)
+        filter_start = 0
+
+        while isinstance(next(iterable), LexicalIndent):
+            filter_start += 1
+
+        self.tokens = self.tokens[:filter_start] + [x for x in self.tokens[filter_start:] if not isinstance(x, LexicalIndent)]
 
 
 class ParenthesesVector(TokenVector, ValueType, ListType):
