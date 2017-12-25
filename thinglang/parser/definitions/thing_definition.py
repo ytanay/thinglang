@@ -24,10 +24,12 @@ class ThingDefinition(BaseNode):
 
     def compile(self, context: CompilationContext):
         symbol_map = context.symbols[self.name]
-        for method in self.methods:
+        thing_id = context.symbols.index(symbol_map)
+
+        for method_id, method in enumerate(self.methods): # Assumes consistent ordering in AST and symbol map
             buffer = CompilationBuffer(context.symbols, method.locals)
             method.compile(buffer)
-            context.add((context.symbols.index(symbol_map), symbol_map[method.name].index), method, buffer)
+            context.add((thing_id, method_id), method, buffer)
 
     def finalize(self):
         super().finalize()
