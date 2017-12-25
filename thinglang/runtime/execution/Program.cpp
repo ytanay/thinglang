@@ -118,9 +118,14 @@ void Program::execute() {
             }
 
             case Opcode::CALL_INTERNAL: {
-
-                Program::internal_types[instruction.target]->call(instruction.secondary);
-                break;
+                try {
+                    Program::internal_types[instruction.target]->call(instruction.secondary);
+                    break;
+                } catch(Thing exc){
+                    Program::push(exc);
+                    counter = Program::exception(counter, internal_type_map[exc->type()], call_stack, return_stack);
+                    goto handle_instruction;
+                }
             }
 
             case Opcode::INSTANTIATE: {
