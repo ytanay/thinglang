@@ -42,7 +42,25 @@ public:
         auto casted = dynamic_cast<T*>(value);
 
         if(casted == nullptr)
-            throw RuntimeError("Cannot cast target"); // TODO: make user-mode exception
+            throw RuntimeError("Cannot cast target"); // TODO: throw user mode excetion
+
+        return casted;
+    }
+
+    template <typename T>
+    static T* optional(){
+        /**
+        * Pops an argument from the stack, casting it to type T* - accepts null
+        */
+        auto value = pop();
+
+        if(value == nullptr)
+            return nullptr;
+
+        auto casted = dynamic_cast<T*>(value);
+
+        if(casted == nullptr)
+            throw RuntimeError("Cannot cast target"); // TODO: throw user mode exception
 
         return casted;
     }
