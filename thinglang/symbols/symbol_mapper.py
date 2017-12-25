@@ -11,6 +11,7 @@ from thinglang.parser.values.indexed_access import IndexedAccess
 from thinglang.parser.values.named_access import NamedAccess
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_map import SymbolMap
+from thinglang.utils import collection_utils
 
 
 class SymbolMapper(object):
@@ -138,6 +139,20 @@ class SymbolMapper(object):
         Get the index of the program's entry point
         """
         return self.user_indexing[Identifier('Program')]
+
+    @collection_utils.drain()
+    def descendants(self, root_map: SymbolMap, include_root: bool=True, collected: set=None):
+        if not collected:
+            collected = {root_map}
+        else:
+            collected.add(root_map)
+
+        if include_root:
+            yield root_map
+
+        for symbol_map in self.maps.values():
+            if symbol_map not in collected and symbol_map.extends == root_map.name:
+                yield from self.descendants(symbol_map, collected=collected)
 
     @property
     def indexed(self):

@@ -57,6 +57,18 @@ thing Person
         
 '''
 
+SOURCE_INHERITANCE = '''
+thing A
+
+thing B1 extends A
+thing B2 extends A
+thing B3 extends A
+
+thing C1 extends B1
+thing C2 extends B1
+thing C3 extends B2
+'''
+
 SOURCE_FULL = SOURCE_LOCATION + SOURCE_PERSON + SOURCE_PAIR
 
 

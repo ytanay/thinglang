@@ -1,5 +1,5 @@
 from tests.mapper import SOURCE_FULL, SOURCE_PERSON, SOURCE_LOCATION, SOURCE_PAIR, get_symbols, validate_member, \
-    validate_method
+    validate_method, SOURCE_INHERITANCE
 from thinglang.lexer.values.identifier import Identifier
 
 
@@ -41,3 +41,13 @@ def test_method_symbol_description():
     validate_method(person[Identifier('walk_to')], None, ['Location'], 1)
     validate_method(location[Identifier('distance')], 'number', ['Location'] * 2, 1, True)
     validate_method(pair[Identifier('set_values')], 'T', ['T'] * 2, 1)
+
+
+def test_descendant_retrieval():
+    symbols = get_symbols(SOURCE_INHERITANCE)
+
+    def get_names(name, *args):
+        return {str(x.name) for x in symbols.descendants(symbols[Identifier(name)], *args)}
+
+    assert get_names('A', False) == {'B1', 'B2', 'B3', 'C1', 'C2', 'C3'}
+    assert get_names('B1') == {'B1', 'C1', 'C2'}
