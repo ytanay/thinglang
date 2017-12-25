@@ -42,6 +42,20 @@ class DuplicateHandlerError(ThinglangException):
         return f'Duplicate handlers were registered ({", ".join(str(handler_type) for handler_type in self.handler_types)})'
 
 
+class ExceptionSpecificityError(ThinglangException):
+    """
+    A handler for an exception was registered after a handler that also catches it.
+    """
+
+    def __init__(self, specified_exception, prior):
+        super().__init__()
+        self.specified_exception, self.prior = specified_exception, prior
+
+    def __str__(self):
+        return f'The exception handler for {self.specified_exception} cannot be reached. ' \
+               f'Exceptions of this type will be handled by the handler for {self.prior}.'
+
+
 class InvalidReference(ThinglangException):
     """
     Reference to an invalid entity - e.g., missing member or method
