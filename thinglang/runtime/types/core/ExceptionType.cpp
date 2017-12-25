@@ -18,3 +18,7 @@ bool ExceptionInstance::boolean() {
     return true;
 }
 
+Type ExceptionInstance::type() const {
+    return singleton<ExceptionType>();
+}
+

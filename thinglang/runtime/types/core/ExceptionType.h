@@ -15,8 +15,9 @@ class ExceptionInstance : public BaseThingInstance {
     std::string text() override;
     bool boolean() override;
 
+	Type type() const override;
 
-    TextInstance* message{};
+	TextInstance* message{};
 
     ~ExceptionInstance() override = default;
 };

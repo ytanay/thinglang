@@ -27,6 +27,10 @@ size_t BaseThingInstance::hash() const {
     return 0;
 }
 
+Type BaseThingInstance::type() const {
+    throw RuntimeError("BaseThingInstance has no type");
+}
+
 void ThingInstance::set(const Index index, const Thing &thing) {
     std::cerr << "Setting " << index << ": " << thing->text() << std::endl;
     members[index] = thing;
