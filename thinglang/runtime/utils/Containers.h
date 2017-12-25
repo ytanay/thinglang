@@ -10,7 +10,17 @@ using ThingMap = std::unordered_map<Thing, Thing, ThingHash, ThingEquality>;
 using Frame = Things;
 using FrameStack = std::forward_list<Frame>;
 
-using ProgramInfo = std::tuple<InstructionList, Things, Types, Index, Size, SourceMap, Source>;
+
+struct ProgramInfo {
+    InstructionList instructions;
+    Things static_data;
+    TypeList imported_types;
+    Index entry_point;
+    Size root_stack_frame_size;
+    SourceMap source_map;
+    Source program_source;
+};
+
 template <class T>
 T* singleton()
 {

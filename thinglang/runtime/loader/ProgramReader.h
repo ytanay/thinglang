@@ -23,7 +23,7 @@ public:
 
     void read_header();
 
-    Types read_imports();
+    TypeList read_imports();
     InstructionList read_code();
     Instruction read_instruction(Opcode opcode);
 

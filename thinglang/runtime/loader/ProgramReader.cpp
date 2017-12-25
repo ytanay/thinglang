@@ -19,7 +19,7 @@ ProgramInfo ProgramReader::process() {
     auto source_map = read_source_map();
     auto source = read_source();
 
-    return ProgramInfo(code, data, imports, entry, initial_frame_size, source_map, source);
+    return ProgramInfo({code, data, imports, entry, initial_frame_size, source_map, source});
 }
 
 void ProgramReader::read_header() {
@@ -52,15 +52,15 @@ void ProgramReader::read_header() {
 }
 
 
-Types ProgramReader::read_imports() {
+TypeList ProgramReader::read_imports() {
     std::cerr << "Reading import table..." << std::endl;
-    Types type_list;
 
+    TypeList type_list;
     while(read_opcode() == Opcode::SENTINEL_IMPORT_TABLE_ENTRY) {
         auto size = read_size();
-        auto data = read_string(size);
-        std::cerr << "Read " << data << std::endl;
-        type_list.push_back(create_type(data));
+        auto name = read_string(size);
+        std::cerr << "\tImporting " << name << std::endl;
+        type_list.push_back(get_type(name));
     }
 
     assert(last_opcode == Opcode::SENTINEL_IMPORT_TABLE_END);

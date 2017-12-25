@@ -34,20 +34,18 @@ void Program::load(ProgramInfo &info) {
     /**
      * Prepares bytecode for execution
      */
-    auto loaded_code = static_cast<InstructionList &&>(std::get<0>(info));
-    auto loaded_data = static_cast<Things &&>(std::get<1>(info));
-    auto loaded_imports = static_cast<Types>(std::get<2>(info));
-    auto loaded_source_map = static_cast<SourceMap &&>(std::get<5>(info));
-    auto loaded_source = static_cast<Source &&>(std::get<6>(info));
+    entry = info.entry_point;
+    initial_frame_size = info.root_stack_frame_size;
+    static_data = info.static_data;
+    instructions = info.instructions;
+    source_map = info.source_map;
+    source = info.program_source;
+    internal_types = info.imported_types;
 
-    entry = std::get<3>(info);
-    initial_frame_size = std::get<4>(info);
-
-    static_data.insert(static_data.end(), loaded_data.begin(), loaded_data.end());
-    instructions.insert(instructions.end(), loaded_code.begin(), loaded_code.end());
-    source_map.insert(source_map.end(), loaded_source_map.begin(), loaded_source_map.end());
-    source.insert(source.end(), loaded_source.begin(), loaded_source.end());
-    internal_types.insert(internal_types.end(), loaded_imports.begin(), loaded_imports.end());
+    Index index = 0;
+    for(Type internal_type : internal_types){ // Used to look up exception types
+        internal_type_map[internal_type] = index++;
+    }
 }
 
 
