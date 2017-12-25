@@ -4,18 +4,18 @@
     thinglang C++ transpiler, 0.0.0
 **/
 
-#include "..\..\foundation\classes\containers\IteratorType.h"
-#include "..\..\foundation\classes\containers\ListType.h"
-#include "..\..\foundation\classes\containers\MapType.h"
-#include "..\..\foundation\classes\exceptions\ExceptionType.h"
-#include "..\..\foundation\classes\io\console\ConsoleType.h"
-#include "..\..\foundation\classes\io\filesystem\DirectoryType.h"
-#include "..\..\foundation\classes\io\filesystem\DirectoryEntryType.h"
-#include "..\..\foundation\classes\io\filesystem\FileType.h"
-#include "..\..\foundation\classes\types\BoolType.h"
-#include "..\..\foundation\classes\types\NumberType.h"
-#include "..\..\foundation\classes\types\TextType.h"
-#include "..\..\foundation\classes\utilities\TimeType.h"
+#include "../../foundation/classes/containers/IteratorType.h"
+#include "../../foundation/classes/containers/ListType.h"
+#include "../../foundation/classes/containers/MapType.h"
+#include "../../foundation/classes/exceptions/ExceptionType.h"
+#include "../../foundation/classes/io/console/ConsoleType.h"
+#include "../../foundation/classes/io/filesystem/DirectoryType.h"
+#include "../../foundation/classes/io/filesystem/DirectoryEntryType.h"
+#include "../../foundation/classes/io/filesystem/FileType.h"
+#include "../../foundation/classes/types/BoolType.h"
+#include "../../foundation/classes/types/NumberType.h"
+#include "../../foundation/classes/types/TextType.h"
+#include "../../foundation/classes/utilities/TimeType.h"
 
 enum PrimitiveType {
     TEXT, NUMBER

@@ -127,7 +127,8 @@ def generate_code():
 
 def relative_path(source, destination, file_name):
     relative = os.path.relpath(os.path.dirname(destination), os.path.dirname(source))
-    return os.path.join(relative, file_name)
+    return os.path.join(relative, file_name).replace('\\', '/')
+
 
 if __name__ == "__main__":
     generate_code()
