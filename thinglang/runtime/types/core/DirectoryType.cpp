@@ -18,7 +18,7 @@ void DirectoryType::contents() {
     auto directory = opendir(self->file_path.c_str());
 
     if (directory == nullptr) {
-        throw ExceptionInstance(Program::create<TextInstance>("Cannot read directory contents"));
+        throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Cannot read directory contents"));
     }
 
     while(auto entry = readdir(directory)) {
