@@ -13,10 +13,10 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
 
     VALIDATOR = re.compile(r'[a-zA-Z_]\w*$')
 
-    def __init__(self, value, source_ref=None):
+    def __init__(self, value, source_ref=None, type_name=None):
         super(Identifier, self).__init__(value, source_ref)
         assert self.validate(value), f'{value} is not a valid identifier'
-        self.type = None
+        self.type = type_name
         self.index = None
 
     def compile(self, context):
