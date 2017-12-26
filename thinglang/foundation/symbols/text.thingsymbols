@@ -3,7 +3,10 @@
     "extends": null,
     "generics": [],
     "name": "text",
-    "offset": 0,
+    "offsets": {
+        "members": 0,
+        "methods": 0
+    },
     "symbols": [
         {
             "arguments": [],
