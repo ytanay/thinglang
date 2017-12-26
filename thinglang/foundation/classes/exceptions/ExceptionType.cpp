@@ -2,8 +2,8 @@
 
 
 void ExceptionType::__constructor__() {
-    auto message = Program::argument<TextInstance>();
     auto self = Program::create<ExceptionInstance>();
+    auto message = Program::argument<TextInstance>();
 
     self->message = message;
 }

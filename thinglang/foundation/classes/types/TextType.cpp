@@ -9,25 +9,24 @@ void TextType::__constructor__() {
 
 
 void TextType::__addition__() {
-	auto other = Program::pop();
 	auto self = Program::argument<TextInstance>();
+	auto other = Program::pop();
 
 	Program::push(Program::create<TextInstance>(self->val + other->text()));
-
 }
 
 
 void TextType::__equals__() {
-	auto other = Program::optional<TextInstance>();
-	auto self = Program::optional<TextInstance>();
+    auto self = Program::argument<TextInstance>();
+    auto other = Program::argument<TextInstance>();
 
 	Program::push(self && other && self->val == other->val);
 }
 
 
 void TextType::contains() {
+    auto self = Program::argument<TextInstance>();
 	auto substring = Program::argument<TextInstance>();
-	auto self = Program::argument<TextInstance>();
 
 	Program::push( self->val.find(substring->val) != std::string::npos);
 }
