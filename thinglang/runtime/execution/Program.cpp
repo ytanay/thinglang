@@ -120,6 +120,17 @@ void Program::execute() {
 
                 call_stack.push(instruction.target);
                 Program::create_frame(instruction.secondary);
+                Program::frame()[0] = Program::pop();
+
+                goto handle_instruction;
+            }
+
+            case Opcode::CALL_STATIC: {
+                return_stack.push(counter + 1);
+                counter = instruction.target;
+
+                call_stack.push(instruction.target);
+                Program::create_frame(instruction.secondary);
 
                 goto handle_instruction;
             }

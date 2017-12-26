@@ -271,6 +271,12 @@ class OpcodeCall(ElementReferenced):
         self.args = offsets[self.args]
 
 
+class OpcodeCallStatic(OpcodeCall):
+    """
+    Calls a user defined method, statically
+    """
+
+
 class OpcodeCallInternal(ElementReferenced):
     """
     Calls a native (compiled) method
