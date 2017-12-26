@@ -35,6 +35,9 @@ thing Program
     
     does action with number n 
         Console.print("action")
+        
+    does add with number a, number b
+        return a + b
 
 
 thing Container
@@ -58,17 +61,22 @@ thing C extends B
 """
 
 
-def compile_base(code='', thing_id=0, method_id=0):
-    context = pipeline.compile(SourceContext.wrap(TEMPLATE.format(code)), mapper=SYMBOL_MAPPER)
+def compile_base(code='', thing_id=0, method_id=0, trim=False):
+    context = pipeline.compile(SourceContext.wrap(code), mapper=SYMBOL_MAPPER)
     entry = context.methods[(thing_id, method_id)]
-    return entry[1].instructions
+    instructions = entry[1].instructions
+    return instructions[trim + 1:-1] if trim else instructions
 
 
-TRIM_START = len(compile_base()) - 1
+def compile_template(code='', thing_id=0, method_id=0):
+    return compile_base(TEMPLATE.format(code), thing_id, method_id)
+
+
+TRIM_START = len(compile_template()) - 1
 
 
 def compile_snippet(code):
-    instructions = compile_base(code)[TRIM_START:-1]  # Pop off boilerplate and the return instruction
+    instructions = compile_template(code)[TRIM_START:-1]  # Pop off boilerplate and the return instruction
     print('Bytecode result: {}'.format(instructions))
     return instructions
 
