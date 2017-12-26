@@ -1,6 +1,7 @@
 from thinglang.compiler.references import Reference
 from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.method_call import MethodCall
@@ -15,10 +16,10 @@ class CastOperation(BaseNode):
     """
 
     @staticmethod
-    def create(source: Reference, destination_type: Identifier) -> MethodCall:
-        return MethodCall(NamedAccess([source.type, Identifier('convert_') + destination_type]), [source], stack_args=True)
+    def create(source, destination_type: Identifier) -> MethodCall:
+        return MethodCall(NamedAccess.extend(source, CastTag(destination_type)), stack_args=True)
 
     @staticmethod
     @ParserRule.mark
     def parse_inline_cast_op(value: ValueType, _: LexicalCast, target_type: Identifier):
-        return MethodCall(NamedAccess.extend(value, Identifier('convert_') + target_type), [])
+        return MethodCall(NamedAccess.extend(value, CastTag(target_type)), [])

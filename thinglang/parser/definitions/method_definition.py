@@ -4,8 +4,10 @@ from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, Lexi
     LexicalDeclarationStatic
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.operators.binary import LexicalBinaryOperation
+from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.operators.comparison import LexicalComparison
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.parser.constructs.cast_operation import CastTag
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes.base_node import BaseNode
@@ -135,3 +137,8 @@ class MethodDefinition(BaseNode):
     def tag_static(_: LexicalDeclarationStatic, method: 'MethodDefinition'):
         method.static = True
         return method
+
+    @staticmethod
+    @ParserRule.predicate(lambda tokens, index: index == 0)
+    def parse_casting_method(_: LexicalCast, return_type: Identifier):
+        return MethodDefinition(CastTag(return_type), return_type=return_type)
