@@ -10,13 +10,13 @@ struct MethodInfo {
 
 class ThingTypeUser {
 public:
-    explicit ThingTypeUser(std::vector<MethodInfo> methods) : methods(std::move(methods)) {};
+    explicit ThingTypeUser(Size members, Size methods) : members(members), methods(methods) {};
     inline MethodInfo method(Index idx) const {
         return methods[idx];
     };
 
-
-    std::vector<MethodInfo> methods;
+    Size members;
+    std::vector<MethodInfo> methods{};
 };
 
 

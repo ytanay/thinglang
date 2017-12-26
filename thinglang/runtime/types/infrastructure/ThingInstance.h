@@ -43,7 +43,7 @@ class ThingInstance : public BaseThingInstance {
 
 public:
 
-    explicit ThingInstance(Size members) : members(members) {};
+    explicit ThingInstance(Index type_id, Size members) : type_id(type_id), members(members) {};
 
     Thing get(Index index) override;
 
@@ -54,6 +54,8 @@ public:
     Things children() override {
         return members;
     }
+
+    Index type_id;
 };
 
 
