@@ -15,7 +15,7 @@ class ExceptionInstance : public BaseThingInstance {
     std::string text() override;
     bool boolean() override;
 
-	Type type() const override;
+	InternalType type() const override;
 
     Things children() override;
 

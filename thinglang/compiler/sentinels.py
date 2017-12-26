@@ -1,4 +1,4 @@
-from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS
+from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS, TARGET
 from thinglang.compiler.opcodes import Opcode
 
 
@@ -25,7 +25,7 @@ class SentinelMethodDefinition(Opcode):
     """
     Signifies a method definition boundary.
     """
-    ARGS = FRAME_SIZE, ARGUMENTS
+    ARGS = TARGET, FRAME_SIZE
 
 
 class SentinelMethodEnd(Opcode):
