@@ -1,25 +1,12 @@
-from thinglang import parser
+from thinglang.phases.preprocess import preprocess
 from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.indexer import Indexer
-from thinglang.lexer.lexical_analyzer import lexer
-from thinglang.parser import parser
-from thinglang.parser.nodes.root_node import RootNode
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils import logging_utils
 from thinglang.utils.source_context import SourceContext
 
 
-def preprocess(source: SourceContext) -> RootNode:
-    lexical_groups = lexer(source)
-    ast = parser.parse(lexical_groups)
-    ast.finalize()
-
-    logging_utils.print_header("Original AST", ast.tree())
-
-    return ast
-
-
-def compile(entrypoint: SourceContext, executable: bool=True) -> CompilationContext:
+def compile(entrypoint: SourceContext, executable: bool=True, mapper: SymbolMapper=None) -> CompilationContext:
     """
     Compile a thinglang program
     :param entrypoint: file path of the program entrypoint
