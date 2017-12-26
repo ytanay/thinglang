@@ -32,25 +32,35 @@ class AssignmentOperation(BaseNode):
         return f'Assignment({self.name} = {self.value})'
 
     def compile(self, context: CompilationBuffer):
-
-        if isinstance(self.name, IndexedAccess):
+        if isinstance(self.name, IndexedAccess):  # Should validate types implicitly
             return self.name.assignment(self.value).compile(context)
 
+        value_ref = self.value.compile(context.optional())
+        target_ref = self.pull_up(self.name, context.optional())
+
+        if value_ref.type.untyped != target_ref.type.untyped:  # TODO: why is the test against untyped?
+            CastOperation.create(source=self.value, destination_type=target_ref.type).compile(context)
+        elif self.optimized_assignment(context):
+            return
+        else:
+            self.value.compile(context)
+
+        self.pull_up(self.name, context)
+
+    def optimized_assignment(self, context):
         if isinstance(self.name, Identifier):
             target = context.resolve(self.name)
 
             if self.value.STATIC:
                 ref = context.append_static(self.value.serialize())
-                return context.append(OpcodeAssignStatic.from_reference(target, ref), self.source_ref)
+                context.append(OpcodeAssignStatic.from_reference(target, ref), self.source_ref)
+                return True
             elif isinstance(self.value, Identifier):
                 ref = context.resolve(self.value)
-                return context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
+                context.append(OpcodeAssignLocal.from_references(target, ref), self.source_ref)
+                return True
 
-        value_ref = self.value.compile(context)
-        target = self.name
-
-        cast_placeholder = context.current_index + 1
-
+    def pull_up(self, target, context):
         if isinstance(target, Identifier):
             target_ref = context.resolve(target)
             context.append(OpcodePopLocal.from_reference(target_ref), self.source_ref)
@@ -60,17 +70,10 @@ class AssignmentOperation(BaseNode):
             else:
                 target_ref = context.resolve(target)
                 context.append(OpcodePopMember.from_reference(target_ref), self.source_ref)
-
         else:
             raise Exception('Cannot pull up {}'.format(target))
 
-        if value_ref.type.untyped != target_ref.type.untyped:
-            optional = context.optional()
-            CastOperation.create(source=value_ref, destination_type=target_ref.type)\
-                .deriving_from(self)\
-                .compile(optional)
-
-            context.insert(cast_placeholder, optional)
+        return target_ref
 
     @property
     def type(self):
