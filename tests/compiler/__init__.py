@@ -3,6 +3,7 @@ import itertools
 from thinglang import pipeline
 from thinglang.compiler.opcodes import OpcodeCallInternal
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
 
@@ -58,7 +59,7 @@ thing C extends B
 
 
 def compile_base(code='', thing_id=0, method_id=0):
-    context = pipeline.compile(SourceContext.wrap(TEMPLATE.format(code)))
+    context = pipeline.compile(SourceContext.wrap(TEMPLATE.format(code)), mapper=SYMBOL_MAPPER)
     entry = context.methods[(thing_id, method_id)]
     return entry[1].instructions
 
@@ -73,4 +74,6 @@ def compile_snippet(code):
 
 
 def internal_call(target):
-    return OpcodeCallInternal.from_reference(SYMBOL_MAPPER.resolve_named([Identifier(x) for x in target.split('.')]))
+    return OpcodeCallInternal.from_reference(SYMBOL_MAPPER.resolve_named([
+        CastTag.parse(x) if CastTag.matches(x) else Identifier(x) for x in target.split('.')
+    ]))

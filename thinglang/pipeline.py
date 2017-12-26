@@ -11,17 +11,16 @@ def compile(entrypoint: SourceContext, executable: bool=True, mapper: SymbolMapp
     Compile a thinglang program
     :param entrypoint: file path of the program entrypoint
     :param executable: should an executable file be made?
+    :param mapper: optionally, an existing SymbolMapper to use
     :return: thinglang bytecode
     """
 
     ast = preprocess(entrypoint)
-
-    symbols = SymbolMapper(ast)
+    mapper = SymbolMapper(ast) if mapper is None else mapper.set_ast(ast)
 
     Indexer(ast).run()
-
     logging_utils.print_header("Final AST", ast.tree())
 
-    context = CompilationContext(symbols, entrypoint, entry=symbols.entry() if executable else None)
+    context = CompilationContext(mapper, entrypoint, entry=mapper.entry() if executable else None)
 
     return ast.compile(context)
