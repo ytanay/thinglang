@@ -278,6 +278,13 @@ class OpcodeCallInternal(ElementReferenced):
     ARGS = TYPE_ID, METHOD_ID
 
 
+class OpcodeCallVirtual(ElementReferenced):
+    """
+    Calls a user defined method via the virtual jump table
+    """
+    ARGS = TYPE_ID, METHOD_ID
+
+
 class OpcodeReturn(Opcode):
     """
     Returns to the calling method
