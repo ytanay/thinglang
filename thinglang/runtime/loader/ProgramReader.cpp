@@ -1,7 +1,6 @@
 #include <cassert>
 #include "ProgramReader.h"
 #include "../utils/Formatting.h"
-#include "../execution/Program.h"
 
 const std::string ProgramReader::EXPECTED_MAGIC = "THING\xCC";
 
@@ -14,12 +13,13 @@ ProgramInfo ProgramReader::process() {
     read_header();
 
     auto imports = read_imports();
+    //auto types = read_types();
     auto code = read_code();
     auto data = read_data();
     auto source_map = read_source_map();
     auto source = read_source();
 
-    return ProgramInfo({code, data, imports, entry, initial_frame_size, source_map, source});
+    return ProgramInfo({code.first, data, code.second, imports, entry, initial_frame_size, source_map, source});
 }
 
 void ProgramReader::read_header() {
@@ -52,10 +52,10 @@ void ProgramReader::read_header() {
 }
 
 
-TypeList ProgramReader::read_imports() {
+InternalTypeList ProgramReader::read_imports() {
     std::cerr << "Reading import table..." << std::endl;
 
-    TypeList type_list;
+    InternalTypeList type_list;
     while(read_opcode() == Opcode::SENTINEL_IMPORT_TABLE_ENTRY) {
         auto size = read_size();
         auto name = read_string(size);
@@ -69,22 +69,32 @@ TypeList ProgramReader::read_imports() {
 }
 
 
-InstructionList ProgramReader::read_code() {
+std::pair<InstructionList, UserTypeList> ProgramReader::read_code() {
     /**
      * Process the code section
      */
     std::cerr << "Reading code section..." << std::endl;
     InstructionList instructions;
+    UserTypeList user_types;
 
     instruction_counter = 0;
 
     for(Opcode opcode = read_opcode(); opcode != Opcode::SENTINEL_CODE_END; opcode = read_opcode()) {
         auto instruction = read_instruction(opcode);
 
-        std::cerr << "\t\t\tReading instruction [" << instructions.size() << "] " << describe(opcode) << " (" << instruction.target << ", " << instruction.secondary
-                  << ")" << std::endl;
+        if(instruction.opcode == Opcode::SENTINEL_THING_DEFINITION){
+            std::cerr << "\tClass boundary (address=" << instructions.size() << ", members=" << instruction.target << ", methods=" << instruction.secondary << ")" << std::endl;
+            user_types.push_back(ThingTypeUser({}));
+        } else if(instruction.opcode == Opcode::SENTINEL_METHOD_DEFINITION){
+            std::cerr << "\t\tMethod boundary (address=" << instruction.target << ", frame size=" << instruction.target << ", arguments=" << instruction.secondary << ")" << std::endl;
+            user_types.back().methods.push_back(MethodInfo{instruction.target, instruction.secondary});
+        } else {
+            std::cerr << "\t\t\t[" << instructions.size() << "] " << describe(opcode) << " (" << instruction.target << ", " << instruction.secondary
+                      << ")" << std::endl;
+        }
 
         instructions.push_back(instruction);
+
     }
 
     assert(last_opcode == Opcode::SENTINEL_CODE_END);
@@ -96,7 +106,7 @@ InstructionList ProgramReader::read_code() {
         std::cerr << "Code section processed successfully" << std::endl << std::endl;
     }
 
-    return instructions;
+    return std::make_pair(instructions, user_types);
 }
 
 
@@ -211,4 +221,3 @@ Source ProgramReader::read_source() {
     return lines;
 
 }
-
