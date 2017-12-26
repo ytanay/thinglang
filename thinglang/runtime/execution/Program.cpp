@@ -118,6 +118,19 @@ void Program::execute() {
                 goto handle_instruction;
             }
 
+            case Opcode::CALL_VIRTUAL: {
+                auto method = user_types[instruction.target].method(instruction.secondary);
+
+                return_stack.push(counter + 1);
+                counter = method.address;
+
+                call_stack.push(counter);
+                Program::create_frame(method.frame_size);
+
+                goto handle_instruction;
+            }
+
+
             case Opcode::CALL_INTERNAL: {
                 try {
                     Program::internal_types[instruction.target]->call(instruction.secondary);

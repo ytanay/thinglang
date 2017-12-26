@@ -16,6 +16,7 @@ enum class Opcode {
     POP_DEREFERENCED = 9,
     CALL = 14,
     CALL_INTERNAL = 15,
+    CALL_VIRTUAL = 16,
     PUSH_LOCAL = 3,
     POP_LOCAL = 7,
     ASSIGN_STATIC = 11,
@@ -27,20 +28,20 @@ enum class Opcode {
     POP = 6,
     ARG_COPY = 10,
     DEREFERENCE = 13,
-    RETURN = 16,
-    THROW = 17,
-    INSTANTIATE = 18,
-    JUMP_CONDITIONAL = 20,
-    JUMP = 19,
-    HANDLER_DESCRIPTION = 21,
-    HANDLER_RANGE_DEFINITION = 22,
-    SENTINEL_IMPORT_TABLE_ENTRY = 23,
-    SENTINEL_IMPORT_TABLE_END = 24,
-    SENTINEL_THING_DEFINITION = 25,
-    SENTINEL_METHOD_DEFINITION = 26,
-    SENTINEL_METHOD_END = 27,
-    SENTINEL_CODE_END = 28,
-    SENTINEL_DATA_END = 29
+    RETURN = 17,
+    THROW = 18,
+    INSTANTIATE = 19,
+    JUMP_CONDITIONAL = 21,
+    JUMP = 20,
+    HANDLER_DESCRIPTION = 22,
+    HANDLER_RANGE_DEFINITION = 23,
+    SENTINEL_IMPORT_TABLE_ENTRY = 24,
+    SENTINEL_IMPORT_TABLE_END = 25,
+    SENTINEL_THING_DEFINITION = 26,
+    SENTINEL_METHOD_DEFINITION = 27,
+    SENTINEL_METHOD_END = 28,
+    SENTINEL_CODE_END = 29,
+    SENTINEL_DATA_END = 30
 };
 
 
@@ -61,6 +62,9 @@ inline auto describe(Opcode val){
 
         case Opcode::CALL_INTERNAL:
             return "CALL_INTERNAL";
+
+        case Opcode::CALL_VIRTUAL:
+            return "CALL_VIRTUAL";
 
         case Opcode::PUSH_LOCAL:
             return "PUSH_LOCAL";
@@ -155,6 +159,9 @@ inline auto arg_count(Opcode val){
             return 2;
 
         case Opcode::CALL_INTERNAL:
+            return 2;
+
+        case Opcode::CALL_VIRTUAL:
             return 2;
 
         case Opcode::PUSH_LOCAL:
