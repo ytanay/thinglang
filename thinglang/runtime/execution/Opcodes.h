@@ -38,10 +38,11 @@ enum class Opcode {
     SENTINEL_IMPORT_TABLE_ENTRY = 24,
     SENTINEL_IMPORT_TABLE_END = 25,
     SENTINEL_THING_DEFINITION = 26,
-    SENTINEL_METHOD_DEFINITION = 27,
-    SENTINEL_METHOD_END = 28,
-    SENTINEL_CODE_END = 29,
-    SENTINEL_DATA_END = 30
+    SENTINEL_THING_EXTENDS = 27,
+    SENTINEL_METHOD_DEFINITION = 28,
+    SENTINEL_METHOD_END = 29,
+    SENTINEL_CODE_END = 30,
+    SENTINEL_DATA_END = 31
 };
 
 
@@ -129,6 +130,9 @@ inline auto describe(Opcode val){
         case Opcode::SENTINEL_THING_DEFINITION:
             return "SENTINEL_THING_DEFINITION";
 
+        case Opcode::SENTINEL_THING_EXTENDS:
+            return "SENTINEL_THING_EXTENDS";
+
         case Opcode::SENTINEL_METHOD_DEFINITION:
             return "SENTINEL_METHOD_DEFINITION";
 
@@ -162,7 +166,7 @@ inline auto arg_count(Opcode val){
             return 2;
 
         case Opcode::CALL_VIRTUAL:
-            return 2;
+            return 1;
 
         case Opcode::PUSH_LOCAL:
             return 1;
@@ -192,7 +196,7 @@ inline auto arg_count(Opcode val){
             return 0;
 
         case Opcode::ARG_COPY:
-            return 1;
+            return 2;
 
         case Opcode::DEREFERENCE:
             return 1;
@@ -226,6 +230,9 @@ inline auto arg_count(Opcode val){
 
         case Opcode::SENTINEL_THING_DEFINITION:
             return 2;
+
+        case Opcode::SENTINEL_THING_EXTENDS:
+            return 1;
 
         case Opcode::SENTINEL_METHOD_DEFINITION:
             return 2;
