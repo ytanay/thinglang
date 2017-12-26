@@ -11,8 +11,9 @@ unsigned char Program::current_mark = 0;
 
 InstructionList Program::instructions;
 Things Program::static_data;
-TypeList Program::internal_types;
-TypeMap Program::internal_type_map;
+InternalTypeList Program::internal_types;
+InternalTypeMap Program::internal_type_map;
+UserTypeList Program::user_types;
 Index Program::entry = static_cast<Index>(-1);
 Index Program::initial_frame_size = static_cast<Index>(-1);
 SourceMap Program::source_map;
@@ -42,9 +43,10 @@ void Program::load(ProgramInfo &info) {
     source_map = info.source_map;
     source = info.program_source;
     internal_types = info.imported_types;
+    user_types = info.user_types;
 
     Index index = 0;
-    for(Type internal_type : internal_types){ // Used to look up exception types
+    for(InternalType internal_type : internal_types){ // Used to look up exception types
         internal_type_map[internal_type] = index++;
     }
 }
@@ -111,9 +113,10 @@ void Program::execute() {
 
             case Opcode::CALL: {
                 return_stack.push(counter + 1);
+                counter = instruction.target;
+
                 call_stack.push(instruction.target);
                 Program::create_frame(instruction.secondary);
-                counter = instruction.target;
 
                 goto handle_instruction;
             }
