@@ -1,5 +1,7 @@
 from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, OpcodePushMember
 from thinglang.compiler.references import Reference, LocalReference, ElementReference
+from thinglang.compiler.tracker import LocalTracker
+from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.source_context import SourceReference
 
 
@@ -9,8 +11,10 @@ class CompilationBuffer(object):
     In certain cases, a buffer can be merged into another buffer, updating relevant offsets in the process
     """
 
-    def __init__(self, symbols, current_locals):
-        self.symbols, self.current_locals = symbols, current_locals
+    USED_ALIAS = object()
+
+    def __init__(self, symbols, current_locals, track=True):
+        self.symbols, self.current_locals, self.track = symbols, current_locals, track
 
         self.instructions = []
         self.epilogues = []
@@ -37,11 +41,12 @@ class CompilationBuffer(object):
         assert len(optional.data) == 0
         self.instructions.insert(index, optional.instructions[0])
 
-    def optional(self) -> 'CompilationBuffer':
+    def optional(self, arguments=None, track=False) -> 'CompilationBuffer':
         """
         Creates an new compilation buffer, which can be optionally merged into the primary buffer
         """
-        return CompilationBuffer(self.symbols, self.current_locals)
+        current_locals = self.current_locals if arguments is None else {x: LocalTracker(x.type) for x in arguments}
+        return CompilationBuffer(self.symbols, current_locals, track)
 
     def append_static(self, data: bytes) -> int:
         """
@@ -79,7 +84,12 @@ class CompilationBuffer(object):
         """
         Resolves an arbitrary item into a reference (e.g. LexicalIdentifier, Access)
         """
-        return self.symbols.resolve(item, self.current_locals)
+        resolved = self.symbols.resolve(item, self.current_locals)
+
+        if self.track:
+            resolved.hit()
+
+        return resolved
 
     def update_conditional_jumps(self):
         """
