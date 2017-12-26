@@ -58,8 +58,7 @@ void Program::status(Index counter, const Instruction& instruction) {
      */
     auto source_idx = source_map[instruction.index];
 
-    if(source_idx >= source.size())
-        throw RuntimeError("Invalid source reference");
+
 
     std::cerr << "[" << counter << "] Executing instruction " << describe(instruction.opcode) << ": " << instruction.target << ", "
               << instruction.secondary << " -> [";
@@ -69,6 +68,10 @@ void Program::status(Index counter, const Instruction& instruction) {
     if(!Program::frames.empty())
         std::for_each(Program::frame().begin(), Program::frame().end(),
                       [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
+
+    if(source_idx >= source.size())
+        throw RuntimeError("Invalid source reference");
+
     std::cerr << "] -> [" << trim(source[source_idx]) << "]" << std::endl;
 
 }
