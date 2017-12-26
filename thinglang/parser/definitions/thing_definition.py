@@ -25,11 +25,14 @@ class ThingDefinition(BaseNode):
     def compile(self, context: CompilationContext):
         symbol_map = context.symbols[self.name]
         thing_id = context.symbols.index(symbol_map)
+        methods = []
 
-        for method_id, method in enumerate(self.methods): # Assumes consistent ordering in AST and symbol map
+        for method_id, method in enumerate(self.methods):  # Assumes consistent ordering in AST and symbol map
             buffer = CompilationBuffer(context.symbols, method.locals)
             method.compile(buffer)
-            context.add((thing_id, method_id), method, buffer)
+            methods.append((method, buffer))
+
+        assert context.add_methods(methods) == thing_id
 
     def finalize(self):
         super().finalize()

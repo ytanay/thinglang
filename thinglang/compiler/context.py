@@ -4,7 +4,7 @@ import struct
 from thinglang.compiler import serializer
 from thinglang.compiler.opcodes import OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
 from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelCodeEnd, SentinelDataEnd, \
-    SentinelImportTableEntry, SentinelImportTableEnd
+    SentinelImportTableEntry, SentinelImportTableEnd, SentinelThingDefinition
 from thinglang.utils.source_context import SourceContext
 
 HEADER_FORMAT = '<HIIII'
@@ -29,14 +29,14 @@ class CompilationContext(object):
         self.current_locals = None
         self.entry = entry or 0
 
-        self.methods = {}
+        self.classes = []
 
-    def add(self, method_id, method, buffer):
+    def add_methods(self, methods):
         """
-        Add a compiled method buffer
+        Add compiled method buffers
         """
-
-        self.methods[method_id] = method, buffer
+        self.classes.append(methods)
+        return len(self.classes) - 1
 
     def buffer(self) -> 'CompilationContext':
         """
@@ -54,24 +54,27 @@ class CompilationContext(object):
         data_items = []
         offsets = {}
 
-        for method_idx, (method, buffer) in self.methods.items():
-            instructions.append(SentinelMethodDefinition(0, 0))
+        for class_id, class_desc in enumerate(self.classes):
+            instructions.append(SentinelThingDefinition(0, len(class_desc)))
 
-            method_offset, data_offset = len(instructions) + len(buffer.exception_table) * 2, len(data_items)
+            for method_id, (method, buffer) in enumerate(class_desc):
+                method_offset, data_offset = len(instructions) + len(buffer.exception_table) * 2 + 1, len(data_items)
 
-            # First, we write the exception table for this method
-            for exception, handler, start_index, end_index in buffer.exception_table:
-                exception_type = self.symbols.index(exception)
-                instructions.extend([
-                    OpcodeHandlerDescription(method_offset + len(buffer.instructions) + handler, exception_type),
-                    OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset)
-                ])
+                instructions.append(SentinelMethodDefinition(method_offset, method.frame_size))
 
-            offsets[method_idx] = method_offset, method.frame_size
-            instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.instructions)
-            instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.epilogues)
+                # First, we write the exception table for this method
+                for exception, handler, start_index, end_index in buffer.exception_table:
+                    exception_type = self.symbols.index(exception)
+                    instructions.extend([
+                        OpcodeHandlerDescription(method_offset + len(buffer.instructions) + handler, exception_type),
+                        OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset)
+                    ])
 
-            data_items.extend(buffer.data)
+                offsets[(class_id, method_id)] = method_offset, method.frame_size
+                instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.instructions)
+                instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.epilogues)
+
+                data_items.extend(buffer.data)
 
         for instruction in instructions:
             instruction.update_references(offsets)
