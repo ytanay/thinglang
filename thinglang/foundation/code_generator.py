@@ -7,6 +7,7 @@ from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.values.identifier import GenericIdentifier
+from thinglang.parser.constructs.cast_operation import CastTag
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils.source_context import SourceContext
@@ -24,6 +25,8 @@ class JSONSerializer(json.JSONEncoder):
             return o.serialize()
         if isinstance(o, LexicalToken):
             return o.transpile()
+        if isinstance(o, CastTag):
+            return repr(o)
         return super().default(o)
 
 
