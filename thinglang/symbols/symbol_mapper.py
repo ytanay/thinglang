@@ -93,7 +93,7 @@ class SymbolMapper(object):
 
         container, element = self.pull(container, second)
 
-        return ElementReference(self.index(container), element, local)
+        return ElementReference(container, self.index(container), element, local)
 
     def resolve_indexed(self, access: IndexedAccess, method_locals=()) -> SymbolMap:
         """

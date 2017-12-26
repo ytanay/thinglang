@@ -23,9 +23,9 @@ class ElementReference(Reference):
         - Member of an object instance
         - Method of a type
     """
-    def __init__(self, index, element, local=None):
+    def __init__(self, thing, index, element, local=None):
         super(ElementReference, self).__init__(element.type)
-        self.index, self.element, self.local = index, element, local
+        self.thing, self.index, self.element, self.local = thing, index, element, local
 
     @property
     def thing_index(self) -> int:
