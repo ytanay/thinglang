@@ -83,8 +83,13 @@ std::pair<InstructionList, UserTypeList> ProgramReader::read_code() {
         auto instruction = read_instruction(opcode);
 
         if(instruction.opcode == Opcode::SENTINEL_THING_DEFINITION){
-            std::cerr << "\tClass boundary (address=" << instructions.size() << ", members=" << instruction.target << ", methods=" << instruction.secondary << ")" << std::endl;
-            user_types.push_back(ThingTypeUser({}));
+            std::cerr << "\tClass boundary (address=" << instructions.size() << ", members=" << instruction.target << ", NONE=" << instruction.secondary << ")" << std::endl;
+            user_types.emplace_back(instruction.target, instruction.secondary);
+        } else if(instruction.opcode == Opcode::SENTINEL_THING_EXTENDS) {
+            assert(user_types.back().methods.empty());
+            auto prior = user_types[instruction.target].methods;
+            std::cerr << "\t\tClass extends " << instruction.target << ", adding " << prior.size() << " entries" <<std::endl;
+            user_types.back().methods.insert(user_types.back().methods.end(), prior.begin(), prior.end());
         } else if(instruction.opcode == Opcode::SENTINEL_METHOD_DEFINITION){
             std::cerr << "\t\tMethod boundary (address=" << instruction.target << ", frame size=" << instruction.target << ", arguments=" << instruction.secondary << ")" << std::endl;
             user_types.back().methods.push_back(MethodInfo{instruction.target, instruction.secondary});
