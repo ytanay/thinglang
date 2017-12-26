@@ -92,7 +92,7 @@ class CompilationContext(object):
         source_map = bytes().join(x.source_ref.serialize() for x in instructions)
 
         header = bytes('THING', 'utf-8') + bytes([0xcc]) + struct.pack(HEADER_FORMAT, *BytecodeHeader(
-            version=3,
+            version=4,
             instruction_count=len(instructions),
             data_item_count=len(data_items),
             entrypoint=offsets[(self.entry, 0)][0],

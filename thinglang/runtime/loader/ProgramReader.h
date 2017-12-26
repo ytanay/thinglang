@@ -68,7 +68,7 @@ private:
     Opcode last_opcode = Opcode::INVALID;
 
     static const std::string EXPECTED_MAGIC;
-    static const uint16_t EXPECTED_VERSION = 3;
+    static const uint16_t EXPECTED_VERSION = 4;
 
     void prepare_stream();
 
