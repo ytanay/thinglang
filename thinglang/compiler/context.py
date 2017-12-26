@@ -4,7 +4,7 @@ import struct
 from thinglang.compiler import serializer
 from thinglang.compiler.opcodes import OpcodeHandlerDescription, OpcodeHandlerRangeDefinition
 from thinglang.compiler.sentinels import SentinelMethodDefinition, SentinelCodeEnd, SentinelDataEnd, \
-    SentinelImportTableEntry, SentinelImportTableEnd, SentinelThingDefinition
+    SentinelImportTableEntry, SentinelImportTableEnd, SentinelThingDefinition, SentinelThingExtends
 from thinglang.utils.source_context import SourceContext
 
 HEADER_FORMAT = '<HIIII'
@@ -31,11 +31,11 @@ class CompilationContext(object):
 
         self.classes = []
 
-    def add_methods(self, methods):
+    def add_methods(self, methods, members, extending_index, methods_offset):
         """
         Add compiled method buffers
         """
-        self.classes.append(methods)
+        self.classes.append((methods, members, extending_index, methods_offset))
         return len(self.classes) - 1
 
     def buffer(self) -> 'CompilationContext':
@@ -54,10 +54,12 @@ class CompilationContext(object):
         data_items = []
         offsets = {}
 
-        for class_id, class_desc in enumerate(self.classes):
-            instructions.append(SentinelThingDefinition(0, len(class_desc)))
+        for class_id, (methods, members, extending_index, methods_offset) in enumerate(self.classes):
+            instructions.append(SentinelThingDefinition(members, 0))
+            if extending_index is not None:
+                instructions.append(SentinelThingExtends(extending_index))
 
-            for method_id, (method, buffer) in enumerate(class_desc):
+            for method_id, (method, buffer) in enumerate(methods):
                 method_offset, data_offset = len(instructions) + len(buffer.exception_table) * 2 + 1, len(data_items)
 
                 instructions.append(SentinelMethodDefinition(method_offset, method.frame_size))
@@ -70,7 +72,7 @@ class CompilationContext(object):
                         OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset)
                     ])
 
-                offsets[(class_id, method_id)] = method_offset, method.frame_size
+                offsets[(class_id, method_id + methods_offset)] = method_offset, method.frame_size
                 instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.instructions)
                 instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.epilogues)
 
