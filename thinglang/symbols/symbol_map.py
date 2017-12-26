@@ -14,9 +14,9 @@ class SymbolMap(object):
     Each SymbolMap also has an index number, by which it is known to the runtime.
     """
 
-    def __init__(self, members: List[Symbol], methods: List[Symbol], name: Identifier, extends: Identifier, generics: List[Identifier], offset: int, convention):
-        self.members, self.methods, self.name, self.extends, self.generics, self.offset, self.convention = \
-            members, self.merge_method_symbols(methods), name, extends, generics or [], offset, convention
+    def __init__(self, members: List[Symbol], methods: List[Symbol], name: Identifier, extends: Identifier, generics: List[Identifier], convention, member_offset: int=0, method_offset: int=0):
+        self.members, self.methods, self.name, self.extends, self.generics, self.convention, self.member_offset, self.method_offset = \
+            members, self.merge_method_symbols(methods), name, extends, generics or [], convention, member_offset, method_offset
 
         self.lookup = {
             symbol.name: symbol for symbol in self.members + self.methods
@@ -32,7 +32,10 @@ class SymbolMap(object):
             "name": self.name,
             "extends": self.extends,
             "generics": self.generics,
-            "offset": self.offset,
+            "offsets": {
+                "members": self.member_offset,
+                "methods": self.method_offset
+            },
             "convention": Symbol.serialize_convention(self.convention),
             "symbols": collection_utils.flatten([x.serialize() for x in self.lookup.values()])
         }
@@ -48,7 +51,14 @@ class SymbolMap(object):
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
         extends = Identifier(data['extends']) if data['extends'] else None
 
-        return cls(members, methods, Identifier(data['name']), extends, [Identifier(x) for x in data['generics']], data['offset'], Symbol.serialize_convention(data['convention']))
+        return cls(members=members,
+                   methods=methods,
+                   name=Identifier(data['name']),
+                   extends=extends,
+                   generics=[Identifier(x) for x in data['generics']],
+                   convention=Symbol.serialize_convention(data['convention']),
+                   member_offset=data['offsets']['members'],
+                   method_offset=data['offsets']['methods'])
 
     @classmethod
     def from_thing(cls, thing, extends: 'SymbolMap') -> 'SymbolMap':
@@ -58,12 +68,23 @@ class SymbolMap(object):
         :param index: the index of the new symbol map
         :param extends: optionally, the symbol map from which this thing inherits
         """
-        offset = extends.offset if extends is not None else 0
 
-        members = [elem.symbol().update_index(offset + index) for index, elem in enumerate(thing.members)]
-        methods = [elem.symbol().update_index(index) for index, elem in enumerate(thing.methods)]
+        member_offset, method_offset = 0, 0
 
-        return cls(members, methods, thing.name, thing.extends, thing.generics, len(members) + offset, Symbol.BYTECODE)
+        if extends is not None:
+            member_offset, method_offset = len(extends.members) + extends.member_offset, len(extends.methods) + extends.method_offset
+
+        members = [elem.symbol().update_index(member_offset + index) for index, elem in enumerate(thing.members)]
+        methods = [elem.symbol().update_index(method_offset + index) for index, elem in enumerate(thing.methods)]
+
+        return cls(members,
+                   methods,
+                   thing.name,
+                   thing.extends,
+                   thing.generics,
+                   Symbol.BYTECODE,
+                   member_offset=member_offset,
+                   method_offset=method_offset)
 
     def parameterize(self, parameters: dict) -> 'SymbolMap':
         """
@@ -78,9 +99,9 @@ class SymbolMap(object):
             GenericIdentifier(self.name, tuple([parameters[x] for x in self.generics])),
             self.extends,
             [],
-            self.offset,
-            self.convention
-        )
+            self.convention,
+            self.member_offset,
+            self.method_offset)
 
     def __getitem__(self, item: Identifier) -> Symbol:
         """
