@@ -154,15 +154,16 @@ void Program::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                auto new_thing = Program::create<ThingInstance>(instruction.secondary);
+                auto type = user_types[instruction.target];
+                auto new_thing = Program::create<ThingInstance>(instruction.target, type.members);
                 Program::frame()[0] = new_thing;
-                Program::copy_args(instruction.target, instruction.target);
+                Program::copy_args(instruction.secondary);
                 Program::push(new_thing);
                 break;
             }
 
             case Opcode::ARG_COPY: {
-                Program::copy_args(instruction.target, instruction.target - 1);
+                Program::copy_args(instruction.target);
                 break;
             }
 
