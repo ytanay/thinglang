@@ -1,5 +1,9 @@
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.parser.definitions.cast_tag import CastTag
+from thinglang.phases import preprocess
 from thinglang.symbols.argument_selector import ArgumentSelector
+from thinglang.symbols.inline_candidate import InlineCandidate
+from thinglang.utils.source_context import SourceContext
 
 
 class Symbol(object):
@@ -12,11 +16,11 @@ class Symbol(object):
     INTERNAL, BYTECODE = object(), object()  # The calling convention used, if this symbol is a method
     PUBLIC, PRIVATE = object(), object()  # The visibility of this symbol
 
-    def __init__(self, name: Identifier, kind, type: Identifier, static: bool, visibility=PUBLIC, arguments=None, index=None, convention=BYTECODE):
+    def __init__(self, name: Identifier, kind, type: Identifier, static: bool, visibility=PUBLIC, arguments=None, index=None, convention=BYTECODE, node=None):
         super(Symbol, self).__init__()
 
-        self.name, self.kind, self.type, self.static, self.visibility, self.arguments, self.index, self._convention = \
-            name, kind, type, static, visibility, arguments, index, convention
+        self.name, self.kind, self.type, self.static, self.visibility, self.arguments, self.index, self._convention, self.node = \
+            name, kind, type, static, visibility, arguments, index, convention, node
 
     def update_index(self, new_index: int):
         """
@@ -69,7 +73,8 @@ class Symbol(object):
             "static": self.static,
             "arguments": self.arguments,
             "visibility": "public" if self.visibility is Symbol.PUBLIC else "private",
-            "convention": self.serialize_convention(self.convention)
+            "convention": self.serialize_convention(self.convention),
+            "inline": self.node.serialize() if self.node else None
         }
 
     @classmethod
@@ -80,15 +85,18 @@ class Symbol(object):
         assert data['kind'] in ('member', 'method')
         assert data['convention'] in ('bytecode', 'internal')
 
+        arguments = data['arguments'] is not None and [cls.load_identifier(x) for x in data['arguments']]
+
         return cls(
-            name=Identifier(data['name']),
+            name=cls.serialize_name(data['name']),
             kind=Symbol.METHOD if data['kind'] == 'method' else Symbol.MEMBER,
             type=cls.load_identifier(data['type']),
             static=data['static'],
             visibility=Symbol.PUBLIC if data['visibility'] == 'public' else Symbol.PRIVATE,
-            arguments=data['arguments'] is not None and [cls.load_identifier(x) for x in data['arguments']],
+            arguments=arguments,
             index=data['index'],
-            convention=cls.serialize_convention(data['convention'])
+            convention=cls.serialize_convention(data['convention']),
+            node=InlineCandidate.from_serialized(data['inline']['code'], data['inline']['argument_names'], arguments) if data['inline'] else None
         )
 
     @staticmethod
@@ -102,11 +110,11 @@ class Symbol(object):
             return GenericIdentifier(Identifier(value[0]), tuple(Identifier(x) for x in value[1]))
 
     @classmethod
-    def method(cls, name: Identifier, return_type: Identifier, static: bool, arguments: list) -> 'Symbol':
+    def method(cls, name: Identifier, return_type: Identifier, static: bool, arguments: list, node) -> 'Symbol':
         """
         Helper method to create a new method symbol
         """
-        return cls(name, cls.METHOD, return_type, static, Symbol.PUBLIC, [x.type for x in arguments])
+        return cls(name, cls.METHOD, return_type, static, Symbol.PUBLIC, [x.type for x in arguments], node=node)
 
     @classmethod
     def member(cls, name: Identifier, type: Identifier, visibility) -> 'Symbol':
@@ -124,3 +132,10 @@ class Symbol(object):
             return Symbol.BYTECODE if param == 'bytecode' else Symbol.INTERNAL
         else:
             return "bytecode" if param is Symbol.BYTECODE else "internal"
+
+    @classmethod
+    def serialize_name(cls, param):
+        if isinstance(param, str):
+            return CastTag.parse(param) if CastTag.matches(param) else Identifier(param)
+        else:
+            return repr(param)
