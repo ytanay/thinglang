@@ -21,7 +21,7 @@ enum PrimitiveType {
     TEXT, NUMBER
 };
 
-inline Type get_type(const std::string& type_name){
+inline InternalType get_type(const std::string& type_name){
     if(type_name == "iterator") return singleton<IteratorType>();
     if(type_name == "list") return singleton<ListType>();
     if(type_name == "map") return singleton<MapType>();

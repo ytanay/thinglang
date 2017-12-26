@@ -22,7 +22,7 @@ public:
     virtual bool boolean();
     virtual size_t hash() const;
     virtual bool operator==(const BaseThingInstance &other) const;
-    virtual Type type() const;
+    virtual InternalType type() const;
 
     virtual Things children() {
         return EMPTY_LIST;

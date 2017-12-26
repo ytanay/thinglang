@@ -18,7 +18,8 @@
 class BaseThingInstance;
 class Instruction;
 class Method;
-class ThingType;
+class ThingTypeInternal;
+class ThingTypeUser;
 class Program;
 
 using Index = uint32_t;
@@ -36,6 +37,9 @@ typedef void (*InternalMethod)();
 using Methods = std::vector<Method>;
 using InternalMethods = std::vector<InternalMethod>;
 
-using Type = ThingType*;
-using TypeList = std::vector<Type>;
-using TypeMap = std::unordered_map<Type, Index>;
+using InternalType = ThingTypeInternal*;
+using InternalTypeList = std::vector<InternalType>;
+using InternalTypeMap = std::unordered_map<InternalType, Index>;
+
+using UserType = ThingTypeUser;
+using UserTypeList = std::vector<UserType>;

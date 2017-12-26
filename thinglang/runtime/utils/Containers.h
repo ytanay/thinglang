@@ -14,7 +14,8 @@ using FrameStack = std::forward_list<Frame>;
 struct ProgramInfo {
     InstructionList instructions;
     Things static_data;
-    TypeList imported_types;
+    UserTypeList user_types;
+    InternalTypeList imported_types;
     Index entry_point;
     Size root_stack_frame_size;
     SourceMap source_map;
