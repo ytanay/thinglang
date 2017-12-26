@@ -13,6 +13,10 @@ class LexicalBinaryOperation(LexicalToken):
     def transpile(cls):
         return cls.format_name()
 
+    def __repr__(self):
+        from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
+        return REVERSE_OPERATORS[type(self)]
+
 
 class FirstOrderLexicalBinaryOperation(LexicalBinaryOperation):
     """
