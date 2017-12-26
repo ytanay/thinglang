@@ -74,17 +74,16 @@ class TokenVector(object):
     def __init__(self, tokens=None):
         self.tokens = tokens if tokens is not None else []
 
-    def parse(self, expect_single=True):
+    def parse(self, expect_single: bool=True) -> object:
         """
         Iteratively parses the token vector until a single node remains, or no further rule replacements can be made.
         """
-
-        self.normalize_tokens()
+        indentation = self.process_indentation()
 
         while self.perform_replacements():
             pass
 
-        self.process_indentation()
+        self.tokens[0].indent = indentation  # TODO: There must be a better way to do this
 
         if not expect_single:
             return self.tokens
@@ -128,10 +127,10 @@ class TokenVector(object):
         Converts a list of LEXICAL_INDENTATION tokens at the beginning of a parsed group into indentation value stored on the first real token.
         """
         if isinstance(self.tokens[-1], LexicalGroupEnd):
-            self.tokens[-1:] = []
+            self.tokens.pop()
 
         if not isinstance(self.tokens[0], LexicalIndent):
-            return
+            return 0
 
         iterable = iter(self.tokens)
         size = 0
@@ -139,10 +138,9 @@ class TokenVector(object):
         while isinstance(next(iterable), LexicalIndent):
             size += 1
 
-        self.tokens[0:size] = []
+        self.tokens = [x for x in self.tokens[size:] if not isinstance(x, LexicalIndent)]
 
-        if self.tokens:
-            self.tokens[0].indent = size
+        return size
 
     def append(self, token: LexicalToken):
         """
@@ -163,15 +161,6 @@ class TokenVector(object):
     def __getitem__(self, item):
         return self.tokens[item]
 
-    def normalize_tokens(self):
-        iterable = iter(self.tokens)
-        filter_start = 0
-
-        while isinstance(next(iterable), LexicalIndent):
-            filter_start += 1
-
-        self.tokens = self.tokens[:filter_start] + [x for x in self.tokens[filter_start:] if not isinstance(x, LexicalIndent)]
-
 
 class ParenthesesVector(TokenVector, ValueType, ListType):
     """
@@ -179,7 +168,7 @@ class ParenthesesVector(TokenVector, ValueType, ListType):
     signifying order-of-operations in an arithmetic operations
     """
 
-    def parse(self, expect_single=False):
+    def parse(self, expect_single: bool=False) -> object:
         if not self.tokens:
             return []
 
@@ -201,7 +190,7 @@ class BracketVector(ParenthesesVector, ValueType):
     Describes a vector of tokens bounded in bracket, generally for creating in line lists.
     """
 
-    def parse(self, expect_single=False):
+    def parse(self, expect_single: bool=False) -> object:
         return InlineList(super().parse())
 
 
@@ -210,7 +199,7 @@ class ParameterVector(ParenthesesVector):
     Describes a vector of type parameters, used for generic thing definitions
     """
 
-    def parse(self, expect_single=False):
+    def parse(self, expect_single: bool=False) -> object:
         return tuple(collection_utils.flatten([super().parse()]))
 
 
@@ -219,7 +208,7 @@ class TypeVector(TokenVector, TypeList):
     Describes a vector of type pairings, such as those describing method arguments (e.g. number value, text name)
     """
 
-    def parse(self, expect_single=False):
+    def parse(self, expect_single: bool=False) -> object:
         output = []
 
         self.tokens = super().parse(expect_single=False)
