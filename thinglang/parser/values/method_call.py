@@ -1,6 +1,6 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
-from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
+from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeCallVirtual
 from thinglang.compiler.references import Reference
 from thinglang.compiler.tracker import TrackedReplacements
 from thinglang.lexer.values.identifier import Identifier
@@ -52,7 +52,14 @@ class MethodCall(BaseNode, ValueType, CallSite):
         else:
             self.determine_target(context)
             self.compile_arguments(target, context)
-            instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
+
+            if target.convention is Symbol.INTERNAL:
+                instruction = OpcodeCallInternal
+            elif target.static or self.constructing_call:
+                instruction = OpcodeCall
+            else:
+                instruction = OpcodeCallVirtual
+
             context.append(instruction.type_reference(target), self.source_ref)
 
             if target.type is None and self.is_captured:
