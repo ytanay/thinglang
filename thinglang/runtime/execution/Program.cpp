@@ -125,13 +125,18 @@ void Program::execute() {
             }
 
             case Opcode::CALL_VIRTUAL: {
-                auto method = user_types[instruction.target].method(instruction.secondary);
+                auto thing = dynamic_cast<ThingInstance*>(stack.front());
+                if(thing == nullptr)
+                    throw RuntimeError("Cannot CALL_VIRTUAL on internal object");
+
+                auto method = user_types[thing->type_id].method(instruction.target);
 
                 return_stack.push(counter + 1);
                 counter = method.address;
 
                 call_stack.push(counter);
                 Program::create_frame(method.frame_size);
+                Program::frame()[0] = Program::pop();
 
                 goto handle_instruction;
             }
