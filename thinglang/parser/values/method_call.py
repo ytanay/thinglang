@@ -50,7 +50,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
             replaced.compile(context)
 
         else:
-            self.compile_target(context)
+            self.determine_target(context)
             self.compile_arguments(target, context)
             instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
             context.append(instruction.type_reference(target), self.source_ref)
@@ -63,11 +63,11 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
         return target
 
-    def compile_target(self, context: CompilationBuffer):
+    def determine_target(self, context: CompilationBuffer):
         assert isinstance(self.target, NamedAccess)
 
         if isinstance(self.target[0], CallSite):
-            inner_target = self.target[0].compile(context)
+            inner_target = self.target[0].compile(context.optional())
             target = context.resolve(NamedAccess([inner_target.type, self.target[1]]))
         else:
             target = context.resolve(self.target.root)
@@ -78,9 +78,6 @@ class MethodCall(BaseNode, ValueType, CallSite):
             if target.kind != Symbol.METHOD:
                 raise TargetNotCallable()
 
-            if not target.static and not self.constructing_call:
-                self.target.compile(context, without_last=True)
-
         return target
 
     def compile_arguments(self, target, context: CompilationBuffer):
@@ -90,12 +87,17 @@ class MethodCall(BaseNode, ValueType, CallSite):
             compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(context)  # Deals with implicit casts
             argument_selector.constraint(compiled_target, self.source_ref)
 
+        if isinstance(self.target[0], CallSite):
+            self.target[0].compile(context)
+        elif not target.static and not self.constructing_call:
+            self.target.compile(context, without_last=True)
+
         target.element = argument_selector.disambiguate(self.source_ref)
 
         return target
 
     def final_target(self, context):
-        ambiguous_target = self.compile_target(context.optional())
+        ambiguous_target = self.determine_target(context.optional())
         return self.compile_arguments(ambiguous_target, context.optional())
 
     def deriving_from(self, node):
