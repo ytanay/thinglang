@@ -26,7 +26,7 @@ public:
     static void create_frame(Size size);
     static void pop_frame();
     static Frame &frame();
-    static void copy_args(Size count, Size offset);
+    static void copy_args(Size count);
     static Index exception(Index counter, Index exception_type, std::stack<Index>& call_stack, std::stack<Index>& return_stack);
 
     template <typename T>

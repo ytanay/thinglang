@@ -76,12 +76,12 @@ void Program::status(Index counter, const Instruction& instruction) {
 
 }
 
-void inline Program::copy_args(Size count, Size offset){
+void inline Program::copy_args(Size count){
     /**
      * Copy arguments from the stack into the current frame
      */
     for (size_t i = 0; i < count; i++) {
-        Program::frame()[offset - i] = Program::pop();
+        Program::frame()[count - i] = Program::pop();
     }
 }
 
