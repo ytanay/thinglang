@@ -1,3 +1,5 @@
+import re
+
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.parser.rule import ParserRule
 from thinglang.utils.mixins import ParsingMixin
@@ -9,8 +11,11 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     Identifiers can refer to local variables or as components of an Access object.
     """
 
+    VALIDATOR = re.compile(r'[a-zA-Z_]\w*$')
+
     def __init__(self, value, source_ref=None):
         super(Identifier, self).__init__(value, source_ref)
+        assert self.validate(value), f'{value} is not a valid identifier'
         self.type = None
         self.index = None
 
@@ -65,12 +70,16 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def untyped(self):
         return self
 
+    @classmethod
+    def validate(cls, value):
+        return isinstance(value, Identifier) or bool(cls.VALIDATOR.match(value))
+
 
 class GenericIdentifier(Identifier):
 
     def __init__(self, name, generics=None):
         super().__init__(name, name.source_ref)
-        assert isinstance(generics, tuple), type(generics)
+        assert all(isinstance(x, Identifier) for x in generics)
         self.generics = generics
 
     def parameterize(self, parameters):

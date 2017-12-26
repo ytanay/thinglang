@@ -1,5 +1,3 @@
-import re
-
 from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
 from thinglang.lexer.blocks.exceptions import LexicalTry, LexicalHandle
 from thinglang.lexer.blocks.loops import LexicalRepeatFor, LexicalRepeatWhile
@@ -26,9 +24,6 @@ from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.separator import LexicalSeparator
 from thinglang.lexer.values.booleans import LexicalBooleanTrue, LexicalBooleanFalse
-
-IDENTIFIER_BASE = r"[a-zA-Z]\w*"
-IDENTIFIER_STANDALONE = re.compile("^" + IDENTIFIER_BASE + "$")
 
 OPERATORS = {
     ' ': None,

@@ -2,7 +2,7 @@ from typing import List
 
 from thinglang.lexer.grouping.backtick import LexicalBacktick
 from thinglang.lexer.grouping.quote import LexicalQuote
-from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS, IDENTIFIER_STANDALONE
+from thinglang.lexer.lexical_definitions import OPERATORS, KEYWORDS
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
@@ -90,17 +90,10 @@ def finalize_buffer(buffer: str, terminating_char, entity_class, source_ref) -> 
             raise ValueError("Unexpected end of inline code")
         return InlineString(buffer, source_ref)
 
-    if is_identifier(buffer):
+    if Identifier.validate(buffer):
         if entity_class in (LexicalQuote, LexicalBacktick):
             raise ValueError("String was not closed")
         return Identifier(buffer, source_ref)
 
     if buffer:
         raise ValueError('Lexer: cannot terminate group {}'.format(buffer))
-
-
-def is_identifier(buffer) -> bool:
-    """
-    Checks if the collected buffer can be interpreted as an identifier
-    """
-    return bool(IDENTIFIER_STANDALONE.match(buffer))
