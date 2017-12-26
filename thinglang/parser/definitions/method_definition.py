@@ -16,6 +16,7 @@ from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.parser.values.named_access import NamedAccess
+from thinglang.symbols.inline_candidate import InlineCandidate
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import TypeList
 
@@ -73,7 +74,7 @@ class MethodDefinition(BaseNode):
         super().finalize()
 
     def symbol(self):
-        return Symbol.method(self.name, self.return_type, self.static, self.arguments)
+        return Symbol.method(self.name, self.return_type, self.static, self.arguments, node=InlineCandidate.from_method(self))
 
     @property
     def frame_size(self):
@@ -82,6 +83,10 @@ class MethodDefinition(BaseNode):
     @property
     def argument_count(self):
         return len(self.arguments) + (0 if self.is_constructor() else 1)
+
+    @property
+    def explicit_local_count(self):
+        return self.frame_size - self.argument_count
 
     @property
     def return_type(self):
