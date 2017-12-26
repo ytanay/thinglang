@@ -31,16 +31,16 @@ def test_inlining_binary_op_constants():
 
 def test_inlining_binary_op_variables():
     assert compile_base(INLINING_TEST_PROGRAM.format('self.add(n1, n2)'), trim=2) == [
-        OpcodePushLocal(1),
         OpcodePushLocal(2),
+        OpcodePushLocal(1),
         internal_call('number.__addition__')
     ]
 
 
 def test_inlining_binary_op_mixed():
     assert compile_base(INLINING_TEST_PROGRAM.format('self.add(2, n1)'), trim=2) == [
-        OpcodePushStatic(2),
         OpcodePushLocal(1),
+        OpcodePushStatic(2),
         internal_call('number.__addition__')
     ]
 

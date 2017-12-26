@@ -63,7 +63,7 @@ thing C extends B
 
 def compile_base(code='', thing_id=0, method_id=0, trim=False):
     context = pipeline.compile(SourceContext.wrap(code), mapper=SYMBOL_MAPPER)
-    entry = context.methods[(thing_id, method_id)]
+    entry = context.classes[thing_id][0][method_id]
     instructions = entry[1].instructions
     return instructions[trim + 1:-1] if trim else instructions
 
