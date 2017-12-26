@@ -10,7 +10,7 @@ from thinglang.parser.nodes.root_node import RootNode
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.utils.tree_utils import TreeTraversal, inspects
 
-LocalMember = collections.namedtuple('LocalMember', ['type', 'index'])
+LocalMember = collections.namedtuple('LocalMember', ['type', 'index', 'source'])
 
 
 class Indexer(TreeTraversal):
@@ -65,9 +65,9 @@ class IndexerContext(object):
         super(IndexerContext, self).__init__()
 
         self.current_method = method
-        self.locals = OrderedDict({Identifier.self(): LocalMember(thing.name, 0)})
+        self.locals = OrderedDict({Identifier.self(): LocalMember(thing.name, 0, 'self')})  # TODO: static functions!
         for arg in method.arguments:
-            self.locals[arg] = LocalMember(arg.type, len(self.locals))
+            self.locals[arg] = LocalMember(arg.type, len(self.locals), 'argument')
 
     def flush(self):
         self.current_method.update_locals(self.locals)
@@ -75,5 +75,5 @@ class IndexerContext(object):
     def append(self, name: Identifier, type: Identifier):
         if name in self.locals:  # TODO: this should be resolved within scoping rules
             return
-        self.locals[name] = LocalMember(type, len(self.locals))
+        self.locals[name] = LocalMember(type, len(self.locals), 'local')
 

@@ -11,6 +11,7 @@
             ],
             "convention": "internal",
             "index": 0,
+            "inline": null,
             "kind": "method",
             "name": "__constructor__",
             "static": false,

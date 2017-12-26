@@ -19,7 +19,7 @@ class ReturnStatement(BaseNode):
         return f'return {self.value}'
 
     def compile(self, context: CompilationBuffer):
-        if self.value is not None:
+        if self.value is not None: # TODO: check stated return types, no missing returns
             self.value.compile(context)
         context.append(OpcodeReturn(), self.source_ref)
 

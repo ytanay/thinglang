@@ -45,7 +45,7 @@ class SymbolMapper(object):
         self.user_indexing = {}
 
         for index, thing in enumerate(x for x in ast.children if isinstance(x, ThingDefinition)):
-            self.maps[thing.name] = SymbolMap.from_thing(thing, self.maps.get(thing.extends))
+            self.maps[thing.name] = SymbolMap.from_thing(thing, self.maps.get(thing.extends))  # TODO: check for name collisions
             self.user_indexing[thing.name] = index
 
         return self

@@ -1,3 +1,6 @@
+from thinglang.compiler.tracker import LocalTracker
+
+
 class Reference(object):
     """
     The basic reference type
@@ -13,6 +16,9 @@ class Reference(object):
         Returns the name of the type of the entity being referenced
         """
         return self._type
+
+    def hit(self):
+        pass
 
 
 class ElementReference(Reference):
@@ -93,6 +99,10 @@ class LocalReference(Reference):
         Returns the index of the local element
         """
         return self.local.index
+
+    def hit(self):
+        if isinstance(self.local, LocalTracker):
+            return self.local.hit()
 
     def __repr__(self):
         return f'LR({self.type} {self.name})'

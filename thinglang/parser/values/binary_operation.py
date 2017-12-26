@@ -36,6 +36,9 @@ class BinaryOperation(BaseNode, ValueType, CallSite):
     def evaluate(self):
         return self.OPERATIONS[type(self.operator)](self.lhs.evaluate(), self.rhs.evaluate())
 
+    def replace_references(self, replacements):
+        return BinaryOperation(self.operator, replacements[self.lhs], replacements[self.rhs])
+
     def __repr__(self):
         return '{} {} {}'.format(self.lhs, self.operator, self.rhs)
 

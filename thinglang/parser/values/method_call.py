@@ -2,6 +2,7 @@ from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
 from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
 from thinglang.compiler.references import Reference
+from thinglang.compiler.tracker import TrackedReplacements
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.nodes.base_node import BaseNode
@@ -34,17 +35,31 @@ class MethodCall(BaseNode, ValueType, CallSite):
     def compile(self, context: CompilationBuffer):
 
         target = self.final_target(context)
+        node = target.element.node
 
-        self.compile_target(context)
-        self.compile_arguments(target, context)
-        instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
-        context.append(instruction.type_reference(target), self.source_ref)
+        if node:  # Inline the function (TODO: better conditions)
+            inlined = context.optional(target.element.node.arguments, track=True)
+            for node in target.element.node.nodes:
+                node.compile(inlined)
 
-        if target.type is None and self.is_captured:
-            raise CapturedVoidMethod()
+            assert all(x.hits == 1 for x in inlined.current_locals.values()), 'Inlining currently only support single use arguments'
+            assert len(target.element.node.nodes) == 1, 'Inlining currently supports only a single subnode'
 
-        if target.type is not None and not self.is_captured:
-            context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
+            node = target.element.node.nodes[0]
+            replaced = node.replace_references(TrackedReplacements(target.element.node.arguments, self.arguments))
+            replaced.compile(context)
+
+        else:
+            self.compile_target(context)
+            self.compile_arguments(target, context)
+            instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
+            context.append(instruction.type_reference(target), self.source_ref)
+
+            if target.type is None and self.is_captured:
+                raise CapturedVoidMethod()
+
+            if target.type is not None and not self.is_captured:
+                context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
 
         return target
 
@@ -86,6 +101,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
     def deriving_from(self, node):
         self.target.deriving_from(node)
         return super().deriving_from(node)
+
+    def replace_references(self, replacements):
+        return MethodCall(self.target, ArgumentList([replacements[x] for x in self.arguments]), self.stack_args, self._is_captured)
 
     @property
     def is_captured(self):
