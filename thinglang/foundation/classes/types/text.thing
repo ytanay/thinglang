@@ -5,4 +5,5 @@ thing text
     does contains with text substring returns bool
     does length returns number
     does to_bytes returns list<number>
-    static does convert_number with text num returns number
+
+    as number

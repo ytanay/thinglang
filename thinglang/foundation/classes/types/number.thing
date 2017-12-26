@@ -15,4 +15,4 @@ thing number
     does < with number other returns bool
     does > with number other returns bool
 
-    does convert_text returns text
+    as text
