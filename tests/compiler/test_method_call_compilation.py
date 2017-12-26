@@ -9,7 +9,7 @@ def test_access_in_method_args():
         OpcodePushLocal(LST_ID),
         internal_call('list.get'),
         OpcodePushLocal(SELF_ID),
-        OpcodeCallVirtual(1)
+        OpcodeCall(0, 1)
     ]
 
     assert compile_snippet('self.action(lst[self.val1])') == [
@@ -17,5 +17,5 @@ def test_access_in_method_args():
         OpcodePushLocal(LST_ID),
         internal_call('list.get'),
         OpcodePushLocal(SELF_ID),
-        OpcodeCallVirtual(1)
+        OpcodeCall(0, 1)
     ]
