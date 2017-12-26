@@ -102,6 +102,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
         self.target.deriving_from(node)
         return super().deriving_from(node)
 
+    def replace_references(self, replacements):
+        return MethodCall(self.target, ArgumentList([replacements[x] for x in self.arguments]), self.stack_args, self._is_captured)
+
     @property
     def is_captured(self):
         """
