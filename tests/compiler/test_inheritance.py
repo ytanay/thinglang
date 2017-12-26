@@ -1,6 +1,6 @@
 import pytest
 
-from tests.compiler import compile_snippet, A_INST, B_INST, C_INST, compile_base, A_THING, B_THING
+from tests.compiler import compile_snippet, A_INST, B_INST, A_THING, B_THING, compile_template
 from thinglang.compiler.errors import InvalidReference
 from thinglang.compiler.opcodes import OpcodePushMember, OpcodeInstantiate, OpcodeReturn, OpcodePushLocal, \
     OpcodePopMember
@@ -29,12 +29,12 @@ def test_regular_inheritance_invalid_member_access():
 
 
 def test_constructor_compilation():
-    assert compile_base(thing_id=A_THING) == [
+    assert compile_template(thing_id=A_THING) == [
         OpcodeInstantiate(0, 1),  # Implicit constructor (0-arg), 1 member
         OpcodeReturn()
     ]
 
-    assert compile_base(thing_id=B_THING) == [
+    assert compile_template(thing_id=B_THING) == [
         OpcodeInstantiate(1, 2),  # Explicit constructor (1-arg), 1 member +
         OpcodePushLocal(1),  # Push the first argument
         OpcodePopMember(0, 1),  # Set it as the second member of self
