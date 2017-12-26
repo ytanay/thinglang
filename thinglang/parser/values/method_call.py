@@ -1,6 +1,6 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
-from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeCallVirtual
+from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeCallVirtual, OpcodeCallStatic
 from thinglang.compiler.references import Reference
 from thinglang.compiler.tracker import TrackedReplacements
 from thinglang.lexer.values.identifier import Identifier
@@ -56,9 +56,11 @@ class MethodCall(BaseNode, ValueType, CallSite):
             if target.convention is Symbol.INTERNAL:
                 instruction = OpcodeCallInternal
             elif target.static or self.constructing_call:
-                instruction = OpcodeCall
-            else:
+                instruction = OpcodeCallStatic
+            elif target.thing.extends is not None:
                 instruction = OpcodeCallVirtual
+            else:
+                instruction = OpcodeCall
 
             context.append(instruction.type_reference(target), self.source_ref)
 
