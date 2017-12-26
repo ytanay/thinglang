@@ -1,4 +1,4 @@
-from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS, TARGET
+from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS, TARGET, TYPE_ID
 from thinglang.compiler.opcodes import Opcode
 
 
@@ -19,6 +19,13 @@ class SentinelThingDefinition(Opcode):
     Signifies the start of thing definition
     """
     ARGS = MEMBERS, METHODS
+
+
+class SentinelThingExtends(Opcode):
+    """
+    Signifies that the thing definition being declared extends a previous thing definition
+    """
+    ARGS = TYPE_ID,
 
 
 class SentinelMethodDefinition(Opcode):

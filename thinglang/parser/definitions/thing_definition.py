@@ -25,6 +25,7 @@ class ThingDefinition(BaseNode):
     def compile(self, context: CompilationContext):
         symbol_map = context.symbols[self.name]
         thing_id = context.symbols.index(symbol_map)
+        extending_index = context.symbols.index(context.symbols[self.extends]) if self.extends else None
         methods = []
 
         for method_id, method in enumerate(self.methods):  # Assumes consistent ordering in AST and symbol map
@@ -32,7 +33,7 @@ class ThingDefinition(BaseNode):
             method.compile(buffer)
             methods.append((method, buffer))
 
-        assert context.add_methods(methods) == thing_id
+        assert context.add_methods(methods, self.slots(context), extending_index, symbol_map.method_offset) == thing_id
 
     def finalize(self):
         super().finalize()

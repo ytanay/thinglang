@@ -227,7 +227,7 @@ class OpcodePopDereferenced(ElementReferenced):
 
 class OpcodeArgCopy(Opcode):
 
-    ARGS = ARGUMENTS,
+    ARGS = ARGUMENTS, ARGUMENTS
 
 
 # Assignment operations
@@ -282,7 +282,11 @@ class OpcodeCallVirtual(ElementReferenced):
     """
     Calls a user defined method via the virtual jump table
     """
-    ARGS = TYPE_ID, METHOD_ID
+    ARGS = METHOD_ID,
+
+    @classmethod
+    def type_reference(cls, element_ref: ElementReference):
+        return cls(element_ref.element_index)
 
 
 class OpcodeReturn(Opcode):

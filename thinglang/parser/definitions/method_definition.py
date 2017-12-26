@@ -44,9 +44,9 @@ class MethodDefinition(BaseNode):
     def compile(self, context: CompilationBuffer):
 
         if self.is_constructor():
-            context.append(OpcodeInstantiate(self.argument_count, context.symbols[self.parent.name].offset), self.source_ref)
+            context.append(OpcodeInstantiate(context.symbols.index(context.symbols[self.parent.name]), self.argument_count), self.source_ref)
         elif self.argument_count:
-            context.append(OpcodeArgCopy(self.argument_count), self.source_ref)
+            context.append(OpcodeArgCopy(self.argument_count, int(not self.is_constructor())), self.source_ref)
 
         if self.children:
             super(MethodDefinition, self).compile(context)
@@ -82,10 +82,10 @@ class MethodDefinition(BaseNode):
 
     @property
     def argument_count(self):
-        return len(self.arguments) + (0 if self.is_constructor() else 1)
+        return len(self.arguments)
 
     @property
-    def explicit_local_count(self):
+    def explicit_local_count(self): # TODO: does this include self?
         return self.frame_size - self.argument_count
 
     @property
