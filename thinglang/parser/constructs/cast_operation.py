@@ -15,11 +15,17 @@ class CastOperation(BaseNode):
     Expects a conversion method on the source class
     """
 
-    @staticmethod
-    def create(source, destination_type: Identifier) -> MethodCall:
-        return MethodCall(NamedAccess.extend(source, CastTag(destination_type)), stack_args=True)
+    def __init__(self, value, target_type: Identifier, stack_args=False):
+        super().__init__([value, target_type])
+        self.value, self.target_type, self.stack_args = value, target_type, stack_args
+
+    def compile(self, context):
+        actual_value = self.value.compile(context.optional())
+        if actual_value.type.untyped == self.target_type.untyped:  # TODO: why is this untyped?
+            return self.value.compile(context)
+        return MethodCall(NamedAccess.extend(self.value, CastTag(self.target_type)), stack_args=self.stack_args).compile(context)
 
     @staticmethod
     @ParserRule.mark
     def parse_inline_cast_op(value: ValueType, _: LexicalCast, target_type: Identifier):
-        return MethodCall(NamedAccess.extend(value, CastTag(target_type)), [])
+        return CastOperation(value, target_type)

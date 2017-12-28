@@ -39,7 +39,7 @@ class AssignmentOperation(BaseNode):
         target_ref = self.pull_up(self.name, context.optional())
 
         if value_ref.type.untyped != target_ref.type.untyped:  # TODO: why is the test against untyped?
-            CastOperation.create(source=self.value, destination_type=target_ref.type).compile(context)
+            CastOperation(self.value, target_ref.type).compile(context)
         elif self.optimized_assignment(context):
             return
         else:
