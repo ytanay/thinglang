@@ -34,11 +34,12 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     def compile(self, context: CompilationBuffer):
 
-        target = self.final_target(context)
+        target, determined_argument_types = self.final_target(context)
         node = target.element.node
 
         if node:  # Inline the function (TODO: better conditions)
-            inlined = context.optional(target.element.node.arguments, track=True)
+            merged_arguments = [Identifier(x.value, type_name=y.type) for x, y in zip(target.element.node.arguments, determined_argument_types)]
+            inlined = context.optional(merged_arguments, track=True)
             for node in target.element.node.nodes:
                 node.compile(inlined)
 
@@ -46,7 +47,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
             assert len(target.element.node.nodes) == 1, 'Inlining currently supports only a single subnode'
 
             node = target.element.node.nodes[0]
-            replaced = node.replace_references(TrackedReplacements(target.element.node.arguments, self.arguments))
+            replaced = node.replace_references(TrackedReplacements(merged_arguments, self.arguments))  # TODO: do we want to use the explicit declared or more as a template construct?
             replaced.compile(context)
 
         else:
@@ -57,7 +58,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
                 instruction = OpcodeCallInternal
             elif target.static or self.constructing_call:
                 instruction = OpcodeCallStatic
-            elif target.thing.extends is not None:
+            elif target.thing.extends is not None:  # TODO: change this to elif target.is_part_of_inheritance_chain
                 instruction = OpcodeCallVirtual
             else:
                 instruction = OpcodeCall
@@ -91,10 +92,12 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     def compile_arguments(self, target, context: CompilationBuffer):
         argument_selector = target.element.selector()
+        compiled_arguments = []
 
         for idx, arg in enumerate(self.arguments):
             compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(context)  # Deals with implicit casts
             argument_selector.constraint(compiled_target, self.source_ref)
+            compiled_arguments.append(compiled_target)
 
         if isinstance(self.target[0], CallSite):
             self.target[0].compile(context)
@@ -103,7 +106,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
         target.element = argument_selector.disambiguate(self.source_ref)
 
-        return target
+        return target, compiled_arguments
 
     def final_target(self, context):
         ambiguous_target = self.determine_target(context.optional())
