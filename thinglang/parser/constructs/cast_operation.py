@@ -16,7 +16,7 @@ class CastOperation(BaseNode):
     """
 
     def __init__(self, value, target_type: Identifier, stack_args=False):
-        super().__init__([value, target_type])
+        super().__init__([value])
         self.value, self.target_type, self.stack_args = value, target_type, stack_args
 
     def compile(self, context):
