@@ -79,7 +79,7 @@ class SourceReference(object):
         if not refs:
             return None
 
-        assert len(set(x.filename for x in refs)) == len(set(x.line_number for x in refs)) == 1
+        assert len(set(x.filename for x in refs)) == len(set(x.line_number for x in refs)) == 1, (set(x.filename for x in refs), set(x.line_number for x in refs))
         return cls(refs[0].source_line, min(x.column_start for x in refs), max(x.column_end for x in refs))
 
     @property
