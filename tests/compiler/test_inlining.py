@@ -52,7 +52,6 @@ def test_inlining_second_call_simple():
     ]
 
 
-@pytest.mark.skip
+
 def test_inlining_internal_call():
-    print(internal_call('Console.write'))
-    print(compile_base(INLINING_TEST_PROGRAM.format('Console.print("Hello")'), trim=2))
+    print(compile_base(INLINING_TEST_PROGRAM.format('Console.print(n1)'), trim=2))
