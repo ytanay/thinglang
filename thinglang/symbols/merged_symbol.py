@@ -37,8 +37,8 @@ class MergedSymbol(object):
         assert len(set(symbol.type for symbol in self.symbols)) == 1
         return self.symbols[0].type
 
-    def selector(self):
-        return ArgumentSelector(self.symbols)
+    def selector(self, context):
+        return ArgumentSelector(self.symbols, context)
 
     @property
     def convention(self):

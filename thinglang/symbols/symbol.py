@@ -43,8 +43,8 @@ class Symbol(object):
                       self.index,
                       self.convention)
 
-    def selector(self):
-        return ArgumentSelector([self])
+    def selector(self, context):
+        return ArgumentSelector([self], context)
 
     @property
     def convention(self):
