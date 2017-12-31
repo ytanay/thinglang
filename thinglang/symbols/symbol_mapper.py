@@ -144,11 +144,11 @@ class SymbolMapper(object):
             current = self[current.extends]
             yield current
 
-    def entry(self) -> int:
+    def entry(self) -> Reference:
         """
         Get the index of the program's entry point
         """
-        return self.user_indexing[Identifier('Program')]
+        return self.resolve(NamedAccess([Identifier('Program'), Identifier.constructor()]), {})
 
     @collection_utils.drain()
     def descendants(self, root_map: SymbolMap, include_root: bool=True, collected: set=None):

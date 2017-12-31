@@ -16,6 +16,8 @@ BytecodeHeader = collections.namedtuple('BytecodeHeader', [
     'initial_frame_size'
 ])
 
+CompiledMethodMetadata = collections.namedtuple('CompiledMethodMetadata', ['address', 'frame_size'])
+
 
 class CompilationContext(object):
     """
@@ -72,7 +74,7 @@ class CompilationContext(object):
                         OpcodeHandlerRangeDefinition(start_index + method_offset, end_index + method_offset)
                     ])
 
-                offsets[(class_id, method_id + methods_offset)] = method_offset, method.frame_size
+                offsets[(class_id, method_id + methods_offset)] = CompiledMethodMetadata(method_offset, method.frame_size)
                 instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.instructions)
                 instructions.extend(instruction.update_offset(method_offset, data_offset) for instruction in buffer.epilogues)
 
@@ -91,12 +93,13 @@ class CompilationContext(object):
         data = bytes().join(x for x in data_items) + SentinelDataEnd().serialize()
         source_map = bytes().join(x.source_ref.serialize() for x in instructions)
 
+        entry = offsets[(self.entry.thing_index, self.entry.element_index)]
         header = bytes('THING', 'utf-8') + bytes([0xcc]) + struct.pack(HEADER_FORMAT, *BytecodeHeader(
             version=4,
             instruction_count=len(instructions),
             data_item_count=len(data_items),
-            entrypoint=offsets[(self.entry, 0)][0],
-            initial_frame_size=offsets[(self.entry, 0)][1]
+            entrypoint=entry.address,
+            initial_frame_size=entry.frame_size
         ))
 
         return header + imports + code + data + source_map + bytes(self.source.raw_contents, 'utf-8')
