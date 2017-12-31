@@ -41,7 +41,11 @@ class CompilationBuffer(object):
         assert len(optional.data) == 0
         self.instructions.insert(index, optional.instructions[0])
 
-    def optional(self, arguments=None, track=False) -> 'CompilationBuffer':
+    def extend(self, buffer: 'CompilationBuffer'):
+        self.instructions.extend(instruction.update_offset(len(self.instructions), len(self.data)) for instruction in buffer.instructions)
+        self.data.extend(buffer.data)
+
+    def optional(self, arguments=None, track=False, require_source_refs=None) -> 'CompilationBuffer':
         """
         Creates an new compilation buffer, which can be optionally merged into the primary buffer
         """
