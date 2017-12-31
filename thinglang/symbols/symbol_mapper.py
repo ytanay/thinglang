@@ -50,7 +50,7 @@ class SymbolMapper(object):
 
         return self
 
-    def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict) -> Reference:
+    def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict=(), current_generics: list=()) -> Reference:
         """
         Resolve a reference into a Reference object
         :param target: the reference being resolved (can be either an identifier or access object)
@@ -60,7 +60,10 @@ class SymbolMapper(object):
         assert not target.STATIC
 
         if isinstance(target, Identifier):
-            return LocalReference(method_locals[target], target)
+            if target in current_generics:
+                return Reference(Identifier.object())
+            else:
+                return LocalReference(method_locals[target], target)
         elif isinstance(target, NamedAccess):
             return self.resolve_named(target, method_locals)
 
