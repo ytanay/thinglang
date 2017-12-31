@@ -13,8 +13,8 @@ class CompilationBuffer(object):
 
     USED_ALIAS = object()
 
-    def __init__(self, symbols, current_locals, track=True):
-        self.symbols, self.current_locals, self.track = symbols, current_locals, track
+    def __init__(self, symbols, current_locals, current_generics, track=True, require_source_refs=True):
+        self.symbols, self.current_locals, self.current_generics, self.track, self.require_source_refs = symbols, current_locals, current_generics or (), track, require_source_refs
 
         self.instructions = []
         self.epilogues = []
@@ -26,7 +26,7 @@ class CompilationBuffer(object):
         """
         Append an instruction to this buffer
         """
-        if not source_ref:
+        if not source_ref and self.require_source_refs:
             raise Exception('Cannot add instruction without a source ref')
 
         opcode.source_ref = source_ref
@@ -50,7 +50,7 @@ class CompilationBuffer(object):
         Creates an new compilation buffer, which can be optionally merged into the primary buffer
         """
         current_locals = self.current_locals if arguments is None else {x: LocalTracker(x.type) for x in arguments}
-        return CompilationBuffer(self.symbols, current_locals, track)
+        return CompilationBuffer(self.symbols, current_locals, self.current_generics, track, self.require_source_refs if require_source_refs is None else require_source_refs)
 
     def append_static(self, data: bytes) -> int:
         """
@@ -88,7 +88,7 @@ class CompilationBuffer(object):
         """
         Resolves an arbitrary item into a reference (e.g. LexicalIdentifier, Access)
         """
-        resolved = self.symbols.resolve(item, self.current_locals)
+        resolved = self.symbols.resolve(item, self.current_locals, self.current_generics)
 
         if self.track:
             resolved.hit()
