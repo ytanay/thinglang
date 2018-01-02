@@ -15,19 +15,21 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
         },
         {
             "arguments": [
-                "object"
+                "text"
             ],
             "convention": "internal",
             "index": 1,
             "inline": null,
             "kind": "method",
             "name": "__addition__",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -41,6 +43,7 @@
             "inline": null,
             "kind": "method",
             "name": "__equals__",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -54,6 +57,7 @@
             "inline": null,
             "kind": "method",
             "name": "contains",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -65,6 +69,7 @@
             "inline": null,
             "kind": "method",
             "name": "length",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -76,6 +81,7 @@
             "inline": null,
             "kind": "method",
             "name": "to_bytes",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -92,9 +98,22 @@
             "inline": null,
             "kind": "method",
             "name": "as number",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

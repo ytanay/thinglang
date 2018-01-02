@@ -17,6 +17,7 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "Directory",
             "visibility": "public"
@@ -28,6 +29,7 @@
             "inline": null,
             "kind": "method",
             "name": "contents",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -36,6 +38,18 @@
                 ]
             ],
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

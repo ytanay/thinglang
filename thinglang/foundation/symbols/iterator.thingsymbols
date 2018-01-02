@@ -17,6 +17,7 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": [
                 "iterator",
@@ -33,6 +34,7 @@
             "inline": null,
             "kind": "method",
             "name": "has_next",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -44,9 +46,22 @@
             "inline": null,
             "kind": "method",
             "name": "next",
+            "passthrough": false,
             "static": false,
             "type": "T",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

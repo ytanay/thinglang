@@ -15,6 +15,7 @@
             "inline": null,
             "kind": "member",
             "name": "name",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -26,6 +27,7 @@
             "inline": null,
             "kind": "member",
             "name": "type",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -37,9 +39,22 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "DirectoryEntry",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

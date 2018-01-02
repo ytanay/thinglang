@@ -15,39 +15,56 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "Console",
             "visibility": "public"
         },
         {
             "arguments": [
-                "object"
+                "text"
             ],
             "convention": "internal",
             "index": 1,
             "inline": null,
             "kind": "method",
             "name": "write",
+            "passthrough": false,
             "static": true,
             "type": null,
             "visibility": "public"
         },
         {
             "arguments": [
-                "object"
+                "text"
             ],
             "convention": "internal",
             "index": 2,
             "inline": null,
             "kind": "method",
-            "name": "print",
+            "name": "write_line",
+            "passthrough": false,
             "static": true,
             "type": null,
             "visibility": "public"
         },
         {
             "arguments": [
-                "object",
+                "text"
+            ],
+            "convention": "internal",
+            "index": 3,
+            "inline": null,
+            "kind": "method",
+            "name": "print",
+            "passthrough": false,
+            "static": true,
+            "type": null,
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "text",
                 [
                     "list",
                     [
@@ -56,10 +73,11 @@
                 ]
             ],
             "convention": "internal",
-            "index": 3,
+            "index": 4,
             "inline": null,
             "kind": "method",
             "name": "print",
+            "passthrough": false,
             "static": true,
             "type": null,
             "visibility": "public"
@@ -67,13 +85,26 @@
         {
             "arguments": [],
             "convention": "internal",
-            "index": 4,
+            "index": 5,
             "inline": null,
             "kind": "method",
             "name": "read_line",
+            "passthrough": false,
             "static": true,
             "type": "text",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

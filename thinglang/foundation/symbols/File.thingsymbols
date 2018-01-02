@@ -17,6 +17,7 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "File",
             "visibility": "public"
@@ -30,6 +31,7 @@
             "inline": null,
             "kind": "method",
             "name": "open",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -41,6 +43,7 @@
             "inline": null,
             "kind": "method",
             "name": "close",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -54,6 +57,7 @@
             "inline": null,
             "kind": "method",
             "name": "write",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -65,9 +69,22 @@
             "inline": null,
             "kind": "method",
             "name": "read",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

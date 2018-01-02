@@ -2,7 +2,7 @@
     "convention": "internal",
     "extends": null,
     "generics": [],
-    "name": "bool",
+    "name": "object",
     "offsets": {
         "members": 0,
         "methods": 0
@@ -17,20 +17,34 @@
             "name": "__constructor__",
             "passthrough": false,
             "static": false,
+            "type": "object",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "object"
+            ],
+            "convention": "internal",
+            "index": 1,
+            "inline": null,
+            "kind": "method",
+            "name": "__equals__",
+            "passthrough": false,
+            "static": false,
             "type": "bool",
             "visibility": "public"
         },
         {
-            "arguments": null,
+            "arguments": [],
             "convention": "internal",
-            "index": null,
+            "index": 2,
             "inline": null,
             "kind": "method",
             "name": "as text",
-            "passthrough": true,
+            "passthrough": false,
             "static": false,
             "type": "text",
-            "visibility": "private"
+            "visibility": "public"
         }
     ]
 }

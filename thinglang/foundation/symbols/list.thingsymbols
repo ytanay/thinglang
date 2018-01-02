@@ -17,6 +17,7 @@
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -35,6 +36,7 @@
             "inline": null,
             "kind": "method",
             "name": "get",
+            "passthrough": false,
             "static": false,
             "type": "T",
             "visibility": "public"
@@ -49,6 +51,7 @@
             "inline": null,
             "kind": "method",
             "name": "set",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -62,6 +65,7 @@
             "inline": null,
             "kind": "method",
             "name": "append",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -78,6 +82,7 @@
             "inline": null,
             "kind": "method",
             "name": "pop",
+            "passthrough": false,
             "static": false,
             "type": "T",
             "visibility": "public"
@@ -92,6 +97,7 @@
             "inline": null,
             "kind": "method",
             "name": "swap",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -105,6 +111,7 @@
             "inline": null,
             "kind": "method",
             "name": "contains",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -116,6 +123,7 @@
             "inline": null,
             "kind": "method",
             "name": "length",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -127,6 +135,7 @@
             "inline": null,
             "kind": "method",
             "name": "iterator",
+            "passthrough": false,
             "static": false,
             "type": [
                 "iterator",
@@ -146,6 +155,7 @@
             "inline": null,
             "kind": "method",
             "name": "range",
+            "passthrough": false,
             "static": true,
             "type": [
                 "list",
@@ -154,6 +164,18 @@
                 ]
             ],
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }
