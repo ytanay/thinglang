@@ -358,6 +358,10 @@ void Program::push(int64_t value) {
 }
 
 
+void Program::push(std::string value) {
+    stack.push_front(Program::create<TextInstance>(value));
+}
+
 void Program::push(bool value) {
     /**
      * Push an boolean value into the program stack
@@ -423,3 +427,4 @@ Index Program::exception(Index counter, Index exception_type, std::stack<Index> 
 
     critical_abort(UNHANDLED_EXCEPTION); // TODO: Obviously, we don't want a critical abort here
 }
+
