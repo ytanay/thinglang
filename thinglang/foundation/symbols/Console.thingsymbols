@@ -42,20 +42,6 @@
             "index": 2,
             "inline": null,
             "kind": "method",
-            "name": "write_line",
-            "passthrough": false,
-            "static": true,
-            "type": null,
-            "visibility": "public"
-        },
-        {
-            "arguments": [
-                "text"
-            ],
-            "convention": "internal",
-            "index": 3,
-            "inline": null,
-            "kind": "method",
             "name": "print",
             "passthrough": false,
             "static": true,
@@ -73,7 +59,7 @@
                 ]
             ],
             "convention": "internal",
-            "index": 4,
+            "index": 3,
             "inline": null,
             "kind": "method",
             "name": "print",
@@ -85,7 +71,7 @@
         {
             "arguments": [],
             "convention": "internal",
-            "index": 5,
+            "index": 4,
             "inline": null,
             "kind": "method",
             "name": "read_line",
