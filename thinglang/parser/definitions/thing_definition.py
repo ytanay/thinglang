@@ -29,7 +29,7 @@ class ThingDefinition(BaseNode):
         methods = []
 
         for method_id, method in enumerate(self.methods):  # Assumes consistent ordering in AST and symbol map
-            buffer = CompilationBuffer(context.symbols, method.locals)
+            buffer = CompilationBuffer(context.symbols, method.locals, self.generics)
             method.compile(buffer)
             methods.append((method, buffer))
 
@@ -57,7 +57,7 @@ class ThingDefinition(BaseNode):
         return [x.name for x in self.members + self.methods]
 
     def slots(self, context):
-        return sum(len(container.members) for container in context.symbols.inheritance(self))
+        return sum(len(container.members) for container in context.symbols.inheritance(self.name))
 
     @staticmethod
     @ParserRule.mark

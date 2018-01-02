@@ -62,6 +62,8 @@ class SymbolMapper(object):
         if isinstance(target, Identifier):
             if target in current_generics:
                 return Reference(Identifier.object())
+            elif target.untyped in self:
+                return Reference(target)
             else:
                 return LocalReference(method_locals[target], target)
         elif isinstance(target, NamedAccess):
@@ -137,7 +139,7 @@ class SymbolMapper(object):
         Emits an inheritance chain (from descendant to ancestor)
         :param start: the ThingDefinition to start from
         """
-        current = self[start.name]
+        current = self[start]
         yield current
 
         while current.extends:
