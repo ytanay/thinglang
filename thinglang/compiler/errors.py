@@ -19,9 +19,10 @@ class NoMatchingOverload(ThinglangException):
     The method was not called with the expected number of arguments
     """
 
-    def __init__(self, methods, arguments, source_ref):
+    def __init__(self, methods, arguments, exact_matches, inheritance_matches, cast_matches, source_ref):
         super().__init__()
-        self.methods, self.arguments, self.source_ref = methods, arguments, source_ref
+        self.methods, self.arguments, self.exact_matches, self.inheritance_matches, self.cast_matches, self.source_ref = \
+            methods, arguments, exact_matches, inheritance_matches, cast_matches, source_ref
 
     def __str__(self):
         return f'No matching overload for {self.methods[0].name} using arguments {self.arguments} was found.\n' + \
