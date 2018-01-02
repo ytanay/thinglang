@@ -69,6 +69,7 @@ thing C2 extends B1
 thing C3 extends B2
 '''
 
+
 SOURCE_FULL = SOURCE_LOCATION + SOURCE_PERSON + SOURCE_PAIR
 
 
