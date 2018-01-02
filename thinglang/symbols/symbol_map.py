@@ -3,6 +3,7 @@ import struct
 from typing import List
 
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
+from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.symbols.merged_symbol import MergedSymbol
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils import collection_utils
@@ -23,6 +24,7 @@ class SymbolMap(object):
         }
 
         assert len(self.methods) + len(self.members) == len(self.lookup), 'Thing definition contains colliding elements'
+        assert {x.convention for x in self.lookup.values()} == {self.convention}, 'Inconsistent calling conventions identified'
 
     def serialize(self) -> dict:
         """
@@ -133,4 +135,4 @@ class SymbolMap(object):
             method_symbols[method_symbol.name].append(method_symbol)
 
         for symbol_name, symbols in method_symbols.items():
-            yield symbols[0] if len(symbols) == 1 else MergedSymbol(symbols)
+            yield symbols.pop() if len(symbols) == 1 else MergedSymbol(symbols)
