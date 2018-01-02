@@ -97,3 +97,7 @@ class NamedAccess(BaseNode, ValueType):
         Parse the all other named access constructions
         """
         return NamedAccess([left, right])
+
+    @classmethod
+    def auto(cls, param):
+        return NamedAccess([Identifier(x) for x in param.split('.')])

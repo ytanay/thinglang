@@ -1,4 +1,4 @@
-from tests.mapper import SOURCE_FULL, SOURCE_PERSON, SOURCE_LOCATION, SOURCE_PAIR, get_symbols, validate_member, \
+from tests.symbols import SOURCE_FULL, SOURCE_PERSON, SOURCE_LOCATION, SOURCE_PAIR, get_symbols, validate_member, \
     validate_method, SOURCE_INHERITANCE
 from thinglang.lexer.values.identifier import Identifier
 
