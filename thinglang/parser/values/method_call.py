@@ -38,40 +38,26 @@ class MethodCall(BaseNode, ValueType, CallSite):
         target, determined_argument_types = self.final_target(context)
         node = target.element.node
 
-        if node:  # Inline the function (TODO: better conditions)
-            merged_arguments = [Identifier(x.value, type_name=y[1].type) for x, y in zip(target.element.node.arguments, determined_argument_types)]
-            inlined = context.optional(merged_arguments, track=True, require_source_refs=False)
-            for node in target.element.node.nodes:
-                node.compile(inlined)
+        self.determine_target(context)
+        self.compile_arguments(target, context)
 
-            assert all(x.hits == 1 for x in inlined.current_locals.values()), 'Inlining currently only support single use arguments'
-            assert len(target.element.node.nodes) == 1, 'Inlining currently supports only a single subnode'
+        if target.element.passthrough:
+            return target
 
-            node = target.element.node.nodes[0]
-            replaced = node.replace_references(TrackedReplacements(merged_arguments, self.arguments, self))  # TODO: do we want to use the explicit declared or more as a template construct?
-            replaced.compile(context)
+        if target.convention is Symbol.INTERNAL:
+            instruction = OpcodeCallInternal
+        elif target.static or self.constructing_call:
+            instruction = OpcodeCallStatic
+        else:  # TODO: change this to elif target.is_part_of_inheritance_chain
+            instruction = OpcodeCallVirtual
 
-        else:
-            self.determine_target(context)
-            self.compile_arguments(target, context)
+        context.append(instruction.type_reference(target), self.source_ref)
 
-            if target.element.passthrough:
-                return target
+        if target.type is None and self.is_captured:
+            raise CapturedVoidMethod()
 
-            if target.convention is Symbol.INTERNAL:
-                instruction = OpcodeCallInternal
-            elif target.static or self.constructing_call:
-                instruction = OpcodeCallStatic
-            else:  # TODO: change this to elif target.is_part_of_inheritance_chain
-                instruction = OpcodeCallVirtual
-
-            context.append(instruction.type_reference(target), self.source_ref)
-
-            if target.type is None and self.is_captured:
-                raise CapturedVoidMethod()
-
-            if target.type is not None and not self.is_captured:
-                context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
+        if target.type is not None and not self.is_captured:
+            context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
 
         return target
 
