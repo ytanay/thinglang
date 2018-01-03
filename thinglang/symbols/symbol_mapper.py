@@ -62,7 +62,7 @@ class SymbolMapper(object):
         if isinstance(target, Identifier):
             if target in current_generics:
                 return Reference(Identifier.object())
-            elif target.untyped in self:
+            elif target.untyped in self:  # TODO: verify name collisions
                 return Reference(target)
             else:
                 return LocalReference(method_locals[target], target)

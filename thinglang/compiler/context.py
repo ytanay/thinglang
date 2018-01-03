@@ -23,7 +23,7 @@ class CompilationContext(object):
     """
     The CompilationContext classes manages the entire compilation pass, including serialization into bytecode
     """
-    def __init__(self, symbols, source: SourceContext, entry=None):
+    def __init__(self, symbols, source: SourceContext=None, entry=None):
 
         self.symbols = symbols
         self.source = source

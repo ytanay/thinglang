@@ -1,17 +1,14 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
-from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop, OpcodeCallVirtual, OpcodeCallStatic
+from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodePop, OpcodeCallVirtual, OpcodeCallStatic
 from thinglang.compiler.references import Reference
-from thinglang.compiler.tracker import TrackedReplacements
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.named_access import NamedAccess
-from thinglang.phases import preprocess
 from thinglang.symbols.symbol import Symbol
-from thinglang.utils.source_context import SourceContext
 from thinglang.utils.type_descriptors import ValueType, CallSite
 
 
