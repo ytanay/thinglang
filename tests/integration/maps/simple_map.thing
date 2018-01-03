@@ -1,6 +1,15 @@
 /*
 {
-    "expected_output": ["{}", "{Yotam Tanay: 19}", "{Ryan Dillian: 42, Yotam Tanay: 19}", "{Ryan Dillian: 42, Yotam Tanay: 20}", "{Ryan Dillian: 43, Yotam Tanay: 20}", "20", "20", "43"]
+    "expected_output": [
+        "{}",
+        "{Yotam Tanay: 19}",
+        "{Ryan Dillian: 42, Yotam Tanay: 19}",
+        "{Ryan Dillian: 42, Yotam Tanay: 20}",
+        "{Ryan Dillian: 43, Yotam Tanay: 20}",
+        "20",
+        "20",
+        "43"
+    ]
 }
 */
 
