@@ -12,7 +12,7 @@ thing Container
         self.name = name
         self.value = value
 
-    as text
+    implicit as text
         return "Container(" + self.name + ", " + self.value + ")"
 
 thing Program

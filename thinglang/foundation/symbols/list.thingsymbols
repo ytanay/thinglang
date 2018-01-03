@@ -13,6 +13,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
@@ -32,6 +33,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
@@ -47,6 +49,7 @@
                 "T"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 2,
             "inline": null,
             "kind": "method",
@@ -61,6 +64,7 @@
                 "T"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 3,
             "inline": null,
             "kind": "method",
@@ -78,6 +82,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 4,
             "inline": null,
             "kind": "method",
@@ -93,6 +98,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 5,
             "inline": null,
             "kind": "method",
@@ -107,6 +113,7 @@
                 "T"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 6,
             "inline": null,
             "kind": "method",
@@ -119,6 +126,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 7,
             "inline": null,
             "kind": "method",
@@ -131,6 +139,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 8,
             "inline": null,
             "kind": "method",
@@ -151,6 +160,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 9,
             "inline": null,
             "kind": "method",
@@ -168,6 +178,7 @@
         {
             "arguments": null,
             "convention": "internal",
+            "implicit": true,
             "index": null,
             "inline": null,
             "kind": "method",

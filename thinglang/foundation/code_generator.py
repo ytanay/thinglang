@@ -6,7 +6,7 @@ from thinglang import pipeline
 from thinglang.compiler.opcodes import Opcode
 from thinglang.foundation import templates, definitions
 from thinglang.lexer.lexical_token import LexicalToken
-from thinglang.lexer.values.identifier import GenericIdentifier
+from thinglang.lexer.values.identifier import GenericIdentifier, Identifier
 from thinglang.parser.constructs.cast_operation import CastTag
 from thinglang.symbols.symbol import Symbol
 from thinglang.symbols.symbol_mapper import SymbolMapper
@@ -41,8 +41,13 @@ def generate_types():
         symbol_map = SymbolMapper(ast)[name]
         symbol_map.convention = Symbol.INTERNAL
 
+        text_cast = CastTag(Identifier('text'))
+        if text_cast not in symbol_map:
+            symbol_map.lookup[text_cast] = Symbol.noop(text_cast, Identifier('text'), implicit=True)
+
         for symbol in symbol_map:
             symbol.convention = Symbol.INTERNAL
+
 
         write_if_changed(os.path.join(SYMBOLS_TARGET, f'{name}.thingsymbols'), json.dumps(
             symbol_map.serialize(),

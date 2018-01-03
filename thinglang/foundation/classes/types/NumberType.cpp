@@ -102,11 +102,6 @@ void NumberType::__greater_than__() {
 
 }
 
-void NumberType::convert_text() {
-	auto self = Program::argument<NumberInstance>();
-
-	Program::push(Program::create<TextInstance>(to_string(self->val)));
-}
 
 std::string NumberInstance::text() {
     return to_string(val);

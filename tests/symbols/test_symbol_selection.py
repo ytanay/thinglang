@@ -1,6 +1,7 @@
 import pytest
 
 from tests.symbols import get_symbols
+from thinglang.compiler.context import CompilationContext
 from thinglang.compiler.errors import NoMatchingOverload
 from thinglang.compiler.references import Reference
 from thinglang.lexer.values.identifier import Identifier
@@ -15,10 +16,12 @@ thing Container1 extends Container
 thing Container2 extends Container
     as Container1
 thing Container3 extends Container
-    as Container1
+    implicit as Container1
 thing Container4 extends Container
+    implicit as Container1
+    implicit as Container2
+thing Container5 extends Container
     as Container1
-    as Container2
     
 thing Container1Child extends Container1
 thing Container1Child2 extends Container1
@@ -37,14 +40,16 @@ thing A
 
 
 # TODO: verify no cast to base type!
+# TODO: we probably don't want implicit casts to text
 
 
 SYMBOLS = get_symbols(SOURCE_OVERLOADING)
+CONTEXT = CompilationContext(SYMBOLS)
 BASE = SYMBOLS.resolve(NamedAccess.auto('A.overloaded'))
 
 
 def get_selection(*target_types):
-    selector = BASE.element.selector(SYMBOLS)
+    selector = BASE.element.selector(CONTEXT)
 
     for target_type in target_types:
         selector.constraint(Reference(Identifier(target_type)))
@@ -75,6 +80,9 @@ def test_inheritance_match():
 
 def test_casted_match():
     verify_selection(['Container3'], 1, ArgumentSelector.CAST)
+
+    with pytest.raises(NoMatchingOverload):
+        verify_selection(['Container5'], 1, ArgumentSelector.CAST)
 
 
 def test_inheritance_directionality():  # Verify that a prent is not accepted in place of a child

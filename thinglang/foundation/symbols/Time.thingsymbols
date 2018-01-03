@@ -11,6 +11,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
@@ -23,6 +24,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
@@ -35,6 +37,7 @@
         {
             "arguments": null,
             "convention": "internal",
+            "implicit": true,
             "index": null,
             "inline": null,
             "kind": "method",

@@ -11,6 +11,7 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
@@ -25,6 +26,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
@@ -39,6 +41,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 2,
             "inline": null,
             "kind": "method",
@@ -53,6 +56,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 3,
             "inline": null,
             "kind": "method",
@@ -67,6 +71,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 4,
             "inline": null,
             "kind": "method",
@@ -81,6 +86,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 5,
             "inline": null,
             "kind": "method",
@@ -95,6 +101,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 6,
             "inline": null,
             "kind": "method",
@@ -109,6 +116,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 7,
             "inline": null,
             "kind": "method",
@@ -123,6 +131,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 8,
             "inline": null,
             "kind": "method",
@@ -137,6 +146,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 9,
             "inline": null,
             "kind": "method",
@@ -151,6 +161,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 10,
             "inline": null,
             "kind": "method",
@@ -165,6 +176,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 11,
             "inline": null,
             "kind": "method",
@@ -179,6 +191,7 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 12,
             "inline": null,
             "kind": "method",
@@ -189,16 +202,17 @@
             "visibility": "public"
         },
         {
-            "arguments": [],
+            "arguments": null,
             "convention": "internal",
-            "index": 13,
+            "implicit": true,
+            "index": null,
             "inline": null,
             "kind": "method",
             "name": "as text",
-            "passthrough": false,
+            "passthrough": true,
             "static": false,
             "type": "text",
-            "visibility": "public"
+            "visibility": "private"
         }
     ]
 }
