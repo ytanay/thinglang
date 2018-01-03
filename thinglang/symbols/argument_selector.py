@@ -8,6 +8,7 @@ from thinglang.parser.definitions.cast_tag import CastTag
 SymbolOption = collections.namedtuple('SymbolOption', ['symbol', 'remaining_arguments'])
 SymbolTarget = collections.namedtuple('SymbolTarget', ['symbol', 'match'])
 
+
 class ArgumentSelector(object):
     """
     Aids in disambiguating overloaded method symbols contained in MergedSymbol objects.
@@ -70,7 +71,9 @@ class ArgumentSelector(object):
         return any(parent_type.name == expected_type for parent_type in self.context.symbols.inheritance(resolved_type))
 
     def casted_match(self, expected_type, resolved):
-        return self.inheritance_match(expected_type, resolved) or CastTag(expected_type) in self.context.symbols[resolved.type]
+        expected_type, resolved_type = self.normalize_type(expected_type), self.normalize_type(resolved.type)
+        tag, symbol_map = CastTag(expected_type), self.context.symbols[resolved_type] # TODO: add warning when cast was not selected due to implicitness?
+        return self.inheritance_match(expected_type, resolved) or (tag in symbol_map and symbol_map[tag].implicit)
 
     @staticmethod
     def map_options(symbols):
