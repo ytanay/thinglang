@@ -16,11 +16,14 @@ class Symbol(object):
     INTERNAL, BYTECODE = object(), object()  # The calling convention used, if this symbol is a method
     PUBLIC, PRIVATE = object(), object()  # The visibility of this symbol
 
-    def __init__(self, name: Identifier, kind, type: Identifier, static: bool, visibility=PUBLIC, arguments=None, index=None, convention=BYTECODE, node=None):
+    def __init__(self, name: Identifier, kind, type: Identifier, static: bool, visibility=PUBLIC, arguments=None, index=None, convention=BYTECODE, node=None, passthrough=False, implicit=False):
         super(Symbol, self).__init__()
 
-        self.name, self.kind, self.type, self.static, self.visibility, self.arguments, self.index, self._convention, self.node = \
-            name, kind, type, static, visibility, arguments, index, convention, node
+        self.name, self.kind, self.type, self.static, self.visibility, self.arguments, self.index, self._convention, self.node, self.passthrough, self.implicit = \
+            name, kind, type, static, visibility, arguments, index, convention, node, passthrough, implicit
+
+        if passthrough:
+            assert not static, len(arguments) == 0
 
     def update_index(self, new_index: int):
         """
@@ -34,14 +37,17 @@ class Symbol(object):
         Creates a new symbol, with generic parameters replaced by their determined values
         :param parameters: a mapping of generic name -> resolved name
         """
-        return Symbol(self.name,
-                      self.kind,
-                      self.type.parameterize(parameters) if self.type else None,
-                      self.static,
-                      self.visibility,
-                      [x.parameterize(parameters) for x in self.arguments] if self.arguments else self.arguments,
-                      self.index,
-                      self.convention)
+        return Symbol(name=self.name,
+                      kind=self.kind,
+                      type=self.type.parameterize(parameters) if self.type else None,
+                      static=self.static,
+                      visibility=self.visibility,
+                      arguments=[x.parameterize(parameters) for x in self.arguments] if self.arguments else self.arguments,
+                      index=self.index,
+                      convention=self.convention,
+                      node=self.node,
+                      passthrough=self.passthrough,
+                      implicit=self.implicit)
 
     def selector(self, context):
         return ArgumentSelector([self], context)
@@ -69,6 +75,8 @@ class Symbol(object):
             "name": self.name,
             "index": self.index,
             "kind": "method" if self.kind is Symbol.METHOD else "member",
+            "passthrough": self.passthrough,
+            "implicit": self.implicit,
             "type": self.type,
             "static": self.static,
             "arguments": self.arguments,
@@ -96,7 +104,9 @@ class Symbol(object):
             arguments=arguments,
             index=data['index'],
             convention=cls.serialize_convention(data['convention']),
-            node=InlineCandidate.from_serialized(data['inline']['code'], data['inline']['argument_names'], arguments) if data['inline'] else None
+            node=InlineCandidate.from_serialized(data['inline']['code'], data['inline']['argument_names'], arguments) if data['inline'] else None,
+            passthrough=data['passthrough'],
+            implicit=data['implicit']
         )
 
     @staticmethod
@@ -110,11 +120,18 @@ class Symbol(object):
             return GenericIdentifier(Identifier(value[0]), tuple(Identifier(x) for x in value[1]))
 
     @classmethod
-    def method(cls, name: Identifier, return_type: Identifier, static: bool, arguments: list, node) -> 'Symbol':
+    def method(cls, name: Identifier, return_type: Identifier, static: bool, arguments: list, implicit: bool, node) -> 'Symbol':
         """
         Helper method to create a new method symbol
         """
-        return cls(name, cls.METHOD, return_type, static, Symbol.PUBLIC, [x.type for x in arguments], node=node)
+        return cls(name=name,
+                   kind=cls.METHOD,
+                   type=return_type,
+                   static=static,
+                   visibility=Symbol.PUBLIC,
+                   arguments=[x.type for x in arguments],
+                   implicit=implicit,
+                   node=node)
 
     @classmethod
     def member(cls, name: Identifier, type: Identifier, visibility) -> 'Symbol':
@@ -122,6 +139,10 @@ class Symbol(object):
         Helper method to create a new member symbol
         """
         return cls(name, cls.MEMBER, type, False, visibility)
+
+    @classmethod
+    def noop(cls, name, return_type, implicit=False):
+        return cls(name, cls.METHOD, return_type, False, [], passthrough=True, implicit=implicit)
 
     def __repr__(self):
         return f'Symbol({self.name})'
