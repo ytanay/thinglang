@@ -49,3 +49,10 @@ class LexicalPrivateTag(LexicalToken):
     """
     Tags a method or member as private
     """
+
+
+class LexicalImplicitTag(LexicalToken):
+    """
+    Marks a cast operation as implicitly callable
+    TODO: demote to Identifier if no parser rule matches?
+    """
