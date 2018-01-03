@@ -5,6 +5,7 @@ from thinglang.compiler.references import Reference
 from thinglang.compiler.tracker import TrackedReplacements
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
+from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.named_access import NamedAccess
@@ -22,9 +23,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     STACK_ARGS = object()
 
-    def __init__(self, target, arguments=None, stack_args=False, is_captured=None):
+    def __init__(self, target, arguments=None, stack_args=False, stack_target=False, is_captured=None):
         super(MethodCall, self).__init__([target, arguments])
-        self.target, self.arguments, self.stack_args, self._is_captured = target, (arguments if arguments is not None else ArgumentList()), stack_args, is_captured
+        self.target, self.arguments, self.stack_args, self.stack_target, self._is_captured = target, (arguments if arguments is not None else ArgumentList()), stack_args, stack_target, is_captured
 
     def __repr__(self):
         return '{}({})'.format(self.target, self.arguments)
@@ -54,14 +55,15 @@ class MethodCall(BaseNode, ValueType, CallSite):
             self.determine_target(context)
             self.compile_arguments(target, context)
 
+            if target.element.passthrough:
+                return target
+
             if target.convention is Symbol.INTERNAL:
                 instruction = OpcodeCallInternal
             elif target.static or self.constructing_call:
                 instruction = OpcodeCallStatic
-            elif target.thing.extends is not None:  # TODO: change this to elif target.is_part_of_inheritance_chain
+            else:  # TODO: change this to elif target.is_part_of_inheritance_chain
                 instruction = OpcodeCallVirtual
-            else:
-                instruction = OpcodeCall
 
             context.append(instruction.type_reference(target), self.source_ref)
 
@@ -115,7 +117,6 @@ class MethodCall(BaseNode, ValueType, CallSite):
                 self.target[0].compile(context)
             elif not target.static and not self.constructing_call:
                 self.target.compile(context, without_last=True)
-
 
         return target, compiled_arguments
 
