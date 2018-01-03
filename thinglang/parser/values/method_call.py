@@ -38,8 +38,8 @@ class MethodCall(BaseNode, ValueType, CallSite):
         node = target.element.node
 
         if node:  # Inline the function (TODO: better conditions)
-            merged_arguments = [Identifier(x.value, type_name=y.type) for x, y in zip(target.element.node.arguments, determined_argument_types)]
-            inlined = context.optional(merged_arguments, track=True)
+            merged_arguments = [Identifier(x.value, type_name=y[1].type) for x, y in zip(target.element.node.arguments, determined_argument_types)]
+            inlined = context.optional(merged_arguments, track=True, require_source_refs=False)
             for node in target.element.node.nodes:
                 node.compile(inlined)
 
@@ -47,7 +47,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
             assert len(target.element.node.nodes) == 1, 'Inlining currently supports only a single subnode'
 
             node = target.element.node.nodes[0]
-            replaced = node.replace_references(TrackedReplacements(merged_arguments, self.arguments))  # TODO: do we want to use the explicit declared or more as a template construct?
+            replaced = node.replace_references(TrackedReplacements(merged_arguments, self.arguments, self))  # TODO: do we want to use the explicit declared or more as a template construct?
             replaced.compile(context)
 
         else:
