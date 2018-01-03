@@ -91,20 +91,31 @@ class MethodCall(BaseNode, ValueType, CallSite):
         return target
 
     def compile_arguments(self, target, context: CompilationBuffer):
-        argument_selector = target.element.selector()
+        argument_selector = target.element.selector(context)
         compiled_arguments = []
 
         for idx, arg in enumerate(self.arguments):
-            compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(context)  # Deals with implicit casts
-            argument_selector.constraint(compiled_target, self.source_ref)
-            compiled_arguments.append(compiled_target)
+            buffer = context.optional()
+            compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(buffer)  # Deals with implicit casts
+            argument_selector.constraint(compiled_target)
+            compiled_arguments.append((buffer, compiled_target))
 
-        if isinstance(self.target[0], CallSite):
-            self.target[0].compile(context)
-        elif not target.static and not self.constructing_call:
-            self.target.compile(context, without_last=True)
+        selected = argument_selector.disambiguate(self.source_ref)
+        target.element = selected.symbol
 
-        target.element = argument_selector.disambiguate(self.source_ref)
+        for (buffer, compiled_target), expected_type in zip(compiled_arguments, selected.symbol.arguments or []):
+            if not argument_selector.inheritance_match(expected_type, compiled_target):
+                MethodCall(NamedAccess([compiled_target.type, CastTag(expected_type)]), stack_target=True, is_captured=True)\
+                    .deriving_from(self)\
+                    .compile(buffer)
+            context.extend(buffer)
+
+        if not self.stack_target:
+            if isinstance(self.target[0], CallSite):
+                self.target[0].compile(context)
+            elif not target.static and not self.constructing_call:
+                self.target.compile(context, without_last=True)
+
 
         return target, compiled_arguments
 
