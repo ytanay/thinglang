@@ -1,0 +1,18 @@
+/*
+{
+    "expected_output": ["in constructor", "in say_hello: via instance", "in say_hello: via type"]
+}
+*/
+
+thing Empty
+    setup
+        Console.print("in constructor")
+
+    static does say_hello with text message
+        Console.print("in say_hello: " + message)
+
+thing Program
+    setup
+        Empty e = Empty()
+        e.say_hello("via instance")
+        Empty.say_hello("via type")
