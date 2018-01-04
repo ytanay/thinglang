@@ -36,4 +36,4 @@ class CastOperation(BaseNode):
 
     def necessary(self, context):  #TODO test this
         actual_value = self.value if isinstance(self.value, Reference) else self.value.compile(context.optional())
-        return actual_value.type.untyped != self.target_type.untyped #and actual_type.convention is not Symbol.INTERNAL  # TODO: why is this untyped?
+        return actual_value.type != self.target_type
