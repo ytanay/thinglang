@@ -7,8 +7,8 @@
         "Successfully performed Running",
         "Yotam Tanay is performing Hobby(Writing a programming language)",
         "Failed to perform hobby. HobbyException: Writing a programming language should fail!",
-        "0",
-        "1"
+        "false",
+        "true"
      ]
 }
 */

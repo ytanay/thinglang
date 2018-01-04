@@ -1,6 +1,7 @@
 #include <cassert>
 #include "ProgramReader.h"
 #include "../utils/Formatting.h"
+#include "../execution/Globals.h"
 
 const std::string ProgramReader::EXPECTED_MAGIC = "THING\xCC";
 
@@ -179,6 +180,13 @@ Thing ProgramReader::read_data_block() {
             std::cerr << "\tReading int: " << data << std::endl;
             auto instance = Program::permanent<NumberInstance>(data);
             return instance;
+        }
+
+        case PrimitiveType::BOOL: {
+            auto data = read<uint8_t >();
+            assert(data == 0 || data == 1);
+            std::cerr << "\tReading bool: " << data << std::endl;
+            return data ? BOOL_TRUE : BOOL_FALSE;
         }
 
         default:

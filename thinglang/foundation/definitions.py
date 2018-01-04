@@ -19,7 +19,8 @@ def list_types():
 
 PRIMITIVE_TYPES = [
     'text',
-    'number'
+    'number',
+    'bool'
 ]
 
 INTERNAL_SOURCES = {Identifier(name): path for name, path in list_types()}

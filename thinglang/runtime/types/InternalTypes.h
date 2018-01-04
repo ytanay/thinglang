@@ -19,7 +19,7 @@
 #include "../../foundation/classes/utilities/TimeType.h"
 
 enum PrimitiveType {
-    TEXT, NUMBER
+    TEXT, NUMBER, BOOL
 };
 
 inline InternalType get_type(const std::string& type_name){
