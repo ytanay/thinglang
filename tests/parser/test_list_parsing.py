@@ -1,7 +1,7 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.values.inline_list import InlineList
-from thinglang.parser.values.inline_text import InlineString
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.values.method_call import MethodCall
 
 

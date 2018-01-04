@@ -4,7 +4,7 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.values.binary_operation import BinaryOperation
-from thinglang.parser.values.inline_text import InlineString
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.values.method_call import MethodCall
 
 

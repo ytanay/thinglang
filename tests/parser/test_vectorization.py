@@ -7,7 +7,7 @@ from thinglang.lexer.tokens.separator import LexicalSeparator
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser import parser
-from thinglang.parser.values.inline_text import InlineString
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.vector import TokenVector
 
 

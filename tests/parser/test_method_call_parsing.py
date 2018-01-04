@@ -25,7 +25,7 @@ def test_single_argument():
 
 def test_multiple_inline_arguments():
     method = parse_local('person.say_hello(1, "text")')
-    from thinglang.parser.values.inline_text import InlineString
+    from thinglang.lexer.values.inline_text import InlineString
     validate_method_call(method, ['person', 'say_hello'], [NumericValue, InlineString])
 
 

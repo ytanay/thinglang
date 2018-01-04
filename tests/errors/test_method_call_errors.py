@@ -4,7 +4,7 @@ from thinglang import pipeline
 from thinglang.compiler.errors import TargetNotCallable, NoMatchingOverload
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
-from thinglang.parser.values.inline_text import InlineString
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.utils.source_context import SourceContext
 
 BASE = """

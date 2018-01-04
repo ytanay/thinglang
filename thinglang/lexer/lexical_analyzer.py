@@ -8,7 +8,7 @@ from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
-from thinglang.parser.values.inline_text import InlineString
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.utils import collection_utils
 from thinglang.utils.source_context import SourceContext, SourceLine
 
