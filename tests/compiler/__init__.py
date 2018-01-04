@@ -10,7 +10,7 @@ from thinglang.utils.source_context import SourceContext
 SELF_ID, A_ID, B_ID, INST_ID, LST_ID, A_INST, B_INST, C_INST, IMPLICIT_ITERATOR_ID, IMPLICIT_ITERATION_ID = range(10)
 VAL1_ID, VAL2_ID, INNER_ID = 0, 1, 2
 INNER1_ID, INNER2_ID, CONTAINER_INNER_ID = 0, 1, 2
-STATIC_START = 6
+STATIC_START, LOCAL_START = 3, 8
 
 PROGRAM, CONTAINER, A_THING, B_THING, C_THING = range(5)
 
@@ -26,14 +26,14 @@ thing Program
         number a = 0
         number b = 0
         Program inst = Program()
-        list<number> lst = [0, 1, 2]
+        list<Container> lst = [Container(), Container(), Container()]  
         A a_inst = A()
         B b_inst = B(42)
         C c_inst = C()
         
         {}
     
-    does action with number n 
+    does action with Container c 
         Console.print("action")
         
     does add with number a, number b
