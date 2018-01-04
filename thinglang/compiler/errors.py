@@ -81,3 +81,17 @@ class SelfInStaticMethod(ThinglangException):
 
     def __str__(self):
         return f'Usage of self in static method (at {self.target.source_ref})'
+
+
+class UnfilledGenericParameters(ThinglangException):
+    """
+    A generic symbol map was selected without specifying type parameters
+    """
+
+    def __init__(self, target, container, element):
+        super().__init__()
+        self.container, self.element, self.target = container, element, target
+
+    def __str__(self):
+        return f'Usage of generic class {self.container.name}.{self.element.name if self.element else ""} without specifying parameter types (at {self.target.source_ref})'
+
