@@ -66,11 +66,11 @@ class AssignmentOperation(BaseNode):
             target_ref = context.resolve(target)
             context.append(OpcodePopLocal.from_reference(target_ref), self.source_ref)
         elif isinstance(target, NamedAccess):
-            if target.extensions:
-                target_ref = target.compile(context, pop_last=True)
-            else:
+            if target.is_identifier_pair:
                 target_ref = context.resolve(target)
                 context.append(OpcodePopMember.from_reference(target_ref), self.source_ref)
+            else:
+                target_ref = target.compile(context, pop_last=True)
         else:
             raise Exception('Cannot pull up {}'.format(target))
 

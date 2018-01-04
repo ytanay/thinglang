@@ -72,6 +72,10 @@ class NamedAccess(BaseNode, ValueType):
         last = self.target[-1]
         return [ExtensionInfo(x, x is last) for x in self.target[2:]]
 
+    @property
+    def is_identifier_pair(self):
+        return not self.extensions and all(isinstance(x, Identifier) for x in self)
+
     def __getitem__(self, item):
         return self.target[item]
 
