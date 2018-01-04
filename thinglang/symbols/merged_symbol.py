@@ -8,7 +8,7 @@ class MergedSymbol(object):
     Contains mostly proxy functions into the common symbol
     """
 
-    # TODO: check for signature ambiguity
+    # TODO: check for signature ambiguity - static non-static consistency (note generic fulfillment assertion)
 
     def __init__(self, symbols):
         self.symbols = symbols
@@ -48,3 +48,6 @@ class MergedSymbol(object):
     def convention(self, convention):
         for symbol in self.symbols:
             symbol.convention = convention
+
+    def is_complete(self, generics: dict) -> bool:
+        return all(x.is_complete(generics) for x in self.symbols)

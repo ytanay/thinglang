@@ -2,7 +2,7 @@ from typing import Tuple, Union, Sequence
 
 import itertools
 
-from thinglang.compiler.errors import InvalidReference, SelfInStaticMethod
+from thinglang.compiler.errors import InvalidReference, SelfInStaticMethod, UnfilledGenericParameters
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
@@ -65,11 +65,14 @@ class SymbolMapper(object):
             elif target.untyped in self:  # TODO: verify name collisions
                 return Reference(target)
             else:
-                if not method_locals[target].allowed:
+                local = method_locals[target]
+                if not local.allowed:
                     raise SelfInStaticMethod(target)
+                if local.type not in current_generics and self[local.type].generics and local.source != 'self':  # Check if any generic type parameters have been left unfilled
+                    raise UnfilledGenericParameters(target, self[local.type], None)
                 return LocalReference(method_locals[target], target)
         elif isinstance(target, NamedAccess):
-            return self.resolve_named(target, method_locals)
+            return self.resolve_named(target, method_locals, current_generics)
 
         raise Exception("Unknown reference type {}".format(target))
 
@@ -82,7 +85,7 @@ class SymbolMapper(object):
         """
         return self.resolve_named([target.type, child])
 
-    def resolve_named(self, target: Sequence, method_locals=()) -> ElementReference:
+    def resolve_named(self, target: Sequence, method_locals=(), current_generics=(), generic_validation=True) -> ElementReference:
         """
         Resolves an identifier pair (a.b) into an element reference
         :param target: the Access object to resolve
@@ -108,6 +111,10 @@ class SymbolMapper(object):
             raise Exception('Cannot resolve first level access {} (on {}) from {}'.format(first, first.source_ref, method_locals))
 
         container, element = self.pull(container, second, target)
+
+        remaining_generics = set(container.generics) - set(current_generics)  # TODO: are we sure generic name conflicts don't prevent this validation?
+        if generic_validation and not element.is_complete({x: Identifier.invalid() for x in remaining_generics}):  # Check if any generic type parameters have been left unfilled
+            raise UnfilledGenericParameters(target, container, element)
 
         return ElementReference(container, self.index(container), element, local)
 

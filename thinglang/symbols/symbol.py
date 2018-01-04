@@ -160,3 +160,8 @@ class Symbol(object):
             return CastTag.parse(param) if CastTag.matches(param) else Identifier(param)
         else:
             return repr(param)
+
+    def is_complete(self, generics: dict) -> bool:  # TODO: assert static methods do not use generic IDs
+        return self.static or (
+                (self.type == self.type.parameterize(generics) if self.type is not None else True) and
+                all(arg == arg.parameterize(generics) for arg in (self.arguments or [])))
