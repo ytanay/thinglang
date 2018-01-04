@@ -7,7 +7,7 @@
 thing Program
     setup
         number num = 2
-        list lst = [[1, 2, 3], [num, (1 + 2) * 3], [self.add(20, 22), self.add(20, 20)]]
+        list<list<number>> lst = [[1, 2, 3], [num, (1 + 2) * 3], [self.add(20, 22), self.add(20, 20)]]
         Console.print(lst)
 
         Console.print([[1, 2, 3], [num, (1 + 2) * 3], [self.add(20, 22), self.add(20, 20)]])

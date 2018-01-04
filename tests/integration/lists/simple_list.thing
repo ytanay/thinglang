@@ -6,7 +6,7 @@
 
 thing Program
     setup
-        list empty = list() # TODO: why is this allowed?
+        list<number> empty = list<number>()
         Console.print(empty)
 
         list<text> names = list<text>()
