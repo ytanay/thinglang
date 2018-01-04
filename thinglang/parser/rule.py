@@ -19,7 +19,7 @@ class ParserRule(object):
     def matches(self, tokens):
         for start_idx, start_token in enumerate(tokens):
             token_subset = tokens[start_idx:start_idx+self.size]
-            if self.does_match(token_subset) and self.predicate(token_subset, start_idx):
+            if self.does_match(token_subset) and self.predicate(tokens, start_idx):
                 return self.constructor, start_idx, start_idx + self.size
 
         return False

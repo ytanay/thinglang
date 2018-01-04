@@ -1,4 +1,5 @@
 from thinglang.compiler.buffer import CompilationBuffer
+from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.errors import InvalidIndexedAccess
@@ -38,7 +39,8 @@ class IndexedAccess(BaseNode, ValueType):
         return type(self) == type(other) and self.target == other.target and self.index == other.index
 
     @staticmethod
-    @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[0], 'ParenthesesVector'))
+    @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[index], 'ParenthesesVector') and
+                                                (index - 1 and not ParserRule.is_instance(tokens[index-1], LexicalAccess)))
     def parse_indexed_access(target: ValueType, idx: 'BracketVector'):
         if len(idx) != 1:
             raise InvalidIndexedAccess(idx)

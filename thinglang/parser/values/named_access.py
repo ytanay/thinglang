@@ -118,7 +118,7 @@ class NamedAccess(BaseNode, ValueType):
         return NamedAccess([left, right])
 
     @staticmethod
-    @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[0], ('BracketVector', 'ParenthesesVector')))
+    @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[index], ('BracketVector', 'ParenthesesVector')))
     def parse_access_predicated(left: ValueType, _: LexicalAccess, right: Identifier):
         """
         Parse the all other named access constructions
