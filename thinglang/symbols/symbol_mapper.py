@@ -2,7 +2,7 @@ from typing import Tuple, Union, Sequence
 
 import itertools
 
-from thinglang.compiler.errors import InvalidReference
+from thinglang.compiler.errors import InvalidReference, SelfInStaticMethod
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
@@ -65,6 +65,8 @@ class SymbolMapper(object):
             elif target.untyped in self:  # TODO: verify name collisions
                 return Reference(target)
             else:
+                if not method_locals[target].allowed:
+                    raise SelfInStaticMethod(target)
                 return LocalReference(method_locals[target], target)
         elif isinstance(target, NamedAccess):
             return self.resolve_named(target, method_locals)
@@ -99,6 +101,8 @@ class SymbolMapper(object):
             container = self[first]
         elif first in method_locals:
             local = method_locals[first]
+            if not local.allowed:
+                raise SelfInStaticMethod(target)
             container = self[local.type]
         else:
             raise Exception('Cannot resolve first level access {} (on {}) from {}'.format(first, first.source_ref, method_locals))
