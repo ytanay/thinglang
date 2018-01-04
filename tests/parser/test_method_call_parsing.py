@@ -2,6 +2,7 @@ from tests.infrastructure.test_utils import validate_types, parse_local
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.values.binary_operation import BinaryOperation
+from thinglang.parser.values.indexed_access import IndexedAccess
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.parser.values.named_access import NamedAccess
 
@@ -58,4 +59,12 @@ def test_chained_call():
             Identifier('counter'), Identifier('increment')
         ])),
         Identifier('add')
+    ])
+
+
+def test_call_via_indexed_access():
+    call = parse_local('a_inst[1].me()')
+    assert call.target == NamedAccess([
+        IndexedAccess(Identifier('a_inst'), NumericValue(1)),
+        Identifier('me')
     ])
