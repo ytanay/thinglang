@@ -29,41 +29,41 @@ As would be expected, almost everything in thinglang is an object, and consequen
 ```python
 thing Person
     # Each of the following is a member of the Person class
-    
+
     has text name
     has number age
     has Location current_location
     has list<Hobby> hobbies       # Defines a list of Hobby instances
     has map<text, Person> friends # Defines a map of text -> Person
-    
+
     # This constructor takes 2 arguments, and sets the members of the Person class
-    setup with text name, number age  
+    setup with text name, number age
         self.name = name
         self.age = age
         self.current_location = Location() # Creates a new instance of the Location class
         self.hobbies = list<Hobby>()       # Creates a new, empty list
         self.friends = map<text, Person>() # Creates a new, empty map
-    
+
     # This defines a method that take no arguments and returns nothing
-    does say_hello 
+    does say_hello
         Console.print("Hello from {}", [self.name])
-    
-    # This method takes no arguments and returns a boolean value    
+
+    # This method takes no arguments and returns a boolean value
     does is_home returns bool
         return self.current_location.name eq "home"
-    
+
     # This method takes one argument of type string
-    does add_hobby with text hobby_name 
-        self.hobbies.append(Hobby(hobby_name)) # We construct a new hobby object from the text object 
-    
+    does add_hobby with text hobby_name
+        self.hobbies.append(Hobby(hobby_name)) # We construct a new hobby object from the text object
+
     # This method shares the same name as the one above, but takes different arguments (i.e. is overloaded)
     does add_hobby with Hobby hobby
         self.hobbies.append(hobby)
-        
+
     does perform_hobbies
-        for Hobby hobby in self.hobbies: # A simple iteration loop
+        for Hobby hobby in self.hobbies # A simple iteration loop
             Console.print("Performing: {}", [self.name, hobby])
-            try:
+            try
                 hobby.perform()
             handle HobbyException exc
                 Console.print("Failed to perform hobby: {}", [exc])
