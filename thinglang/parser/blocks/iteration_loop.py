@@ -23,8 +23,8 @@ class IterationLoop(Loop):
         self.iterator_id = next(IterationLoop.TRANSIENT_COUNTER)
 
         self.iterator = self.iterator_container_name[0]
-        self.continuation_check = MethodCall(NamedAccess([self.iterator, Identifier('has_next')])).deriving_from(self)
-        self.continuation_next = MethodCall(NamedAccess([self.iterator, Identifier('next')])).deriving_from(self)
+        self.continuation_check = MethodCall(NamedAccess.extend(self.iterator, Identifier('has_next'))).deriving_from(self)
+        self.continuation_next = MethodCall(NamedAccess.extend(self.iterator, Identifier('next'))).deriving_from(self)
 
         self.value = self.continuation_check
 
@@ -39,7 +39,7 @@ class IterationLoop(Loop):
         AssignmentOperation(
             AssignmentOperation.REASSIGNMENT,
             iterator_name,
-            MethodCall(NamedAccess([self.collection, Identifier('iterator')]), is_captured=True).deriving_from(self),
+            MethodCall(NamedAccess.extend(self.collection, Identifier('iterator')), is_captured=True).deriving_from(self),
             iterator_type,
         ).deriving_from(self).compile(context)
 
