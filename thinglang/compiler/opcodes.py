@@ -227,7 +227,7 @@ class OpcodePopDereferenced(ElementReferenced):
 
 class OpcodeArgCopy(Opcode):
 
-    ARGS = ARGUMENTS, ARGUMENTS
+    ARGS = ARGUMENTS,
 
 
 # Assignment operations

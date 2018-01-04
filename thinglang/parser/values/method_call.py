@@ -104,7 +104,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
                 raise TargetNotCallable()
 
             if not target.static and not self.constructing_call and not self.stack_target:
-                #TODO: Add assertion for callin with instance, not type
+                # TODO: Add assertion for calling with instance, not type
                 self.target.compile(target_buffer, without_last=True)
 
         return target, target_buffer

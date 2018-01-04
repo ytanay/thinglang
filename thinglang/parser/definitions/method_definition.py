@@ -46,7 +46,7 @@ class MethodDefinition(BaseNode):
         if self.is_constructor():
             context.append(OpcodeInstantiate(context.symbols.index(context.symbols[self.parent.name]), self.argument_count), self.source_ref)
         elif self.argument_count:
-            context.append(OpcodeArgCopy(self.argument_count, int(not self.is_constructor())), self.source_ref)
+            context.append(OpcodeArgCopy(self.argument_count), self.source_ref)
 
         if self.children:
             super(MethodDefinition, self).compile(context)

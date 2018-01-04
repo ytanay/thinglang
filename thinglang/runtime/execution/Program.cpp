@@ -79,6 +79,7 @@ void Program::status(Index counter, const Instruction& instruction) {
 void inline Program::copy_args(Size count){
     /**
      * Copy arguments from the stack into the current frame
+     * For static functions, the first slot remains empty.
      */
     for (size_t i = 0; i < count; i++) {
         Program::frame()[count - i] = Program::pop();

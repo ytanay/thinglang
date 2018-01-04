@@ -203,7 +203,7 @@ inline auto arg_count(Opcode val){
             return 0;
 
         case Opcode::ARG_COPY:
-            return 2;
+            return 1;
 
         case Opcode::DEREFERENCE:
             return 1;
