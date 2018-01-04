@@ -10,12 +10,11 @@ from thinglang.lexer.values.primitive_type import PrimitiveType
 from thinglang.utils.type_descriptors import ValueType
 
 
-class InlineString(LexicalToken, ValueType):
+class InlineString(PrimitiveType):
     """
     Represents a constant inline string
     """
 
-    STATIC = True
     TYPE = Identifier('text')
     PRIMITIVE_ID = definitions.PRIMITIVE_TYPES.index('text')
 
@@ -24,15 +23,3 @@ class InlineString(LexicalToken, ValueType):
 
     def serialize(self):
         return struct.pack('<i', InlineString.PRIMITIVE_ID) + serializer.auto(self.value)
-
-    @property
-    def type(self):
-        return self.TYPE
-
-    def __repr__(self):
-        return '"{}"'.format(self.value)
-
-    def compile(self, context: CompilationBuffer):
-        ref = context.append_static(self.serialize())
-        context.append(OpcodePushStatic(ref), self.source_ref)
-        return self
