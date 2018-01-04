@@ -48,3 +48,14 @@ def test_constructing_call():
     assert method.target == NamedAccess([Identifier('Empty'), Identifier.constructor()])
     validate_types(method.arguments, [NumericValue], MethodCall, lambda x: x.arguments)
     assert method.constructing_call
+
+
+def test_chained_call():
+    call = parse_local('counter.increment().add(10)')
+    validate_types(call.arguments, [NumericValue])
+    assert call.target == NamedAccess([
+        MethodCall(NamedAccess([
+            Identifier('counter'), Identifier('increment')
+        ])),
+        Identifier('add')
+    ])
