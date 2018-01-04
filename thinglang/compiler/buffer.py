@@ -1,3 +1,4 @@
+from thinglang.compiler.errors import CalledInstanceMethodOnClass
 from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, OpcodePushMember
 from thinglang.compiler.references import Reference, LocalReference, ElementReference
 from thinglang.compiler.tracker import LocalTracker
@@ -79,6 +80,8 @@ class CompilationBuffer(object):
             self.append(OpcodePushLocal.from_reference(ref), source_ref)
         elif isinstance(ref, ElementReference):
             self.append(OpcodePushMember.from_reference(ref), source_ref)
+        elif isinstance(ref, Reference):
+            raise CalledInstanceMethodOnClass(ref)
         else:
             raise Exception('Cannot push down {}'.format(ref))
 

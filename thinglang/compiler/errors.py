@@ -95,3 +95,15 @@ class UnfilledGenericParameters(ThinglangException):
     def __str__(self):
         return f'Usage of generic class {self.container.name}.{self.element.name if self.element else ""} without specifying parameter types (at {self.target.source_ref})'
 
+
+class CalledInstanceMethodOnClass(ThinglangException):
+    """
+    An instance method was called on a class
+    """
+
+    def __init__(self, reference):
+        super().__init__()
+        self.reference = reference
+
+    def __str__(self):
+        return f'Cannot call instance method on {self.reference.type} (at {self.reference.type.source_ref}'
