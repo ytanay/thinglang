@@ -40,7 +40,7 @@ class AssignmentOperation(BaseNode):
         target_ref = self.pull_up(self.name, target_buffer)
 
         if value_ref.type != target_ref.type:
-            CastOperation(self.value, target_ref.type).compile(context)
+            CastOperation(self.value, target_ref.type).compile(context)  # TODO: recompiles value buffer
         elif self.optimized_assignment(context):
             return
         else:

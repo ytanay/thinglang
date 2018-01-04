@@ -63,7 +63,6 @@ class ArgumentSelector(object):
             raise NoMatchingOverload(self.symbols, self.collected_arguments, self.exact_matches, self.inheritance_matches, self.casted_matches, source_ref)
 
     def exact_match(self, expected_type, resolved):
-        # TODO: generic identifiers should not be exportable
         return expected_type == resolved.type
 
     def inheritance_match(self, expected_type, resolved):
