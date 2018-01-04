@@ -4,9 +4,10 @@ from thinglang.parser.common.list_type import ListInitialization
 from thinglang.parser.definitions.argument_list import ArgumentList
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.parser.values.named_access import NamedAccess
+from thinglang.utils.type_descriptors import CallSite
 
 
-class InlineList(ListInitialization):
+class InlineList(ListInitialization, CallSite):
     """
     Describes inline list initialization
     """
