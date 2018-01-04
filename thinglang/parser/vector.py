@@ -42,8 +42,8 @@ PARSING_ORDER = [  # Apply production rules in this order
     MethodDefinition,
 
     NamedAccess,
-    MethodCall,
     IndexedAccess,
+    MethodCall,
 
     BinaryOperation,
 
