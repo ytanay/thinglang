@@ -62,12 +62,12 @@ class InvalidReference(ThinglangException):
     Reference to an invalid entity - e.g., missing member or method
     """
 
-    def __init__(self, target, search):
+    def __init__(self, target, search, original_target):
         super().__init__()
-        self.target, self.search = target, search
+        self.target, self.search, self.original_target = target, search, original_target
 
     def __str__(self):
-        return f'{self.target} does not exist in {self.search.name}'
+        return f'{self.target} does not exist in {self.search.name} (at {self.original_target.source_ref})'
 
 
 class SelfInStaticMethod(ThinglangException):

@@ -107,7 +107,7 @@ class SymbolMapper(object):
         else:
             raise Exception('Cannot resolve first level access {} (on {}) from {}'.format(first, first.source_ref, method_locals))
 
-        container, element = self.pull(container, second)
+        container, element = self.pull(container, second, target)
 
         return ElementReference(container, self.index(container), element, local)
 
@@ -121,7 +121,7 @@ class SymbolMapper(object):
         getter = self[resolved.type][self.INDEX_GETTER_NAME]
         return self[getter.type]
 
-    def pull(self, start: SymbolMap, item: Identifier) -> Tuple[SymbolMap, Symbol]:
+    def pull(self, start: SymbolMap, item: Identifier, target) -> Tuple[SymbolMap, Symbol]:
         """
         Pull a symbol from a symbol map, iteratively traversing its parents until a match is found
         :param start: the original symbol map
@@ -134,7 +134,7 @@ class SymbolMapper(object):
             if container.extends:
                 container = self[container.extends]
             else:
-                raise InvalidReference(item, start)
+                raise InvalidReference(item, start, target)
 
         return container, container[item]
 
