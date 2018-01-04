@@ -9,7 +9,7 @@ from thinglang.utils.source_context import SourceContext
 
 SELF_ID, A_ID, B_ID, INST_ID, LST_ID, A_INST, B_INST, C_INST, IMPLICIT_ITERATOR_ID, IMPLICIT_ITERATION_ID = range(10)
 VAL1_ID, VAL2_ID, INNER_ID = 0, 1, 2
-INNER1_ID, INNER2_ID = 0, 1
+INNER1_ID, INNER2_ID, CONTAINER_INNER_ID = 0, 1, 2
 STATIC_START = 6
 
 PROGRAM, CONTAINER, A_THING, B_THING, C_THING = range(5)
@@ -43,9 +43,13 @@ thing Program
 thing Container
     has number inner1
     has number inner2
+    has Container inner
     
 thing A
     has number a1
+    
+    does me returns A
+        return self
 
 thing B extends A
     has number b1
