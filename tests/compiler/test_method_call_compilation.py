@@ -1,11 +1,11 @@
-from tests.compiler import compile_snippet, SELF_ID, LST_ID, VAL1_ID, internal_call
+from tests.compiler import compile_snippet, SELF_ID, LST_ID, VAL1_ID, internal_call, STATIC_START
 from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushMember, OpcodeCall, OpcodePushStatic, \
     OpcodeCallVirtual
 
 
 def test_access_in_method_args():
     assert compile_snippet('self.action(lst[123])') == [
-        OpcodePushStatic(6),
+        OpcodePushStatic(STATIC_START),
         OpcodePushLocal(LST_ID),
         internal_call('list.get'),
         OpcodePushLocal(SELF_ID),

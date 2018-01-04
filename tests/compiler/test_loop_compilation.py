@@ -5,7 +5,7 @@ from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePopLocal, OpcodeJu
 
 def test_iteration_loop():
 
-    assert compile_snippet('for number x in lst') == [
+    assert compile_snippet('for Container x in lst') == [
         OpcodePushLocal(LST_ID),
 
         internal_call('list.iterator'),  # Create iterator

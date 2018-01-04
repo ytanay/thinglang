@@ -1,5 +1,5 @@
 from tests.compiler import compile_snippet, A_ID, LST_ID, SELF_ID, VAL1_ID, internal_call, A_INST, INNER_ID, \
-    CONTAINER_INNER_ID
+    CONTAINER_INNER_ID, STATIC_START
 from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushMember, OpcodePushStatic, OpcodePop, \
     OpcodeDereference, OpcodeCallVirtual
 
@@ -35,7 +35,7 @@ def test_member_access_via_method_call():
 
 def test_local_list_immediate_index():
     assert compile_snippet('lst[123]') == [
-        OpcodePushStatic(6),
+        OpcodePushStatic(STATIC_START),
         OpcodePushLocal(LST_ID),
         internal_call('list.get'),
         OpcodePop()
