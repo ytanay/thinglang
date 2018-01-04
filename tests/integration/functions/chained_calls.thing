@@ -1,0 +1,26 @@
+/*
+{
+    "expected_output": ["12", "42"]
+}
+*/
+
+thing ChainedCounter
+    has number value
+
+    setup
+        self.value = 0
+
+    does increment returns ChainedCounter
+        self.value += 1
+        return self
+
+    does add with number increment returns ChainedCounter
+        self.value += increment
+        return self
+
+thing Program
+    setup
+        ChainedCounter counter = ChainedCounter()
+        counter.increment().increment().add(10)
+        Console.print(counter.value)
+        Console.print(ChainedCounter().increment().increment().add(40).value )

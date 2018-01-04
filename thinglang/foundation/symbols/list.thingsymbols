@@ -5,15 +5,20 @@
         "T"
     ],
     "name": "list",
-    "offset": 0,
+    "offsets": {
+        "members": 0,
+        "methods": 0
+    },
     "symbols": [
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -28,10 +33,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
             "name": "get",
+            "passthrough": false,
             "static": false,
             "type": "T",
             "visibility": "public"
@@ -42,10 +49,12 @@
                 "T"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 2,
             "inline": null,
             "kind": "method",
             "name": "set",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -55,10 +64,12 @@
                 "T"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 3,
             "inline": null,
             "kind": "method",
             "name": "append",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -71,10 +82,12 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 4,
             "inline": null,
             "kind": "method",
             "name": "pop",
+            "passthrough": false,
             "static": false,
             "type": "T",
             "visibility": "public"
@@ -85,10 +98,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 5,
             "inline": null,
             "kind": "method",
             "name": "swap",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -98,10 +113,12 @@
                 "T"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 6,
             "inline": null,
             "kind": "method",
             "name": "contains",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -109,10 +126,12 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 7,
             "inline": null,
             "kind": "method",
             "name": "length",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -120,10 +139,12 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 8,
             "inline": null,
             "kind": "method",
             "name": "iterator",
+            "passthrough": false,
             "static": false,
             "type": [
                 "iterator",
@@ -139,10 +160,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 9,
             "inline": null,
             "kind": "method",
             "name": "range",
+            "passthrough": false,
             "static": true,
             "type": [
                 "list",
@@ -151,6 +174,19 @@
                 ]
             ],
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "implicit": true,
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

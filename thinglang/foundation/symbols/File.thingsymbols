@@ -3,17 +3,22 @@
     "extends": null,
     "generics": [],
     "name": "File",
-    "offset": 0,
+    "offsets": {
+        "members": 0,
+        "methods": 0
+    },
     "symbols": [
         {
             "arguments": [
                 "text"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "File",
             "visibility": "public"
@@ -23,10 +28,12 @@
                 "text"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
             "name": "open",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -34,10 +41,12 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 2,
             "inline": null,
             "kind": "method",
             "name": "close",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -47,10 +56,12 @@
                 "text"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 3,
             "inline": null,
             "kind": "method",
             "name": "write",
+            "passthrough": false,
             "static": false,
             "type": null,
             "visibility": "public"
@@ -58,13 +69,28 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 4,
             "inline": null,
             "kind": "method",
             "name": "read",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "implicit": true,
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

@@ -1,4 +1,4 @@
-from tests.mapper import get_symbols, SOURCE_PAIR, SOURCE_FULL, validate_member, validate_method
+from tests.symbols import get_symbols, SOURCE_PAIR, SOURCE_FULL, validate_member, validate_method
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 
 

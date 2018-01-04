@@ -51,10 +51,11 @@ class ProgramTestCase(object):
 
         metadata_start = contents.index('/*') + 2
         metadata_end = contents.index('*/')
-        metadata = json.loads(contents[metadata_start:metadata_end])
+        metadata_raw = contents[metadata_start:metadata_end]
+        metadata = json.loads(metadata_raw)
 
         self.name = metadata.get('test_name') or ' '.join(path.replace('.thing', '').split(os.sep)[-2:])
-        self.code = contents[metadata_end + 2:]
+        self.code = '\n' * (metadata_raw.count('\n') + 1) + contents[metadata_end + 2:]
         self.metadata = metadata
         self.target_path = path + 'c'
         self.source_path = path

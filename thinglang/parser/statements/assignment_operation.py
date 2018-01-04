@@ -35,17 +35,18 @@ class AssignmentOperation(BaseNode):
         if isinstance(self.name, IndexedAccess):  # Should validate types implicitly
             return self.name.assignment(self.value).compile(context)
 
-        value_ref = self.value.compile(context.optional())
-        target_ref = self.pull_up(self.name, context.optional())
+        value_buffer, target_buffer = context.optional(), context.optional()
+        value_ref = self.value.compile(value_buffer)
+        target_ref = self.pull_up(self.name, target_buffer)
 
         if value_ref.type.untyped != target_ref.type.untyped:  # TODO: why is the test against untyped?
-            CastOperation.create(source=self.value, destination_type=target_ref.type).compile(context)
+            CastOperation(self.value, target_ref.type).compile(context)
         elif self.optimized_assignment(context):
             return
         else:
-            self.value.compile(context)
+            context.extend(value_buffer)
 
-        self.pull_up(self.name, context)
+        context.extend(target_buffer)
 
     def optimized_assignment(self, context):
         if isinstance(self.name, Identifier):

@@ -6,6 +6,7 @@ add_library(thingcore
         foundation/classes/types/TextType.cpp
         foundation/classes/types/NumberType.cpp
         foundation/classes/types/BoolType.cpp
+        foundation/classes/types/ObjectType.cpp
         foundation/classes/containers/ListType.cpp
         foundation/classes/containers/MapType.cpp
         foundation/classes/io/console/ConsoleType.cpp

@@ -1,7 +1,7 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeInstantiate, OpcodePushNull, OpcodeReturn, OpcodeArgCopy
 from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationReturnType, \
-    LexicalDeclarationStatic
+    LexicalDeclarationStatic, LexicalImplicitTag
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationMethod
 from thinglang.lexer.operators.binary import LexicalBinaryOperation
 from thinglang.lexer.operators.casts import LexicalCast
@@ -27,10 +27,10 @@ class MethodDefinition(BaseNode):
     Must be a direct child of a ThingDefinition
     """
 
-    def __init__(self, name, arguments=None, return_type=None, static=False, token=None):
+    def __init__(self, name, arguments=None, return_type=None, static=False, implicit=False, token=None):
         super(MethodDefinition, self).__init__([name, arguments, return_type, static, token])
 
-        self.name, self.arguments, self._return_type, self.static = name, (arguments or ArgumentList()), return_type, static
+        self.name, self.arguments, self._return_type, self.static, self.implicit = name, (arguments or ArgumentList()), return_type, static, implicit
 
         self.index = None
         self.locals = None
@@ -44,7 +44,7 @@ class MethodDefinition(BaseNode):
     def compile(self, context: CompilationBuffer):
 
         if self.is_constructor():
-            context.append(OpcodeInstantiate(self.argument_count, context.symbols[self.parent.name].offset), self.source_ref)
+            context.append(OpcodeInstantiate(context.symbols.index(context.symbols[self.parent.name]), self.argument_count), self.source_ref)
         elif self.argument_count:
             context.append(OpcodeArgCopy(self.argument_count), self.source_ref)
 
@@ -74,7 +74,12 @@ class MethodDefinition(BaseNode):
         super().finalize()
 
     def symbol(self):
-        return Symbol.method(self.name, self.return_type, self.static, self.arguments, node=InlineCandidate.from_method(self))
+        return Symbol.method(self.name,
+                             self.return_type,
+                             self.static,
+                             self.arguments,
+                             self.implicit,
+                             node=InlineCandidate.from_method(self))
 
     @property
     def frame_size(self):
@@ -82,10 +87,10 @@ class MethodDefinition(BaseNode):
 
     @property
     def argument_count(self):
-        return len(self.arguments) + (0 if self.is_constructor() else 1)
+        return len(self.arguments)
 
     @property
-    def explicit_local_count(self):
+    def explicit_local_count(self): # TODO: does this include self?
         return self.frame_size - self.argument_count
 
     @property
@@ -147,3 +152,10 @@ class MethodDefinition(BaseNode):
     @ParserRule.predicate(lambda tokens, index: index == 0)
     def parse_casting_method(_: LexicalCast, return_type: Identifier):
         return MethodDefinition(CastTag(return_type), return_type=return_type)
+
+    @staticmethod
+    @ParserRule.predicate(lambda tokens, index: index == 0)
+    def parse_casting_method_implicit(_1: LexicalImplicitTag, _2: LexicalCast, return_type: Identifier):
+        return MethodDefinition(CastTag(return_type), return_type=return_type, implicit=True)
+
+

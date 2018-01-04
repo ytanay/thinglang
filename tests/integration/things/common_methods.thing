@@ -1,0 +1,22 @@
+/*
+{
+    "expected_output": ["Container(Box, 10)", "Container(Package, 20)"]
+}
+*/
+
+thing Container
+    has text name
+    has number value
+
+    setup with text name, number value
+        self.name = name
+        self.value = value
+
+    implicit as text
+        return "Container(" + self.name + ", " + self.value + ")"
+
+thing Program
+    setup
+        Container c = Container("Box", 10)
+        Console.print(c)
+        Console.print(Container("Package", 20))

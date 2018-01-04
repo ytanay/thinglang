@@ -2,7 +2,7 @@ from typing import Tuple, Union, Sequence
 
 import itertools
 
-from thinglang.compiler.errors import InvalidReference
+from thinglang.compiler.errors import InvalidReference, SelfInStaticMethod
 from thinglang.compiler.references import ElementReference, LocalReference, Reference
 from thinglang.foundation import serializer
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
@@ -50,7 +50,7 @@ class SymbolMapper(object):
 
         return self
 
-    def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict) -> Reference:
+    def resolve(self, target: Union[Identifier, NamedAccess], method_locals: dict=(), current_generics: list=()) -> Reference:
         """
         Resolve a reference into a Reference object
         :param target: the reference being resolved (can be either an identifier or access object)
@@ -60,7 +60,14 @@ class SymbolMapper(object):
         assert not target.STATIC
 
         if isinstance(target, Identifier):
-            return LocalReference(method_locals[target], target)
+            if target in current_generics:
+                return Reference(Identifier.object())
+            elif target.untyped in self:  # TODO: verify name collisions
+                return Reference(target)
+            else:
+                if not method_locals[target].allowed:
+                    raise SelfInStaticMethod(target)
+                return LocalReference(method_locals[target], target)
         elif isinstance(target, NamedAccess):
             return self.resolve_named(target, method_locals)
 
@@ -94,6 +101,8 @@ class SymbolMapper(object):
             container = self[first]
         elif first in method_locals:
             local = method_locals[first]
+            if not local.allowed:
+                raise SelfInStaticMethod(target)
             container = self[local.type]
         else:
             raise Exception('Cannot resolve first level access {} (on {}) from {}'.format(first, first.source_ref, method_locals))
@@ -134,18 +143,18 @@ class SymbolMapper(object):
         Emits an inheritance chain (from descendant to ancestor)
         :param start: the ThingDefinition to start from
         """
-        current = self[start.name]
+        current = self[start]
         yield current
 
         while current.extends:
             current = self[current.extends]
             yield current
 
-    def entry(self) -> int:
+    def entry(self) -> Reference:
         """
         Get the index of the program's entry point
         """
-        return self.user_indexing[Identifier('Program')]
+        return self.resolve(NamedAccess([Identifier('Program'), Identifier.constructor()]), {})
 
     @collection_utils.drain()
     def descendants(self, root_map: SymbolMap, include_root: bool=True, collected: set=None):

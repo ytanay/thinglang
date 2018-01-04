@@ -75,6 +75,7 @@ class BaseNode(ParsingMixin):
         """
         Override the source reference for this node by providing the source node
         """
+        self.parent = node.parent
         self.source_ref = node.source_ref
         return self
 

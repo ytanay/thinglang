@@ -11,8 +11,9 @@ unsigned char Program::current_mark = 0;
 
 InstructionList Program::instructions;
 Things Program::static_data;
-TypeList Program::internal_types;
-TypeMap Program::internal_type_map;
+InternalTypeList Program::internal_types;
+InternalTypeMap Program::internal_type_map;
+UserTypeList Program::user_types;
 Index Program::entry = static_cast<Index>(-1);
 Index Program::initial_frame_size = static_cast<Index>(-1);
 SourceMap Program::source_map;
@@ -42,9 +43,10 @@ void Program::load(ProgramInfo &info) {
     source_map = info.source_map;
     source = info.program_source;
     internal_types = info.imported_types;
+    user_types = info.user_types;
 
     Index index = 0;
-    for(Type internal_type : internal_types){ // Used to look up exception types
+    for(InternalType internal_type : internal_types){ // Used to look up exception types
         internal_type_map[internal_type] = index++;
     }
 }
@@ -56,8 +58,7 @@ void Program::status(Index counter, const Instruction& instruction) {
      */
     auto source_idx = source_map[instruction.index];
 
-    if(source_idx >= source.size())
-        throw RuntimeError("Invalid source reference");
+
 
     std::cerr << "[" << counter << "] Executing instruction " << describe(instruction.opcode) << ": " << instruction.target << ", "
               << instruction.secondary << " -> [";
@@ -67,16 +68,21 @@ void Program::status(Index counter, const Instruction& instruction) {
     if(!Program::frames.empty())
         std::for_each(Program::frame().begin(), Program::frame().end(),
                       [](const Thing &thing) { std::cerr << (thing ? thing->text() : "?") << ","; });
+
+    if(source_idx >= source.size())
+        throw RuntimeError("Invalid source reference");
+
     std::cerr << "] -> [" << trim(source[source_idx]) << "]" << std::endl;
 
 }
 
-void inline Program::copy_args(Size count, Size offset){
+void inline Program::copy_args(Size count){
     /**
      * Copy arguments from the stack into the current frame
+     * For static functions, the first slot remains empty.
      */
     for (size_t i = 0; i < count; i++) {
-        Program::frame()[offset - i] = Program::pop();
+        Program::frame()[count - i] = Program::pop();
     }
 }
 
@@ -111,12 +117,42 @@ void Program::execute() {
 
             case Opcode::CALL: {
                 return_stack.push(counter + 1);
+                counter = instruction.target;
+
                 call_stack.push(instruction.target);
                 Program::create_frame(instruction.secondary);
-                counter = instruction.target;
+                Program::frame()[0] = Program::pop();
 
                 goto handle_instruction;
             }
+
+            case Opcode::CALL_STATIC: {
+                return_stack.push(counter + 1);
+                counter = instruction.target;
+
+                call_stack.push(instruction.target);
+                Program::create_frame(instruction.secondary);
+
+                goto handle_instruction;
+            }
+
+            case Opcode::CALL_VIRTUAL: {
+                auto thing = dynamic_cast<ThingInstance*>(stack.front());
+                if(thing == nullptr)
+                    throw RuntimeError("Cannot CALL_VIRTUAL on internal object");
+
+                auto method = user_types[thing->type_id].method(instruction.target);
+
+                return_stack.push(counter + 1);
+                counter = method.address;
+
+                call_stack.push(counter);
+                Program::create_frame(method.frame_size);
+                Program::frame()[0] = Program::pop();
+
+                goto handle_instruction;
+            }
+
 
             case Opcode::CALL_INTERNAL: {
                 try {
@@ -130,15 +166,16 @@ void Program::execute() {
             }
 
             case Opcode::INSTANTIATE: {
-                auto new_thing = Program::create<ThingInstance>(instruction.secondary);
+                auto type = user_types[instruction.target];
+                auto new_thing = Program::create<ThingInstance>(instruction.target, type.members);
                 Program::frame()[0] = new_thing;
-                Program::copy_args(instruction.target, instruction.target);
+                Program::copy_args(instruction.secondary);
                 Program::push(new_thing);
                 break;
             }
 
             case Opcode::ARG_COPY: {
-                Program::copy_args(instruction.target, instruction.target - 1);
+                Program::copy_args(instruction.target);
                 break;
             }
 
@@ -322,6 +359,10 @@ void Program::push(int64_t value) {
 }
 
 
+void Program::push(std::string value) {
+    stack.push_front(Program::create<TextInstance>(value));
+}
+
 void Program::push(bool value) {
     /**
      * Push an boolean value into the program stack
@@ -387,3 +428,4 @@ Index Program::exception(Index counter, Index exception_type, std::stack<Index> 
 
     critical_abort(UNHANDLED_EXCEPTION); // TODO: Obviously, we don't want a critical abort here
 }
+

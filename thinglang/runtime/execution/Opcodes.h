@@ -14,8 +14,10 @@ enum class Opcode {
     PUSH_MEMBER = 4,
     POP_MEMBER = 8,
     POP_DEREFERENCED = 9,
+    CALL_STATIC = 15,
     CALL = 14,
-    CALL_INTERNAL = 15,
+    CALL_INTERNAL = 16,
+    CALL_VIRTUAL = 17,
     PUSH_LOCAL = 3,
     POP_LOCAL = 7,
     ASSIGN_STATIC = 11,
@@ -27,20 +29,21 @@ enum class Opcode {
     POP = 6,
     ARG_COPY = 10,
     DEREFERENCE = 13,
-    RETURN = 16,
-    THROW = 17,
-    INSTANTIATE = 18,
-    JUMP_CONDITIONAL = 20,
-    JUMP = 19,
-    HANDLER_DESCRIPTION = 21,
-    HANDLER_RANGE_DEFINITION = 22,
-    SENTINEL_IMPORT_TABLE_ENTRY = 23,
-    SENTINEL_IMPORT_TABLE_END = 24,
-    SENTINEL_THING_DEFINITION = 25,
-    SENTINEL_METHOD_DEFINITION = 26,
-    SENTINEL_METHOD_END = 27,
-    SENTINEL_CODE_END = 28,
-    SENTINEL_DATA_END = 29
+    RETURN = 18,
+    THROW = 19,
+    INSTANTIATE = 20,
+    JUMP_CONDITIONAL = 22,
+    JUMP = 21,
+    HANDLER_DESCRIPTION = 23,
+    HANDLER_RANGE_DEFINITION = 24,
+    SENTINEL_IMPORT_TABLE_ENTRY = 25,
+    SENTINEL_IMPORT_TABLE_END = 26,
+    SENTINEL_THING_DEFINITION = 27,
+    SENTINEL_THING_EXTENDS = 28,
+    SENTINEL_METHOD_DEFINITION = 29,
+    SENTINEL_METHOD_END = 30,
+    SENTINEL_CODE_END = 31,
+    SENTINEL_DATA_END = 32
 };
 
 
@@ -56,11 +59,17 @@ inline auto describe(Opcode val){
         case Opcode::POP_DEREFERENCED:
             return "POP_DEREFERENCED";
 
+        case Opcode::CALL_STATIC:
+            return "CALL_STATIC";
+
         case Opcode::CALL:
             return "CALL";
 
         case Opcode::CALL_INTERNAL:
             return "CALL_INTERNAL";
+
+        case Opcode::CALL_VIRTUAL:
+            return "CALL_VIRTUAL";
 
         case Opcode::PUSH_LOCAL:
             return "PUSH_LOCAL";
@@ -125,6 +134,9 @@ inline auto describe(Opcode val){
         case Opcode::SENTINEL_THING_DEFINITION:
             return "SENTINEL_THING_DEFINITION";
 
+        case Opcode::SENTINEL_THING_EXTENDS:
+            return "SENTINEL_THING_EXTENDS";
+
         case Opcode::SENTINEL_METHOD_DEFINITION:
             return "SENTINEL_METHOD_DEFINITION";
 
@@ -151,11 +163,17 @@ inline auto arg_count(Opcode val){
         case Opcode::POP_DEREFERENCED:
             return 1;
 
+        case Opcode::CALL_STATIC:
+            return 2;
+
         case Opcode::CALL:
             return 2;
 
         case Opcode::CALL_INTERNAL:
             return 2;
+
+        case Opcode::CALL_VIRTUAL:
+            return 1;
 
         case Opcode::PUSH_LOCAL:
             return 1;
@@ -219,6 +237,9 @@ inline auto arg_count(Opcode val){
 
         case Opcode::SENTINEL_THING_DEFINITION:
             return 2;
+
+        case Opcode::SENTINEL_THING_EXTENDS:
+            return 1;
 
         case Opcode::SENTINEL_METHOD_DEFINITION:
             return 2;

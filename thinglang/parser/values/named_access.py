@@ -1,3 +1,5 @@
+import collections
+
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodePopDereferenced, OpcodeDereference
 from thinglang.lexer.tokens.access import LexicalAccess
@@ -5,6 +7,8 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.utils.type_descriptors import ValueType
+
+ExtensionInfo = collections.namedtuple('ExtensionInfo', ['value', 'is_last'])
 
 
 class NamedAccess(BaseNode, ValueType):
@@ -15,8 +19,8 @@ class NamedAccess(BaseNode, ValueType):
         person.info.age
     """
 
-    def __init__(self, target):
-        super(NamedAccess, self).__init__(target)
+    def __init__(self, target, tokens=None):
+        super(NamedAccess, self).__init__(target if tokens is None else tokens)
 
         self.target = target
         self.type = None
@@ -25,12 +29,31 @@ class NamedAccess(BaseNode, ValueType):
         return '{}'.format('.'.join(str(x) for x in self.target))
 
     def compile(self, context: CompilationBuffer, pop_last=False, without_last=False):
+        """
+        Compiling NamedAccess objects involves compiling each component in turn, maintaining the last generated reference.
+        :param context:
+        We start with the root (an order-2 tuple)
+            If the root is a pure Identifier pair, resolve the pair and emit a PushMember opcode
+            Otherwise, compile the first component, and emit a Dereference opcode for the second
+        :param pop_last:
+        :param without_last:
+        :return:
+        """
+        assert len(self) >= 2
+
         if without_last and not self.extensions:
             return self[0].compile(context)
 
-        ref = context.push_ref(context.resolve(self.root), self.source_ref)
+        extensions = self.extensions
 
-        for ext, last in self.extensions:
+        if isinstance(self[0], Identifier):
+            assert isinstance(self[1], Identifier)
+            ref = context.push_ref(context.resolve(self.root), self.source_ref)
+        else:
+            ref = self[0].compile(context)
+            extensions = [ExtensionInfo(self[1], len(self) == 2)] + extensions
+
+        for ext, last in extensions:
             if last and without_last:
                 break
 
@@ -47,7 +70,7 @@ class NamedAccess(BaseNode, ValueType):
     @property
     def extensions(self):
         last = self.target[-1]
-        return [(x, x is last) for x in self.target[2:]]
+        return [ExtensionInfo(x, x is last) for x in self.target[2:]]
 
     def __getitem__(self, item):
         return self.target[item]
@@ -91,9 +114,13 @@ class NamedAccess(BaseNode, ValueType):
         return NamedAccess([left, right])
 
     @staticmethod
-    @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[0], 'BracketVector'))
+    @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[0], ('BracketVector', 'ParenthesesVector')))
     def parse_access_predicated(left: ValueType, _: LexicalAccess, right: Identifier):
         """
         Parse the all other named access constructions
         """
         return NamedAccess([left, right])
+
+    @classmethod
+    def auto(cls, param):
+        return NamedAccess([Identifier(x) for x in param.split('.')])

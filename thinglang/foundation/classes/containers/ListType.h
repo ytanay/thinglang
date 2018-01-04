@@ -36,7 +36,7 @@ class ListType : public ThingTypeInternal {
                                            &__constructor__,
                                            &get,
                                            &set,
-                                           append,
+                                           &append,
                                            &pop,
                                            &swap,
                                            &contains,

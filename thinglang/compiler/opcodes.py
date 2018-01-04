@@ -271,11 +271,28 @@ class OpcodeCall(ElementReferenced):
         self.args = offsets[self.args]
 
 
+class OpcodeCallStatic(OpcodeCall):
+    """
+    Calls a user defined method, statically
+    """
+
+
 class OpcodeCallInternal(ElementReferenced):
     """
     Calls a native (compiled) method
     """
     ARGS = TYPE_ID, METHOD_ID
+
+
+class OpcodeCallVirtual(ElementReferenced):
+    """
+    Calls a user defined method via the virtual jump table
+    """
+    ARGS = METHOD_ID,
+
+    @classmethod
+    def type_reference(cls, element_ref: ElementReference):
+        return cls(element_ref.element_index)
 
 
 class OpcodeReturn(Opcode):

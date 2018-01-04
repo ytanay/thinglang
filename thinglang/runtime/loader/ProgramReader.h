@@ -23,8 +23,8 @@ public:
 
     void read_header();
 
-    TypeList read_imports();
-    InstructionList read_code();
+    InternalTypeList read_imports();
+    std::pair<InstructionList, UserTypeList> read_code();
     Instruction read_instruction(Opcode opcode);
 
     Things read_data();
@@ -63,12 +63,12 @@ private:
     std::ifstream file;
     Index entry = 0;
 
-    Size program_size = 0, instruction_count = 0, data_item_count = 0, instruction_counter = 0, initial_frame_size = 0;
+    Size instruction_count = 0, data_item_count = 0, instruction_counter = 0, initial_frame_size = 0;
 
     Opcode last_opcode = Opcode::INVALID;
 
     static const std::string EXPECTED_MAGIC;
-    static const uint16_t EXPECTED_VERSION = 3;
+    static const uint16_t EXPECTED_VERSION = 4;
 
     void prepare_stream();
 

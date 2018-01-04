@@ -3,15 +3,20 @@
     "extends": null,
     "generics": [],
     "name": "DirectoryEntry",
-    "offset": 2,
+    "offsets": {
+        "members": 0,
+        "methods": 0
+    },
     "symbols": [
         {
             "arguments": null,
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "member",
             "name": "name",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -19,10 +24,12 @@
         {
             "arguments": null,
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "member",
             "name": "type",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -30,13 +37,28 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "DirectoryEntry",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "implicit": true,
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

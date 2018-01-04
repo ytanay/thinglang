@@ -46,8 +46,7 @@ class NumberType : public ThingTypeInternal {
 											 &__not_equals__,
 											 &__less_than__,
 											 &__greater_than__,
-
-											 &convert_text }) {};
+											  }) {};
  
 	static void __constructor__();
 	static void __addition__();
@@ -62,6 +61,5 @@ class NumberType : public ThingTypeInternal {
 	static void __not_equals__();
 	static void __less_than__();
 	static void __greater_than__();
-	static void convert_text();
     
 };

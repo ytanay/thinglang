@@ -8,62 +8,63 @@ void NumberType::__constructor__() {
 
 
 void NumberType::__addition__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
+	
 
 	Program::push(Program::create<NumberInstance>(self->val + other->val));
 }
 
 
 void NumberType::__subtraction__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val - other->val));
 }
 
 
 void NumberType::__multiplication__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val * other->val));
 }
 
 
 void NumberType::__division__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val / other->val));
 }
 
 
 void NumberType::__modulus__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val % other->val));
 }
 
 void NumberType::__binary_and__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val & other->val));
 }
 
 void NumberType::__binary_or__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val | other->val));
 }
 
 
 void NumberType::__binary_xor__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
 	Program::push(Program::create<NumberInstance>(self->val ^ other->val));
 }
@@ -78,34 +79,29 @@ void NumberType::__equals__() {
 
 
 void NumberType::__not_equals__() {
-	auto other = Program::argument<NumberInstance>();
-	auto self = Program::argument<NumberInstance>();
+    auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
     Program::push(self->val != other->val);
 }
 
 
 void NumberType::__less_than__() {
-    auto other = Program::argument<NumberInstance>();
     auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
     Program::push(self->val < other->val);
 
 }
 
 void NumberType::__greater_than__() {
-    auto other = Program::argument<NumberInstance>();
     auto self = Program::argument<NumberInstance>();
+    auto other = Program::argument<NumberInstance>();
 
     Program::push(self->val > other->val);
 
 }
 
-void NumberType::convert_text() {
-	auto self = Program::argument<NumberInstance>();
-
-	Program::push(Program::create<TextInstance>(to_string(self->val)));
-}
 
 std::string NumberInstance::text() {
     return to_string(val);
@@ -121,7 +117,7 @@ bool NumberInstance::operator==(const BaseThingInstance &other) const {
 }
 
 size_t NumberInstance::hash() const {
-    return std::hash<int>{}(this->val);
+    return std::hash<long long>{}(this->val);
 }
 
 

@@ -14,6 +14,7 @@
 #include "../../foundation/classes/io/filesystem/FileType.h"
 #include "../../foundation/classes/types/BoolType.h"
 #include "../../foundation/classes/types/NumberType.h"
+#include "../../foundation/classes/types/ObjectType.h"
 #include "../../foundation/classes/types/TextType.h"
 #include "../../foundation/classes/utilities/TimeType.h"
 
@@ -21,7 +22,7 @@ enum PrimitiveType {
     TEXT, NUMBER
 };
 
-inline Type get_type(const std::string& type_name){
+inline InternalType get_type(const std::string& type_name){
     if(type_name == "iterator") return singleton<IteratorType>();
     if(type_name == "list") return singleton<ListType>();
     if(type_name == "map") return singleton<MapType>();
@@ -32,6 +33,7 @@ inline Type get_type(const std::string& type_name){
     if(type_name == "File") return singleton<FileType>();
     if(type_name == "bool") return singleton<BoolType>();
     if(type_name == "number") return singleton<NumberType>();
+    if(type_name == "object") return singleton<ObjectType>();
     if(type_name == "text") return singleton<TextType>();
     if(type_name == "Time") return singleton<TimeType>();
     

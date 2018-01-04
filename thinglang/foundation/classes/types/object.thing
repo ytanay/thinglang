@@ -1,0 +1,4 @@
+thing object
+
+    does eq with object other returns bool
+    implicit as text

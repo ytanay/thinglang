@@ -41,7 +41,7 @@ enum PrimitiveType {{
     {primitives}
 }};
 
-inline Type get_type(const std::string& type_name){{
+inline InternalType get_type(const std::string& type_name){{
     {conditions}
     
     throw RuntimeError("Unknown type name: " + type_name);  

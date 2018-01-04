@@ -19,9 +19,10 @@ class NoMatchingOverload(ThinglangException):
     The method was not called with the expected number of arguments
     """
 
-    def __init__(self, methods, arguments, source_ref):
+    def __init__(self, methods, arguments, exact_matches, inheritance_matches, cast_matches, source_ref):
         super().__init__()
-        self.methods, self.arguments, self.source_ref = methods, arguments, source_ref
+        self.methods, self.arguments, self.exact_matches, self.inheritance_matches, self.cast_matches, self.source_ref = \
+            methods, arguments, exact_matches, inheritance_matches, cast_matches, source_ref
 
     def __str__(self):
         return f'No matching overload for {self.methods[0].name} using arguments {self.arguments} was found.\n' + \
@@ -67,3 +68,16 @@ class InvalidReference(ThinglangException):
 
     def __str__(self):
         return f'{self.target} does not exist in {self.search.name}'
+
+
+class SelfInStaticMethod(ThinglangException):
+    """
+    Reference to `self` in a static method
+    """
+
+    def __init__(self, target):
+        super().__init__()
+        self.target = target
+
+    def __str__(self):
+        return f'Usage of self in static method (at {self.target.source_ref})'

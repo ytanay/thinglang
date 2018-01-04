@@ -14,5 +14,3 @@ thing number
     does not eq with number other returns bool
     does < with number other returns bool
     does > with number other returns bool
-
-    as text

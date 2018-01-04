@@ -1,6 +1,6 @@
 thing Console
 
-    static does write with object message
-    static does print with object message
-    static does print with object message, list<object> params
+    static does write with text message  #TODO: We probably want this to be object and remove the implicit cast
+    static does print with text message
+    static does print with text message, list<object> params
     static does read_line returns text

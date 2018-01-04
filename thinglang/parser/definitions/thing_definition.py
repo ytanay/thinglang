@@ -25,11 +25,15 @@ class ThingDefinition(BaseNode):
     def compile(self, context: CompilationContext):
         symbol_map = context.symbols[self.name]
         thing_id = context.symbols.index(symbol_map)
+        extending_index = context.symbols.index(context.symbols[self.extends]) if self.extends else None
+        methods = []
 
-        for method_id, method in enumerate(self.methods): # Assumes consistent ordering in AST and symbol map
-            buffer = CompilationBuffer(context.symbols, method.locals)
+        for method_id, method in enumerate(self.methods):  # Assumes consistent ordering in AST and symbol map
+            buffer = CompilationBuffer(context.symbols, method.locals, self.generics)
             method.compile(buffer)
-            context.add((thing_id, method_id), method, buffer)
+            methods.append((method, buffer))
+
+        assert context.add_methods(methods, self.slots(context), extending_index, symbol_map.method_offset) == thing_id
 
     def finalize(self):
         super().finalize()
@@ -53,7 +57,7 @@ class ThingDefinition(BaseNode):
         return [x.name for x in self.members + self.methods]
 
     def slots(self, context):
-        return sum(len(container.members) for container in context.symbols.inheritance(self))
+        return sum(len(container.members) for container in context.symbols.inheritance(self.name))
 
     @staticmethod
     @ParserRule.mark

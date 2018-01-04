@@ -2,8 +2,8 @@
 #include "../../../../runtime/execution/Program.h"
 
 void FileType::__constructor__() {
-	auto file_path = Program::argument<TextInstance>();
 	auto self = Program::create<FileInstance>();
+	auto file_path = Program::argument<TextInstance>();
 
 	self->file_path = file_path->text();
 	Program::push(self);
@@ -11,8 +11,8 @@ void FileType::__constructor__() {
 
 
 void FileType::open() {
+    auto self = Program::argument<FileInstance>();
 	auto mode = Program::argument<TextInstance>();
-	auto self = Program::argument<FileInstance>();
 
 	if(mode->text() == "r") {
 		self->file.open(self->file_path, std::ios::in);
@@ -32,8 +32,8 @@ void FileType::close() {
 
 
 void FileType::write() {
+    auto self = Program::argument<FileInstance>();
 	auto contents = Program::argument<TextInstance>();
-	auto self = Program::argument<FileInstance>();
 
 	self->file << contents->text();
 }

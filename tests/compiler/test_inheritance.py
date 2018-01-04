@@ -30,12 +30,12 @@ def test_regular_inheritance_invalid_member_access():
 
 def test_constructor_compilation():
     assert compile_template(thing_id=A_THING) == [
-        OpcodeInstantiate(0, 1),  # Implicit constructor (0-arg), 1 member
+        OpcodeInstantiate(2, 0),  # Type ID 2, implicit constructor (0-arg)
         OpcodeReturn()
     ]
 
     assert compile_template(thing_id=B_THING) == [
-        OpcodeInstantiate(1, 2),  # Explicit constructor (1-arg), 1 member +
+        OpcodeInstantiate(3, 1),  # Type ID 3, explicit constructor (1-arg)
         OpcodePushLocal(1),  # Push the first argument
         OpcodePopMember(0, 1),  # Set it as the second member of self
         OpcodeReturn()

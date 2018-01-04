@@ -3,28 +3,20 @@
     "extends": null,
     "generics": [],
     "name": "text",
-    "offset": 0,
+    "offsets": {
+        "members": 0,
+        "methods": 0
+    },
     "symbols": [
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
-            "static": false,
-            "type": "text",
-            "visibility": "public"
-        },
-        {
-            "arguments": [
-                "object"
-            ],
-            "convention": "internal",
-            "index": 1,
-            "inline": null,
-            "kind": "method",
-            "name": "__addition__",
+            "passthrough": false,
             "static": false,
             "type": "text",
             "visibility": "public"
@@ -34,10 +26,27 @@
                 "text"
             ],
             "convention": "internal",
+            "implicit": false,
+            "index": 1,
+            "inline": null,
+            "kind": "method",
+            "name": "__addition__",
+            "passthrough": false,
+            "static": false,
+            "type": "text",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "implicit": false,
             "index": 2,
             "inline": null,
             "kind": "method",
             "name": "__equals__",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -47,10 +56,12 @@
                 "text"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 3,
             "inline": null,
             "kind": "method",
             "name": "contains",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -58,10 +69,12 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 4,
             "inline": null,
             "kind": "method",
             "name": "length",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -69,10 +82,12 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 5,
             "inline": null,
             "kind": "method",
             "name": "to_bytes",
+            "passthrough": false,
             "static": false,
             "type": [
                 "list",
@@ -85,13 +100,28 @@
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 6,
             "inline": null,
             "kind": "method",
             "name": "as number",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
+        },
+        {
+            "arguments": null,
+            "convention": "internal",
+            "implicit": true,
+            "index": null,
+            "inline": null,
+            "kind": "method",
+            "name": "as text",
+            "passthrough": true,
+            "static": false,
+            "type": "text",
+            "visibility": "private"
         }
     ]
 }

@@ -2,7 +2,8 @@ from thinglang.lexer.blocks.conditionals import LexicalConditional, LexicalElse
 from thinglang.lexer.blocks.exceptions import LexicalTry, LexicalHandle
 from thinglang.lexer.blocks.loops import LexicalRepeatFor, LexicalRepeatWhile
 from thinglang.lexer.definitions.tags import LexicalDeclarationConstructor, LexicalDeclarationStatic, \
-    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag, LexicalPrivateTag
+    LexicalDeclarationReturnType, LexicalArgumentListIndicator, LexicalInheritanceTag, LexicalPrivateTag, \
+    LexicalImplicitTag
 from thinglang.lexer.definitions.thing_definition import LexicalDeclarationThing, LexicalDeclarationMember, \
     LexicalDeclarationMethod
 from thinglang.lexer.grouping.backtick import LexicalBacktick
@@ -68,6 +69,7 @@ KEYWORDS = {
     'returns': LexicalDeclarationReturnType,
     'extends': LexicalInheritanceTag,
     'private': LexicalPrivateTag,
+    'implicit': LexicalImplicitTag,
 
     'create': LexicalThingInstantiation,
 

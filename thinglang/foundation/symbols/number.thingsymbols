@@ -3,15 +3,20 @@
     "extends": null,
     "generics": [],
     "name": "number",
-    "offset": 0,
+    "offsets": {
+        "members": 0,
+        "methods": 0
+    },
     "symbols": [
         {
             "arguments": [],
             "convention": "internal",
+            "implicit": false,
             "index": 0,
             "inline": null,
             "kind": "method",
             "name": "__constructor__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -21,10 +26,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
             "name": "__addition__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -34,10 +41,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 2,
             "inline": null,
             "kind": "method",
             "name": "__subtraction__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -47,10 +56,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 3,
             "inline": null,
             "kind": "method",
             "name": "__multiplication__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -60,10 +71,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 4,
             "inline": null,
             "kind": "method",
             "name": "__division__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -73,10 +86,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 5,
             "inline": null,
             "kind": "method",
             "name": "__modulus__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -86,10 +101,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 6,
             "inline": null,
             "kind": "method",
             "name": "__binary_and__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -99,10 +116,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 7,
             "inline": null,
             "kind": "method",
             "name": "__binary_or__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -112,10 +131,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 8,
             "inline": null,
             "kind": "method",
             "name": "__binary_xor__",
+            "passthrough": false,
             "static": false,
             "type": "number",
             "visibility": "public"
@@ -125,10 +146,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 9,
             "inline": null,
             "kind": "method",
             "name": "__equals__",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -138,10 +161,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 10,
             "inline": null,
             "kind": "method",
             "name": "__not_equals__",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -151,10 +176,12 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 11,
             "inline": null,
             "kind": "method",
             "name": "__less_than__",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
@@ -164,24 +191,28 @@
                 "number"
             ],
             "convention": "internal",
+            "implicit": false,
             "index": 12,
             "inline": null,
             "kind": "method",
             "name": "__greater_than__",
+            "passthrough": false,
             "static": false,
             "type": "bool",
             "visibility": "public"
         },
         {
-            "arguments": [],
+            "arguments": null,
             "convention": "internal",
-            "index": 13,
+            "implicit": true,
+            "index": null,
             "inline": null,
             "kind": "method",
             "name": "as text",
+            "passthrough": true,
             "static": false,
             "type": "text",
-            "visibility": "public"
+            "visibility": "private"
         }
     ]
 }

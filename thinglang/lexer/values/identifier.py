@@ -70,6 +70,10 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def untyped(self):
         return self
 
+    @property
+    def parent(self):
+        return None
+
     @classmethod
     def validate(cls, value):
         return isinstance(value, Identifier) or bool(cls.VALIDATOR.match(value))

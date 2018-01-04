@@ -21,12 +21,13 @@ private:
 public:
     static void push(const Thing& instance);
     static void push(int64_t value);
+    static void push(std::string value);
     static void push(bool value);
     static Thing pop();
     static void create_frame(Size size);
     static void pop_frame();
     static Frame &frame();
-    static void copy_args(Size count, Size offset);
+    static void copy_args(Size count);
     static Index exception(Index counter, Index exception_type, std::stack<Index>& call_stack, std::stack<Index>& return_stack);
 
     template <typename T>
@@ -77,8 +78,9 @@ private:
     static SourceMap source_map;
     static Source source;
     static InstructionList instructions;
-    static TypeList internal_types;
-    static TypeMap internal_type_map;
+    static InternalTypeList internal_types;
+    static InternalTypeMap internal_type_map;
+    static UserTypeList user_types;
 
 public:
     static void load(ProgramInfo &info);

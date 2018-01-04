@@ -8,23 +8,23 @@ void MapType::__constructor__() {
 
 
 void MapType::get() {
-	auto key = Program::pop();
-	auto self = Program::argument<MapInstance>();
+    auto self = Program::argument<MapInstance>();
+    auto key = Program::pop();
 
 	Program::push(self->container.at(key));
 }
 
 void MapType::set() {
+    auto self = Program::argument<MapInstance>();
     auto value = Program::pop();
     auto key = Program::pop();
-    auto self = Program::argument<MapInstance>();
 
     self->container[key] = value;
 }
 
 void MapType::remove() {
-    auto key = Program::pop();
     auto self = Program::argument<MapInstance>();
+    auto key = Program::pop();
 
     auto value = self->container.at(key);
 

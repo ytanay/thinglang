@@ -42,10 +42,7 @@ def test_argument_type_mismatch():
     with pytest.raises(NoMatchingOverload) as e:
         pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args("hello", 3)')))
 
-    assert e.value.methods[0].name == Identifier('two_args') and e.value.arguments == [InlineString("hello")]
+    assert e.value.methods[0].name == Identifier('two_args') and e.value.arguments == [InlineString("hello"), NumericValue(3)]
 
-    with pytest.raises(NoMatchingOverload) as e:
-        pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args(3, 3)')))
-
-    assert e.value.methods[0].name == Identifier('two_args') and e.value.arguments == [NumericValue(3)] * 2
+    pipeline.compile(SourceContext.wrap(BASE.format(code='self.two_args(3, 3)')))  # Can be implicitly casted
 

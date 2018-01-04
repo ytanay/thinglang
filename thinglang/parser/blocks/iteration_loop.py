@@ -28,6 +28,9 @@ class IterationLoop(Loop):
 
         self.value = self.continuation_check
 
+        if isinstance(self.collection, MethodCall):
+            self.collection.is_captured = True
+
     def __repr__(self):
         return f'for {self.target_type} {self.target} in {self.collection}'
 
@@ -36,8 +39,8 @@ class IterationLoop(Loop):
         AssignmentOperation(
             AssignmentOperation.REASSIGNMENT,
             iterator_name,
-            MethodCall(NamedAccess([self.collection, Identifier('iterator')])).deriving_from(self),
-            iterator_type
+            MethodCall(NamedAccess([self.collection, Identifier('iterator')]), is_captured=True).deriving_from(self),
+            iterator_type,
         ).deriving_from(self).compile(context)
 
         super().compile(context)

@@ -3,8 +3,8 @@
 
 
 void DirectoryType::__constructor__() {
+    auto self = Program::create<DirectoryInstance>();
 	auto file_path = Program::argument<TextInstance>();
-	auto self = Program::create<DirectoryInstance>();
 
 	self->file_path = file_path->text();
 	Program::push(self);

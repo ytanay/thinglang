@@ -1,17 +1,21 @@
+from typing import Tuple
+
+import collections
+
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod
-from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodeCall, OpcodePop
-from thinglang.compiler.references import Reference
-from thinglang.compiler.tracker import TrackedReplacements
+from thinglang.compiler.opcodes import OpcodeCallInternal, OpcodePop, OpcodeCallVirtual, OpcodeCallStatic
+from thinglang.compiler.references import Reference, ElementReference
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.argument_list import ArgumentList
+from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.named_access import NamedAccess
-from thinglang.phases import preprocess
 from thinglang.symbols.symbol import Symbol
-from thinglang.utils.source_context import SourceContext
 from thinglang.utils.type_descriptors import ValueType, CallSite
+
+CompiledArgument = collections.namedtuple('CompiledArgument', ['symbol', 'buffer'])
 
 
 class MethodCall(BaseNode, ValueType, CallSite):
@@ -22,9 +26,9 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
     STACK_ARGS = object()
 
-    def __init__(self, target, arguments=None, stack_args=False, is_captured=None):
+    def __init__(self, target, arguments=None, stack_args=False, stack_target=False, is_captured=None):
         super(MethodCall, self).__init__([target, arguments])
-        self.target, self.arguments, self.stack_args, self._is_captured = target, (arguments if arguments is not None else ArgumentList()), stack_args, is_captured
+        self.target, self.arguments, self.stack_args, self.stack_target, self._is_captured = target, (arguments if arguments is not None else ArgumentList()), stack_args, stack_target, is_captured
 
     def __repr__(self):
         return '{}({})'.format(self.target, self.arguments)
@@ -33,42 +37,63 @@ class MethodCall(BaseNode, ValueType, CallSite):
         return type(self) == type(other) and self.target == other.target and self.arguments == other.arguments
 
     def compile(self, context: CompilationBuffer):
+        """
+        Compiling method calls is probably the trickiest piece of logic in the thinglang compiler.
+        We can separate the procedure into a number of distinct operations:
 
-        target = self.final_target(context)
-        node = target.element.node
+            1. Resolving the callable target (identified by self.target)
+                If the first component of the target is a CallSite (i.e. we're looking at a chinaed method call),
+                we compile it directly into the target buffer. Otherwise, we resolve it into an executable
+                symbol, and compile a push down operation of the target instance
+            2. Disambiguating the target symbol
+                We now compile each argument in turn, producing a list of argument buffers and symbols. We use an
+                ArgumentSelector to disambiguate between overloaded symbols (which also serves to validate types and
+                produce an indication if an implicit cast is required)
+            3. Calling convention selection
+                Finally, we select the appropriate calling convention and merge the collected buffers.
 
-        if node:  # Inline the function (TODO: better conditions)
-            inlined = context.optional(target.element.node.arguments, track=True)
-            for node in target.element.node.nodes:
-                node.compile(inlined)
+        :param context:
+        :return:
+        """
 
-            assert all(x.hits == 1 for x in inlined.current_locals.values()), 'Inlining currently only support single use arguments'
-            assert len(target.element.node.nodes) == 1, 'Inlining currently supports only a single subnode'
+        symbols, target_buffer = self.compile_target(context)
+        final_ref, compiled_arguments = self.compile_arguments(context, symbols)
 
-            node = target.element.node.nodes[0]
-            replaced = node.replace_references(TrackedReplacements(target.element.node.arguments, self.arguments))
-            replaced.compile(context)
+        for argument_type, argument_buffer in compiled_arguments:
+            context.extend(argument_buffer)
 
-        else:
-            self.compile_target(context)
-            self.compile_arguments(target, context)
-            instruction = OpcodeCallInternal if target.convention is Symbol.INTERNAL else OpcodeCall
-            context.append(instruction.type_reference(target), self.source_ref)
+        if not self.stack_target:
+            context.extend(target_buffer)
 
-            if target.type is None and self.is_captured:
-                raise CapturedVoidMethod()
+        if final_ref.element.passthrough:
+            return final_ref
 
-            if target.type is not None and not self.is_captured:
-                context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
+        if final_ref.convention is Symbol.INTERNAL:
+            instruction = OpcodeCallInternal
+        elif final_ref.static or self.constructing_call:
+            instruction = OpcodeCallStatic
+        else:  # TODO: change this to elif target.is_part_of_inheritance_chain
+            instruction = OpcodeCallVirtual
 
-        return target
+        context.append(instruction.type_reference(final_ref), self.source_ref)
 
-    def compile_target(self, context: CompilationBuffer):
+        if final_ref.type is None and self.is_captured:
+            raise CapturedVoidMethod()
+
+        if final_ref.type is not None and not self.is_captured:
+            context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
+
+        return final_ref
+
+    def compile_target(self, context: CompilationBuffer) -> Tuple[ElementReference, CompilationBuffer]:
         assert isinstance(self.target, NamedAccess)
 
+        target_buffer = context.optional()  # This buffer holds a push down operation for the target instance
+
         if isinstance(self.target[0], CallSite):
-            inner_target = self.target[0].compile(context)
-            target = context.resolve(NamedAccess([inner_target.type, self.target[1]]))
+            assert not self.stack_target
+            inner_target = self.target[0].compile(target_buffer)
+            target = context.resolve(NamedAccess([inner_target.type, self.target[1]], tokens=self.target))
         else:
             target = context.resolve(self.target.root)
 
@@ -78,32 +103,43 @@ class MethodCall(BaseNode, ValueType, CallSite):
             if target.kind != Symbol.METHOD:
                 raise TargetNotCallable()
 
-            if not target.static and not self.constructing_call:
-                self.target.compile(context, without_last=True)
+            if not target.static and not self.constructing_call and not self.stack_target:
+                # TODO: Add assertion for calling with instance, not type
+                self.target.compile(target_buffer, without_last=True)
 
-        return target
+        return target, target_buffer
 
-    def compile_arguments(self, target, context: CompilationBuffer):
-        argument_selector = target.element.selector()
+    def compile_arguments(self, context: CompilationBuffer, ref: ElementReference):
+        argument_selector = ref.element.selector(context)
+        compiled_arguments = []
 
         for idx, arg in enumerate(self.arguments):
-            compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(context)  # Deals with implicit casts
-            argument_selector.constraint(compiled_target, self.source_ref)
+            buffer = context.optional()
+            compiled_target = arg if self.stack_args and isinstance(arg, Reference) else arg.compile(buffer)  # Deals with implicit casts
+            argument_selector.constraint(compiled_target)
+            compiled_arguments.append(CompiledArgument(compiled_target, buffer))
 
-        target.element = argument_selector.disambiguate(self.source_ref)
+        selected = argument_selector.disambiguate(self.source_ref)
+        ref.element = selected.symbol
 
-        return target
+        for (compiled_target, buffer), expected_type in zip(compiled_arguments, selected.symbol.arguments or []):
+            if not argument_selector.inheritance_match(expected_type, compiled_target):
+                MethodCall(NamedAccess([compiled_target.type, CastTag(expected_type)]), stack_target=True, is_captured=True)\
+                    .deriving_from(self)\
+                    .compile(buffer)
 
-    def final_target(self, context):
-        ambiguous_target = self.compile_target(context.optional())
-        return self.compile_arguments(ambiguous_target, context.optional())
+        return ref, compiled_arguments
 
     def deriving_from(self, node):
         self.target.deriving_from(node)
         return super().deriving_from(node)
 
     def replace_references(self, replacements):
-        return MethodCall(self.target, ArgumentList([replacements[x] for x in self.arguments]), self.stack_args, self._is_captured)
+        return MethodCall(self.target,
+                          ArgumentList([x.replace_references(replacements) for x in self.arguments]),
+                          self.stack_args,
+                          self._is_captured) \
+            .deriving_from(replacements.original)
 
     @property
     def is_captured(self):

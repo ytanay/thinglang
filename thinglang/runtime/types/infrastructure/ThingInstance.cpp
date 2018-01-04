@@ -27,7 +27,7 @@ size_t BaseThingInstance::hash() const {
     return 0;
 }
 
-Type BaseThingInstance::type() const {
+InternalType BaseThingInstance::type() const {
     throw RuntimeError("BaseThingInstance has no type");
 }
 

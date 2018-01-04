@@ -1,10 +1,8 @@
 {
     "convention": "internal",
     "extends": null,
-    "generics": [
-        "T"
-    ],
-    "name": "iterator",
+    "generics": [],
+    "name": "object",
     "offsets": {
         "members": 0,
         "methods": 0
@@ -20,22 +18,19 @@
             "name": "__constructor__",
             "passthrough": false,
             "static": false,
-            "type": [
-                "iterator",
-                [
-                    "T"
-                ]
-            ],
+            "type": "object",
             "visibility": "public"
         },
         {
-            "arguments": [],
+            "arguments": [
+                "object"
+            ],
             "convention": "internal",
             "implicit": false,
             "index": 1,
             "inline": null,
             "kind": "method",
-            "name": "has_next",
+            "name": "__equals__",
             "passthrough": false,
             "static": false,
             "type": "bool",
@@ -44,28 +39,15 @@
         {
             "arguments": [],
             "convention": "internal",
-            "implicit": false,
+            "implicit": true,
             "index": 2,
             "inline": null,
             "kind": "method",
-            "name": "next",
+            "name": "as text",
             "passthrough": false,
             "static": false,
-            "type": "T",
-            "visibility": "public"
-        },
-        {
-            "arguments": null,
-            "convention": "internal",
-            "implicit": true,
-            "index": null,
-            "inline": null,
-            "kind": "method",
-            "name": "as text",
-            "passthrough": true,
-            "static": false,
             "type": "text",
-            "visibility": "private"
+            "visibility": "public"
         }
     ]
 }

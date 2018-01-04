@@ -1,6 +1,6 @@
 thing text
 
-    does + with object other returns text
+    does + with text other returns text
     does eq with text other returns bool
     does contains with text substring returns bool
     does length returns number
