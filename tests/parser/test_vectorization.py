@@ -5,9 +5,9 @@ from thinglang.lexer.operators.binary import LexicalAddition, LexicalMultiplicat
 from thinglang.lexer.tokens.access import LexicalAccess
 from thinglang.lexer.tokens.separator import LexicalSeparator
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser import parser
-from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.vector import TokenVector
 
 

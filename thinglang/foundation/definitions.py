@@ -1,5 +1,4 @@
 import glob
-
 import os
 
 from thinglang.lexer.values.identifier import Identifier

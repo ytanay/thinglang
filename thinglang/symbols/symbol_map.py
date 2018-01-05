@@ -1,9 +1,7 @@
 import collections
-import struct
 from typing import List
 
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
-from thinglang.parser.definitions.cast_tag import CastTag
 from thinglang.symbols.merged_symbol import MergedSymbol
 from thinglang.symbols.symbol import Symbol
 from thinglang.utils import collection_utils

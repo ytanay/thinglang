@@ -1,5 +1,4 @@
 #include "../../../runtime/types/InternalTypes.h"
-#include "../../../runtime/utils/Formatting.h"
 
 
 void ObjectType::__equals__() {

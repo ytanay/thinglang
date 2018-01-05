@@ -1,6 +1,5 @@
-from typing import Tuple, Union, Sequence
-
 import itertools
+from typing import Tuple, Union, Sequence
 
 from thinglang.compiler.errors import InvalidReference, SelfInStaticMethod, UnfilledGenericParameters
 from thinglang.compiler.references import ElementReference, LocalReference, Reference

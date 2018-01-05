@@ -1,9 +1,7 @@
 from thinglang.lexer.values.identifier import Identifier, GenericIdentifier
 from thinglang.parser.definitions.cast_tag import CastTag
-from thinglang.phases import preprocess
 from thinglang.symbols.argument_selector import ArgumentSelector
 from thinglang.symbols.inline_candidate import InlineCandidate
-from thinglang.utils.source_context import SourceContext
 
 
 class Symbol(object):

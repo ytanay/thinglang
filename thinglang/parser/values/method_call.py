@@ -1,6 +1,5 @@
-from typing import Tuple
-
 import collections
+from typing import Tuple
 
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.errors import TargetNotCallable, CapturedVoidMethod

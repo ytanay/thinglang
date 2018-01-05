@@ -1,5 +1,4 @@
 #include "../../../../runtime/types/InternalTypes.h"
-#include "../../../../runtime/execution/Program.h"
 
 void FileType::__constructor__() {
 	auto self = Program::create<FileInstance>();

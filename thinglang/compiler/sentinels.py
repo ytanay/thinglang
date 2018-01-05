@@ -1,4 +1,4 @@
-from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, ARGUMENTS, TARGET, TYPE_ID
+from thinglang.compiler.opcodes import MEMBERS, METHODS, FRAME_SIZE, TARGET, TYPE_ID
 from thinglang.compiler.opcodes import Opcode
 
 

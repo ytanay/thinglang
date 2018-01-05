@@ -6,7 +6,6 @@ from thinglang.parser.nodes import BaseNode
 from thinglang.parser.rule import ParserRule
 from thinglang.parser.values.method_call import MethodCall
 from thinglang.parser.values.named_access import NamedAccess
-from thinglang.symbols.symbol import Symbol
 from thinglang.utils.type_descriptors import ValueType
 
 

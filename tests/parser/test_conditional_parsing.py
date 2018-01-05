@@ -1,10 +1,10 @@
 from tests.infrastructure.test_utils import parse_local, validate_types
 from thinglang.lexer.values.booleans import LexicalBooleanTrue
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.blocks.conditional import Conditional
 from thinglang.parser.blocks.conditional_else import ConditionalElse
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.values.binary_operation import BinaryOperation
-from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.values.method_call import MethodCall
 
 

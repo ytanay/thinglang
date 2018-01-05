@@ -2,7 +2,6 @@ from thinglang.compiler.errors import CalledInstanceMethodOnClass
 from thinglang.compiler.opcodes import Opcode, OpcodePushLocal, OpcodePushMember
 from thinglang.compiler.references import Reference, LocalReference, ElementReference
 from thinglang.compiler.tracker import LocalTracker
-from thinglang.lexer.values.identifier import Identifier
 from thinglang.utils.source_context import SourceReference
 
 

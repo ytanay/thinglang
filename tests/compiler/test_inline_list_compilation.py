@@ -1,6 +1,6 @@
 import pytest
 
-from tests.compiler import compile_snippet, internal_call,  STATIC_START, LOCAL_START
+from tests.compiler import compile_snippet, internal_call, STATIC_START, LOCAL_START
 from thinglang.compiler.errors import NoMatchingOverload, InvalidReference
 from thinglang.compiler.opcodes import OpcodePopLocal, OpcodePushStatic
 

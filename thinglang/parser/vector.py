@@ -1,5 +1,3 @@
-import itertools
-
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.tokens.misc import LexicalGroupEnd

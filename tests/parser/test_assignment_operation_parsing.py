@@ -1,10 +1,10 @@
 from tests.infrastructure.test_utils import parse_local
 from tests.parser.test_method_call_parsing import validate_method_call
 from thinglang.lexer.values.identifier import Identifier
+from thinglang.lexer.values.inline_text import InlineString
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
 from thinglang.parser.values.binary_operation import BinaryOperation
-from thinglang.lexer.values.inline_text import InlineString
 from thinglang.parser.values.method_call import MethodCall
 
 

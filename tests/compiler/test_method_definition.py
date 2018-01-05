@@ -1,8 +1,7 @@
 import pytest
 
-from tests.compiler import compile_base, internal_call
+from tests.compiler import compile_base
 from thinglang.compiler.errors import SelfInStaticMethod
-from thinglang.compiler.opcodes import OpcodePushStatic, OpcodePushLocal
 
 SELF_USE_IN_STATIC_METHOD = '''
 thing Program

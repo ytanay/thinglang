@@ -1,7 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include "../../include/catch.h"
 #include "../../../thinglang/runtime/types/InternalTypes.h"
-#include "../../../thinglang/runtime/execution/Program.h"
 
 
 TEST_CASE( "Full flow GC test", "[gc]" ) {

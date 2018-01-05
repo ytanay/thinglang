@@ -2,7 +2,6 @@ import collections
 import copy
 
 from thinglang.compiler.errors import NoMatchingOverload
-from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.definitions.cast_tag import CastTag
 
 SymbolOption = collections.namedtuple('SymbolOption', ['symbol', 'remaining_arguments'])

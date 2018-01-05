@@ -1,5 +1,3 @@
-import itertools
-
 from thinglang import pipeline
 from thinglang.compiler.opcodes import OpcodeCallInternal
 from thinglang.lexer.values.identifier import Identifier

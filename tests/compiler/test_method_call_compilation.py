@@ -2,7 +2,7 @@ import pytest
 
 from tests.compiler import compile_snippet, SELF_ID, LST_ID, VAL1_ID, internal_call, STATIC_START
 from thinglang.compiler.errors import CalledInstanceMethodOnClass
-from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushMember, OpcodeCall, OpcodePushStatic, \
+from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePushMember, OpcodePushStatic, \
     OpcodeCallVirtual
 
 
