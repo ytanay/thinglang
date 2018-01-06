@@ -27,12 +27,13 @@ class IndexedAccess(BaseNode, ValueType):
         return '{}[{}]'.format(self.target, self.index)
 
     def compile(self, context: CompilationBuffer):
-        return MethodCall(NamedAccess.extend(self.target, Identifier('get')), ArgumentList([self.index]))\
-            .deriving_from(self)\
+        return MethodCall(NamedAccess.extend(self.target, Identifier('get')), ArgumentList([self.index])) \
+            .deriving_from(self) \
             .compile(context)
 
     def assignment(self, value):
-        return MethodCall(NamedAccess.extend(self.target, Identifier('set')), ArgumentList([self.index, value]), is_captured=False) \
+        return MethodCall(NamedAccess.extend(self.target, Identifier('set')), ArgumentList([self.index, value]),
+                          is_captured=False) \
             .deriving_from(self)
 
     def __eq__(self, other):
@@ -40,10 +41,10 @@ class IndexedAccess(BaseNode, ValueType):
 
     @staticmethod
     @ParserRule.predicate(lambda tokens, index: not ParserRule.is_instance(tokens[index], 'ParenthesesVector') and
-                                                (index - 1 and not ParserRule.is_instance(tokens[index-1], LexicalAccess)))
+                                                (not ParserRule.is_instance(tokens[index - 1],
+                                                                        LexicalAccess)) if index - 1 >= 0 else True)
     def parse_indexed_access(target: ValueType, idx: 'BracketVector'):
         if len(idx) != 1:
             raise InvalidIndexedAccess(idx)
 
         return IndexedAccess(target, idx[0])
-
