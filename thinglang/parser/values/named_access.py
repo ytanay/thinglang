@@ -57,7 +57,7 @@ class NamedAccess(BaseNode, ValueType):
             if last and without_last:
                 break
 
-            ref = context.symbols.resolve_partial(ref, ext)
+            ref = context.resolve(NamedAccess([ref.type, ext], tokens=self))
             cls = OpcodePopDereferenced if pop_last and last else OpcodeDereference
             context.append(cls(ref.element_index), self.source_ref)
 

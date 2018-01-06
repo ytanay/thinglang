@@ -75,15 +75,6 @@ class SymbolMapper(object):
 
         raise Exception("Unknown reference type {}".format(target))
 
-    def resolve_partial(self, target: ElementReference, child: Identifier) -> ElementReference:
-        """
-        Resolve an existing element reference into a a new element reference of one of its children
-        :param target: the existing element reference
-        :param child: the new field to resolve
-        :return: new ElementReference
-        """
-        return self.resolve_named([target.type, child])
-
     def resolve_named(self, target: Sequence, method_locals=(), current_generics=(), generic_validation=True) -> ElementReference:
         """
         Resolves an identifier pair (a.b) into an element reference
@@ -99,6 +90,8 @@ class SymbolMapper(object):
             container = self[first.type]
         elif isinstance(first, IndexedAccess):
             container = self.resolve_indexed(first, method_locals)
+        elif first.untyped in current_generics:  # TODO: what about name collisions?
+            container = self[Identifier.object()]  # TODO: implement `with type T implement Interface`
         elif first.untyped in self.maps:
             container = self[first]
         elif first in method_locals:

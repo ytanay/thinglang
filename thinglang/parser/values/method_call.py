@@ -84,7 +84,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
 
         return final_ref
 
-    def compile_target(self, context: CompilationBuffer) -> Tuple[ElementReference, CompilationBuffer]:
+    def compile_target(self, context: CompilationBuffer) -> Tuple[Reference, CompilationBuffer]:
         assert isinstance(self.target, NamedAccess)
 
         target_buffer = context.optional()  # This buffer holds a push down operation for the target instance
@@ -97,7 +97,7 @@ class MethodCall(BaseNode, ValueType, CallSite):
             target = context.resolve(self.target.root)
 
             for ext, _ in self.target.extensions:
-                target = context.symbols.resolve_partial(target, ext)
+                target = context.resolve(NamedAccess([target.type, ext], tokens=self.target))
 
             if target.kind != Symbol.METHOD:
                 raise TargetNotCallable()
