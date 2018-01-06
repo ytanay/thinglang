@@ -101,9 +101,9 @@ class CalledInstanceMethodOnClass(ThinglangException):
     An instance method was called on a class
     """
 
-    def __init__(self, reference):
+    def __init__(self, reference, source_ref):
         super().__init__()
-        self.reference = reference
+        self.reference, self.source_ref = reference, source_ref
 
     def __str__(self):
-        return f'Cannot call instance method on {self.reference.type} (at {self.reference.type.source_ref}'
+        return f'Cannot call instance method on class {self.reference.type} (at {self.source_ref}'

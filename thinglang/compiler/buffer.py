@@ -80,7 +80,7 @@ class CompilationBuffer(object):
         elif isinstance(ref, ElementReference):
             self.append(OpcodePushMember.from_reference(ref), source_ref)
         elif isinstance(ref, Reference):
-            raise CalledInstanceMethodOnClass(ref)
+            raise CalledInstanceMethodOnClass(ref, source_ref)
         else:
             raise Exception('Cannot push down {}'.format(ref))
 
