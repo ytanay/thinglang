@@ -8,6 +8,7 @@ from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.inline_text import InlineString
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser import parser
+from thinglang.parser.errors import UnclosedVector, UnexpectedVectorTermination
 from thinglang.parser.vector import TokenVector
 
 
@@ -62,12 +63,12 @@ def test_complex_vectorization():
 @pytest.mark.parametrize('source', ['(5 * (2 + 3)', '[[1, 2, 3]'])
 def test_missing_closing_token(source):
     tokens = lexer_single(source)
-    with pytest.raises(ValueError):
+    with pytest.raises(UnclosedVector):
         parser.collect_vectors(tokens)
 
 
 @pytest.mark.parametrize('source', ['(5 * (2 + 3)))', '[[1, 2, 3]]]'])
 def test_extraneous_closing_tokens(source):
     tokens = lexer_single(source)
-    with pytest.raises(ValueError):
+    with pytest.raises(UnexpectedVectorTermination):
         parser.collect_vectors(tokens)

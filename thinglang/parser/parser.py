@@ -6,6 +6,7 @@ from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, Lexical
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
+from thinglang.parser.errors import UnclosedVector, UnexpectedVectorTermination
 from thinglang.parser.nodes.root_node import RootNode
 from thinglang.parser.vector import TokenVector, ParenthesesVector, BracketVector, TypeVector, ParameterVector
 
@@ -86,13 +87,13 @@ def collect_vectors(tokens: List[LexicalToken]) -> TokenVector:
                 stack[-1].append(token)
             closing_tokens.pop()
         elif token.MUST_CLOSE:
-            raise ValueError('Unexpected group end token')
+            raise UnexpectedVectorTermination(type(token), token.source_ref)
 
         elif not isinstance(token, LexicalGroupEnd):
             stack[-1].append(token)
 
     if len(stack) != 1:
-        raise ValueError('Not all token vectors were closed - currently at depth {}'.format(len(stack)))
+        raise UnclosedVector(closing_tokens[-1], len(stack), tokens[0].source_ref)
 
     return stack[0]
 
