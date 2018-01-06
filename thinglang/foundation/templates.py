@@ -53,6 +53,6 @@ TYPE_CONDITIONAL = """if(type_name == "{name}") return singleton<{cls_name}>();"
 
 
 def class_names(name):
-    name = name.transpile()
+    name = name.serialize()
     formatted_name = name[0].upper() + name[1:]
     return '{}Type'.format(formatted_name), '{}Instance'.format(formatted_name)

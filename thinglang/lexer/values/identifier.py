@@ -23,9 +23,7 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
     def compile(self, context):
         return context.push_ref(context.resolve(self), self.source_ref)
 
-    def transpile(self):
-        if self == Identifier.constructor():
-            return '__constructor__'
+    def serialize(self):
         return self.value
 
     def parameterize(self, parameters):
@@ -77,7 +75,7 @@ class Identifier(LexicalToken, ValueType, ParsingMixin):
 
     @classmethod
     def validate(cls, value):
-        return isinstance(value, Identifier) or bool(cls.VALIDATOR.match(value))
+        return isinstance(value, Identifier) or (isinstance(value, str) and cls.VALIDATOR.match(value))
 
     @classmethod
     def invalid(cls):

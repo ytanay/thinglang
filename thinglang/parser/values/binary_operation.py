@@ -29,8 +29,8 @@ class BinaryOperation(BaseNode, ValueType, CallSite):
         super(BinaryOperation, self).__init__([operator, lhs, rhs])
         self.operator, self.lhs, self.rhs = operator, lhs, rhs
 
-    def compile(self, context: CompilationBuffer):
-        method_call = MethodCall(NamedAccess.extend(self.lhs, Identifier(self.operator.transpile())), [self.rhs])
+    def compile(self, context: CompilationBuffer): # TODO: we should probably reparse the maps into identifiers
+        method_call = MethodCall(NamedAccess.extend(self.lhs, Identifier(self.operator.serialize())), [self.rhs])
         return method_call.compile(context)
 
     def evaluate(self):

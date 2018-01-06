@@ -21,8 +21,9 @@ class LexicalToken(object):
         """
         return current
 
-    def transpile(self):
-        raise NotImplementedError('Cannot transpile token')
+    @classmethod
+    def serialize(cls):
+        return cls.format_name()
 
     def deriving_from(self, node):
         self.source_ref = node.source_ref

@@ -9,10 +9,6 @@ class LexicalBinaryOperation(LexicalToken):
         super(LexicalBinaryOperation, self).__init__(value, source_ref)
         self.operator = value
 
-    @classmethod
-    def transpile(cls):
-        return cls.format_name()
-
     def __repr__(self):
         from thinglang.lexer.lexical_definitions import REVERSE_OPERATORS
         return REVERSE_OPERATORS[type(self)]
