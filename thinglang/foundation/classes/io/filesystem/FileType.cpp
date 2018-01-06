@@ -12,13 +12,18 @@ void FileType::__constructor__() {
 void FileType::open() {
     auto self = Program::argument<FileInstance>();
 	auto mode = Program::argument<TextInstance>();
+    auto mode_type = mode->text();
 
-	if(mode->text() == "r") {
+	if(mode_type == "r") {
 		self->file.open(self->file_path, std::ios::in);
-	} else if(mode->text() == "w") {
+	} else if(mode_type == "w") {
 		self->file.open(self->file_path, std::ios::out);
-	} else {
-		throw RuntimeError("Invalid file mode"); // TODO: throw user exception
+	} else if(mode_type == "rb") {
+        self->file.open(self->file_path, std::ios::in | std::ios::binary);
+    } else if(mode_type == "wb"){
+        self->file.open(self->file_path, std::ios::out | std::ios::binary);
+    } else {
+        throw RuntimeError("Invalid file mode"); // TODO: throw user exception
 	}
 }
 
