@@ -97,5 +97,5 @@ def compile_snippet(code):
 
 def internal_call(target):
     return OpcodeCallInternal.from_reference(SYMBOL_MAPPER.resolve_named([
-        CastTag.parse(x) if CastTag.matches(x) else Identifier(x) for x in target.split('.')
+        CastTag(Identifier(x[3:])) if x.startswith('as ') else Identifier(x) for x in target.split('.')
     ], generic_validation=False))
