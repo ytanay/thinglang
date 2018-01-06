@@ -4,6 +4,9 @@ thing text
     does eq with text other returns bool
     does contains with text substring returns bool
     does length returns number
-    does to_bytes returns list<number>
+    does hex returns text
 
+    as list<number>
     as number
+
+    static does from_list with list<number> lst returns text # TODO: convert to list -> bytes -> text

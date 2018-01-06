@@ -32,14 +32,16 @@ public:
 class TextType : public ThingTypeInternal {
     
     public:
-    TextType() : ThingTypeInternal({ &__constructor__, &__addition__, &__equals__, &contains, &length, &to_bytes, &convert_number }) {}; // constructor
+    TextType() : ThingTypeInternal({ &__constructor__, &__addition__, &__equals__, &contains, &length, &hex, &to_bytes, &convert_number, &from_list }) {}; // constructor
  
 	static void __constructor__();
 	static void __addition__();
 	static void __equals__();
 	static void contains();
 	static void length();
+    static void hex();
 	static void to_bytes();
 	static void convert_number();
+	static void from_list();
     
 };
