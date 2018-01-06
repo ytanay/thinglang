@@ -1,11 +1,10 @@
 from thinglang.lexer.values.identifier import Identifier
 
 
-class CastTag(object):
-
-    PREFIX = 'as '
+class CastTag(Identifier):
 
     def __init__(self, destination_type):
+        super().__init__(f'as {destination_type}', validate=False)
         self.destination_type = destination_type
 
     def __hash__(self):
@@ -20,10 +19,8 @@ class CastTag(object):
     def deriving_from(self, *args, **kwargs):
         pass
 
-    @classmethod
-    def parse(cls, param):
-        return cls(Identifier(param[len(CastTag.PREFIX):]))
-
-    @classmethod
-    def matches(cls, param):
-        return param.startswith(CastTag.PREFIX)
+    def serialize(self):
+        return {
+            "intent": "cast",
+            "type": self.destination_type
+        }

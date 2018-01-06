@@ -86,7 +86,28 @@
             "index": 5,
             "inline": null,
             "kind": "method",
-            "name": "to_bytes",
+            "name": "hex",
+            "passthrough": false,
+            "static": false,
+            "type": "text",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "implicit": false,
+            "index": 6,
+            "inline": null,
+            "kind": "method",
+            "name": {
+                "intent": "cast",
+                "type": [
+                    "list",
+                    [
+                        "number"
+                    ]
+                ]
+            },
             "passthrough": false,
             "static": false,
             "type": [
@@ -101,13 +122,36 @@
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 6,
+            "index": 7,
             "inline": null,
             "kind": "method",
-            "name": "as number",
+            "name": {
+                "intent": "cast",
+                "type": "number"
+            },
             "passthrough": false,
             "static": false,
             "type": "number",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                [
+                    "list",
+                    [
+                        "number"
+                    ]
+                ]
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 8,
+            "inline": null,
+            "kind": "method",
+            "name": "from_list",
+            "passthrough": false,
+            "static": true,
+            "type": "text",
             "visibility": "public"
         },
         {
@@ -117,7 +161,10 @@
             "index": null,
             "inline": null,
             "kind": "method",
-            "name": "as text",
+            "name": {
+                "intent": "cast",
+                "type": "text"
+            },
             "passthrough": true,
             "static": false,
             "type": "text",

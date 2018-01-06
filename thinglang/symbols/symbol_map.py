@@ -49,7 +49,7 @@ class SymbolMap(object):
         symbols = [Symbol.load(elem) for elem in data['symbols']]
         members = [symbol for symbol in symbols if symbol.kind == Symbol.MEMBER]
         methods = [symbol for symbol in symbols if symbol.kind == Symbol.METHOD]
-        extends = Identifier(data['extends']) if data['extends'] else None
+        extends = Symbol.load_identifier(data['extends']) if data['extends'] else None
 
         return cls(members=members,
                    methods=methods,

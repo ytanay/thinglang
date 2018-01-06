@@ -30,7 +30,10 @@
             "index": null,
             "inline": null,
             "kind": "method",
-            "name": "as text",
+            "name": {
+                "intent": "cast",
+                "type": "text"
+            },
             "passthrough": true,
             "static": false,
             "type": "text",

@@ -70,7 +70,7 @@ class Symbol(object):
         Returns a dict representing this symbol
         """
         return {
-            "name": self.name,
+            "name": self.name.serialize(),
             "index": self.index,
             "kind": "method" if self.kind is Symbol.METHOD else "member",
             "passthrough": self.passthrough,
@@ -94,7 +94,7 @@ class Symbol(object):
         arguments = data['arguments'] is not None and [cls.load_identifier(x) for x in data['arguments']]
 
         return cls(
-            name=cls.serialize_name(data['name']),
+            name=cls.load_identifier(data['name']),
             kind=Symbol.METHOD if data['kind'] == 'method' else Symbol.MEMBER,
             type=cls.load_identifier(data['type']),
             static=data['static'],
@@ -108,7 +108,7 @@ class Symbol(object):
         )
 
     @staticmethod
-    def load_identifier(value) -> Identifier:
+    def load_identifier(value):
         """
         Parse a generic identifier
         """
@@ -116,6 +116,8 @@ class Symbol(object):
             return Identifier(value)
         elif isinstance(value, list):
             return GenericIdentifier(Identifier(value[0]), tuple(Identifier(x) for x in value[1]))
+        elif isinstance(value, dict) and value['intent'] == 'cast':
+            return CastTag(Symbol.load_identifier(value['type']))
 
     @classmethod
     def method(cls, name: Identifier, return_type: Identifier, static: bool, arguments: list, implicit: bool, node) -> 'Symbol':
@@ -151,13 +153,6 @@ class Symbol(object):
             return Symbol.BYTECODE if param == 'bytecode' else Symbol.INTERNAL
         else:
             return "bytecode" if param is Symbol.BYTECODE else "internal"
-
-    @classmethod
-    def serialize_name(cls, param):
-        if isinstance(param, str):
-            return CastTag.parse(param) if CastTag.matches(param) else Identifier(param)
-        else:
-            return repr(param)
 
     def is_complete(self, generics: dict) -> bool:  # TODO: assert static methods do not use generic IDs
         return self.static or (
