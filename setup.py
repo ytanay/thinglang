@@ -42,5 +42,7 @@ setup(
 
 
     packages=find_packages(exclude=['docs', 'tests']),
+    package_data={'': ['*.thingsymbols']},
+    include_package_data=True
 
 )

@@ -1,22 +1,12 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
+source thinglang-build-env/bin/activate
 
-python3.6 -m venv thinglang-env
-source thinglang-env/bin/activate
-pip install -r requirements.txt
+mkdir build
+cd build
+cmake -D CMAKE_BUILD_TYPE=Release ..
+make VERBOSE=1
 
-mkdir /app-src/build
-cd /app-src/build
-cmake ..
-make
+cd ..
+python3.6 setup.py install
 
-export PATH=$PATH:/app-src/build/thinglang/:/app-src/build/tests/
-export PYTHONPATH=/app-src
-
-
-thinglang --version
-ctest --verbose
-
-cd /app-src
-pytest tests/
