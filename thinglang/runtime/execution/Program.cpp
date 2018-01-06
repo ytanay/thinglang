@@ -20,7 +20,7 @@ SourceMap Program::source_map;
 Source Program::source;
 
 
-Thing Program::pop() {
+Thing Program::pop(bool checked) {
     /**
      * Pop an item from the program stack and return it
      */
@@ -28,6 +28,10 @@ Thing Program::pop() {
         critical_abort(EMPTY_PROGRAM_STACK);
 
     auto ti = stack.front();
+
+    if(checked && ti == nullptr)
+        critical_abort(AbortReason::NULL_POINTER);
+
     stack.pop_front();
     return ti;
 }

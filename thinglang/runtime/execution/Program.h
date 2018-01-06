@@ -23,7 +23,7 @@ public:
     static void push(int64_t value);
     static void push(std::string value);
     static void push(bool value);
-    static Thing pop();
+    static Thing pop(bool checked=true);
     static void create_frame(Size size);
     static void pop_frame();
     static Frame &frame();
@@ -36,10 +36,6 @@ public:
         * Pops an argument from the stack, casting it to type T*
         */
         auto value = pop();
-
-        if(value == nullptr)
-            critical_abort(AbortReason::NULL_POINTER);
-
         auto casted = dynamic_cast<T*>(value);
 
         if(casted == nullptr)
@@ -53,7 +49,7 @@ public:
         /**
         * Pops an argument from the stack, casting it to type T* - accepts null
         */
-        auto value = pop();
+        auto value = pop(false);
 
         if(value == nullptr)
             return nullptr;
