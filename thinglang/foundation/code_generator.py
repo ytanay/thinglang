@@ -20,12 +20,8 @@ EXECUTION_TARGET = os.path.join(CURRENT_PATH, '..', 'runtime', 'execution')
 
 class JSONSerializer(json.JSONEncoder):
     def default(self, o):
-        if isinstance(o, GenericIdentifier):
+        if isinstance(o, (Identifier, CastTag)):
             return o.serialize()
-        if isinstance(o, LexicalToken):
-            return o.transpile()
-        if isinstance(o, CastTag):
-            return repr(o)
         return super().default(o)
 
 
@@ -46,7 +42,6 @@ def generate_types():
 
         for symbol in symbol_map:
             symbol.convention = Symbol.INTERNAL
-
 
         write_if_changed(os.path.join(SYMBOLS_TARGET, f'{name}.thingsymbols'), json.dumps(
             symbol_map.serialize(),
