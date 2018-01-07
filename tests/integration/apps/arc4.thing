@@ -10,7 +10,7 @@ thing ARC4
     has list<number> state
 
     setup with text key
-        list<number> key_array = key.to_bytes()
+        list<number> key_array = key
         self.state = list.range(0, 256)
 
         number i = 0
@@ -26,7 +26,7 @@ thing ARC4
         number i = 0
         number j = 0
 
-        for number plaintext_byte in plaintext.to_bytes()
+        for number plaintext_byte in plaintext as list<number>
             i = (i + 1) % 256
             j = (j + self.state[i]) % 256
             self.state.swap(i, j)
