@@ -81,7 +81,7 @@ void ListType::range() {
 
     auto lst = Program::create<ListInstance>();
     lst->val.resize(static_cast<unsigned int>(end->val - start->val));
-    for(long long idx = start->val, val = 0; idx < end->val; idx++, val++) lst->val[idx] = Program::create<NumberInstance>(val);
+    for(long long idx = 0, val = start->val; idx < end->val - start->val; idx++, val++) lst->val[idx] = Program::create<NumberInstance>(val);
     Program::push(lst);
 }
 
