@@ -41,6 +41,9 @@ def parse(lexical_groups: List[List[LexicalToken]]) -> RootNode:
 
     for idx, node in enumerate(processed_groups):
 
+        if not stack:
+            raise Exception(f'Unexpected indent at {node.source_ref}')
+
         parent = stack[-1]
 
         parent.attach(node)

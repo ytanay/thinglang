@@ -96,4 +96,4 @@ def finalize_buffer(buffer: str, terminating_char, entity_class, source_ref) -> 
         return Identifier(buffer, source_ref)
 
     if buffer:
-        raise ValueError('Lexer: cannot terminate group {}'.format(buffer))
+        raise ValueError('Lexer: cannot terminate group "{}" (at {})'.format(buffer, source_ref))
