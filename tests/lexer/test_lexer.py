@@ -1,6 +1,7 @@
 import pytest
 
 from tests.infrastructure.test_utils import lexer_single
+from thinglang.lexer.operators.comparison import LexicalEquals
 from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.inline_text import InlineString
@@ -22,6 +23,11 @@ def test_whitespace_handling():
 
 def test_indentation_handling():
     assert lexer_single("\t\t\tid", without_end=True) == [LexicalIndent('\t', None)] * 3 + [Identifier('id')]
+
+
+def test_escaping():
+    assert lexer_single(r'"\tHello world\nand goodbye!"', without_end=True) == [InlineString('\tHello world\nand goodbye!')]
+    assert lexer_single(r'"A message, \"and a quote\"."', without_end=True) == [InlineString('A message, "and a quote".')]
 
 
 @pytest.mark.parametrize('code', UNTERMINATED_GROUPS)
