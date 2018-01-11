@@ -2,9 +2,11 @@ thing text
 
     does + with text other returns text
     does eq with text other returns bool
+    does not eq with text other returns bool
     does contains with text substring returns bool
     does length returns number
     does hex returns text
+    does * with number count returns text
 
     as list<number>
     as number

@@ -60,6 +60,21 @@
             "index": 3,
             "inline": null,
             "kind": "method",
+            "name": "__not_equals__",
+            "passthrough": false,
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 4,
+            "inline": null,
+            "kind": "method",
             "name": "contains",
             "passthrough": false,
             "static": false,
@@ -70,7 +85,7 @@
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 4,
+            "index": 5,
             "inline": null,
             "kind": "method",
             "name": "length",
@@ -83,7 +98,7 @@
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 5,
+            "index": 6,
             "inline": null,
             "kind": "method",
             "name": "hex",
@@ -93,10 +108,25 @@
             "visibility": "public"
         },
         {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 7,
+            "inline": null,
+            "kind": "method",
+            "name": "__multiplication__",
+            "passthrough": false,
+            "static": false,
+            "type": "text",
+            "visibility": "public"
+        },
+        {
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 6,
+            "index": 8,
             "inline": null,
             "kind": "method",
             "name": {
@@ -122,7 +152,7 @@
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 7,
+            "index": 9,
             "inline": null,
             "kind": "method",
             "name": {
@@ -145,7 +175,7 @@
             ],
             "convention": "internal",
             "implicit": false,
-            "index": 8,
+            "index": 10,
             "inline": null,
             "kind": "method",
             "name": "from_list",

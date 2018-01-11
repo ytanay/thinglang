@@ -23,6 +23,14 @@ void TextType::__equals__() {
 	Program::push(self && other && self->val == other->val);
 }
 
+void TextType::__not_equals__() {
+    auto self = Program::argument<TextInstance>();
+    auto other = Program::argument<TextInstance>();
+
+    Program::push(self && other && self->val != other->val);
+}
+
+
 
 void TextType::contains() {
     auto self = Program::argument<TextInstance>();
@@ -87,6 +95,20 @@ void TextType::from_list() {
     }
 
     Program::push(res);
+
+}
+
+void TextType::repeat() {
+    auto self = Program::argument<TextInstance>();
+    auto count = Program::argument<NumberInstance>();
+
+    std::ostringstream output;
+
+    for(int i = 0; i < count->val; i++)
+        output << self->val;
+
+
+    Program::push(output.str());
 
 }
 
