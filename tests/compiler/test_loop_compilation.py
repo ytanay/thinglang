@@ -1,6 +1,7 @@
-from tests.compiler import compile_snippet, LST_ID, IMPLICIT_ITERATOR_ID, IMPLICIT_ITERATION_ID, internal_call
+from tests.compiler import compile_snippet, LST_ID, IMPLICIT_ITERATOR_ID, IMPLICIT_ITERATION_ID, internal_call, \
+    STATIC_START
 from thinglang.compiler.opcodes import OpcodePushLocal, OpcodePopLocal, OpcodeJumpConditional, \
-    OpcodeJump
+    OpcodeJump, OpcodePushStatic
 
 
 def test_iteration_loop():
@@ -23,3 +24,28 @@ def test_iteration_loop():
 
     ]
 
+
+def test_simple_break():
+    assert compile_snippet({'while true': ['Console.write("")', 'break', 'Console.write("")']}) == [
+        OpcodePushStatic(STATIC_START),
+        OpcodeJumpConditional(28),
+        OpcodePushStatic(STATIC_START + 1),
+        internal_call('Console.write'),
+        OpcodeJump(28), # TODO: optimize case where `if something: break`
+        OpcodePushStatic(STATIC_START + 2),
+        internal_call('Console.write'),
+        OpcodeJump(20)
+    ]
+
+
+def test_simple_continue():
+    assert compile_snippet({'while true': ['Console.write("")', 'continue', 'Console.write("")']}) == [
+        OpcodePushStatic(STATIC_START),
+        OpcodeJumpConditional(28),
+        OpcodePushStatic(STATIC_START + 1),
+        internal_call('Console.write'),
+        OpcodeJump(20),
+        OpcodePushStatic(STATIC_START + 2),
+        internal_call('Console.write'),
+        OpcodeJump(20)
+    ]
