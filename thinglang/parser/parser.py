@@ -6,7 +6,8 @@ from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, Lexical
 from thinglang.lexer.lexical_token import LexicalToken
 from thinglang.lexer.operators.comparison import LexicalLessThan, LexicalGreaterThan
 from thinglang.lexer.tokens.misc import LexicalGroupEnd
-from thinglang.parser.errors import UnclosedVector, UnexpectedVectorTermination
+from thinglang.parser.errors import UnclosedVector, UnexpectedVectorTermination, StructureError
+from thinglang.parser.nodes import BaseNode
 from thinglang.parser.nodes.root_node import RootNode
 from thinglang.parser.vector import TokenVector, ParenthesesVector, BracketVector, TypeVector, ParameterVector
 
@@ -45,6 +46,9 @@ def parse(lexical_groups: List[List[LexicalToken]]) -> RootNode:
             raise Exception(f'Unexpected indent at {node.source_ref}')
 
         parent = stack[-1]
+
+        if not isinstance(node, BaseNode):
+            raise StructureError(parent, [node], negated=True)
 
         parent.attach(node)
 
