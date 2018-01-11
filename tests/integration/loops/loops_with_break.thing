@@ -1,0 +1,23 @@
+/*
+{
+    "expected_output": ["At index 0", "At index 1", "At index 2", "Breaking", "Iterating on 0", "Iterating on 1", "Iterating on 2", "Breaking", "Method end"]
+}
+*/
+
+thing Program
+    setup
+        number i = 0
+        while i < 5
+            Console.print("At index " + i)
+            if i > 1
+                Console.print("Breaking")
+                break
+            i += 1
+
+        for number j in list.range(0, 10)
+            Console.print("Iterating on " + j)
+            if j > 1
+                Console.print("Breaking")
+                break
+
+        Console.print("Method end")

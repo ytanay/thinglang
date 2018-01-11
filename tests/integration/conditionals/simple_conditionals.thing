@@ -11,3 +11,6 @@ thing Program
 
         if "dog" eq "cat"
             Console.print("dog is cat")
+
+        if "dog" eq "dog"
+            pass
