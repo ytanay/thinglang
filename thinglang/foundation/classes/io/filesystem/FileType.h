@@ -17,7 +17,11 @@ class FileInstance : public BaseThingInstance {
     std::string file_path;
 	std::fstream file;
 
-	~FileInstance() override = default;
+	~FileInstance() override {
+		if(this->file.is_open()){
+            this->file.close();
+        }
+	};
 
 };
 
