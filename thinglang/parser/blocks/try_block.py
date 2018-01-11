@@ -1,7 +1,7 @@
 import collections
 
 from thinglang.compiler.buffer import CompilationBuffer
-from thinglang.compiler.errors import DuplicateHandlerError, ExceptionSpecificityError
+from thinglang.compiler.errors import DuplicateHandlerError, ExceptionSpecificityError, NoExceptionHandlers
 from thinglang.lexer.blocks.exceptions import LexicalTry
 from thinglang.parser.blocks.handle_block import HandleBlock
 from thinglang.parser.nodes import BaseNode
@@ -28,6 +28,9 @@ class TryBlock(BaseNode):
 
         if len({handler.exception_type for handler in self.handlers}) != len(self.handlers):
             raise DuplicateHandlerError([handler.exception_type for handler in self.handlers])
+
+        if not self.handlers:
+            raise NoExceptionHandlers(self)
 
         for handler in self.handlers:
             handler.remove()
