@@ -25,6 +25,9 @@ from thinglang.lexer.tokens.indent import LexicalIndent
 from thinglang.lexer.tokens.inline_comment import LexicalInlineComment
 from thinglang.lexer.tokens.separator import LexicalSeparator
 from thinglang.lexer.values.booleans import LexicalBooleanTrue, LexicalBooleanFalse
+from thinglang.parser.statements.break_statement import BreakStatement
+from thinglang.parser.statements.continue_statement import ContinueStatement
+from thinglang.parser.statements.pass_statement import PassStatement
 
 OPERATORS = {
     ' ': None,
@@ -93,7 +96,11 @@ KEYWORDS = {
 
     'try': LexicalTry,
     'handle': LexicalHandle,
-    'throw': LexicalThrowStatement
+    'throw': LexicalThrowStatement,
+
+    'break': BreakStatement,
+    'continue': ContinueStatement,
+    'pass': PassStatement
 }
 
 REVERSE_OPERATORS = {
