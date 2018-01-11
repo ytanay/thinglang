@@ -15,7 +15,7 @@ from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction
     LexicalDivision, LexicalModulus, LexicalBinaryXOR, LexicalBinaryOr, LexicalBinaryAnd
 from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.operators.comparison import LexicalEquals, LexicalNegation, LexicalGreaterThan, \
-    LexicalLessThan, LexicalNotEquals
+    LexicalLessThan, LexicalNotEquals, LexicalExclamation
 from thinglang.lexer.operators.membership import LexicalIn
 from thinglang.lexer.statements.return_statement import LexicalReturnStatement
 from thinglang.lexer.statements.thing_instantiation import LexicalThingInstantiation
@@ -52,6 +52,7 @@ OPERATORS = {
     '*': LexicalMultiplication,
     '%': LexicalModulus,
 
+
     '&': LexicalBinaryAnd,
     '|': LexicalBinaryOr,
     '^': LexicalBinaryXOR,
@@ -59,7 +60,9 @@ OPERATORS = {
     '>': LexicalGreaterThan,
     '<': LexicalLessThan,
 
-    '#': LexicalInlineComment
+    '#': LexicalInlineComment,
+
+    '!': LexicalExclamation
 }
 
 

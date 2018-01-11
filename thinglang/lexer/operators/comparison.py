@@ -17,6 +17,12 @@ class LexicalNegation(LexicalToken):
     """
 
 
+class LexicalExclamation(LexicalToken):
+    """
+    Specifies the exclamation operator, given by "!"
+    """
+
+
 class LexicalEquals(LexicalComparison):
     """
     Signifies the equality operator, given by "eq"
