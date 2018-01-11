@@ -40,3 +40,4 @@ def test_constructor_compilation():
         OpcodePopMember(0, 1),  # Set it as the second member of self
         OpcodeReturn()
     ]
+
