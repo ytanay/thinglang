@@ -23,8 +23,13 @@ void FileType::open() {
     } else if(mode_type == "wb"){
         self->file.open(self->file_path, std::ios::out | std::ios::binary);
     } else {
-        throw RuntimeError("Invalid file mode"); // TODO: throw user exception
-	}
+        throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Invalid file mode (" + mode_type + ")"));
+    }
+
+    if(!self->file.is_open()){
+        throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Could not open file at (" + self->file_path + ")"));
+    }
+
 }
 
 
