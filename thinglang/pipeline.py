@@ -1,6 +1,7 @@
-from thinglang.phases.preprocess import preprocess
 from thinglang.compiler.context import CompilationContext
-from thinglang.compiler.indexer import Indexer
+from thinglang.phases.preprocess import preprocess
+from thinglang.phases.indexer import Indexer
+from thinglang.phases.integrity import StructuralIntegrity
 from thinglang.symbols.symbol_mapper import SymbolMapper
 from thinglang.utils import logging_utils
 from thinglang.utils.source_context import SourceContext
@@ -18,6 +19,7 @@ def compile(entrypoint: SourceContext, executable: bool=True, mapper: SymbolMapp
     ast = preprocess(entrypoint)
     mapper = SymbolMapper(ast) if mapper is None else mapper.set_ast(ast)
 
+    StructuralIntegrity(ast).run()
     Indexer(ast).run()
     logging_utils.print_header("Final AST", ast.tree())
 
