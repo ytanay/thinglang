@@ -220,6 +220,7 @@ void Program::execute() {
 
             case Opcode::ASSIGN_LOCAL: {
                 Program::frame()[instruction.target] = Program::frame()[instruction.secondary];
+                break;
             }
 
             case Opcode::POP_MEMBER: {
