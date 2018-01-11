@@ -4,6 +4,7 @@ import struct
 from typing import List
 
 from thinglang.compiler.references import ElementReference, LocalReference
+from thinglang.compiler.tracker import ResolvableIndex
 from thinglang.utils import collection_utils
 from thinglang.utils.logging_utils import camelcase_to_underscore
 from thinglang.utils.source_context import SourceReference
@@ -54,6 +55,10 @@ class Opcode(object, metaclass=OpcodeRegistration):
 
     def update_references(self, offsets):
         pass
+
+    def resolve(self):
+        self.args = tuple(arg.index if isinstance(arg, ResolvableIndex) else arg for arg in self.args)
+        return self
 
     def serialize(self) -> bytes:
         """
