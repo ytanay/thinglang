@@ -43,6 +43,19 @@ class DuplicateHandlerError(ThinglangException):
         return f'Duplicate handlers were registered ({", ".join(str(handler_type) for handler_type in self.handler_types)})'
 
 
+class NoExceptionHandlers(ThinglangException):
+    """
+    No exception handlers were registered for a try blck
+    """
+
+    def __init__(self, node):
+        super().__init__()
+        self.node = node
+
+    def __str__(self):
+        return f'No exception handling blocks were registered (at {self.node.source_ref})'
+
+
 class ExceptionSpecificityError(ThinglangException):
     """
     A handler for an exception was registered after a handler that also catches it.
