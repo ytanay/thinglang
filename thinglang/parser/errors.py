@@ -51,3 +51,24 @@ class InvalidIndexedAccess(ThinglangException):
         a[]
         a[1, 2, 3]
     """
+
+
+class StructureError(ThinglangException):
+    def __init__(self, node, failing_children, required_types=None, negated=False):
+        super().__init__()
+        self.node, self.failing_children, self.required_types, self.negated = node, failing_children, required_types, negated
+
+    def __str__(self):
+        if self.required_types:
+            return f'A {type(self.node).__name__} may {"not" if self.negated else "only"} contain {self.required_types}, but contains {self.failing_children} (at {self.node.source_ref})'
+        else:
+            return f'A {type(self.node).__name__} may {"not" if self.negated else "only"}  directly contain an {type(self.failing_children[0]).__name__} (at {self.node.source_ref})'
+
+
+class CustomStructureError(StructureError):
+    def __init__(self, node, message):
+        super().__init__(node, None)
+        self.message = message
+
+    def __str__(self):
+        return f'{self.message} (at {self.node.source_ref})'
