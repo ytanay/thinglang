@@ -1,3 +1,5 @@
+import pprint
+
 from thinglang import pipeline
 from thinglang.compiler.opcodes import OpcodeCallInternal
 from thinglang.lexer.values.identifier import Identifier
@@ -82,6 +84,7 @@ def compile_base(code='', thing_id=0, method_id=0, trim=False):
     return instructions[trim + 1:-1] if trim else instructions
 
 
+
 def compile_template(code='', thing_id=0, method_id=0):
     return compile_base(TEMPLATE.format(code), thing_id, method_id)
 
@@ -90,9 +93,13 @@ TRIM_START = len(compile_template()) - 1
 
 
 def compile_snippet(code):
+    if isinstance(code, dict):
+        for key, value in code.items():
+           code = key + '\n\t\t\t' + '\n\t\t\t'.join(value)
+    print(TEMPLATE.format(code))
     instructions = compile_template(code)[TRIM_START:-1]  # Pop off boilerplate and the return instruction
-    print('Bytecode result: {}'.format(instructions))
-    return instructions
+    print('Bytecode result: {}'.format(pprint.pformat(instructions)))
+    return [instruction.resolve() for instruction in instructions]
 
 
 def internal_call(target):
