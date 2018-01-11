@@ -5,7 +5,9 @@ from thinglang.lexer.lexical_analyzer import analyze_line
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.lexer.values.numeric import NumericValue
 from thinglang.parser import parser
-from thinglang.utils.source_context import SourceLine
+from thinglang.phases.integrity import StructuralIntegrity
+from thinglang.phases.preprocess import preprocess
+from thinglang.utils.source_context import SourceLine, SourceContext
 
 INDENT = '\n' + ' ' * 8
 
@@ -14,10 +16,16 @@ def lexer_single(source: str, without_end: bool=False):
     return list(analyze_line(SourceLine.inline(source)))[:-1 if without_end else None]
 
 
-def parse_local(code):
+def parse_local(code, integrity=False):
     tokens = lexer_single(code)
     vector = parser.collect_vectors(tokens)
     return vector.parse()
+
+
+def parse_full(code):
+    ast = preprocess(SourceContext.wrap(code))
+    StructuralIntegrity(ast).run()
+    return ast
 
 
 def validate_types(elements, types: list, descend_cls=None, descend_key=lambda x: x) -> None:
@@ -55,7 +63,7 @@ class ProgramTestCase(object):
         metadata = json.loads(metadata_raw)
 
         self.name = metadata.get('test_name') or ' '.join(path.replace('.thing', '').split(os.sep)[-2:])
-        self.code = '\n' * (metadata_raw.count('\n') + 1) + contents[metadata_end + 2:]
+        self.code = '\n' * (metadata_raw.count('\n')) + contents[metadata_end + 2:]
         self.metadata = metadata
         self.target_path = path + 'c'
         self.source_path = path
