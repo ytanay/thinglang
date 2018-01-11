@@ -21,6 +21,8 @@ class CompilationBuffer(object):
         self.data = []
         self.conditional_groups = []
         self.exception_table = []
+        self.jump_out = {}
+        self.jump_in = {}
 
     def append(self, opcode: Opcode, source_ref: SourceReference):
         """
@@ -109,7 +111,7 @@ class CompilationBuffer(object):
     @property
     def current_index(self) -> int:
         """
-        Returns the index of the current instruction
+        Returns the index of the last added instruction
         """
         return len(self.instructions) - 1
 

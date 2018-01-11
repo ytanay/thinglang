@@ -33,3 +33,13 @@ class TrackedReplacements(object):
             return item
 
         return copy.deepcopy(self.replacements[item]).deriving_from(item)
+
+
+class ResolvableIndex(object):
+
+    def __init__(self, index=None):
+        super().__init__()
+        self.index = index
+
+    def __add__(self, other):
+        return self.index + other

@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
+from thinglang.compiler.tracker import ResolvableIndex
 from thinglang.lexer.blocks.conditionals import LexicalConditional
 from thinglang.parser.blocks.common import ElseBranchInterface
 from thinglang.parser.nodes.base_node import BaseNode
@@ -25,23 +26,27 @@ class Conditional(BaseNode):
         return 'if {}'.format(self.value)
 
     def compile(self, context: CompilationBuffer):
+        jump_out = ResolvableIndex()
+        conditional_jump = OpcodeJumpConditional(jump_out)
+
+        context.jump_out[self] = jump_out
+
         if not context.conditional_groups or self not in context.conditional_groups[-1]:
             elements = [self] + list(self.siblings_while(lambda x: isinstance(x, ElseBranchInterface)))
             context.conditional_groups.append(OrderedDict((x, None) for x in elements))
 
         self.value.compile(context)
-        opcode = OpcodeJumpConditional()
-        context.append(opcode, self.source_ref)
+        context.append(conditional_jump, self.source_ref)
         super(Conditional, self).compile(context)
 
         if list(context.conditional_groups[-1].keys())[-1] is self:
             context.update_conditional_jumps()
         else:
-            jump_out = OpcodeJump()
-            context.conditional_groups[-1][self] = jump_out
-            context.append(jump_out, self.source_ref)
+            jump = OpcodeJump()
+            context.conditional_groups[-1][self] = jump
+            context.append(jump, self.source_ref)
 
-        opcode.update(context.current_index + 1)
+        jump_out.index = context.next_index
 
     @staticmethod
     @ParserRule.mark

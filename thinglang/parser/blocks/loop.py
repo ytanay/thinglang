@@ -1,5 +1,6 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.compiler.opcodes import OpcodeJumpConditional, OpcodeJump
+from thinglang.compiler.tracker import ResolvableIndex
 from thinglang.lexer.blocks.loops import LexicalRepeatWhile
 from thinglang.parser.nodes.base_node import BaseNode
 from thinglang.parser.rule import ParserRule
@@ -19,13 +20,20 @@ class Loop(BaseNode):
         return str(self.value)
 
     def compile(self, context: CompilationBuffer):
-        idx = context.current_index + 1
+        loop_start = ResolvableIndex(context.next_index) # Jumps to the evaluation of the loop's expression
+        jump_out = ResolvableIndex()  # Jumps out of the loop when done
+        conditional_jump = OpcodeJumpConditional(jump_out)
+
+        context.jump_out[self] = jump_out
+        context.jump_in[self] = loop_start
+
         self.value.compile(context)
-        opcode = OpcodeJumpConditional()
-        context.append(opcode, self.source_ref)
+        context.append(conditional_jump, self.source_ref) # Evaluation
+
         super(Loop, self).compile(context)
-        context.append(OpcodeJump(idx), self.source_ref)
-        opcode.update(context.current_index + 1)
+
+        context.append(OpcodeJump(loop_start.index), self.source_ref)
+        jump_out.index = context.next_index
 
     @staticmethod
     @ParserRule.mark
