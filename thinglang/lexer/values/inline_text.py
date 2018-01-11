@@ -15,7 +15,11 @@ class InlineString(PrimitiveType):
     PRIMITIVE_ID = definitions.PRIMITIVE_TYPES.index('text')
 
     def __init__(self, value, source_ref=None):
-        super().__init__(value, source_ref)
+        super().__init__(self.process_escaping(value), source_ref)
 
     def serialize(self):
         return struct.pack('<i', InlineString.PRIMITIVE_ID) + serializer.auto(self.value)
+
+    @staticmethod
+    def process_escaping(value):
+        return bytes(value, 'utf-8').decode('unicode_escape')

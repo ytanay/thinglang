@@ -28,14 +28,15 @@ def analyze_line(line: SourceLine) -> List[LexicalToken]:
     """
     Analyze a line of source code, emitting a list of lexical tokens
     """
-    operator_working_set, buffer, entity_class, start_ref, current_ref = OPERATORS, '', None, None, None
+    operator_working_set, buffer, entity_class, start_ref, current_ref, prev = OPERATORS, '', None, None, None, None
 
     for char, current_ref in line:
 
         if start_ref is None:
             start_ref = current_ref  # update the group's starting source reference
 
-        if char not in operator_working_set:
+
+        if char not in operator_working_set or (prev == '\\' and char == '"' and entity_class is LexicalQuote):  # TODO: Move this handling to InlineString?
             buffer += char  # continue appending characters to the current group
 
         else:  # i.e. if we are on an operator
@@ -59,6 +60,8 @@ def analyze_line(line: SourceLine) -> List[LexicalToken]:
             # Emit an instance of the entity class if it is emittable
             if entity_class.EMITTABLE:
                 yield OPERATORS[char](char, current_ref)
+
+        prev = char
 
     if buffer:
         yield finalize_buffer(buffer, StopIteration(), entity_class, current_ref - start_ref + 1)
