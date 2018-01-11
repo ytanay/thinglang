@@ -1,6 +1,14 @@
 /*
 {
-    "expected_output": ["Operators + in strings", "Concatenation with the number 10", "Yotam"]
+    "expected_output": [
+        "Operators + in strings",
+        "Concatenation with the number 10",
+        "\tEscaping", "a string with escape sequences!",
+        "Repeated and repeated and repeated and repeated and repeated and repeated",
+        "And the man said: \"Let there be thinglang!\"",
+        "true false false true",
+        "Yotam"
+    ]
 }
 */
 
@@ -8,7 +16,10 @@ thing Program
     setup
         Console.print("Operators + in strings") # inline comments
         Console.print("Concatenation with the number " + 10)
+        Console.print("\tEscaping\na string with escape sequences\x21")
+        Console.print("Repeated and " + "repeated and " * 4 + "repeated")
+        Console.print("And the man said: \"Let there be thinglang!\"")
+        Console.print("{} {} {} {}", ["dog" == "dog", "dog" == "cat", "dog" != "dog", "dog" != "cat"])
 
         text name = "Yotam" # Local variables
-        number i = 10
         Console.print(name)
