@@ -39,6 +39,10 @@ class BaseNode(ParsingMixin):
         siblings = self.parent.children
         siblings[siblings.index(self)] = node
 
+    def previous_sibling(self):
+        siblings = self.parent.children
+        return siblings[siblings.index(self) - 1]
+
     def next_siblings(self):
         """
         Returns this node's siblings, starting after this node
@@ -46,6 +50,14 @@ class BaseNode(ParsingMixin):
         """
         siblings = self.parent.children
         return siblings[siblings.index(self) + 1:]
+
+    def ascend(self, target_type):
+        node = self
+        while node.parent:
+            node = node.parent
+            if isinstance(node, target_type):
+                return node
+
 
     @collection_utils.drain()
     def siblings_while(self, predicate):
@@ -69,7 +81,7 @@ class BaseNode(ParsingMixin):
             child.compile(context)
 
         if not self.children:
-            raise Exception('Cannot pass through for further compilation')
+            raise Exception(f'A {type(self).__name__} cannot have an empty body (at {self.source_ref})')
 
     def deriving_from(self, node):
         """
