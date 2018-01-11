@@ -12,12 +12,14 @@ from thinglang.parser.blocks.try_block import TryBlock
 from thinglang.parser.blocks.unconditional_else import UnconditionalElse
 from thinglang.parser.constructs.cast_operation import CastOperation
 from thinglang.parser.constructs.negated_operator import NegatedOperation
+from thinglang.parser.constructs.shortened_token import ShortenedTokens
 from thinglang.parser.definitions.member_definition import MemberDefinition
 from thinglang.parser.definitions.method_definition import MethodDefinition
 from thinglang.parser.definitions.thing_definition import ThingDefinition
 from thinglang.parser.errors import VectorReductionError
 from thinglang.parser.nodes import BaseNode
 from thinglang.parser.statements.assignment_operation import AssignmentOperation
+from thinglang.parser.statements.pass_statement import PassStatement
 from thinglang.parser.statements.return_statement import ReturnStatement
 from thinglang.parser.statements.throw_statement import ThrowStatement
 from thinglang.parser.values.binary_operation import BinaryOperation
@@ -33,6 +35,8 @@ The primary component of the parser - describes token vectors and their reductio
 """
 
 PARSING_ORDER = [  # Apply production rules in this order
+    ShortenedTokens,
+
     GenericIdentifier,
 
     ThingDefinition,
@@ -86,7 +90,7 @@ class TokenVector(object):
         if not expect_single:
             return self.tokens
 
-        if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode)):
+        if len(self.tokens) != 1 or not isinstance(self.tokens[0], (ValueType, BaseNode, PassStatement)):
             raise VectorReductionError('Invalid syntax', self.tokens)
 
         if isinstance(self.tokens[0], TokenVector):
