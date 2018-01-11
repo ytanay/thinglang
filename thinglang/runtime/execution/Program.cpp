@@ -430,6 +430,10 @@ Index Program::exception(Index counter, Index exception_type, std::stack<Index> 
 
     }
 
-    critical_abort(UNHANDLED_EXCEPTION); // TODO: Obviously, we don't want a critical abort here
+    std::cout << std::endl << std::endl;
+    std::cout << "An unhandled exception was thrown." << std::endl;
+    std::cout << Program::pop()->text();
+    exit(2);
+
 }
 
