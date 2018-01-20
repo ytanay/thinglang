@@ -25,11 +25,27 @@
         },
         {
             "arguments": [
+                "text",
                 "text"
             ],
             "convention": "internal",
             "implicit": false,
             "index": 1,
+            "inline": null,
+            "kind": "method",
+            "name": "__constructor__",
+            "passthrough": false,
+            "static": false,
+            "type": "File",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "text"
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 2,
             "inline": null,
             "kind": "method",
             "name": "open",
@@ -42,7 +58,7 @@
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 2,
+            "index": 3,
             "inline": null,
             "kind": "method",
             "name": "close",
@@ -57,7 +73,7 @@
             ],
             "convention": "internal",
             "implicit": false,
-            "index": 3,
+            "index": 4,
             "inline": null,
             "kind": "method",
             "name": "write",
@@ -70,13 +86,26 @@
             "arguments": [],
             "convention": "internal",
             "implicit": false,
-            "index": 4,
+            "index": 5,
             "inline": null,
             "kind": "method",
             "name": "read",
             "passthrough": false,
             "static": false,
             "type": "text",
+            "visibility": "public"
+        },
+        {
+            "arguments": [],
+            "convention": "internal",
+            "implicit": false,
+            "index": 6,
+            "inline": null,
+            "kind": "method",
+            "name": "modify_time",
+            "passthrough": false,
+            "static": false,
+            "type": "number",
             "visibility": "public"
         },
         {

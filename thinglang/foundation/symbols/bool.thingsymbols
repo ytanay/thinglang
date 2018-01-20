@@ -22,6 +22,36 @@
             "visibility": "public"
         },
         {
+            "arguments": [
+                "bool"
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 1,
+            "inline": null,
+            "kind": "method",
+            "name": "__logical_and__",
+            "passthrough": false,
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
+            "arguments": [
+                "bool"
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 2,
+            "inline": null,
+            "kind": "method",
+            "name": "__logical_or__",
+            "passthrough": false,
+            "static": false,
+            "type": "bool",
+            "visibility": "public"
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "implicit": true,

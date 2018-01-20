@@ -42,6 +42,19 @@
             "visibility": "public"
         },
         {
+            "arguments": [],
+            "convention": "internal",
+            "implicit": false,
+            "index": 2,
+            "inline": null,
+            "kind": "method",
+            "name": "current_working_directory",
+            "passthrough": false,
+            "static": true,
+            "type": "Directory",
+            "visibility": "public"
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "implicit": true,
