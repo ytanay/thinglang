@@ -1,6 +1,15 @@
 #include <dirent.h>
 #include "../../../../runtime/types/InternalTypes.h"
 
+#include <stdio.h>  /* defines FILENAME_MAX */
+// #define WINDOWS  /* uncomment this line to use it for windows.*/
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
 
 void DirectoryType::__constructor__() {
     auto self = Program::create<DirectoryInstance>();
@@ -26,6 +35,15 @@ void DirectoryType::contents() {
     }
 
     Program::push(contents);
+}
+
+void DirectoryType::current_working_directory(){
+    char buff[FILENAME_MAX];
+    if(!GetCurrentDir(buff, FILENAME_MAX)){
+        throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Path is too long"));
+    }
+    std::string current_working_dir(buff);
+    Program::push(current_working_dir);
 }
 
 

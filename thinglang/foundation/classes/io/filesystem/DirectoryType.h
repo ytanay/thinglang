@@ -27,10 +27,11 @@ class DirectoryInstance : public BaseThingInstance {
 class DirectoryType : public ThingTypeInternal {
     
     public:
-	DirectoryType() : ThingTypeInternal({ &__constructor__, &contents}) {};
+	DirectoryType() : ThingTypeInternal({ &__constructor__, &contents, &current_working_directory}) {};
  
 	static void __constructor__();
 	static void contents();
+	static void current_working_directory();
 
     
 };
