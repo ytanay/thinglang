@@ -36,6 +36,9 @@ void NumberType::__division__() {
     auto self = Program::argument<NumberInstance>();
     auto other = Program::argument<NumberInstance>();
 
+    if(other->val == 0)
+        throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Division by zero"));
+
 	Program::push(Program::create<NumberInstance>(self->val / other->val));
 }
 
@@ -43,6 +46,9 @@ void NumberType::__division__() {
 void NumberType::__modulus__() {
     auto self = Program::argument<NumberInstance>();
     auto other = Program::argument<NumberInstance>();
+
+    if(other->val == 0)
+        throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Modulus by zero"));
 
 	Program::push(Program::create<NumberInstance>(self->val % other->val));
 }
