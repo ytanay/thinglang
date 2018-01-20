@@ -25,7 +25,7 @@ class NoMatchingOverload(ThinglangException):
             methods, arguments, exact_matches, inheritance_matches, cast_matches, source_ref
 
     def __str__(self):
-        return f'No matching overload for {self.methods[0].name} using arguments {self.arguments} was found.\n' + \
+        return f'No matching overload for {self.methods[0].name} using arguments {[x.type for x in self.arguments]} was found.\n' + \
                f'Allowable overloads: {", ".join(str(method.arguments) for method in self.methods)}.\n' + \
                f'At {self.source_ref}'
 
@@ -80,7 +80,7 @@ class InvalidReference(ThinglangException):
         self.target, self.search, self.original_target = target, search, original_target
 
     def __str__(self):
-        return f'{self.target} does not exist in {self.search.name} (at {self.original_target.source_ref})'
+        return f'Cannot find reference {self.search.name}.{self.target} (at {self.original_target.source_ref})'
 
 
 class SelfInStaticMethod(ThinglangException):
