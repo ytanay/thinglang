@@ -15,15 +15,19 @@ void ConsoleType::print_format() {
     auto message = Program::pop();
 
     auto str = message->text();
+    auto param_size = params->val.size();
     size_t index = 0, iterated = 0;
 
-    while (true) {
+
+    while(true){
         index = str.find("{}", index);
-        if (index == std::string::npos) break;
+        if(index == std::string::npos) break;
+        if(iterated >= param_size) throw Program::create<ExceptionInstance>(Program::create<TextInstance>("Not enough format arguments provided"));
 
-        str.replace(index, 2, params->val[iterated++]->text());
+        auto contents = params->val[iterated++]->text();
+        str.replace(index, 2, contents);
 
-        index += 2;
+        index += contents.size();
     }
 
     std::cout << str << std::endl;
