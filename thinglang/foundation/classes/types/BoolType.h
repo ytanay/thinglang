@@ -26,8 +26,11 @@ class BoolInstance : public BaseThingInstance {
 class BoolType : public ThingTypeInternal {
     
     public:
-    BoolType() : ThingTypeInternal({ &__constructor__ }) {}; // constructor
- 
+    BoolType() : ThingTypeInternal({ &__constructor__, &__and__, &__or__ }) {}; // constructor
+
 	static void __constructor__();
+	static void __and__();
+	static void __or__();
+
     
 };

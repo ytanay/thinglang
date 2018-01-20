@@ -4,6 +4,19 @@ void BoolType::__constructor__() {
     throw RuntimeError("Cannot create bool instance");
 }
 
+void BoolType::__and__(){
+    auto self = Program::pop();
+    auto other = Program::pop();
+    Program::push(self->boolean() && other->boolean());
+};
+
+void BoolType::__or__(){
+    auto self = Program::pop();
+    auto other = Program::pop();
+    Program::push(self->boolean() || other->boolean());
+};
+
+
 std::string BoolInstance::text() {
     return val ? "true" : "false";
 }

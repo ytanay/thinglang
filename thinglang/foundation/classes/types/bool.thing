@@ -1,1 +1,4 @@
 thing bool
+
+    does and with bool other returns bool
+    does or with bool other returns bool
