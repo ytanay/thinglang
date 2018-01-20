@@ -72,3 +72,19 @@ class LexicalBinaryXOR(SecondOrderLexicalBinaryOperation):
     """
     Exclusive-OR (XOR), using ^
     """
+
+
+class LexicalLogic(LexicalBinaryOperation):
+    pass
+
+
+class LexicalLogicalAnd(LexicalLogic):
+    """
+    AND, using "and"
+    """
+
+
+class LexicalLogicalOr(LexicalLogic):
+    """
+    OR, using "or"
+    """

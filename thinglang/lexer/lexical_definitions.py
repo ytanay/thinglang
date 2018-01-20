@@ -12,7 +12,8 @@ from thinglang.lexer.grouping.parentheses import LexicalParenthesesOpen, Lexical
 from thinglang.lexer.grouping.quote import LexicalQuote
 from thinglang.lexer.operators.assignment import LexicalAssignment
 from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction, LexicalMultiplication, \
-    LexicalDivision, LexicalModulus, LexicalBinaryXOR, LexicalBinaryOr, LexicalBinaryAnd
+    LexicalDivision, LexicalModulus, LexicalBinaryXOR, LexicalBinaryOr, LexicalBinaryAnd, LexicalLogicalAnd, \
+    LexicalLogicalOr
 from thinglang.lexer.operators.casts import LexicalCast
 from thinglang.lexer.operators.comparison import LexicalEquals, LexicalNegation, LexicalGreaterThan, \
     LexicalLessThan, LexicalNotEquals, LexicalExclamation
@@ -97,6 +98,9 @@ KEYWORDS = {
 
     'as': LexicalCast,
 
+    'and': LexicalLogicalAnd,
+    'or': LexicalLogicalOr,
+
     'try': LexicalTry,
     'handle': LexicalHandle,
     'throw': LexicalThrowStatement,
@@ -112,5 +116,7 @@ REVERSE_OPERATORS = {
 
 REVERSE_OPERATORS.update({
     LexicalEquals: "==",
-    LexicalNotEquals: "!="
+    LexicalNotEquals: "!=",
+    LexicalLogicalAnd: '&&',
+    LexicalLogicalOr: '||'
 })
