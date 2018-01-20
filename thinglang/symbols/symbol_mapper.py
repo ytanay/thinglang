@@ -117,6 +117,9 @@ class SymbolMapper(object):
         """
         target, index = access.target, access.index
         resolved = self.resolve(target, method_locals)
+        if self.INDEX_GETTER_NAME not in self[resolved.type]:
+            raise Exception(f'{resolved.type} does not support indexing (at {access.source_ref})')
+
         getter = self[resolved.type][self.INDEX_GETTER_NAME]
         return self[getter.type]
 
