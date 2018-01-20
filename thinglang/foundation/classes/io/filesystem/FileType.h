@@ -13,9 +13,10 @@ class FileInstance : public BaseThingInstance {
     std::string text() override;
     bool boolean() override;
 
-
     std::string file_path;
 	std::fstream file;
+
+    void open(std::string mode);
 
 	~FileInstance() override {
 		if(this->file.is_open()){
@@ -29,12 +30,14 @@ class FileInstance : public BaseThingInstance {
 class FileType : public ThingTypeInternal {
     
     public:
-    FileType() : ThingTypeInternal({ &__constructor__, &open, &close, &write, &read }) {}; // constructor
+    FileType() : ThingTypeInternal({ &__constructor__, &__construct_and_open__, &open, &close, &write, &read, &modify_time}) {}; // constructor
  
 	static void __constructor__();
+	static void __construct_and_open__();
 	static void open();
 	static void close();
 	static void write();
 	static void read();
+	static void modify_time();
     
 };

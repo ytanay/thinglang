@@ -2,8 +2,10 @@ thing File
 
 
     setup with text file_path
+    setup with text file_path, text mode
 
     does open with text mode
     does close
     does write with text contents
     does read returns text
+    does modify_time returns number
