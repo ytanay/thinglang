@@ -1,6 +1,6 @@
 #include "../../../runtime/types/InternalTypes.h"
 #include "../../../runtime/utils/Formatting.h"
-
+#include <cmath>
 
 void NumberType::__constructor__() {
     Program::push(Program::create<NumberInstance>());
@@ -106,6 +106,13 @@ void NumberType::__greater_than__() {
 
     Program::push(self->val > other->val);
 
+}
+
+
+void NumberType::__sqrt__() {
+    auto self = Program::argument<NumberInstance>();
+
+    Program::push(static_cast<int64_t>(sqrt(self->val)));
 }
 
 

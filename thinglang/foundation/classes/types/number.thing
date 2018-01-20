@@ -14,3 +14,5 @@ thing number
     does not eq with number other returns bool
     does < with number other returns bool
     does > with number other returns bool
+
+    does sqrt returns number

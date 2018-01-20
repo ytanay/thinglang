@@ -46,6 +46,7 @@ class NumberType : public ThingTypeInternal {
 											 &__not_equals__,
 											 &__less_than__,
 											 &__greater_than__,
+                                             &__sqrt__
 											  }) {};
  
 	static void __constructor__();
@@ -61,5 +62,6 @@ class NumberType : public ThingTypeInternal {
 	static void __not_equals__();
 	static void __less_than__();
 	static void __greater_than__();
+	static void __sqrt__();
     
 };
