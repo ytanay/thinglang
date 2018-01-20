@@ -48,14 +48,15 @@ void TextType::length() {
 
 
 void TextType::hex() {
-    auto self = Program::argument<TextInstance>();
+    auto self = Program::pop();
     static const char* const lut = "0123456789abcdef";
-    size_t len = self->val.length();
+    auto source = self->text();
+    size_t len = source.length();
 
     std::string output;
     output.reserve(2 * len);
     for (size_t i = 0; i < len; ++i) {
-        const auto c = static_cast<const unsigned char>(self->val[i]);
+        const auto c = static_cast<const unsigned char>(source[i]);
         output.push_back(lut[c >> 4]);
         output.push_back(lut[c & 15]);
     }
