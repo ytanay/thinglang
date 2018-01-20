@@ -1,6 +1,6 @@
 /*
 {
-    "expected_output": ["10", "15", "25", "16", "37"]
+    "expected_output": ["10", "15", "25", "16", "37", "true false true true false true"]
 }
 */
 
@@ -23,3 +23,5 @@ thing Program
         d |= 123
         d &= 421
         Console.print(d)
+
+        Console.print("{} {} {} {} {} {}", [true and true, false and false, true or false, true or true, false or false, "dog" == "cat" or "cat" == "cat"])
