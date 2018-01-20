@@ -1,6 +1,6 @@
 from thinglang.compiler.buffer import CompilationBuffer
 from thinglang.lexer.operators.binary import LexicalAddition, LexicalSubtraction, LexicalMultiplication, \
-    LexicalDivision, SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation
+    LexicalDivision, SecondOrderLexicalBinaryOperation, FirstOrderLexicalBinaryOperation, LexicalLogic
 from thinglang.lexer.operators.comparison import LexicalEquals, LexicalGreaterThan, LexicalLessThan, LexicalComparison
 from thinglang.lexer.values.identifier import Identifier
 from thinglang.parser.nodes.base_node import BaseNode
@@ -60,3 +60,9 @@ class BinaryOperation(BaseNode, ValueType, CallSite):
     @ParserRule.mark
     def parse_comparison_operation(lhs: ValueType, operator: LexicalComparison, rhs: ValueType):
         return BinaryOperation(operator, lhs, rhs)
+
+    @staticmethod
+    @ParserRule.mark
+    def parse_logical_operation(lhs: ValueType, operator: LexicalLogic, rhs: ValueType):
+        return BinaryOperation(operator, lhs, rhs)
+
