@@ -7,9 +7,9 @@ class FileInstance : public BaseThingInstance {
     
     public:
     explicit FileInstance() = default; // empty constructor
-    
+
     explicit FileInstance(std::string file_path) : file_path(std::move(file_path)) {}; // value constructor
-    
+
     std::string text() override;
     bool boolean() override;
 
