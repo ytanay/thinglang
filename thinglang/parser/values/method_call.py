@@ -79,8 +79,8 @@ class MethodCall(BaseNode, ValueType, CallSite):
         if final_ref.type is None and self.is_captured:
             raise CapturedVoidMethod()
 
-        if final_ref.type is not None and not self.is_captured:
-            context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
+        #if final_ref.type is not None and not self.is_captured:
+        #    context.append(OpcodePop(), self.source_ref)  # pop the return value, if the return value is not captured
 
         return final_ref
 
