@@ -185,6 +185,21 @@
             "visibility": "public"
         },
         {
+            "arguments": [
+                "number"
+            ],
+            "convention": "internal",
+            "implicit": false,
+            "index": 11,
+            "inline": null,
+            "kind": "method",
+            "name": "from_byte",
+            "passthrough": false,
+            "static": true,
+            "type": "text",
+            "visibility": "public"
+        },
+        {
             "arguments": null,
             "convention": "internal",
             "implicit": true,

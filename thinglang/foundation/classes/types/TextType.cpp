@@ -99,6 +99,13 @@ void TextType::from_list() {
 
 }
 
+void TextType::from_byte() {
+    auto byte = Program::argument<NumberInstance>();
+
+    Program::push(std::string(1, static_cast<char>(byte->val)));
+
+}
+
 void TextType::repeat() {
     auto self = Program::argument<TextInstance>();
     auto count = Program::argument<NumberInstance>();
