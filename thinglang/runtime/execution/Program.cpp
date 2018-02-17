@@ -112,8 +112,6 @@ void Program::execute() {
 
         instruction = instructions[counter];
 
-        Program::status(counter, instruction);
-
         switch (instruction.opcode) {
 
             case Opcode::PASS:
